@@ -9,6 +9,11 @@ a {
 
 
 /* employee Login Form */
+
+.FullWidth {
+  width: 100%;
+}
+
 .form_container {
   width: fit-content;
   height: fit-content;
@@ -89,8 +94,7 @@ a {
   border-radius: 7px;
   outline: none;
   border: 1px solid #e5e5e5;
-  filter: drop-shadow(0px 1px 0px #efefef)
-    drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
+  filter: drop-shadow(0px 1px 0px #efefef) drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
   transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
 }
 
@@ -123,8 +127,7 @@ a {
   outline: none;
   color: #242424;
   border: 1px solid #e5e5e5;
-  filter: drop-shadow(0px 1px 0px #efefef)
-    drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
+  filter: drop-shadow(0px 1px 0px #efefef) drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
   cursor: pointer;
 }
 
@@ -140,8 +143,7 @@ a {
   outline: none;
   color: #ffffff;
   border: 1px solid #e5e5e5;
-  filter: drop-shadow(0px 1px 0px #efefef)
-    drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
+  filter: drop-shadow(0px 1px 0px #efefef) drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
   cursor: pointer;
 }
 
@@ -166,4 +168,184 @@ a {
   font-size: 0.75rem;
   color: #8B8E98;
   text-decoration: underline;
+}
+
+
+
+
+/* ButtonForPrint */
+.ButtonForPrint {
+  width: 50%;
+  height: 5rem;
+  margin: 20px;
+  padding: 20px;
+  color: white;
+  background-color: blue;
+}
+
+.ButtonForPrint:hover {
+  color: yellow;
+  background-color: red;
+}
+
+
+/* Create Fromula */
+
+.containerForCF {
+  width: 100%;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.CFBorder {
+  border: 3px solid gray;
+  width: 100%;
+}
+
+.Cf_Header_Area {
+  width: 100%;
+  height: 8rem;
+  border: 1px solid gray;
+  display: flex;
+  justify-content: end;
+}
+
+.MixerDetails {
+  display: flex;
+  align-items: center;
+}
+
+.Cf_Header_Area_Buttons {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.Cf_Header_Area_Buttons_EachOne {
+  margin: 10px 10px;
+  width: 150px;
+  border: #242424 2px solid;
+  height: 50px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #434343;
+  color: whitesmoke;
+  font-size: 18px;
+}
+
+.CFdropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.CFdropdown-button {
+  width: 150px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 15px;
+  background-color: #434343;
+  color: whitesmoke;
+  font-size: 18px;
+}
+
+.CFdropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.CFdropdown-content button {
+  color: black;
+  padding: 12px 16px;
+  display: block;
+  width: 100%;
+}
+
+.CFdropdown:hover .CFdropdown-content {
+  display: block;
+}
+
+.BasicDetailsMainDiv {
+  width: 100%;
+}
+
+.BasicDetails {
+  margin: 3rem 0;
+  display: flex;
+  /* background-color: red; */
+  width: 100%;
+  height: 15rem;
+}
+
+.BasicDetailsLeftSection {
+  width: 33%;
+  height: 15rem;
+  border: 1px solid gray;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  display: flex;
+  flex-direction: column;
+  /* background-color: black; */
+}
+
+.BasicDetailsCenterSection {
+  width: 34%;
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  /* background-color: rgb(48, 48, 48); */
+}
+
+.BasicDetailsRightSection {
+  width: 33%;
+  height: 15rem;
+  border: 1px solid gray;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  display: flex;
+  flex-direction: column;
+  /* background-color: rgb(158, 158, 158); */
+}
+
+.CFDateDiv,
+.CFFileNODiv,
+.CFProjectNoDiv,
+.CFCustomerNameDiv,
+.CFCustomerRefDiv,
+.CFColorCodeDiv,
+.CFColorNameDiv {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem 2rem;
+  margin-left: 0;
+  justify-content: space-between;
+}
+
+.CFDateDiv p,
+.CFFileNODiv p,
+.CFProjectNoDiv p,
+.CFCustomerNameDiv p,
+.CFCustomerRefDiv p,
+.CFColorCodeDiv p,
+.CFColorNameDiv p {
+  margin: 1rem 2rem;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.BasicDetails input[type="date"], [type="text"] {
+  width: 50%;
+  font-size: 20px;
+  font-weight: 700;
+  padding-left: 1rem;
 }

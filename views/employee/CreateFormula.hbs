@@ -1,0 +1,68 @@
+<section>
+    <div class="containerForCF">
+        <div class="CFBorder">
+            <div class="Cf_Header_Area">
+                <div class="containerForCF">
+                    <div class="MixerDetails" hidden>
+                        <p class="MixerNameLabel">Mixer Name</p>
+                       <input type="text" name="MixerName" id="">   {{!--  Enter Mixer Name Here By Dynamic Process --}}
+                    </div>
+                    <div class="Cf_Header_Area_Buttons">
+                        <button class="Cf_Header_Area_Buttons_EachOne">Clear All</button>
+                        <button class="Cf_Header_Area_Buttons_EachOne">Save</button>
+                        <button class="Cf_Header_Area_Buttons_EachOne">Save as New</button>
+                        <div class="CFdropdown Cf_Header_Area_Buttons_EachOne">
+                            <button class="CFdropdown-button" onclick="CFtoggleDropdown()">
+                                <p>Print</p>
+                            </button>
+                            <div class="CFdropdown-content">
+                                <button>Print Formula</button>
+                                <button>Print Label</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="BasicDetailsMainDiv">
+                <div class="containerForCF">
+                    <div class="BasicDetails">
+                        <div class="BasicDetailsLeftSection">
+                            <div class="CFDateDiv">
+                                <p class="CFDateLabel">Date:</p>
+                                <input type="date" name="Date"  id="dateInput" value=''>
+                            </div>
+                            <div class="CFFileNODiv">
+                                <p class="CFFileNOLabel">File No:</p>
+                                <input type="text" name="FileNo">
+                            </div>
+                            <div class="CFProjectNoDiv">
+                                <p class="CFProjectNoLabel">Project No:</p>
+                                <input type="text" name="ProjectNo">
+                            </div>
+                        </div>
+                        <div class="BasicDetailsCenterSection">
+                            <div class="CFCustomerNameDiv">
+                                <p class="CFCustomerNameLabel">Customer Name:</p>
+                                <input type="text" name="CustomerName">
+                            </div>
+                            <div class="CFCustomerRefDiv">
+                                <p class="CFCustomerRefLabel">Customer Ref:</p>
+                                <input type="text" name="CustomerRef">
+                            </div>
+                        </div>
+                        <div class="BasicDetailsRightSection">
+                            <div class="CFColorCodeDiv">
+                                <p class="CFColorCodeLabel">Color Code:</p>
+                                <input type="text" name="ColorCode">
+                            </div>
+                            <div class="CFColorNameDiv">
+                                <p class="CFColorNameLabel">Color Name:</p>
+                                <input type="text" name="ColorName">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -28,7 +28,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'secret', cookie: { maxAge: 2592000000 } })); // session upto 30 days ,  for 1 minute apply 60000, for 5 minutes 300000 
+app.use(session({
+  secret: 'secret', 
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 2592000000 }
+})); // session upto 30 days ,  for 1 minute apply 60000, for 5 minutes 300000 
 
 // db.connect((err)=>{
 //   if(err) {

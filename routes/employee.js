@@ -11,4 +11,12 @@ router.get('/login',(req,res)=>{
   res.render('employee/login',{loginpage});
 })
 
+router.get('/printlabel',(req,res)=>{
+  res.render('employee/Invoice')
+})
+
+router.get('/CreateFormula',(req,res)=>{
+  res.render('employee/CreateFormula')
+})
+
 module.exports = router;
