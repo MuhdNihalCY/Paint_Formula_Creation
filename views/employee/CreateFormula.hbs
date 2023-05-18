@@ -5,7 +5,7 @@
                 <div class="containerForCF">
                     <div class="MixerDetails" hidden>
                         <p class="MixerNameLabel">Mixer Name</p>
-                       <input type="text" name="MixerName" id="">   {{!--  Enter Mixer Name Here By Dynamic Process --}}
+                        <input type="text" name="MixerName" id=""> {{!--  Enter Mixer Name Here By Dynamic Process --}}
                     </div>
                     <div class="Cf_Header_Area_Buttons">
                         <button class="Cf_Header_Area_Buttons_EachOne">Clear All</button>
@@ -29,7 +29,7 @@
                         <div class="BasicDetailsLeftSection">
                             <div class="CFDateDiv">
                                 <p class="CFDateLabel">Date:</p>
-                                <input type="date" name="Date"  id="dateInput" value=''>
+                                <input type="date" name="Date" id="dateInput" disabled value=''>
                             </div>
                             <div class="CFFileNODiv">
                                 <p class="CFFileNOLabel">File No:</p>
@@ -61,6 +61,243 @@
                             </div>
                         </div>
                     </div>
+                    {{!-- Basic Details Ends Here --}}
+
+                    <hr class="BasicDetailsEndHR">
+
+                    {{!-- Category selection Starts --}}
+                    <div class="CFSelectionHeader">
+                        <div class="CFSelectCategory">
+                            <p class="CFSelectCategoryLabel">Category</p>
+                            <select name="Category" class="CFCategory" id="category">
+                                <option value="" disabled selected>Select Category</option>
+                                <option value="Paint">Paint</option>
+                            </select>
+                        </div>
+                        <div class="CFSelectSubCategory">
+                            <p class="CFSelectSubCategoryLabel">Sub Category</p>
+                            <select name="SubCategory" class="CFSubCategory" id="subCategory">
+                                <option value="" disabled selected>Select Sub Category</option>
+                                <option value="mipa 2k PUR">mipa 2k PUR</option>
+                            </select>
+                        </div>
+                    </div>
+                    {{!-- Category selection ends --}}
+
+                    <div class="MainMixingTableDiv">
+                        <table border="1" style="width:100%">
+                            <tr class="CFTableHeadRow">
+                                <th class="CFTableHead" rowspan="2">SL No</th>
+                                <th class="CFTableHead" rowspan="2">Tinters</th>
+                                <th class="CFTableHead" colspan="2">Total Quantity</th>
+                                <th class="CFTableHead" colspan="6" rowspan="2">QTY</th>
+                            </tr>
+                            <tr class="CFTableHeadRow">
+                                <th class="CFTableHead">in Grams</th>
+                                <th class="CFTableHead">in Volume</th>
+                            </tr>
+                            {{!-- Add Loop from here --}}
+                            <tr>
+                                <td class="CFTableRowData">1</td>
+                                <td class="CFTableRowData">R903</td>
+                                <td class="CFTableRowData">0.00</td>
+                                <td class="CFTableRowData">0.00</td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                            </tr>
+                            <tr>
+                                <td class="CFTableRowData">1</td>
+                                <td class="CFTableRowData">R903</td>
+                                <td class="CFTableRowData">0.00</td>
+                                <td class="CFTableRowData">0.00</td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                            </tr>
+                            <tr>
+                                <td class="CFTableRowData">1</td>
+                                <td class="CFTableRowData">R903</td>
+                                <td class="CFTableRowData">0.00</td>
+                                <td class="CFTableRowData">0.00</td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                            </tr>
+                            <tr>
+                                <td class="CFTableRowData">1</td>
+                                <td class="CFTableRowData">R903</td>
+                                <td class="CFTableRowData">0.00</td>
+                                <td class="CFTableRowData">0.00</td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
+                                        alt="AddIcon"></td>
+                            </tr>
+                            <tr>
+                                <td class="CFTableRowData"></td>
+                                <td class="CFTableRowData"></td>
+                                <td class="CFTableRowData"></td>
+                                <td class="CFTableRowData"></td>
+                                <td class="CFTableRowData"></td>
+                                <td class="CFTableRowData"></td>
+                                <td class="CFTableRowData"></td>
+                                <td class="CFTableRowData"></td>
+                                <td class="CFTableRowData"></td>
+                                <td class="CFTableRowData"></td>
+                            </tr>
+                        </table>
+                        {{!-- mixing Table Ends --}}
+                        {{!-- Total Calculations Starts Here --}}
+
+                    </div>
+
+
+                    {{!-- bulk  CoversionTable and  Binders  and Additives--}}
+                    <div class="CFBulkConverstedTableandBindersAndAdditives">
+                        {{!-- total without additives --}}
+                        <div class="CFBindersAndAdditives">
+                            <div class="CFBindersAndAdditivesUnits">
+                                <div class="CFeachUnit">
+                                    <p class="CFUnitsTotal">QTY (Grams)</p>
+                                </div>
+                                <div class="CFeachUnit">
+                                    <p class="CFUnitsTotal">Volume (ml)</p>
+                                </div>
+                            </div>
+                            <div class="CFBinder1Div">
+                                <p class="CFBinderName">Total Without Additives</p>
+                                <div class="CFTotalCalcDiv">
+                                    <input type="text" class="CFTotalInputElements" disabled value="43">
+                                    <input type="text" class="CFTotalInputElements" disabled value="43">
+                                </div>
+                            </div>
+                            <hr>
+                            {{!-- Binders  and Additives starts Here --}}
+                            <div class="CFBinderHead">
+                                <p class="CFBindersHeading">Binder</p>
+                                <div class="CFBindersAndAdditivesUnits">
+                                    <div class="CFeachUnit">
+                                        <p class="CFUnitsTotal">QTY (Grams)</p>
+                                    </div>
+                                    <div class="CFeachUnit">
+                                        <p class="CFUnitsTotal">Volume (ml)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {{!-- <hr> --}}
+                            <div class="CFBinder1Div">
+                                <p class="CFBinderName">PU 240-90</p>
+                                <div class="CFTotalCalcDiv">
+                                    <input type="text" class="CFTotalInputElements" disabled value="43">
+                                    <input type="text" class="CFTotalInputElements" disabled value="43">
+                                </div>
+                            </div>
+                            <div class="CFBinder2Div">
+                                <p class="CFBinderName">PU 240-90</p>
+                                <div class="CFTotalCalcDiv">
+                                    <input type="text" class="CFTotalInputElements" disabled value="43">
+                                    <input type="text" class="CFTotalInputElements" disabled value="43">
+                                </div>
+
+
+                            </div>
+                            <hr>
+                            <p class="CFBindersHeading">Additives</p>
+                            <div class="CFBinder1Div CFSelectAdditivesDiv">
+                                <p class="CFBinderName">Select Additive</p>
+                                <select class="CFSelectAdditives" name="additives" id="">
+                                    <option value="" disabled selected>Select Additive</option>
+                                    <option value="2K-Elastic">2K-Elastic</option>
+                                    <option value="2K-Elastic">2K-Elastic</option>
+                                </select>
+                            </div>
+                            <div class="CFBinder1Div">
+                                <p class="CFBinderName">Enter Additives in Percentage (%)</p>
+                                <input type="text" value="43">
+                            </div>
+                            <div class="CFBinder1Div">
+                                <p class="CFBinderName">Additives</p>
+                                <input type="text" disabled value="43">
+                            </div>
+                            {{!-- Binders and Additives Ends Here --}}
+                            <hr>
+                            {{!-- total Start Here --}}
+                            <div class="CFTotalWithAdditives">
+                                <div class="CFTotalWithAddUnit">
+                                    <div class="CFeachUnit">
+                                        <p class="CFUnitsTotal">QTY (Grams)</p>
+                                    </div>
+                                    <div class="CFeachUnit">
+                                        <p class="CFUnitsTotal">Volume (ml)</p>
+                                    </div>
+                                </div>
+                                <div class="CFTotalWithAddAndBinder">
+                                    <p class="CFBindersHeading">Total</p>
+                                    <div class="CFtotalwithAddValuesDiv">
+                                        <div class="CFtotalwithAddValues">
+                                            <p class="CFBindersHeading ">9745</p>
+                                        </div>
+                                        <div class="CFtotalwithAddValues">
+                                            <p class="CFBindersHeading ">9745</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{!-- total without additives Ends --}}
+
+                        {{!-- bulk convertion table Starts Here --}}
+                        <div class="CFBulkConvertionTable">
+                            <table border="1" style="width:100%">
+                                <tr class="CFTableHeadRow">
+                                    <th class="CFTableHead" rowspan="2"></th>
+                                    <th class="CFTableHead" rowspan="2">Tinters</th>
+                                </tr>
+                                <tr class="CFTableHeadRow">
+                                    <th class="CFTableHead">in Grams</th>
+                                    <th class="CFTableHead">in Volume</th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

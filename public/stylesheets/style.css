@@ -343,9 +343,222 @@ a {
   font-weight: 700;
 }
 
-.BasicDetails input[type="date"], [type="text"] {
+.BasicDetails input[type="date"],
+[type="text"] {
   width: 50%;
   font-size: 20px;
   font-weight: 700;
   padding-left: 1rem;
+}
+
+.BasicDetailsEndHR {
+  margin-top: 2rem;
+}
+
+.CFSelectionHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  margin-top: 3rem;
+}
+
+.CFSelectCategory,
+.CFSelectSubCategory {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-left: 4rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5rem;
+}
+
+.CFSelectCategoryLabel,
+.CFSelectSubCategoryLabel {
+  margin: 1rem 2rem;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.CFCategory,
+.CFSubCategory {
+  width: 60%;
+  font-size: 20px;
+  font-weight: 600;
+  padding-left: 1rem;
+  padding: 1rem 1rem;
+
+}
+
+
+/* create formula table */
+.MainMixingTableDiv {
+  margin-top: -2rem;
+  margin-bottom: 3rem;
+}
+
+.CFTableHeadRow {
+  background-color: gray;
+  color: whitesmoke;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 5px;
+  text-align: center;
+}
+
+.CFTableRowData {
+  padding: 1rem 0;
+}
+
+.AddIcon {
+  width: 15px;
+  height: 15px;
+  margin-left: 1rem;
+}
+
+.CFBindersAndAdditivesUnits {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+.CFeachUnit {
+  width: 100px;
+  margin-left: 2rem;
+}
+
+.CFUnitsTotal {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.CFTotalInputElements {
+  margin-left: 2rem;
+}
+
+.CFTotalWithoutAdditives {
+  /* border: 1px solid rgba(0, 0, 0, 0.529); */
+  border-top: transparent;
+  width: 48%;
+  display: flex;
+  align-items: center;
+  height: 68px;
+}
+
+.CFTotalWithoutAdditivesLabel {
+  height: 100%;
+  border-top: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 42%;
+  /* border: 1px solid rgba(0, 0, 0, 0.319); */
+}
+
+.CFTotalWithoutAdditivesinGrams,
+.CFTotalWithoutAdditivesinVolume {
+  height: 100%;
+  width: 29%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CFBulkConverstedTableandBindersAndAdditives {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  width: 100%;
+}
+
+.CFBinderHead {
+  display: flex;
+  justify-content: space-between;
+}
+
+.CFBindersAndAdditives {
+  width: 40%;
+  border: 1px solid rgba(0, 0, 0, 0.319);
+  padding: 1rem;
+}
+
+.CFBinder1Div,
+.CFBinder2Div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.CFBindersHeading {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.CFBinderName {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.CFBinder1Div input[type="text"],
+.CFBinder2Div input[type="text"] {
+  width: 100px;
+  text-align: center;
+}
+
+.CFTotalCalcDiv {
+  margin-left: 2rem;
+}
+
+.CFSelectAdditives {
+  width: 200px;
+  padding: 1rem;
+  margin-top: -1rem;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.CFSelectAdditivesDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.CFSelectAdditivesDiv p {
+  margin-top: 1rem;
+}
+
+.CFTotalWithAdditives {
+  display: flex;
+  flex-direction: column;
+}
+
+.CFTotalWithAddUnit {
+  display: flex;
+  justify-content: end;
+}
+
+.CFTotalWithAddAndBinder {
+  display: flex;
+  justify-content: space-between;
+}
+
+.CFtotalwithAddValuesDiv {
+  display: flex;
+}
+
+.CFtotalwithAddValues {
+  width: 100px;
+  text-align: center;
+  margin-left: 2rem;
+}
+.CFBulkConvertionTable {
+  width: 50%;
 }
