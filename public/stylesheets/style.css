@@ -559,6 +559,290 @@ td {
   text-align: center;
   margin-left: 2rem;
 }
+
 .CFBulkConvertionTable {
   width: 50%;
+}
+
+.CFsolidContentCalcDivArea {
+  margin-top: 3rem;
+  width: 40%;
+  border: 1px solid rgba(0, 0, 0, 0.319);
+  padding: 2rem 1rem;
+}
+
+.CFsolidContentCalcDiv {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.CFSolidContentInput {
+  width: 300px;
+  text-align: center;
+  margin-top: -10px;
+}
+
+.CFSolidContentInputNoLabel {
+  width: 350px;
+  text-align: center;
+  margin-top: -10px;
+  height: 45px;
+}
+
+.CFsolidContentCalcDivNoLabel {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  padding: 1rem 0;
+}
+
+.CFRemark {
+  margin-top: 3rem;
+  width: 40%;
+  border: 1px solid rgba(0, 0, 0, 0.319);
+  background-color: #6b6b6b;
+  border-radius: 5px;
+  margin-bottom: 5rem;
+}
+
+.CFRemarkHeading {
+  display: flex;
+  align-items: center;
+  padding: .5rem 1rem;
+  background-color: #414141;
+  width: 100%;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.CFRemarkHeading p {
+  margin-top: 1rem;
+}
+
+.CFRemarksDIv {
+  height: 6rem;
+  padding: 1rem;
+  color: whitesmoke;
+}
+
+
+/* Creating formula Ends */
+
+
+
+/* admin Side Starts */
+
+.AdminPage {
+  display: flex;
+  flex-direction: row;
+}
+
+.ADSidebar {
+  width: 25%;
+  /* height: 130%; */
+  position: absolute;
+  background-color: #3D3D3D;
+  padding-bottom: 10rem;
+}
+
+.ADSidebarLogoDiv {
+  width: 300px;
+}
+
+.AdLogo {
+  margin: 4vh 0vw 0vh 4vw;
+  width: 15vw;
+  user-select: none;
+}
+
+.ADSelectioSideBarDIv {
+  margin-top: 10vh;
+}
+
+.ADSelectioSideBarDIv a {
+  text-decoration: none;
+}
+
+.Category {
+  user-select: none;
+  margin-left: 2vw;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+  /* border: 1px solid black; */
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+  padding: 5px;
+}
+
+.Category:hover {
+  background-color: #5e5e5e;
+}
+
+.ADactiveButton {
+  background-color: #848484;
+}
+
+.ADactiveButton .ADMoreIcon {
+  margin: 1vh 2vw 0vh 0vw;
+}
+
+
+
+.ADDelectionSideBarLabel {
+  font-size: 2vw;
+  color: white;
+  font-weight: 600;
+  margin: 0.7vh 0vw 0.6vh 1vw;
+}
+
+.ADMoreIcon {
+  margin: 1vh 4vw 0vh 0vw;
+  width: 2vw;
+  height: 2vw;
+}
+
+.ADAccount {
+  display: flex;
+  justify-content: space-around;
+  user-select: none;
+  margin-left: 2vw;
+  margin-top: 5vh;
+  margin-bottom: 2vh;
+  width: 80%;
+  padding: 5px;
+  border: 1px solid whitesmoke;
+  border-radius: 25px;
+}
+
+.ADAccount:hover {
+  background-color: #5e5e5e;
+  border: none;
+}
+
+.ADAccountIcon {
+  margin: 1vh 2vw 0vh 0vw;
+  width: 2vw;
+  height: 2vw;
+  transform: rotate(90deg);
+}
+
+.ADAccountExpandDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  width: 80%;
+
+  margin-top: -2vh;
+  margin-left: 2vw;
+  background-color: #2a2a2a;
+  border-radius: 15px;
+  display: none;
+}
+
+.ADAccountExpandDiv a {
+  height: 100%;
+  width: 100%;
+}
+
+.ADlogoutDiv {
+  padding: 1vw;
+  margin-top: 2vh;
+  display: flex;
+  justify-content: center;
+}
+
+.ADlogoutDiv p {
+  margin-top: 1vh;
+  font-size: 30px;
+  color: whitesmoke;
+  font-weight: 600;
+
+}
+
+.ADLogoutIcon {
+  width: 1.5vw;
+  height: 1.5vw;
+  margin-top: 1.5vh;
+  margin-left: 1vw;
+}
+
+.ADAccount:hover+.ADAccountExpandDiv,
+.ADAccountExpandDiv:hover {
+  display: block;
+}
+
+
+.AdMainArea {
+  margin-left: 25%;
+  width: 75%;
+  height: 100;
+  padding-bottom: 84vh;
+  background-color: #f7f5f1cc;
+}
+
+.ADMainAreaHeader {
+  font-size: 6vw;
+  font-weight: 700;
+  margin: 5vh 0vw 0vh 3vw;
+}
+
+.ADMainAddButtonDiv {
+  display: flex;
+  justify-content: end;
+  margin-right: 10vw;
+}
+
+.ADMainAddButtonDiv a {
+  text-decoration: none;
+}
+
+.ADMainAddButton {
+  width: 250px;
+  height: 50px;
+  background-color: #3D3D3D;
+  border-radius: 25px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.ADMainAddButton p {
+  font-size: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  color: whitesmoke;
+  margin-top: 9px;
+}
+
+.ADAddNewIcon {
+  width: 35px;
+  height: 35px;
+  margin-top: 8px;
+}
+
+.ADMainTableDiv {
+  margin: 5vh 0 0 3vw;
+  width: 85%;
+}
+
+.ADMainTable {
+  width: 100%;
+}
+
+.ADTable {
+  width: 100%;
+}
+
+.ADTable tr{
+  height: 60px;
+}
+
+.ADTableHeadTR {
+  height: 40px;
 }

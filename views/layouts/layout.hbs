@@ -19,11 +19,15 @@
 <body>
 
     {{#if loginpage}}
-        {{{body}}}
+    {{{body}}}
     {{else}}
-        {{>header}}
-        {{{body}}}
-        {{>footer}}
+    {{#if admin}}
+    {{{body}}}
+    {{else}}
+    {{>header}}
+    {{{body}}}
+    {{>footer}}
+    {{/if}}
     {{/if}}
 
 
