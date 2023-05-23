@@ -1,3 +1,6 @@
+
+
+
 function CFtoggleDropdown() {
     var dropdownContent = document.querySelector('.dropdown-content');
     dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
@@ -18,3 +21,4 @@ document.addEventListener('DOMContentLoaded', function () {
     dateInput.min = `${year}-${month}-${day - 7}`;
     dateInput.max = `${year}-${month}-${day - -7}`;
 });
+

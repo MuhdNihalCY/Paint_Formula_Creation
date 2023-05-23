@@ -42,6 +42,8 @@ app.use(session({
 //     console.log("Database connection established");
 //   } 
 // })
+
+
 db.connect()
   .then(() => {
     console.log("Database connection established on port 3000");
