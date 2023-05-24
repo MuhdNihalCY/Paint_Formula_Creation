@@ -22,3 +22,19 @@ document.addEventListener('DOMContentLoaded', function () {
     dateInput.max = `${year}-${month}-${day - -7}`;
 });
 
+
+// Admin side Add Category Form
+function OpenCategoryAddingForm() {
+    const popupContainer = document.getElementById('ADpopupContainer');
+    popupContainer.style.display = 'flex';
+}
+
+function closeCategoryAddingForm() {
+    const popupContainer = document.getElementById('ADpopupContainer');
+    popupContainer.style.display = 'none';
+}
+
+// Error while adding Category;
+if (AddError){
+    alert(AddError);
+}

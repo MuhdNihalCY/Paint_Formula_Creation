@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'secret', 
+  secret: 'secret',
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 2592000000 }
@@ -44,14 +44,26 @@ app.use(session({
 // })
 
 
-db.connect()
-  .then(() => {
+const startApp = async () => {
+  try {
+    await db.connect();
     console.log("Database connection established on port 3000");
-    // add your application code here
-  })
-  .catch((err) => {
-    console.log("Connection error: " + err);
-  });
+  } catch (err) {
+    console.error("Connection error: " + err);
+  }
+}
+
+startApp();
+
+
+// db.connect()
+//   .then(() => {
+//     console.log("Database connection established on port 3000");
+//     // add your application code here
+//   })
+//   .catch((err) => {
+//     console.log("Connection error: " + err);
+//   });
 
 app.use('/', EmployeeRouter);
 app.use('/admin', AdminRouter);

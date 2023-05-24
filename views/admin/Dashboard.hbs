@@ -69,40 +69,53 @@
                 <p class="ADMainAreaHeader">Category</p>
             </div>
             <div class="ADMainAddButtonDiv">
-                <a href="/addCategory">
-                    <div class="ADMainAddButton">
-                        <p>Add New</p>
-                        <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
-                    </div>
-                </a>
+                {{!-- <a href="/admin/addCategory"> --}}
+                <div onclick="OpenCategoryAddingForm()" class="ADMainAddButton">
+                    <p>Add New</p>
+                    <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
+                </div>
+                {{!-- </a> --}}
             </div>
             <div class="ADMainTableDiv">
                 <table class="ADMainTable">
-                    <thead class="ADTableHead" >
-                        <tr class="ADTableHeadTR" >
+                    <thead class="ADTableHead">
+                        <tr class="ADTableHeadTR">
                             <th>ID</th>
                             <th>Category Name</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {{#each AllCategory}}
                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
+                            <td>{{this.Category_Id}}</td>
+                            <td>{{this.Category}}</td>
+                            <td><a href="/admin/Detele-Category/{{this._id}}" class="btn btn-danger">Delete <img class="ADdeleteIcon" src="/images/Icons/bin.png" alt=""></a></td>
                         </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
+                        {{/each}}
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        {{!-- Addcategory form --}}
+
+        <div id="ADpopupContainer">
+            <div id="ADpopupContent">
+                <!-- Add your popup content here -->
+                <div class="ADAddCategoryFromHeaderDiv">
+                    <p class="ADAddCategoryFromHeader">Add Category</p>
+                    <div onclick="closeCategoryAddingForm()" class="ADAddCategoryFromCloseBTNDiv">
+                        <img src="/images/Icons/delete-button.png" alt="" class="ADaddCloseBTNIcon">
+                    </div>
+                </div>
+                <form action="/admin/AddCategory" method="post">
+                    <div class="ADAddCategoryFromDiv">
+                        <p class="ADAddCategoryLabel">Category Name:</p>
+                        <input class="ADAddCategoryTextInput" type="text" name="Category" placeholder="Enter the Name of category">
+                        <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Category</button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>

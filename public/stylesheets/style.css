@@ -686,6 +686,9 @@ td {
 
 .ADactiveButton {
   background-color: #848484;
+  -webkit-box-shadow: -7px 7px 4px -1px rgba(0, 0, 0, 0.61);
+  -moz-box-shadow: -7px 7px 4px -1px rgba(0, 0, 0, 0.61);
+  box-shadow: -7px 7px 4px -1px rgba(0, 0, 0, 0.61);
 }
 
 .ADactiveButton .ADMoreIcon {
@@ -810,6 +813,7 @@ td {
   border-radius: 25px;
   display: flex;
   justify-content: space-evenly;
+  user-select: none;
 }
 
 .ADMainAddButton p {
@@ -839,10 +843,108 @@ td {
   width: 100%;
 }
 
-.ADTable tr{
+.ADTable tr {
   height: 60px;
 }
 
 .ADTableHeadTR {
   height: 40px;
+}
+
+.ADdeleteIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.ADSubCategorySelectionArea {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  padding-right: 10vw;
+  padding-top: 2rem;
+}
+
+.ADSubCategorySelectionDiv {
+  display: flex;
+  align-items: baseline;
+}
+
+.ADSubCategorySelectionLabel {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.ADSubCategorySelectionSelectBox {
+  width: 13rem;
+  padding: 1rem;
+  font-size: 1.5rem;
+  margin: 0 0 0 1.5rem;
+}
+
+
+/* form for add Category */
+#ADpopupContainer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(36, 36, 36, 0.5);
+  /* Red with 50% opacity */
+  backdrop-filter: blur(8px);
+  /* Blurred effect */
+  justify-content: center;
+  align-items: center;
+  transition: display 2s ease-in;
+}
+
+#ADpopupContent {
+  width: 400px;
+  height: 300px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.ADAddCategoryFromHeaderDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.ADAddCategoryFromHeader {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.ADaddCloseBTNIcon {
+  width: 3rem;
+  height: 3rem;
+  margin-top: -1rem;
+}
+
+.ADAddCategoryFromDiv {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.ADAddCategoryLabel{
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.ADAddCategoryTextInput {
+  width: 100%;
+  padding: .5rem .5rem .5rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.ADaddCategorySubmitBTN {
+  width: 80%;
+  font-weight: 700;
+  margin-right: auto;
+  margin-left: auto;
 }
