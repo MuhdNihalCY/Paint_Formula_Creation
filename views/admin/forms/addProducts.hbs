@@ -1,0 +1,153 @@
+<section>
+    <div class="ADProductsAddingFormDiv">
+        <div class="container">
+            <div class="ADProductsAddingMainDiv">
+                <div class="ADProductsAddingFormDiv__title">
+                    <p>Add product</p>
+                    <hr>
+                </div>
+                <form action="/admin/addProducts" method="post">
+                    <div class="ADFormAdding">
+                        <div class="ADFormAddingCatgorySelection">
+                            <div class="ADFromAddingSingleRow">
+                                <p class="ADSubCategorySelectionLabel">Select Category</p>
+                                <select required class="ADSubCategorySelectionSelectBox" name="Category" id="CategorySelect">
+                                    {{!-- <option value="" selected>All Category</option> --}}
+                                    {{#each AllCategory}}
+                                    <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
+                                        {{this.Category_Id}} -
+                                        {{this.Category}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="ADFromAddingSingleRow">
+                                <p class="ADSubCategorySelectionLabel">Select Sub Category</p>
+                                <select required class="ADSubCategorySelectionSelectBox" name="SubCategory"
+                                    id="SubCategorySelect">
+                                    {{!-- <option value="" selected>All Sub Category</option> --}}
+                                    {{#each AllSubCategory}}
+                                    <option class="ADSelectCategoryOptions" value="{{this.SubCategory_Id}}">
+                                        {{this.SubCategory_Id}} - {{this.SubCategory}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ADFormAddingCatgorySelection">
+                            <div class="ADFromAddingSingleRow">
+                                <p class="ADSubCategorySelectionLabel">Product Name</p>
+                                <input type="text" name="Product_Name" class="ADProductInputBox" required>
+                            </div>
+                            <div class="ADFromAddingSingleRow">
+                                <p class="ADSubCategorySelectionLabel">Density</p>
+                                <input type="text" name="Product_Density" class="ADProductInputBox" required>
+                            </div>
+                        </div>
+                        <div class="ADFormAddingCatgorySelection">
+                            <div class="ADFromAddingSingleRow">
+                                <p class="ADSubCategorySelectionLabel">Price (in liter)</p>
+                                <input type="number" step="any" name="Price_Liter" class="ADProductInputBox" required>
+                            </div>
+                            <div class="ADFromAddingSingleRow">
+                                <p class="ADSubCategorySelectionLabel">Price (in kilogram)</p>
+                                <input type="number" step="any" name="Price_Kilogram" class="ADProductInputBox" required>
+                            </div>
+                        </div>
+                        <div class="ADFormAddingCatgorySelection">
+                            <div class="ADFromAddingSingleRow">
+                                <p class="ADSubCategorySelectionLabel">VOC</p>
+                                <input type="number" step="any" name="VOC" class="ADProductInputBox"required>
+                            </div>
+                            <div class="ADFromAddingSingleRow">
+                                <p class="ADSubCategorySelectionLabel">Solid Content</p>
+                                <input type="number" step="any" name="SolidContent" class="ADProductInputBox" required>
+                            </div>
+                        </div>
+                        <div class="ADFormAddingCatgorySelection">
+                            <div class="ADFromAddingSingleRow">
+                                <p class="ADSubCategorySelectionLabel">Stock</p>
+                                <input type="number" name="Stock" class="ADProductInputBox" required>
+                            </div>
+                        </div>
+                        <button class="ADPRoductSubmitBTN" type="submit"> Submit </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    //ajax
+    function ADgetAllSubCategories() {
+        return fetch('/admin/Subcategories/api')
+            .then(response => response.json())
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+    function ADgetAllCategories() {
+        return fetch('/admin/Categories/api')
+            .then(response => response.json())
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+    Promise.all([ADgetAllSubCategories(), ADgetAllCategories()])
+        .then(([subCategories, categories]) => {
+            // Process the retrieved subcategories and categories
+            console.log(subCategories);
+            console.log(categories);
+
+            // Assign the values to the variables
+            var subCategories = subCategories;
+            var categories = categories;
+
+            // Continue with your code here...
+
+
+
+            // Get the category select element
+            const categorySelect = document.getElementById('CategorySelect');
+
+            // Get the subcategory select element
+            const subCategorySelect = document.getElementById('SubCategorySelect');
+
+            // Add an event listener to the category select element
+            categorySelect.addEventListener('change', () => {
+                // Get the selected category ID
+                const categoryId = categorySelect.value;
+
+                // Filter the subcategories based on the selected category ID
+                const filteredSubCategories = subCategories.filter(subCategory => subCategory.Category_Id === categoryId);
+
+                // Clear the subcategory select box
+                subCategorySelect.innerHTML = '';
+
+                // Create and append the option elements for the filtered subcategories
+
+                if (filteredSubCategories.length > 0) {
+                    filteredSubCategories.forEach(subCategory => {
+                        const option = document.createElement('option');
+                        option.value = subCategory.SubCategory_Id;
+                        option.textContent = subCategory.SubCategory;
+                        subCategorySelect.appendChild(option);
+                    });
+                    // Enable the subcategory select box
+                    subCategorySelect.disabled = false;
+                } else {
+                    // Add a "No Subcategory" option
+                    const option = document.createElement('option');
+                    option.textContent = 'No SubCategory available';
+                    subCategorySelect.appendChild(option);
+
+                    // Disable the subcategory select box
+                    subCategorySelect.disabled = true;
+                }
+            });
+        });
+
+</script>

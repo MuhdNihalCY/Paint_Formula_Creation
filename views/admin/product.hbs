@@ -69,37 +69,50 @@
                 <p class="ADMainAreaHeader">Products</p>
             </div>
             <div class="ADMainAddButtonDiv">
-                <a href="/addCategory">
+                <a href="/admin/addProduct">
                     <div class="ADMainAddButton">
                         <p>Add New</p>
                         <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
                     </div>
                 </a>
             </div>
+            <div class="ADSubCategorySelectionArea">
+                <div class="ADSubCategorySelectionDiv">
+                    <p class="ADSubCategorySelectionLabel">Select Category</p>
+                    <select class="ADSubCategorySelectionSelectBox" onchange="ADcategorySelect()" name="Category"
+                        id="CategorySelect">
+                        <option value="1" selected>All Category</option>
+                        {{#each AllCategory}}
+                        <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">{{this.Category_Id}} -
+                            {{this.Category}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="ADSubCategorySelectionDiv">
+                    <p class="ADSubCategorySelectionLabel">Select Sub Category</p>
+                    <select class="ADSubCategorySelectionSelectBox" onchange="ADSubcategorySelect()" name="SubCategory"
+                        id="SubCategorySelect" disabled>
+                        <option value="0" selected>All Sub Category</option>
+                    </select>
+                </div>
+            </div>
             <div class="ADMainTableDiv">
                 <table class="ADMainTable">
-                    <thead class="ADTableHead" >
-                        <tr class="ADTableHeadTR" >
+                    <thead class="ADTableHead">
+                        <tr class="ADTableHeadTR">
                             <th>ID</th>
+                            <th>Product Name</th>
+                            <th>Sub Category Name</th>
                             <th>Category Name</th>
+                            <th>Density</th>
+                            <th>Stock</th>
+                            <th>Price (ltr)</th>
+                            <th>Price (kg)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -107,3 +120,252 @@
         </div>
     </section>
 </section>
+
+
+
+
+<script>
+    //ajax
+    function ADgetAllSubCategories() {
+        return fetch('/admin/Subcategories/api')
+            .then(response => response.json())
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+    function ADgetAllCategories() {
+        return fetch('/admin/Categories/api')
+            .then(response => response.json())
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+    Promise.all([ADgetAllSubCategories(), ADgetAllCategories()])
+        .then(([subCategories, categories]) => {
+            // Process the retrieved subcategories and categories
+            console.log(subCategories);
+            console.log(categories);
+
+            // Assign the values to the variables
+            var subCategories = subCategories;
+            var categories = categories;
+
+            // Continue with your code here...
+
+
+
+            // Get the category select element
+            const categorySelect = document.getElementById('CategorySelect');
+
+            // Get the subcategory select element
+            const subCategorySelect = document.getElementById('SubCategorySelect');
+
+            // Add an event listener to the category select element
+            categorySelect.addEventListener('change', () => {
+                // Get the selected category ID
+                const categoryId = categorySelect.value;
+
+                if (categoryId === "1") {
+                    // Add a "No Subcategory" option
+                    while (subCategorySelect.options.length > 0) {
+                        subCategorySelect.remove(0);
+                    }
+
+                    const option = document.createElement('option');
+                    option.textContent = 'All Sub Categories';
+                    option.value = "0"
+                    subCategorySelect.appendChild(option);
+
+                    //alert(subCategorySelect.value)
+
+
+                    // Disable the subcategory select box
+                    subCategorySelect.disabled = true;
+                    ADSubcategorySelect();
+                } else {
+
+                    // Filter the subcategories based on the selected category ID
+                    const filteredSubCategories = subCategories.filter(subCategory => subCategory.Category_Id === categoryId);
+
+                    // Clear the subcategory select box
+                    subCategorySelect.innerHTML = '';
+
+                    // Create and append the option elements for the filtered subcategories
+
+                    if (filteredSubCategories.length > 0) {
+
+                        /* const option = document.createElement('option');
+                         option.value = "1";
+                         option.textContent = "All Sub Category";
+                         subCategorySelect.appendChild(option);*/
+
+                        filteredSubCategories.forEach(subCategory => {
+                            const option = document.createElement('option');
+                            option.value = subCategory.SubCategory_Id;
+                            option.textContent = subCategory.SubCategory;
+                            subCategorySelect.appendChild(option);
+                        });
+                        // Enable the subcategory select box
+                        ADSubcategorySelect();
+                        subCategorySelect.disabled = false;
+                    } else {
+                        // Add a "No Subcategory" option
+                        const option = document.createElement('option');
+                        option.value = "0";
+                        option.textContent = 'No SubCategory available';
+                        subCategorySelect.appendChild(option);
+
+                        // Disable the subcategory select box
+
+                        subCategorySelect.disabled = true;
+                    }
+                }
+
+                console.log(subCategorySelect.value);
+            });
+        });
+
+
+    function AddProductsToTable(data) {
+
+        const categoryData = data.Category;
+        const subCategoryData = data.SubCategory;
+        const productData = data.Products;
+
+        console.log("Calling Addproducts to Table");
+        console.table(categoryData);
+        console.table(subCategoryData);
+        console.table(productData);
+
+        function populateTable(categoryData,subCategoryData,productData) {
+            const tableBody = document.querySelector('.ADMainTable tbody');
+
+            // Clear existing table rows
+            tableBody.innerHTML = '';
+
+            // Function to match category and subcategory IDs and update product data
+            function updateProductData() {
+                productData.forEach((product) => {
+                    const category = categoryData.find((category) => category.Category_Id === parseInt(product.Category) );
+                    console.log("Product: ",product.Product_Name ," category: ",category);
+                    const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === parseInt(product.SubCategory));
+                    console.log("Product: ",product.Product_Name ," category: ",subCategory);
+
+                    if (category) {
+                        product.CategoryName = category.Category;
+                    }
+                    if (subCategory) {
+                        product.SubCategoryName = subCategory.SubCategory;
+                    }
+                });
+                console.log("Updates Product Data with category and sub category");
+                //console.log(productData[0].CategoryName);
+            }
+
+            // Call the function to update product data
+            updateProductData(productData);
+
+            console.table()
+
+            // Iterate over productData array and create table rows
+            productData.forEach((product) => {
+                // Find the category and subcategory names based on IDs
+                const category = categoryData.find((category) => category.Category_Id === product.Category);
+                const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === product.SubCategory);
+
+                // Create a new table row
+                const row = document.createElement('tr');
+
+                // Populate table cells with data
+                row.innerHTML = `
+      <td>${product.Product_Id}</td>
+      <td>${product.Product_Name}</td>
+      <td>${product.SubCategoryName}</td>
+      <td>${product.CategoryName}</td>
+      <td>${product.Product_Density}</td>
+      <td>${product.Stock}</td>
+      <td>${product.Price_Liter}</td>
+      <td>${product.Price_Kilogram}</td>
+      <td>Action</td>
+    `;
+
+                // Append the row to the table body
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Call the function to populate the table
+        populateTable(categoryData,subCategoryData,productData);
+    }
+
+
+    function ADSubcategorySelect(value) {
+        const subCategorySelect = document.getElementById('SubCategorySelect');
+        alert(subCategorySelect.value)
+
+        var SubCategory_Id = subCategorySelect.value;
+
+        if (SubCategory_Id === "0") {
+            // call all  products
+            async function fetchData() {
+                try {
+                    const response = await fetch(`/admin/GetAllProduct-Cat-Sub/api`, {
+                        method: 'GET', // Specify the HTTP method (e.g., GET, POST, etc.)
+                        headers: {
+                            'Content-Type': 'application/json' // Specify the content type of the request
+                            // Add any additional headers as needed
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Process the data received from the backend
+                        console.log(data);
+                        // Call a function or perform any actions with the data
+                        AddProductsToTable(data);
+
+                    } else {
+                        throw new Error('Request failed with status ' + response.status);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+
+            fetchData();
+        } else {
+            async function fetchData() {
+                try {
+                    const response = await fetch(`/admin/GetAllProduct-Cat-Sub/api/${SubCategory_Id}`, {
+                        method: 'GET', // Specify the HTTP method (e.g., GET, POST, etc.)
+                        headers: {
+                            'Content-Type': 'application/json' // Specify the content type of the request
+                            // Add any additional headers as needed
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Process the data received from the backend
+                        console.log(data);
+
+                        // Call a function or perform any actions with the data
+                        AddProductsToTable(data);
+
+                    } else {
+                        throw new Error('Request failed with status ' + response.status);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+
+            fetchData();
+
+
+        }
+    }
+
+</script>
