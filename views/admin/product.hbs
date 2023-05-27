@@ -239,7 +239,7 @@
         console.table(subCategoryData);
         console.table(productData);
 
-        function populateTable(categoryData,subCategoryData,productData) {
+        function populateTable(categoryData, subCategoryData, productData) {
             const tableBody = document.querySelector('.ADMainTable tbody');
 
             // Clear existing table rows
@@ -248,10 +248,10 @@
             // Function to match category and subcategory IDs and update product data
             function updateProductData() {
                 productData.forEach((product) => {
-                    const category = categoryData.find((category) => category.Category_Id === parseInt(product.Category) );
-                    console.log("Product: ",product.Product_Name ," category: ",category);
+                    const category = categoryData.find((category) => category.Category_Id === parseInt(product.Category));
+                    console.log("Product: ", product.Product_Name, " category: ", category);
                     const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === parseInt(product.SubCategory));
-                    console.log("Product: ",product.Product_Name ," category: ",subCategory);
+                    console.log("Product: ", product.Product_Name, " category: ", subCategory);
 
                     if (category) {
                         product.CategoryName = category.Category;
@@ -288,7 +288,7 @@
       <td>${product.Stock}</td>
       <td>${product.Price_Liter}</td>
       <td>${product.Price_Kilogram}</td>
-      <td>Action</td>
+      <td><a class="btn btn-primary ADProductEditBTN" href="/admin/editProduct/${product.Product_Id}">Edit</a></td>
     `;
 
                 // Append the row to the table body
@@ -297,7 +297,7 @@
         }
 
         // Call the function to populate the table
-        populateTable(categoryData,subCategoryData,productData);
+        populateTable(categoryData, subCategoryData, productData);
     }
 
 
@@ -368,4 +368,32 @@
         }
     }
 
+
+    window.onload = function () {
+        async function fetchData() {
+            try {
+                const response = await fetch(`/admin/GetAllProduct-Cat-Sub/api`, {
+                    method: 'GET', // Specify the HTTP method (e.g., GET, POST, etc.)
+                    headers: {
+                        'Content-Type': 'application/json' // Specify the content type of the request
+                        // Add any additional headers as needed
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Process the data received from the backend
+                    console.log(data);
+                    // Call a function or perform any actions with the data
+                    AddProductsToTable(data);
+
+                } else {
+                    throw new Error('Request failed with status ' + response.status);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        fetchData();
+    };
 </script>

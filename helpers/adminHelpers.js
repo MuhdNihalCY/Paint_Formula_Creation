@@ -1,7 +1,7 @@
 var db = require('../config/connection');
 var collection = require('../config/collection');
 const { ObjectId } = require('mongodb');
-const { request } = require('express');
+const { request, response } = require('express');
 
 
 module.exports = {
@@ -90,7 +90,7 @@ module.exports = {
             var SameCatagory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ "SubCategory": data.SubCategory });
             if (SameCatagory) {
                 // already Subcategory Added
-                var State = { Status: false, error: "Sub Category "+ data.SubCategory +" is already in Database" }
+                var State = { Status: false, error: "Sub Category " + data.SubCategory + " is already in Database" }
                 resolve(State)
             } else {
                 // get latest Inserted SubCategory
@@ -125,53 +125,117 @@ module.exports = {
             resolve(SubCategories);
         })
     },
-    addProduct:(data)=>{
+    addProduct: (data) => {
         return new Promise(async (resolve, reject) => {
             // console.log(data)
             var SameProduct = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": data.Product_Name });
             // console.log(SameProduct);
-            var State  = {
-                Status:false,
-                error:false
+            var State = {
+                Status: false,
+                error: false
             }
-            if(!SameProduct){
+            if (!SameProduct) {
 
                 data.InsertedTime = Date.now();
 
-                var latestProductAdded = await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({"InsertedTime": -1}).toArray()
+                var latestProductAdded = await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray()
                 // console.log(latestProductAdded);
 
-                if(latestProductAdded.length > 0){
+                if (latestProductAdded.length > 0) {
                     latestProductAdded = latestProductAdded[0];
                     data.Product_Id = parseInt(latestProductAdded.Product_Id) + 1;
-                }else{
+                } else {
                     data.Product_Id = 10000;
                 }
 
-                await db.get().collection(collection.PRODUCT_COLLECTION).insertOne(data).then((response)=>{
-                    if(response.insertedId){
+                await db.get().collection(collection.PRODUCT_COLLECTION).insertOne(data).then((response) => {
+                    if (response.insertedId) {
                         State.Status = true;
-                    }else{
+                    } else {
                         State.Status = false;
                         State.error = "Product is not Added, Try Again."
                     }
                 })
-            }else{
+            } else {
                 State.error = "Product Already Exists."
             }
             resolve(State);
         })
     },
-    GetProduct:(id)=>{
+    GetProduct: (id) => {
         return new Promise(async (resolve, reject) => {
             var Product = await db.get().collection(collection.PRODUCT_COLLECTION).find({ SubCategory: id }).toArray();
             resolve(Product);
         })
     },
-    GetAllProduct:()=>{
-        return new Promise(async(resolve,reject)=>{
+    GetAllProduct: () => {
+        return new Promise(async (resolve, reject) => {
             var products = await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray();
             resolve(products);
+        })
+    },
+    GetProductByID: (id) => {
+        return new Promise(async (resolve, reject) => {
+            console.log(id);
+            var product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: parseInt(id) });
+            resolve(product);
+        })
+    },
+    UpdateProduct: (data) => {
+        return new Promise(async (resolve, reject) => {
+            // console.log(data);
+            var State = {
+                Status: false,
+                error: ""
+            }
+            // console.log(data.Product_Name)
+            var SameProduct = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: parseInt(data.Product_Id) });
+            // console.log(SameProduct);
+            if (SameProduct) {
+
+                await db.get().collection(collection.PRODUCT_COLLECTION).updateOne(
+                    { _id: SameProduct._id },
+                    {
+                        $set: {
+                            Category: data.Category,
+                            SubCategory: data.SubCategory,
+                            Product_Name: data.Product_Name,
+                            Product_Density: data.Product_Density,
+                            Price_Liter: data.Price_Liter,
+                            Price_Kilogram: data.Price_Kilogram,
+                            VOC: data.VOC,
+                            SolidContent: data.SolidContent,
+                            Stock: data.Stock
+                        }
+                    }
+                ).then((response)=>{
+                    // console.log(response);
+                    if(response.acknowledged){
+                        State.Status = true;
+                    }
+                    resolve(State)
+                });
+
+            }
+
+        })
+    },
+    DeleteProductById:(id)=>{
+        return new Promise (async(resolve,reject)=>{
+            var State = {
+                Status : false,
+                error : ""
+            }
+
+            await db.get().collection(collection.PRODUCT_COLLECTION).deleteOne({Product_Id: parseInt(id)}).then((response)=>{
+                // console.log(response)
+                if(response.deletedCount){
+                    State.Status = true
+                }else{
+                    State.error = "Product Id Not Found"
+                }
+                resolve(State);
+            })
         })
     }
 } 

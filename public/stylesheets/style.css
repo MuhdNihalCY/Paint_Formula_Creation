@@ -1040,3 +1040,13 @@ td {
   font-weight: 700;
   margin-bottom: 5rem;
 }
+
+.ADProductEditBTN{
+  width: 5rem;
+  font-weight: 800;
+}
+
+.productDeleteBTN{
+  margin-top: -3rem;
+  margin-bottom: 3rem;
+}

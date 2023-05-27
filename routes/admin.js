@@ -90,9 +90,9 @@ router.post('/AddSubCategory', (req, res) => {
 })
 
 router.get('/Product', (req, res) => {
-  adminHelpers.getCategory().then((AllCategory)=>{
+  adminHelpers.getCategory().then((AllCategory) => {
     // console.log(AllCategory)
-    adminHelpers.GetAllSubCategory().then((AllSubCategory)=>{
+    adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
       // console.log(AllSubCategory)
       const filteredSubCategories = AllSubCategory.filter(subCategory => subCategory.Category_Id === '100');
       AllSubCategory = filteredSubCategories;
@@ -101,14 +101,14 @@ router.get('/Product', (req, res) => {
   })
 })
 
-router.get('/GetAllProduct-Cat-Sub/api/:id',(req,res)=>{
-  adminHelpers.GetProduct(req.params.id).then((products)=>{
-    adminHelpers.getCategory().then((Category)=>{
-      adminHelpers.GetAllSubCategory().then((SubCategory)=>{
+router.get('/GetAllProduct-Cat-Sub/api/:id', (req, res) => {
+  adminHelpers.GetProduct(req.params.id).then((products) => {
+    adminHelpers.getCategory().then((Category) => {
+      adminHelpers.GetAllSubCategory().then((SubCategory) => {
         // console.log("Category = ",Category);
         // console.log("SubCategory = ",SubCategory);
         // console.log("Products = ",products)
-        
+
         var data = {
           Category: Category,
           SubCategory: SubCategory,
@@ -120,14 +120,14 @@ router.get('/GetAllProduct-Cat-Sub/api/:id',(req,res)=>{
   })
 })
 
-router.get('/GetAllProduct-Cat-Sub/api',(req,res)=>{
-  adminHelpers.GetAllProduct().then((products)=>{
-    adminHelpers.getCategory().then((Category)=>{
-      adminHelpers.GetAllSubCategory().then((SubCategory)=>{
+router.get('/GetAllProduct-Cat-Sub/api', (req, res) => {
+  adminHelpers.GetAllProduct().then((products) => {
+    adminHelpers.getCategory().then((Category) => {
+      adminHelpers.GetAllSubCategory().then((SubCategory) => {
         // console.log("Category = ",Category);
         // console.log("SubCategory = ",SubCategory);
         // console.log("Products = ",products)
-        
+
         var data = {
           Category: Category,
           SubCategory: SubCategory,
@@ -139,31 +139,70 @@ router.get('/GetAllProduct-Cat-Sub/api',(req,res)=>{
   })
 })
 
-router.get('/addProduct',(req,res)=>{
-  adminHelpers.getCategory().then((AllCategory)=>{
+router.get('/addProduct', (req, res) => {
+  adminHelpers.getCategory().then((AllCategory) => {
     // console.log(AllCategory)
-    adminHelpers.GetAllSubCategory().then((AllSubCategory)=>{
+    adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
       // console.log(AllSubCategory)
       const filteredSubCategories = AllSubCategory.filter(subCategory => subCategory.Category_Id === '100');
       AllSubCategory = filteredSubCategories;
-      res.render('admin/forms/addProducts', { admin: true , AllCategory, AllSubCategory } );
+      res.render('admin/forms/addProducts', { admin: true, AllCategory, AllSubCategory });
     })
   })
 })
 
-router.post('/addProducts',(req,res)=>{
-  adminHelpers.addProduct(req.body).then((State)=>{
-    if(State.Status){
+router.post('/addProducts', (req, res) => {
+  adminHelpers.addProduct(req.body).then((State) => {
+    if (State.Status) {
       res.redirect('/admin/Product');
-    }else{
+    } else {
       res.redirect(`/admin/Product/?Error=${State.error}`);
     }
   })
 })
 
-router.get('/Categories/api',(req,res)=>{
-  adminHelpers.getCategory().then((AllCategory)=>{
+router.get('/Categories/api', (req, res) => {
+  adminHelpers.getCategory().then((AllCategory) => {
     res.json(AllCategory)
+  })
+})
+
+router.get('/editProduct/:id', (req, res) => {
+  console.log(req.params.id);
+  adminHelpers.GetProductByID(req.params.id).then((product) => {
+    adminHelpers.getCategory().then((AllCategory) => {
+      adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
+        console.log(product);
+        var CategoryID = product.Category;
+        var SubCategoryID = product.SubCategory
+
+        var matchingCategory = AllCategory.find((category) => category.Category_Id === parseInt(CategoryID));
+        const NotMatchingCategories = AllCategory.filter(category => category.Category_Id !== parseInt(CategoryID));
+
+        var matchingSubCategory = AllSubCategory.find((SubCategory) => SubCategory.SubCategory_Id === parseInt(SubCategoryID));
+        const NotMatchingSubCategory = AllSubCategory.filter(SubCategory => SubCategory.SubCategory_Id !== parseInt(SubCategoryID));
+
+        res.render('admin/forms/addProducts', { admin: true, editProduct: true, product, matchingCategory, NotMatchingCategories, matchingSubCategory, NotMatchingSubCategory })
+      })
+    })
+  })
+})
+
+router.post('/UpdateProducts', (req, res) => {
+  adminHelpers.UpdateProduct(req.body).then((State) => {
+    if (State.Status) {
+      res.redirect('/admin/Product')
+    }
+  })
+});
+
+router.get('/DeleteProduct/:id',(req,res)=>{
+  adminHelpers.DeleteProductById(req.params.id).then((State)=>{
+    if(State.Status){
+      res.redirect('/admin/Product');
+    }else{
+      res.redirect(`/admin/Product/?Error=${State.error}`);
+    }
   })
 })
 

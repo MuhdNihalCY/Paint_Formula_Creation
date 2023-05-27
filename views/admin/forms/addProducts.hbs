@@ -3,75 +3,154 @@
         <div class="container">
             <div class="ADProductsAddingMainDiv">
                 <div class="ADProductsAddingFormDiv__title">
+                    {{#if editProduct}}
+                    <p>Edit product</p>
+                    {{else}}
                     <p>Add product</p>
+                    {{/if}}
                     <hr>
                 </div>
-                <form action="/admin/addProducts" method="post">
-                    <div class="ADFormAdding">
-                        <div class="ADFormAddingCatgorySelection">
-                            <div class="ADFromAddingSingleRow">
-                                <p class="ADSubCategorySelectionLabel">Select Category</p>
-                                <select required class="ADSubCategorySelectionSelectBox" name="Category" id="CategorySelect">
-                                    {{!-- <option value="" selected>All Category</option> --}}
-                                    {{#each AllCategory}}
-                                    <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
-                                        {{this.Category_Id}} -
-                                        {{this.Category}}</option>
-                                    {{/each}}
-                                </select>
-                            </div>
-                            <div class="ADFromAddingSingleRow">
-                                <p class="ADSubCategorySelectionLabel">Select Sub Category</p>
-                                <select required class="ADSubCategorySelectionSelectBox" name="SubCategory"
-                                    id="SubCategorySelect">
-                                    {{!-- <option value="" selected>All Sub Category</option> --}}
-                                    {{#each AllSubCategory}}
-                                    <option class="ADSelectCategoryOptions" value="{{this.SubCategory_Id}}">
-                                        {{this.SubCategory_Id}} - {{this.SubCategory}}</option>
-                                    {{/each}}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="ADFormAddingCatgorySelection">
-                            <div class="ADFromAddingSingleRow">
-                                <p class="ADSubCategorySelectionLabel">Product Name</p>
-                                <input type="text" name="Product_Name" class="ADProductInputBox" required>
-                            </div>
-                            <div class="ADFromAddingSingleRow">
-                                <p class="ADSubCategorySelectionLabel">Density</p>
-                                <input type="text" name="Product_Density" class="ADProductInputBox" required>
-                            </div>
-                        </div>
-                        <div class="ADFormAddingCatgorySelection">
-                            <div class="ADFromAddingSingleRow">
-                                <p class="ADSubCategorySelectionLabel">Price (in liter)</p>
-                                <input type="number" step="any" name="Price_Liter" class="ADProductInputBox" required>
-                            </div>
-                            <div class="ADFromAddingSingleRow">
-                                <p class="ADSubCategorySelectionLabel">Price (in kilogram)</p>
-                                <input type="number" step="any" name="Price_Kilogram" class="ADProductInputBox" required>
-                            </div>
-                        </div>
-                        <div class="ADFormAddingCatgorySelection">
-                            <div class="ADFromAddingSingleRow">
-                                <p class="ADSubCategorySelectionLabel">VOC</p>
-                                <input type="number" step="any" name="VOC" class="ADProductInputBox"required>
-                            </div>
-                            <div class="ADFromAddingSingleRow">
-                                <p class="ADSubCategorySelectionLabel">Solid Content</p>
-                                <input type="number" step="any" name="SolidContent" class="ADProductInputBox" required>
-                            </div>
-                        </div>
-                        <div class="ADFormAddingCatgorySelection">
-                            <div class="ADFromAddingSingleRow">
-                                <p class="ADSubCategorySelectionLabel">Stock</p>
-                                <input type="number" name="Stock" class="ADProductInputBox" required>
-                            </div>
-                        </div>
-                        <button class="ADPRoductSubmitBTN" type="submit"> Submit </button>
-                    </div>
+                {{#if editProduct}}
+                <form action="/admin/UpdateProducts" method="post">
+                    {{else}}
+                    <form action="/admin/addProducts" method="post">
+                        {{/if}}
+                        <div class="ADFormAdding">
+                            <div class="ADFormAddingCatgorySelection">
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Select Category</p>
+                                    <select required class="ADSubCategorySelectionSelectBox" name="Category"
+                                        id="CategorySelect">
+                                        {{#if editProduct}}
+                                        <option class="ADSelectCategoryOptions"
+                                            value="{{matchingCategory.Category_Id}}">
+                                            {{matchingCategory.Category_Id}} - {{matchingCategory.Category}}</option>
+                                        {{#each NotMatchingCategories}}
+                                        <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
+                                            {{this.Category_Id}} -
+                                            {{this.Category}}</option>
+                                        {{/each}}
 
-                </form>
+                                        {{else}}
+                                        {{#each AllCategory}}
+                                        <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
+                                            {{this.Category_Id}} -
+                                            {{this.Category}}</option>
+                                        {{/each}}
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Select Sub Category</p>
+                                    <select required class="ADSubCategorySelectionSelectBox" name="SubCategory"
+                                        id="SubCategorySelect">
+                                        {{#if editProduct}}
+                                        <option class="ADSelectCategoryOptions"
+                                            value="{{matchingSubCategory.SubCategory_Id}}">
+                                            {{matchingSubCategory.SubCategory_Id}} - {{matchingSubCategory.SubCategory}}
+                                        </option>
+                                        {{#each NotMatchingSubCategory}}
+                                        <option class="ADSelectCategoryOptions" value="{{this.SubCategory_Id}}">
+                                            {{this.SubCategory_Id}} - {{this.SubCategory}}</option>
+                                        {{/each}}
+                                        {{else}}
+                                        {{#each AllSubCategory}}
+                                        <option class="ADSelectCategoryOptions" value="{{this.SubCategory_Id}}">
+                                            {{this.SubCategory_Id}} - {{this.SubCategory}}</option>
+                                        {{/each}}
+                                        {{/if}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="ADFormAddingCatgorySelection">
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Product Name</p>
+                                    {{#if editProduct}}
+                                    <input type="text" name="Product_Name" class="ADProductInputBox"
+                                        value="{{product.Product_Name}}" required>
+                                    <input type="text" name="Product_Id" class="ADProductInputBox"
+                                        value="{{product.Product_Id}}" hidden required>
+                                    {{else}}
+                                    <input type="text" name="Product_Name" class="ADProductInputBox" required>
+                                    {{/if}}
+                                </div>
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Density (ml/1000g)</p>
+                                    {{#if editProduct}}
+                                    <input type="text" name="Product_Density" class="ADProductInputBox"
+                                        value="{{product.Product_Density}}" required>
+                                    {{else}}
+                                    <input type="text" name="Product_Density" class="ADProductInputBox" required>
+                                    {{/if}}
+                                </div>
+                            </div>
+                            <div class="ADFormAddingCatgorySelection">
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Price (in liter)</p>
+                                    {{#if editProduct}}
+                                    <input type="number" step="any" name="Price_Liter" class="ADProductInputBox"
+                                        value="{{product.Price_Liter}}" required>
+                                    {{else}}
+                                    <input type="number" step="any" name="Price_Liter" class="ADProductInputBox"
+                                        required>
+                                    {{/if}}
+                                </div>
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Price (in kilogram)</p>
+                                    {{#if editProduct}}
+                                    <input type="number" step="any" name="Price_Kilogram" class="ADProductInputBox"
+                                        value="{{product.Price_Kilogram}}" required>
+                                    {{else}}
+                                    <input type="number" step="any" name="Price_Kilogram" class="ADProductInputBox"
+                                        required>
+                                    {{/if}}
+                                </div>
+                            </div>
+                            <div class="ADFormAddingCatgorySelection">
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">VOC</p>
+                                    {{#if editProduct}}
+                                    <input type="number" step="any" name="VOC" class="ADProductInputBox"
+                                        value="{{product.VOC}}" required>
+                                    {{else}}
+                                    <input type="number" step="any" name="VOC" class="ADProductInputBox" required>
+                                    {{/if}}
+                                </div>
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Solid Content</p>
+                                    {{#if editProduct}}
+                                    <input type="number" step="any" name="SolidContent" class="ADProductInputBox"
+                                        value="{{product.SolidContent}}" required>
+                                    {{else}}
+                                    <input type="number" step="any" name="SolidContent" class="ADProductInputBox"
+                                        required>
+                                    {{/if}}
+                                </div>
+                            </div>
+                            <div class="ADFormAddingCatgorySelection">
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Stock</p>
+                                    {{#if editProduct}}
+                                    <input type="number" name="Stock" class="ADProductInputBox"
+                                        value="{{product.Stock}}" required>
+                                    {{else}}
+                                    <input type="number" name="Stock" class="ADProductInputBox" required>
+                                    {{/if}}
+                                </div>
+                            </div>
+                            <button class="ADPRoductSubmitBTN" type="submit"> Submit </button>
+                            {{#if editProduct}}
+                            <script>
+                                function confirmProductDelete() {
+                                    return confirm('Are you sure you want to delete this product?');
+                                }
+                            </script>
+                            <a class="btn btn-danger productDeleteBTN" href="/admin/DeleteProduct/{{product.Product_Id}}"
+                                onclick="return confirmProductDelete()">Delete Product</a>
+                            {{/if}}
+                        </div>
+
+                    </form>
             </div>
         </div>
     </div>
