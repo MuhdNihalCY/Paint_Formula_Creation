@@ -69,40 +69,62 @@
                 <p class="ADMainAreaHeader">Additives</p>
             </div>
             <div class="ADMainAddButtonDiv">
-                <a href="/addCategory">
-                    <div class="ADMainAddButton">
+                    <div onclick="OpenCategoryAddingForm()" class="ADMainAddButton">
                         <p>Add New</p>
                         <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
                     </div>
-                </a>
             </div>
             <div class="ADMainTableDiv">
                 <table class="ADMainTable">
-                    <thead class="ADTableHead" >
-                        <tr class="ADTableHeadTR" >
+                    <thead class="ADTableHead">
+                        <tr class="ADTableHeadTR">
                             <th>ID</th>
-                            <th>Category Name</th>
+                            <th>Additive Name</th>
+                            <th>Density</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {{#each Additives}}
                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
+                            <td>{{this.Additive_Id}}</td>
+                            <td>{{this.Additive_Name}}</td>
+                            <td>{{this.Additive_Density}}</td>
+                            <td><a href="/admin/deleteAdditive/{{this.Additive_Id}}" class="btn btn-danger">Delete</a></td>
                         </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
+                        {{/each}}
                     </tbody>
                 </table>
+            </div>
+        </div>
+        {{!-- Addcategory form --}}
+
+        <div id="ADpopupContainer">
+            <div id="ADpopupContentAdditive">
+                <!-- Add your popup content here -->
+                <div class="ADAddCategoryFromHeaderDiv">
+                    <p class="ADAddCategoryFromHeader">Add Additives</p>
+                    <div onclick="closeCategoryAddingForm()" class="ADAddCategoryFromCloseBTNDiv">
+                        <img src="/images/Icons/delete-button.png" alt="" class="ADaddCloseBTNIcon">
+                    </div>
+                </div>
+                <form action="/admin/AddAdditives" method="post">
+                    <div class="ADAddCategoryFromDiv">
+                        <p class="ADAddCategoryLabel">Additive Name:</p>
+                        <input required class="ADAddCategoryTextInput" type="text" name="Additive_Name"
+                            placeholder="Enter the Name Additive">
+                        {{!-- <select class="ADSelectCategory" name="Category_Id" id="">
+                            {{#each AllCategory}}
+                            <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">{{this.Category_Id}} -
+                                {{this.Category}}</option>
+                            {{/each}}
+                        </select> --}}
+                        <p class="ADAddCategoryLabel">Density (ml/1000g)</p>
+                        <input required class="ADAddCategoryTextInput" type="text" name="Additive_Density"
+                            placeholder="Enter Density of Additive">
+                        <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Additives</button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>

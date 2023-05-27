@@ -208,11 +208,34 @@ router.get('/DeleteProduct/:id',(req,res)=>{
 
 
 router.get('/Additives', (req, res) => {
-  res.render('admin/Additives', { admin: true });
+  adminHelpers.GetAllAdditives().then((Additives)=>{
+    res.render('admin/Additives', { admin: true, Additives });
+  })
+})
+
+router.post('/AddAdditives',(req,res)=>{
+  adminHelpers.AddAdditives(req.body).then((State)=>{
+    console.log(State)
+    if(State.Status){
+      res.redirect('/admin/Additives');
+    }else{
+      res.redirect(`/admin/Additives/?Error=${State.error}`);
+    }
+  })
+})
+
+router.get('/deleteAdditive/:id',(req,res)=>{
+  adminHelpers.DeleteAdditiveById(req.params.id).then((State)=>{
+    if(State.Status){
+      res.redirect('/admin/Additives');
+    }else{
+      res.redirect(`/admin/Additives/?Error=${State.error}`);
+    }
+  }) 
 })
 
 router.get('/Binders', (req, res) => {
-  res.render('admin/Binders', { admin: true });
+  res.render('admin/Binders', { admin: true }); 
 })
 
 router.get('/Employees', (req, res) => {

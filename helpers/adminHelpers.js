@@ -208,9 +208,9 @@ module.exports = {
                             Stock: data.Stock
                         }
                     }
-                ).then((response)=>{
+                ).then((response) => {
                     // console.log(response);
-                    if(response.acknowledged){
+                    if (response.acknowledged) {
                         State.Status = true;
                     }
                     resolve(State)
@@ -220,22 +220,74 @@ module.exports = {
 
         })
     },
-    DeleteProductById:(id)=>{
-        return new Promise (async(resolve,reject)=>{
+    DeleteProductById: (id) => {
+        return new Promise(async (resolve, reject) => {
             var State = {
-                Status : false,
-                error : ""
+                Status: false,
+                error: ""
             }
 
-            await db.get().collection(collection.PRODUCT_COLLECTION).deleteOne({Product_Id: parseInt(id)}).then((response)=>{
+            await db.get().collection(collection.PRODUCT_COLLECTION).deleteOne({ Product_Id: parseInt(id) }).then((response) => {
                 // console.log(response)
-                if(response.deletedCount){
+                if (response.deletedCount) {
                     State.Status = true
-                }else{
+                } else {
                     State.error = "Product Id Not Found"
                 }
                 resolve(State);
             })
+        })
+    },
+    AddAdditives: (data) => {
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                Status: false,
+                error: ""
+            }
+            var SameAdditive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ Additive_Name: data.Additive_Name });
+            if (!SameAdditive) {
+                data.InsertedTime = Date.now();
+                var latestAdditive = await db.get().collection(collection.ADDITIVE_COLLECTION).find().sort({ InsertedTime: -1 }).toArray();
+                if (latestAdditive.length > 0) {
+                    latestAdditive = latestAdditive[0];
+                    data.Additive_Id = parseInt(latestAdditive.Additive_Id) + 1;
+                }else{
+                    data.Additive_Id = 1000;
+                }
+                await db.get().collection(collection.ADDITIVE_COLLECTION).insertOne(data).then((respones)=>{
+                    if(respones.insertedId){
+                        State.Status = true;
+                    }else {
+                        State.error = "Additive Not Added!"
+                    }
+                })
+            } else {
+                State.error = "This Additive Already Added!"
+            }
+            resolve(State);
+        })
+    },
+    GetAllAdditives:()=>{
+        return new Promise(async (resolve, reject) => {
+            var Additives = await db.get().collection(collection.ADDITIVE_COLLECTION).find().toArray();
+            resolve(Additives);
+        })
+    },
+    DeleteAdditiveById:(id)=>{
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                Status: false,
+                error: ""
+                }
+            
+                await db.get().collection(collection.ADDITIVE_COLLECTION).deleteOne({Additive_Id: parseInt(id)}).then((respone)=>{
+                    if(respone.deletedCount){
+                        State.Status = true;
+                    }else{
+                        State.error = "Additive Not Deleted!"
+                    }
+                    resolve(State);
+                })
         })
     }
 } 
