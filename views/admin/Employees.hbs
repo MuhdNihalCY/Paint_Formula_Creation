@@ -69,40 +69,78 @@
                 <p class="ADMainAreaHeader">Employees</p>
             </div>
             <div class="ADMainAddButtonDiv">
-                <a href="/addCategory">
-                    <div class="ADMainAddButton">
-                        <p>Add New</p>
-                        <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
-                    </div>
-                </a>
+                <div onclick="OpenCategoryAddingForm()" class="ADMainAddButton">
+                    <p>Add New</p>
+                    <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
+                </div>
             </div>
             <div class="ADMainTableDiv">
                 <table class="ADMainTable">
-                    <thead class="ADTableHead" >
-                        <tr class="ADTableHeadTR" >
+                    <thead class="ADTableHead">
+                        <tr class="ADTableHeadTR">
                             <th>ID</th>
-                            <th>Category Name</th>
+                            <th> Name</th>
+                            <th> Phone</th>
+                            <th> Email</th>
+                            <th> Password</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {{#each Employees}}
                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
+                            <td>{{this.Employee_Id}}</td>
+                            <td>{{this.Employee_Name}}</td>
+                            <td>{{this.MOB_Number}}</td>
+                            <td>{{this.Email}}</td>
+                            <td> <input class="ADEmplyeeTablePassBox" type="password" value="{{this.Password}}" id="ADTBEmpPass{{this.Employee_Id}}"
+                                    disabled> <span id="ADTBpassword-icon{{this.Employee_Id}}" class="ADTBpassword-icon"
+                                    onclick="ADTBEmpPasstogglePassword({{this.Employee_Id}})"><i class="fas fa-eye"></i></span> </td>
                             <td><a href="" class="btn btn-primary">Edit</a></td>
                         </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
+                        {{/each}}
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        {{!-- Addcategory form --}}
+
+        <div id="ADpopupContainer">
+            <div id="ADpopupContentEmployee">
+                <!-- Add your popup content here -->
+                <div class="ADAddCategoryFromHeaderDiv">
+                    <p class="ADAddCategoryFromHeader">Add Employee</p>
+                    <div onclick="closeCategoryAddingForm()" class="ADAddCategoryFromCloseBTNDiv">
+                        <img src="/images/Icons/delete-button.png" alt="" class="ADaddCloseBTNIcon">
+                    </div>
+                </div>
+                <form action="/admin/AddEmployee" method="post">
+                    <div class="ADAddCategoryFromDiv">
+                        <p class="ADAddCategoryLabel">Employee Name:</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="text"
+                            name="Employee_Name" placeholder="Enter the Name Employee Name">
+
+                        <p class="ADAddCategoryLabel">Mobile Number</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="number"
+                            name="MOB_Number" placeholder="Enter Mobile Number">
+                        <p class="ADAddCategoryLabel">Email</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="email" name="Email"
+                            placeholder="Enter Email">
+                        <p class="ADAddCategoryLabel">Password</p>
+                        {{!-- <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="password" name="Password" id="password"
+                            placeholder="Enter Password">
+                        <i id="password-icon" class="fas fa-eye password-icon" onclick="togglePassword()"></i> --}}
+
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput ADEmployeePass"
+                            type="password" name="Password" id="password" placeholder="Enter Password">
+                        <span id="password-icon" class="password-icon" onclick="togglePassword()"><i
+                                class="fas fa-eye"></i></span>
+
+
+                        <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Employee</button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>

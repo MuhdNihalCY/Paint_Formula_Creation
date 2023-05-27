@@ -196,11 +196,11 @@ router.post('/UpdateProducts', (req, res) => {
   })
 });
 
-router.get('/DeleteProduct/:id',(req,res)=>{
-  adminHelpers.DeleteProductById(req.params.id).then((State)=>{
-    if(State.Status){
+router.get('/DeleteProduct/:id', (req, res) => {
+  adminHelpers.DeleteProductById(req.params.id).then((State) => {
+    if (State.Status) {
       res.redirect('/admin/Product');
-    }else{
+    } else {
       res.redirect(`/admin/Product/?Error=${State.error}`);
     }
   })
@@ -208,38 +208,72 @@ router.get('/DeleteProduct/:id',(req,res)=>{
 
 
 router.get('/Additives', (req, res) => {
-  adminHelpers.GetAllAdditives().then((Additives)=>{
+  adminHelpers.GetAllAdditives().then((Additives) => {
     res.render('admin/Additives', { admin: true, Additives });
   })
 })
 
-router.post('/AddAdditives',(req,res)=>{
-  adminHelpers.AddAdditives(req.body).then((State)=>{
+router.post('/AddAdditives', (req, res) => {
+  adminHelpers.AddAdditives(req.body).then((State) => {
     console.log(State)
-    if(State.Status){
+    if (State.Status) {
       res.redirect('/admin/Additives');
-    }else{
+    } else {
       res.redirect(`/admin/Additives/?Error=${State.error}`);
     }
   })
 })
 
-router.get('/deleteAdditive/:id',(req,res)=>{
-  adminHelpers.DeleteAdditiveById(req.params.id).then((State)=>{
-    if(State.Status){
+router.get('/deleteAdditive/:id', (req, res) => {
+  adminHelpers.DeleteAdditiveById(req.params.id).then((State) => {
+    if (State.Status) {
       res.redirect('/admin/Additives');
-    }else{
+    } else {
       res.redirect(`/admin/Additives/?Error=${State.error}`);
     }
-  }) 
+  })
 })
 
 router.get('/Binders', (req, res) => {
-  res.render('admin/Binders', { admin: true }); 
+  adminHelpers.GetAllBinders().then((Binders) => {
+    res.render('admin/Binders', { admin: true, Binders });
+  })
+})
+
+router.post('/AddBinders', (req, res) => {
+  adminHelpers.AddBinders(req.body).then((State) => {
+    if (State.Status) {
+      res.redirect('/admin/Binders');
+    } else {
+      res.redirect(`/admin/Binders/?Error=${State.error}`);
+    }
+  })
+})
+
+router.get('/deleteBinder/:id', (req, res) => {
+  adminHelpers.DeleteBinderById(req.params.id).then((State) => {
+    if (State.Status) {
+      res.redirect('/admin/Binders');
+    } else {
+      res.redirect(`/admin/Binders/?Error=${State.error}`);
+    }
+  })
+})
+
+router.post('/AddEmployee', (req, res) => {
+  adminHelpers.AddEmployee(req.body).then((State) => {
+    if (State.Status) {
+      res.redirect('/admin/Employees');
+    } else {
+      res.redirect(`/admin/Employees/?Error=${State.error}`);
+    }
+  })
 })
 
 router.get('/Employees', (req, res) => {
-  res.render('admin/Employees', { admin: true });
+  adminHelpers.GetAllEmployees().then((Employees) => {
+    res.render('admin/Employees', { admin: true, Employees });
+  })
 })
 
 router.get('/Customers', (req, res) => {

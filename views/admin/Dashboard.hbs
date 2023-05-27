@@ -90,7 +90,9 @@
                         <tr>
                             <td>{{this.Category_Id}}</td>
                             <td>{{this.Category}}</td>
-                            <td><a href="/admin/Detele-Category/{{this._id}}" class="btn btn-danger">Delete <img class="ADdeleteIcon" src="/images/Icons/bin.png" alt=""></a></td>
+                            <td><a onclick="return confirmProductDelete()" href="/admin/Detele-Category/{{this._id}}"
+                                    class="btn btn-danger">Delete <img class="ADdeleteIcon" src="/images/Icons/bin.png"
+                                        alt=""></a></td>
                         </tr>
                         {{/each}}
                     </tbody>
@@ -112,7 +114,8 @@
                 <form action="/admin/AddCategory" method="post">
                     <div class="ADAddCategoryFromDiv">
                         <p class="ADAddCategoryLabel">Category Name:</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="Category" placeholder="Enter the Name of category">
+                        <input required class="ADAddCategoryTextInput" type="text" name="Category"
+                            placeholder="Enter the Name of category">
                         <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Category</button>
                     </div>
                 </form>
@@ -120,3 +123,9 @@
         </div>
     </section>
 </section>
+
+<script>
+    function confirmProductDelete() {
+        return confirm('Are you sure you want to delete this Category?');
+    }
+</script>

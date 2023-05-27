@@ -903,7 +903,8 @@ td {
 
 #ADpopupContent,
 #ADpopupContentSubCategory,
-#ADpopupContentAdditive {
+#ADpopupContentAdditive,
+#ADpopupContentEmployee {
   width: 400px;
   height: 300px;
   background-color: #fff;
@@ -914,8 +915,13 @@ td {
 #ADpopupContentSubCategory {
   height: 500px;
 }
-#ADpopupContentAdditive{
+
+#ADpopupContentAdditive {
   height: 400px;
+}
+
+#ADpopupContentEmployee {
+  height: 645px;
 }
 
 .ADAddCategoryFromHeaderDiv {
@@ -1033,7 +1039,7 @@ td {
   padding-left: 1rem;
 }
 
-.ADPRoductSubmitBTN{
+.ADPRoductSubmitBTN {
   width: 50%;
   padding: 1rem 0;
   background-color: #578af8;
@@ -1045,12 +1051,42 @@ td {
   margin-bottom: 5rem;
 }
 
-.ADProductEditBTN{
+.ADProductEditBTN {
   width: 5rem;
   font-weight: 800;
 }
 
-.productDeleteBTN{
+.productDeleteBTN {
   margin-top: -3rem;
   margin-bottom: 3rem;
+}
+
+.password-icon {
+  position: relative;
+  top: -59px;
+  left: 92%;
+  cursor: pointer;
+}
+
+.ADemployeeAddforminput {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.ADEmployeePass{
+  padding-right: 2.5rem;
+}
+
+.ADEmplyeeTablePassBox{
+  border: none;
+  /* width: 150px; */
+  margin-left: -40px;
+  margin-right: -60px;
+}
+
+.ADTBpassword-icon{
+  position: relative;
+  top: 0px;
+  left: 20%;
+  cursor: pointer;
 }

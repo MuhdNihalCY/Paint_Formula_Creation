@@ -251,13 +251,13 @@ module.exports = {
                 if (latestAdditive.length > 0) {
                     latestAdditive = latestAdditive[0];
                     data.Additive_Id = parseInt(latestAdditive.Additive_Id) + 1;
-                }else{
+                } else {
                     data.Additive_Id = 1000;
                 }
-                await db.get().collection(collection.ADDITIVE_COLLECTION).insertOne(data).then((respones)=>{
-                    if(respones.insertedId){
+                await db.get().collection(collection.ADDITIVE_COLLECTION).insertOne(data).then((respones) => {
+                    if (respones.insertedId) {
                         State.Status = true;
-                    }else {
+                    } else {
                         State.error = "Additive Not Added!"
                     }
                 })
@@ -267,27 +267,115 @@ module.exports = {
             resolve(State);
         })
     },
-    GetAllAdditives:()=>{
+    GetAllAdditives: () => {
         return new Promise(async (resolve, reject) => {
             var Additives = await db.get().collection(collection.ADDITIVE_COLLECTION).find().toArray();
             resolve(Additives);
         })
     },
-    DeleteAdditiveById:(id)=>{
+    DeleteAdditiveById: (id) => {
         return new Promise(async (resolve, reject) => {
             var State = {
                 Status: false,
                 error: ""
+            }
+
+            await db.get().collection(collection.ADDITIVE_COLLECTION).deleteOne({ Additive_Id: parseInt(id) }).then((respone) => {
+                if (respone.deletedCount) {
+                    State.Status = true;
+                } else {
+                    State.error = "Additive Not Deleted!"
                 }
-            
-                await db.get().collection(collection.ADDITIVE_COLLECTION).deleteOne({Additive_Id: parseInt(id)}).then((respone)=>{
-                    if(respone.deletedCount){
+                resolve(State);
+            })
+        })
+    },
+    AddBinders: (data) => {
+        return new Promise(async (resolve, reject) => {
+            // console.log(data);
+            var State = {
+                Status: false,
+                error: ""
+            }
+            var SameBinder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Name: data.Binder_Name });
+            if (!SameBinder) {
+                data.InsertedTime = Date.now();
+                var latestBinder = await db.get().collection(collection.BINDER_COLLECTION).find().sort({ InsertedTime: -1 }).toArray();
+                if (latestBinder.length > 0) {
+                    latestBinder = latestBinder[0];
+                    data.Binder_Id = parseInt(latestBinder.Binder_Id) + 1;
+                } else {
+                    data.Binder_Id = 1000;
+                }
+                await db.get().collection(collection.BINDER_COLLECTION).insertOne(data).then((respones) => {
+                    if (respones.insertedId) {
                         State.Status = true;
-                    }else{
-                        State.error = "Additive Not Deleted!"
+                    } else {
+                        State.error = "Binder Not Added!"
                     }
-                    resolve(State);
                 })
+            } else {
+                State.error = "This Binder Already Added!"
+            }
+            resolve(State);
+        })
+    },
+    GetAllBinders: () => {
+        return new Promise(async (resolve, reject) => {
+            var Binders = await db.get().collection(collection.BINDER_COLLECTION).find().toArray();
+            resolve(Binders);
+        })
+    },
+    DeleteBinderById: (id) => {
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                Status: false,
+                error: ""
+            }
+            await db.get().collection(collection.BINDER_COLLECTION).deleteOne({ Binder_Id: parseInt(id) }).then((response) => {
+                if (response.deletedCount) {
+                    State.Status = true;
+                } else {
+                    State.error = "Binder Not Deleted!"
+                }
+                resolve(State)
+            })
+        })
+    },
+    AddEmployee: (data) => {
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                Status: false,
+                error: ""
+            }
+
+            var latestEmployee = await db.get().collection(collection.EMPLOYEE_COLLECTION).find().sort({InsertedTime : -1}).toArray();
+            
+            data.InsertedTime = Date.now();
+
+            if (latestEmployee.length > 0) {
+                var latestEmployee = latestEmployee[0];
+                if (latestEmployee) {
+                    data.Employee_Id = latestEmployee.Employee_Id + 1;
+                }
+            }else{
+                data.Employee_Id = 100;
+            }
+
+            await db.get().collection(collection.EMPLOYEE_COLLECTION).insertOne(data).then((response)=>{
+                if(response.insertedId){
+                    State.Status = true;
+                }else{
+                    State.error = "Employee Not Added!"
+                }
+                resolve(State)
+            })
+        })
+    },
+    GetAllEmployees: () => {
+        return new Promise(async (resolve, reject) => {
+            var Employees = await db.get().collection(collection.EMPLOYEE_COLLECTION).find().toArray();
+            resolve(Employees)
         })
     }
 } 

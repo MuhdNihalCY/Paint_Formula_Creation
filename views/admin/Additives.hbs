@@ -69,10 +69,10 @@
                 <p class="ADMainAreaHeader">Additives</p>
             </div>
             <div class="ADMainAddButtonDiv">
-                    <div onclick="OpenCategoryAddingForm()" class="ADMainAddButton">
-                        <p>Add New</p>
-                        <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
-                    </div>
+                <div onclick="OpenCategoryAddingForm()" class="ADMainAddButton">
+                    <p>Add New</p>
+                    <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
+                </div>
             </div>
             <div class="ADMainTableDiv">
                 <table class="ADMainTable">
@@ -80,7 +80,7 @@
                         <tr class="ADTableHeadTR">
                             <th>ID</th>
                             <th>Additive Name</th>
-                            <th>Density</th>
+                            <th>Density (ml/1000g)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -90,7 +90,9 @@
                             <td>{{this.Additive_Id}}</td>
                             <td>{{this.Additive_Name}}</td>
                             <td>{{this.Additive_Density}}</td>
-                            <td><a href="/admin/deleteAdditive/{{this.Additive_Id}}" class="btn btn-danger">Delete</a></td>
+                            <td><a onclick="return confirmProductDelete()"
+                                    href="/admin/deleteAdditive/{{this.Additive_Id}}" class="btn btn-danger">Delete</a>
+                            </td>
                         </tr>
                         {{/each}}
                     </tbody>
@@ -113,12 +115,7 @@
                         <p class="ADAddCategoryLabel">Additive Name:</p>
                         <input required class="ADAddCategoryTextInput" type="text" name="Additive_Name"
                             placeholder="Enter the Name Additive">
-                        {{!-- <select class="ADSelectCategory" name="Category_Id" id="">
-                            {{#each AllCategory}}
-                            <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">{{this.Category_Id}} -
-                                {{this.Category}}</option>
-                            {{/each}}
-                        </select> --}}
+
                         <p class="ADAddCategoryLabel">Density (ml/1000g)</p>
                         <input required class="ADAddCategoryTextInput" type="text" name="Additive_Density"
                             placeholder="Enter Density of Additive">
@@ -129,3 +126,8 @@
         </div>
     </section>
 </section>
+<script>
+    function confirmProductDelete() {
+        return confirm('Are you sure you want to delete this Additive?');
+    }
+</script>
