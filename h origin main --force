@@ -1,0 +1,107 @@
+[33mcommit ff520f8631a79a1d4aa6645335582876bdbe1ed0[m[33m ([m[1;36mHEAD[m[33m)[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Mon May 29 22:53:29 2023 +0530
+
+    push without docker
+
+[33mcommit d53c3b21aa5a7c747b9c83a47fa176f854b2582c[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Mon May 29 22:45:08 2023 +0530
+
+    Docker Added
+
+[33mcommit 331fc18d399e90edb48c77cf452ca8272bc283f3[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Sun May 28 00:54:41 2023 +0530
+
+    employee adding and view page is partially completed, but edit employee is pending
+
+[33mcommit fefd768ebcfd3895543b951e48a3c5348615752d[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Sat May 27 23:30:32 2023 +0530
+
+    Additive add and delete is now completed
+
+[33mcommit cee16846e958b212f5c9e068f1575cbf55da9435[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Sat May 27 13:38:45 2023 +0530
+
+    Product adding, editing Product, and deleting Product Section in now complted
+
+[33mcommit d3bffbff7827f951a27b6be9d0b26d5529781d37[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Sat May 27 01:47:31 2023 +0530
+
+    product adding and displaying according to category and subcategory is partially campleted, action area products table is pendong
+
+[33mcommit ac5a36f01b43a6e0d7179486c67b4f80043c97aa[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Thu May 25 10:37:01 2023 +0530
+
+    Removed Node modules
+
+[33mcommit 2acdd2649c0c47fba0f30fa106100104f66c0678[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Thu May 25 02:02:14 2023 +0530
+
+    Added node mudules in the repo
+
+[33mcommit c0850b9dcf7180a2a694c695972bf5916cd8ad71[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Thu May 25 01:54:48 2023 +0530
+
+    removed nodemon
+
+[33mcommit 210fa4db363109566bd1573f3638fbaad5c2c1b8[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Thu May 25 01:31:57 2023 +0530
+
+    Deleted node modules
+
+[33mcommit db16a63fef72e2e488fbac07e17db54122dfdcca[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Thu May 25 01:27:23 2023 +0530
+
+    in this commit the admin can add and delete the category, database is mongodb Atlas
+
+[33mcommit 8f3a3cb18411fc028ea6a9ec293df43da6cd2ed9[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Tue May 23 16:23:11 2023 +0530
+
+    Connected server with mongodb Atlas
+
+[33mcommit 973ae1200a6c0cb018bc4946dd59dc79f3937c2f[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Sun May 21 22:40:57 2023 +0530
+
+    Added admin Dashboard for category
+
+[33mcommit 8f045513bd2c5e7563bcc127c211a30c228ed5d1[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Fri May 19 01:23:07 2023 +0530
+
+    in this commit mixing table and some total table isn done
+
+[33mcommit e8043406b91471a23a129de429b576fccc9546d6[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Thu May 18 00:49:35 2023 +0530
+
+    Started the Employee formula creation
+
+[33mcommit c152eb7e9035307c4a728b233346de77b0d978c1[m
+Author: MuhdNihalCY <120302066+MuhdNihalCY@users.noreply.github.com>
+Date:   Wed May 3 17:18:00 2023 +0530
+
+    Create node.js.yml
+
+[33mcommit 9aeac0d9c7612b75ff433a285ca088ffc8c2ab5b[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Wed May 3 17:16:47 2023 +0530
+
+    This Commit will start the skeliton of Express
+
+[33mcommit 52b8e4547cdd0fe300d971cede95b31a0f0b9f4c[m
+Author: MuhdNihalCY <nihalcy1234@gmail.com>
+Date:   Wed May 3 17:15:05 2023 +0530
+
+    first commit

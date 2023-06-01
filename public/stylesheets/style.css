@@ -1090,3 +1090,22 @@ td {
   left: 20%;
   cursor: pointer;
 }
+#AdEditEmployee{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+#ADEditEmployeeSubDiv{
+  width: 50%;
+  margin: 3rem auto;
+}
+
+.ADpassword-icons{
+  position: relative;
+  top: -62px;
+  left: 95%;
+  cursor: pointer;
+}

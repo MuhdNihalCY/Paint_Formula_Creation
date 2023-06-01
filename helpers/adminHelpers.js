@@ -349,8 +349,8 @@ module.exports = {
                 error: ""
             }
 
-            var latestEmployee = await db.get().collection(collection.EMPLOYEE_COLLECTION).find().sort({InsertedTime : -1}).toArray();
-            
+            var latestEmployee = await db.get().collection(collection.EMPLOYEE_COLLECTION).find().sort({ InsertedTime: -1 }).toArray();
+
             data.InsertedTime = Date.now();
 
             if (latestEmployee.length > 0) {
@@ -358,14 +358,14 @@ module.exports = {
                 if (latestEmployee) {
                     data.Employee_Id = latestEmployee.Employee_Id + 1;
                 }
-            }else{
+            } else {
                 data.Employee_Id = 100;
             }
 
-            await db.get().collection(collection.EMPLOYEE_COLLECTION).insertOne(data).then((response)=>{
-                if(response.insertedId){
+            await db.get().collection(collection.EMPLOYEE_COLLECTION).insertOne(data).then((response) => {
+                if (response.insertedId) {
                     State.Status = true;
-                }else{
+                } else {
                     State.error = "Employee Not Added!"
                 }
                 resolve(State)
@@ -377,5 +377,122 @@ module.exports = {
             var Employees = await db.get().collection(collection.EMPLOYEE_COLLECTION).find().toArray();
             resolve(Employees)
         })
+    },
+    GetEmployeeById: (id) => {
+        console.log(id);
+        return new Promise(async (resolve, reject) => {
+            var Employee = await db.get().collection(collection.EMPLOYEE_COLLECTION).findOne({ Employee_Id: parseInt(id) });
+            resolve(Employee);
+        })
+    },
+    UpdateEmployee: (data, id) => {
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                Status: false,
+                error: ""
+            } 
+
+            await db.get().collection(collection.EMPLOYEE_COLLECTION).updateOne({ Employee_Id: parseInt(id) }, { $set: data }).then((response) => {
+                console.log(response);
+                if (response.modifiedCount > 0) {
+                    State.Status = true;
+                } else {
+                    State.error = "Employee Not Updated!";
+                }
+                resolve(State);
+            })
+        })
+    },
+    DeleteEmployeeById:(id)=>{
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                Status: false,
+                error: ""
+            }
+            await db.get().collection(collection.EMPLOYEE_COLLECTION).deleteOne({ Employee_Id: parseInt(id) }).then((response) => {
+                if (response.deletedCount) {
+                    State.Status = true;
+                } else {
+                    State.error = "Employee Not Deleted!"
+                }
+                resolve(State)
+            })
+        })
+    },
+    AddCustomer:(data)=>{
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                Status: false,
+                error: ""
+            }
+
+            var latestCustomer = await db.get().collection(collection.CUSTOMER_COLLECTION).find().sort({ InsertedTime: -1 }).toArray();
+
+            data.InsertedTime = Date.now();
+
+            if (latestCustomer.length > 0) {
+                var latestCustomer = latestCustomer[0];
+                if (latestCustomer) {
+                    data.Customer_Id = latestCustomer.Customer_Id + 1;
+                }
+            } else {
+                data.Customer_Id = 100;
+            }
+
+            await db.get().collection(collection.CUSTOMER_COLLECTION).insertOne(data).then((response) => {
+                if (response.insertedId) {
+                    State.Status = true;
+                } else {
+                    State.error = "Customer Not Added!"
+                }
+                resolve(State)
+            })
+        })
+    },
+    getAllCustomers:()=>{
+        return new Promise(async (resolve, reject) => {
+            var Customers = await db.get().collection(collection.CUSTOMER_COLLECTION).find().toArray();
+            resolve(Customers);
+        })
+    },
+    GetCustomerById:(id)=>{
+        return new Promise(async (resolve, reject) => {
+            var Customer = await db.get().collection(collection.CUSTOMER_COLLECTION).findOne({ Customer_Id: parseInt(id) });
+            resolve(Customer);
+        })
+    },
+    UpdateCustomer:(data, id) => {
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                Status: false,
+                error: ""
+            } 
+
+            await db.get().collection(collection.CUSTOMER_COLLECTION).updateOne({ Customer_Id: parseInt(id) }, { $set: data }).then((response) => {
+                console.log(response);
+                if (response.modifiedCount > 0) {
+                    State.Status = true;
+                } else {
+                    State.error = "Customer Not Updated!";
+                }
+                resolve(State);
+            })
+        })
+    },
+    DeleteCustomerById:(id)=>{
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                Status: false,
+                error: ""
+            }
+            await db.get().collection(collection.CUSTOMER_COLLECTION).deleteOne({ Customer_Id: parseInt(id) }).then((response) => {
+                if (response.deletedCount) {
+                    State.Status = true;
+                } else {
+                    State.error = "Employee Not Deleted!"
+                }
+                resolve(State)
+            })
+        })
     }
-} 
+}  

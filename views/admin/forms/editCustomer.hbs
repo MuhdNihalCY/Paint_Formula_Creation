@@ -1,0 +1,47 @@
+<section>
+    {{!-- Addcategory form --}}
+
+    <div id="AdEditEmployee">
+        <div class="container">
+            <div id="ADEditEmployeeSubDiv">
+                <!-- Add your popup content here -->
+                <div class="ADAddCategoryFromHeaderDiv">
+                    <p class="ADAddCategoryFromHeader">Edit Customer</p>
+                </div>
+                <form action="/admin/EditCustomer/{{Customer.Customer_Id}}" method="post">
+                    <div class="">
+                        <p class="ADAddCategoryLabel">Customer Name:</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="text"
+                            name="Employee_Name" placeholder="Enter the Name Customer Name"
+                            value="{{Customer.Customer_Name}}">
+
+                        <p class="ADAddCategoryLabel">Mobile Number</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="number"
+                            name="MOB_Number" placeholder="Enter Mobile Number" value="{{Customer.MOB_Number}}">
+                        <p class="ADAddCategoryLabel">Email</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="email" name="Email"
+                            placeholder="Enter Email" value="{{Customer.Email}}">
+                        <p class="ADAddCategoryLabel">Password</p>
+                        {{!-- <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="password" name="Password" id="password"
+                            placeholder="Enter Password">
+                        <i id="password-icon" class="fas fa-eye password-icon" onclick="togglePassword()"></i> --}}
+
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput ADEmployeePass"
+                            type="password" name="Password" id="password" placeholder="Enter Password"
+                            value="{{Customer.Password}}">
+                        <span id="password-icon" class="ADpassword-icons" onclick="togglePassword()"><i
+                                class="fas fa-eye"></i></span>
+
+
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN mx-4 ">Update
+                                Customer</button>
+                            <a href="/admin/DeleteCustomer/{{Customer.Customer_Id}}" class="btn btn-danger mx-4" onclick="return confirm('Are you sure you want to delete this Customer?')">Delete
+                                Customer</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

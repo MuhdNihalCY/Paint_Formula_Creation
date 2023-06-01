@@ -69,44 +69,73 @@
                 <p class="ADMainAreaHeader">Customers</p>
             </div>
             <div class="ADMainAddButtonDiv">
-                <a href="/addCategory">
-                    <div class="ADMainAddButton">
-                        <p>Add New</p>
-                        <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
-                    </div>
-                </a>
+                <div onclick="OpenCategoryAddingForm()" class="ADMainAddButton">
+                    <p>Add New</p>
+                    <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
+                </div>
             </div>
             <div class="ADMainTableDiv">
                 <table class="ADMainTable">
-                    <thead class="ADTableHead" >
-                        <tr class="ADTableHeadTR" >
+                    <thead class="ADTableHead">
+                        <tr class="ADTableHeadTR">
                             <th>ID</th>
-                            <th>Sub-Category</th>
-                            <th>Category</th>
+                            <th>Customer</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Password</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {{#each customers}}
                         <tr>
-                            <td>001</td>
-                            <td>Mipa_2K_PUR</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
+                            <td>{{this.Customer_Id}}</td>
+                            <td>{{this.Customer_Name}}</td>
+                            <td>{{this.MOB_Number}}</td>
+                            <td>{{this.Email}}</td>
+                            <td>{{this.Password}}</td>
+                            <td><a href="/admin/editCustomer/{{this.Customer_Id}}" class="btn btn-primary">Edit</a></td>
                         </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Mipa_2K_PUR</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
-                         <tr>
-                            <td>001</td>
-                            <td>Mipa_2K_PUR</td>
-                            <td>Paint</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
-                        </tr>
+                        {{/each}}
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+
+        {{!-- Addcategory form --}}
+
+        <div id="ADpopupContainer">
+            <div id="ADpopupContentEmployee">
+                <!-- Add your popup content here -->
+                <div class="ADAddCategoryFromHeaderDiv">
+                    <p class="ADAddCategoryFromHeader">Add Customer</p>
+                    <div onclick="closeCategoryAddingForm()" class="ADAddCategoryFromCloseBTNDiv">
+                        <img src="/images/Icons/delete-button.png" alt="" class="ADaddCloseBTNIcon">
+                    </div>
+                </div>
+                <form action="/admin/AddCustomer" method="post">
+                    <div class="ADAddCategoryFromDiv">
+                        <p class="ADAddCategoryLabel">Customer Name:</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="text"
+                            name="Customer_Name" placeholder="Enter the Name Customer Name">
+
+                        <p class="ADAddCategoryLabel">Mobile Number</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="number"
+                            name="MOB_Number" placeholder="Enter Mobile Number">
+                        <p class="ADAddCategoryLabel">Email</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="email" name="Email"
+                            placeholder="Enter Email">
+                        <p class="ADAddCategoryLabel">Password</p>
+                        <input required class="ADAddCategoryTextInput ADemployeeAddforminput ADEmployeePass"
+                            type="password" name="Password" id="password" placeholder="Enter Password">
+                        <span id="password-icon" class="password-icon" onclick="togglePassword()"><i
+                                class="fas fa-eye"></i></span>
+
+
+                        <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Customer</button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>

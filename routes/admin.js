@@ -276,8 +276,72 @@ router.get('/Employees', (req, res) => {
   })
 })
 
-router.get('/Customers', (req, res) => {
-  res.render('admin/Customer', { admin: true });
+router.get('/editEmployee/:id', (req, res) => {
+  adminHelpers.GetEmployeeById(req.params.id).then((Employee) => {
+    console.log(Employee);
+    res.render('admin/forms/editEmployee', { admin: true, Employee });
+  })
 })
+
+router.post('/EditEmployee/:id', (req, res) => {
+  adminHelpers.UpdateEmployee(req.body, req.params.id).then(() => {
+    res.redirect('/admin/Employees');
+  })
+})
+
+router.get('/deleteEmployee/:id', (req, res) => {
+  adminHelpers.DeleteEmployeeById(req.params.id).then((State) => {
+    if (State.Status) {
+      res.redirect('/admin/Employees');
+    } else {
+      res.redirect(`/admin/Employees/?Error=${State.error}`);
+    }
+  })
+})
+
+router.get('/Customers', (req, res) => {
+  adminHelpers.getAllCustomers().then((customers) => {
+    res.render('admin/Customer', { admin: true, customers });
+  })
+})
+
+
+router.post('/AddCustomer', (req, res) => {
+  adminHelpers.AddCustomer(req.body).then((State) => {
+    if (State.Status) {
+      res.redirect('/admin/Customers');
+    } else {
+      res.redirect(`/admin/Customers/?Error=${State.error}`);
+    }
+  })
+})
+
+router.get('/editCustomer/:id', (req, res) => {
+  adminHelpers.GetCustomerById(req.params.id).then((Customer) => {
+    res.render('admin/forms/editCustomer', { admin: true, Customer });
+  })
+})
+
+router.post('/EditCustomer/:id', (req, res) => {
+  adminHelpers.UpdateCustomer(req.body, req.params.id).then((State) => {
+    if (State.Status) {
+      res.redirect('/admin/Customers');
+    } else {
+      res.redirect(`/admin/Customers/?Error=${State.error}`);
+    }
+  })
+})
+
+router.get('/DeleteCustomer/:id', (req, res) => {
+  adminHelpers.DeleteCustomerById(req.params.id).then((State) => {
+    if (State.Status) {
+      res.redirect('/admin/Customers');
+    } else {
+      res.redirect(`/admin/Customers/?Error=${State.error}`);
+    }
+
+  })
+})
+
 
 module.exports = router;

@@ -4,5 +4,6 @@ module.exports={
     PRODUCT_COLLECTION : 'Product_Collection',
     ADDITIVE_COLLECTION : 'Additive_Collection',
     BINDER_COLLECTION: 'Binder_collection',
-    EMPLOYEE_COLLECTION: 'Employee_Collection'
+    EMPLOYEE_COLLECTION: 'Employee_Collection',
+    CUSTOMER_COLLECTION: 'Customer_Collection'
 };

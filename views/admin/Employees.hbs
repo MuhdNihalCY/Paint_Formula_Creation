@@ -96,7 +96,7 @@
                             <td> <input class="ADEmplyeeTablePassBox" type="password" value="{{this.Password}}" id="ADTBEmpPass{{this.Employee_Id}}"
                                     disabled> <span id="ADTBpassword-icon{{this.Employee_Id}}" class="ADTBpassword-icon"
                                     onclick="ADTBEmpPasstogglePassword({{this.Employee_Id}})"><i class="fas fa-eye"></i></span> </td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
+                            <td><a href="/admin/editEmployee/{{this.Employee_Id}}" class="btn btn-primary">Edit</a></td>
                         </tr>
                         {{/each}}
                     </tbody>
