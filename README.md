@@ -18,7 +18,7 @@ Before starting, ensure you have the following prerequisites installed on your s
 3. Clone the source code repository by running the following command in your terminal or command prompt:
 
    ```bash
-   git clone [<repository-url>](https://github.com/MuhdNihalCY/Paint_Formula_Creation.git)
+   git clone https://github.com/MuhdNihalCY/Paint_Formula_Creation.git
    ```
 
 4. Navigate to the cloned repository:
