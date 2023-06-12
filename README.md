@@ -30,13 +30,13 @@ Before starting, ensure you have the following prerequisites installed on your s
 5. Build the Docker image for the MegaPaints web app using the following command:
 
    ```bash
-   docker build -t megaPaints .
+   docker build -t megapaints .
    ```
 
 6. Run the Docker container with the following command:
 
    ```bash
-   docker run -p 3000:3000 megaPaints
+   docker run -p 3000:3000 megapaints
    ```
 
 7. Once the container is running, you can access the MegaPaints web app by opening your web browser and navigating to [http://localhost:3000](http://localhost:3000).
