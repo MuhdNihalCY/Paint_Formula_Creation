@@ -43,6 +43,4 @@ Before starting, ensure you have the following prerequisites installed on your s
 
    The web app will now be running on port 3000, and you can interact with it through the browser.
 
-## License
 
-This project is licensed under the [MIT License](LICENSE).
