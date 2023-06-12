@@ -18,13 +18,13 @@ Before starting, ensure you have the following prerequisites installed on your s
 3. Clone the source code repository by running the following command in your terminal or command prompt:
 
    ```bash
-   git clone <repository-url>
+   git clone [<repository-url>](https://github.com/MuhdNihalCY/Paint_Formula_Creation.git)
    ```
 
 4. Navigate to the cloned repository:
 
    ```bash
-   cd <repository-directory>
+   cd Paint_Formula_Creation
    ```
 
 5. Build the Docker image for the MegaPaints web app using the following command:
