@@ -1,0 +1,238 @@
+<section>
+    <div class="container">
+        <div class="col-md-6">
+            <div class="AddSubCategoryPage">
+                {{#if EditSubcategory}}
+                <p class="ADAddCategoryFromHeader">Edit Sub Category</p>
+                {{else}}
+                <p class="ADAddCategoryFromHeader">Add Sub Category</p>
+                {{/if}}
+
+                {{#if EditSubcategory}}
+                <form action="/admin/EditSubCategory" method="post">
+                {{else}}
+                <form action="/admin/AddSubCategory" method="post">
+                {{/if}}
+                    <div class="ADAddCategoryFromDiv">
+                        <p class="ADAddCategoryLabel">Category Name:</p>
+                        <select class="ADSelectCategory" name="Category_Id" id="">
+                            {{#each AllCategory}}
+                            <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">{{this.Category_Id}} -
+                                {{this.Category}}</option>
+                            {{/each}}
+                        </select>
+                        <p class="ADAddCategoryLabel">Sub Category Name:</p>
+                        {{#if EditSubcategory}}
+                        <input required class="ADAddCategoryTextInput" type="text" name="SubCategory"
+                            placeholder="Enter the Name of Sub Category" value="{{SubCategory.SubCategory}}">
+                        {{else}}
+                        <input required class="ADAddCategoryTextInput" type="text" name="SubCategory"
+                            placeholder="Enter the Name of Sub Category">
+                        {{/if}}
+                        <div class="ADPopUpRadioButtonDIV">
+                            {{!-- unit RAdio Button --}}
+                            <p class="ADAddCategoryLabel">Unit:</p>
+
+                            {{#if Gram}}
+                            <div class="ADPopUpRadioButton">
+                                <input type="radio" id="gram" name="Gram" checked>
+                                <label for="gram">Kilo Gram</label>
+                            </div>
+                            {{else}}
+                            <div class="ADPopUpRadioButton">
+                                <input type="radio" id="gram" name="Gram">
+                                <label for="gram">Kilo Gram</label>
+                            </div>
+                            {{/if}}
+
+                            {{#if Liter}}
+                            <div class="ADPopUpRadioButton">
+                                <input type="radio" id="liter" name="Liter" checked>
+                                <label for="liter">Liter</label>
+                            </div>
+                            {{else}}
+                            <div class="ADPopUpRadioButton">
+                                <input type="radio" id="liter" name="Liter">
+                                <label for="liter">Liter</label>
+                            </div>
+                            {{/if}}
+                        </div>
+
+                        <div class="ADPopUpRadioButtonDIV">
+                            {{!-- shine radio BTN --}}
+
+                            <p class="ADAddCategoryLabel">Level of Shine:</p>
+                            {{#if Matt}}
+                            <div class="ADPopUpRadioButton">
+                                <input type="radio" id="matt" name="Matt" checked>
+                                <label for="matt">Matt</label>
+                            </div>
+                            {{else}}
+                            <div class="ADPopUpRadioButton">
+                                <input type="radio" id="matt" name="Matt">
+                                <label for="matt">Matt</label>
+                            </div>
+                            {{/if}}
+
+
+                            {{#if Gloss}}
+                            <div class="ADPopUpRadioButton">
+                                <input type="radio" id="gloss" name="Gloss" checked>
+                                <label for="gloss">Gloss</label>
+                            </div>
+                            {{else}}
+                            <div class="ADPopUpRadioButton">
+                                <input type="radio" id="gloss" name="Gloss">
+                                <label for="gloss">Gloss</label>
+                            </div>
+                            {{/if}}
+                        </div>
+
+
+                        {{!-- Select Binder --}}
+                        <div class="BinderSelectDiv">
+                            <p class="ADAddCategoryLabel">Select Binder 1:</p>
+                            <select class="BinderSelect" name="Binder1" id="Binder1">
+
+                                {{#if EditSubcategory}}
+                                {{else}}
+                                <option value="">Select an option</option>
+                                {{/if}}
+
+                                {{#each Binders}}
+                                <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}</option>
+                                {{/each}}
+
+                                {{#if EditSubcategory}}
+                                <option value="">Select an option</option>
+                                {{else}}
+                                {{/if}}
+                            </select>
+                            <div class="DivForVerticalGap"></div>
+                            <p class="ADAddCategoryLabel">Select Binder 2:</p>
+                            {{#if Binder2}}
+                            <select class="BinderSelect" name="Binder2" id="Binder2">
+                                {{#each Binder2}}
+                                <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}</option>
+                                {{/each}}
+                                <option value="">Select an option</option>
+                            </select>
+                            {{else}}
+                            <select class="BinderSelect" name="Binder2" id="Binder2" disabled>
+                                <option value="">Select an option</option>
+                                {{#each Binders}}
+                                <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}</option>
+                                {{/each}}
+                            </select>
+                            {{/if}}
+                        </div>
+
+                        <p class="ADAddCategoryLabel">Remarks</p>
+                        <input class="ADAddCategoryTextInput" type="text" name="Remarks" placeholder="Enter Remarks"
+                            required value="{{SubCategory.Remarks}}">
+
+                        {{#if EditSubcategory}}
+                        <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Edit Sub Category</button>
+                        {{else}}
+                        <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Sub Category</button>
+                        {{/if}}
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+
+
+    $(document).ready(function () {
+        if (Binder2) {
+
+        } else {
+            // Disable Binder 2 initially
+            $("#Binder2").prop("disabled", true);
+        }
+        // Bind event listener to Binder 1
+        $("#Binder1").change(function () {
+            var selectedValue = $(this).val(); // Get the selected value
+
+            if (selectedValue === "") {
+                // If Binder 1 is unselected, disable Binder 2 and reset its value
+                $("#Binder2").prop("disabled", true).val("");
+            } else {
+                // If Binder 1 is selected, enable Binder 2
+                $("#Binder2").prop("disabled", false);
+
+                // Enable all options in Binder 2
+                $("#Binder2 option").prop("disabled", false);
+
+                // Disable selected option in Binder 2 if it matches Binder 1
+                $("#Binder2 option[value='" + selectedValue + "']").prop("disabled", true);
+            }
+        });
+
+
+
+        // Bind event listener to Binder 2
+        $("#Binder2").change(function () {
+            var selectedValue = $(this).val(); // Get the selected value
+
+            if (selectedValue !== "") {
+                // Disable selected option in Binder 1 if it matches Binder 2
+                $("#Binder1 option[value='" + selectedValue + "']").prop("disabled", true);
+            } else {
+                // Enable all options in Binder 1 when "Select an option" is selected in Binder 2
+                $("#Binder1 option").prop("disabled", false);
+            }
+        });
+    });
+
+
+    // radio button
+
+    const mattRadio = document.getElementById('matt');
+    const glossRadio = document.getElementById('gloss');
+
+    // Add event listener to the matt radio button
+    mattRadio.addEventListener('change', function () {
+        if (mattRadio.checked) {
+            glossRadio.checked = false;
+        }
+    });
+
+    // Add event listener to the gloss radio button
+    glossRadio.addEventListener('change', function () {
+        if (glossRadio.checked) {
+            mattRadio.checked = false;
+        }
+    });
+
+
+    const Gram = document.getElementById('gram');
+    const Liter = document.getElementById('liter');
+
+    // Add event listener to the matt radio button
+    Gram.addEventListener('change', function () {
+        if (Gram.checked) {
+            Liter.checked = false;
+        }
+    });
+
+    // Add event listener to the gloss radio button
+    Liter.addEventListener('change', function () {
+        if (Liter.checked) {
+            Gram.checked = false;
+        }
+    });
+
+
+
+</script>

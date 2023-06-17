@@ -17,9 +17,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const day = String(currentDate.getDate()).padStart(2, '0');
 
     const formattedDate = `${year}-${month}-${day}`;
-    dateInput.value = formattedDate;
-    dateInput.min = `${year}-${month}-${day - 7}`;
-    dateInput.max = `${year}-${month}-${day - -7}`;
+    // console.log(formattedDate);
+    if (dateInput) {
+        dateInput.value = formattedDate;
+        dateInput.min = `${year}-${month}-${day - 7}`;
+        dateInput.max = `${year}-${month}-${day - -7}`;
+    }
 });
 
 
@@ -93,7 +96,7 @@ function ADcategorySelect() {
             var subCategories = AllSubCategory;
             const filteredSubCategories = subCategories.filter(subCategory => subCategory.Category_Id === selectedCategoryId);
             displayFilteredSubCategories(filteredSubCategories)
-           
+
             // Print the filtered subcategories
             // console.table(filteredSubCategories);
 

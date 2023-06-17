@@ -913,7 +913,8 @@ td {
 }
 
 #ADpopupContentSubCategory {
-  height: 500px;
+  height: 900px;
+  width: 600px;
 }
 
 #ADpopupContentAdditive {
@@ -1108,4 +1109,60 @@ td {
   top: -62px;
   left: 95%;
   cursor: pointer;
+}
+
+/* CSS to display radio buttons horizontally */
+.ADPopUpRadioButtonDIV {
+  display: flex;
+  width: 100%;
+  padding-bottom: 2rem;
+}
+
+.ADPopUpRadioButton {
+  display: inline-block;
+  margin-left: 1rem;
+  margin-top: -0.2rem;
+}
+
+.ADPopUpRadioButton input[type="radio"] {
+  display: none;
+}
+
+.ADPopUpRadioButton label {
+  display: inline-block;
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.ADPopUpRadioButton input[type="radio"]:checked + label {
+  background-color: #4d67b6;
+  color: whitesmoke;
+}
+
+.BinderSelect, .BinderSelect option {
+  padding: 1rem;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.BinderSelect option {
+  margin: 1rem;
+}
+
+.BinderSelectDiv {
+  margin-bottom: 2rem;
+}
+
+.AddSubCategoryPage {
+  height: auto;
+  margin-bottom: 10rem;
+}
+
+.DivForVerticalGap {
+  margin-top: 2rem;
 }

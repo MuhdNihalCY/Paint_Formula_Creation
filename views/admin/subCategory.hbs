@@ -69,17 +69,18 @@
                 <p class="ADMainAreaHeader">Sub Category</p>
             </div>
             <div class="ADMainAddButtonDiv">
-                {{!-- <a href="/addCategory"> --}}
-                <div onclick="OpenCategoryAddingForm()" class="ADMainAddButton">
+                <a href="/admin/addSubCategory">
+                <div class="ADMainAddButton">
                     <p>Add New</p>
                     <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
                 </div>
-                {{!-- </a> --}}
+                </a>
             </div>
             <div class="ADSubCategorySelectionArea">
                 <div class="ADSubCategorySelectionDiv">
                     <p class="ADSubCategorySelectionLabel">Select Category</p>
-                    <select class="ADSubCategorySelectionSelectBox" onchange="ADcategorySelect()" name="Category" id="CategorySelect">
+                    <select class="ADSubCategorySelectionSelectBox" onchange="ADcategorySelect()" name="Category"
+                        id="CategorySelect">
                         <option value="" selected>All Category</option>
                         {{#each AllCategory}}
                         <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">{{this.Category_Id}} -
@@ -105,7 +106,7 @@
                             <td>{{this.SubCategory_Id}}</td>
                             <td>{{this.SubCategory}}</td>
                             <td>{{this.Category_Id}} - {{this.Category}}</td>
-                            <td><a href="" class="btn btn-primary">Edit</a></td>
+                            <td><a href="/admin/edit-subcategory/{{this.SubCategory_Id}}" class="btn btn-primary">Edit</a></td>
                         </tr>
                         {{/each}}
                         {{else}}
@@ -119,36 +120,7 @@
 
             </div>
         </div>
-        {{!-- Addcategory form --}}
-
-        <div id="ADpopupContainer">
-            <div id="ADpopupContentSubCategory">
-                <!-- Add your popup content here -->
-                <div class="ADAddCategoryFromHeaderDiv">
-                    <p class="ADAddCategoryFromHeader">Add Sub Category</p>
-                    <div onclick="closeCategoryAddingForm()" class="ADAddCategoryFromCloseBTNDiv">
-                        <img src="/images/Icons/delete-button.png" alt="" class="ADaddCloseBTNIcon">
-                    </div>
-                </div>
-                <form action="/admin/AddSubCategory" method="post">
-                    <div class="ADAddCategoryFromDiv">
-                        <p class="ADAddCategoryLabel">Category Name:</p>
-                        <select class="ADSelectCategory" name="Category_Id" id="">
-                            {{#each AllCategory}}
-                            <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">{{this.Category_Id}} -
-                                {{this.Category}}</option>
-                            {{/each}}
-                        </select>
-                        <p class="ADAddCategoryLabel">Sub Category Name:</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="SubCategory"
-                            placeholder="Enter the Name of Sub Category">
-                        <p class="ADAddCategoryLabel">Remarks</p>
-                        <input class="ADAddCategoryTextInput" type="text" name="Remarks" placeholder="Enter Remarks">
-                        <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Sub Category</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        
     </section>
 </section>
 

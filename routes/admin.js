@@ -52,7 +52,11 @@ router.get('/Sub-Category', (req, res) => {
           subCategory.Category = 'Unknown Category';
         }
       }
-      res.render('admin/subCategory', { admin: true, AllCategory, AllSubCategory });
+
+      adminHelpers.GetAllBinders().then((Binders) => {
+        console.log(Binders)
+        res.render('admin/subCategory', { admin: true, AllCategory, AllSubCategory, Binders });
+      })
     })
   })
 })
@@ -78,6 +82,31 @@ router.get('/Subcategories/api', (req, res) => {
   })
 })
 
+router.get('/addSubCategory', (req, res) => {
+  adminHelpers.getCategory().then((AllCategory) => {
+    adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
+      // Loop through each subcategory
+      for (let i = 0; i < AllSubCategory.length; i++) {
+        const subCategory = AllSubCategory[i];
+        // Find the matching category
+        const category = AllCategory.find(c => c.Category_Id === parseInt(subCategory.Category_Id));
+        // Check if a matching category is found
+        if (category) {
+          subCategory.Category = category.Category;
+        } else {
+          // Handle the case when no matching category is found
+          subCategory.Category = 'Unknown Category';
+        }
+      }
+
+      adminHelpers.GetAllBinders().then((Binders) => {
+        console.log(Binders)
+        res.render('admin/forms/addSubCategory', { admin: true, AllCategory, AllSubCategory, Binders });
+      })
+    })
+  })
+})
+
 router.post('/AddSubCategory', (req, res) => {
   // console.log(req.body)
   adminHelpers.AddSubCategory(req.body).then((State) => {
@@ -89,8 +118,102 @@ router.post('/AddSubCategory', (req, res) => {
   })
 })
 
-router.get('/Product', (req, res) => {
-  adminHelpers.getCategory().then((AllCategory) => {
+router.get('/edit-subcategory/:id', (req, res) => {
+  adminHelpers.getSubCategoryById(req.params.id).then((SubCategory) => {
+    adminHelpers.getCategory().then((AllCategory) => {
+      adminHelpers.GetAllBinders().then((Binders) => {
+        // console.log(SubCategory);
+        // console.log(AllCategory);
+        // console.log(Binders);
+
+
+        // Find the matching category
+        const matchingCategory = AllCategory.find((category) => category.Category_Id === parseInt(SubCategory.Category_Id));
+
+        // Find the matching binder for Binder1
+        const matchingBinder1 = Binders.find((binder) => binder.Binder_Id === parseInt(SubCategory.Binder1));
+
+        // Create the array of categories with matching category as the first element
+        const matchingCategories = [matchingCategory, ...AllCategory.filter((category) => category.Category_Id !== matchingCategory.Category_Id)];
+
+        // Create the array of binders with matching binder as the first element
+        const matchingBinders = [matchingBinder1, ...Binders.filter((binder) => binder.Binder_Id !== matchingBinder1.Binder_Id)];
+
+        // console.log(matchingCategories);
+        // console.log(matchingBinders);
+
+        AllCategory = matchingCategories;
+        Binders = matchingBinders;
+
+        console.log(SubCategory);
+
+        var Gram, Liter, Matt, Gloss, Binder2;
+
+        if (SubCategory.Gram) {
+          Gram = true;
+        } else if (SubCategory.Liter) {
+          Liter = true;
+        }
+
+        if (SubCategory.Matt) {
+          Matt = true;
+        } else if (SubCategory.Gloss) {
+          Gloss = true;
+        }
+
+        console.log(Gram, Liter, Matt, Gloss);
+
+        if (SubCategory.Binder2) {
+          Binder2 = SubCategory.Binder2
+
+          let matchingBinder = null;
+          const remainingBinders = [];
+
+          for (let i = 0; i < Binders.length; i++) {
+            const binder = Binders[i];
+            if (binder.Binder_Id.toString() === Binder2) {
+              matchingBinder = binder;
+            } else {
+              remainingBinders.push(binder);
+            }
+          }
+
+          // Move the matching binder to the first position
+          if (matchingBinder !== null) {
+            remainingBinders.unshift(matchingBinder);
+          }
+
+          // Print the matching binder
+          // console.log("Matching Binder:");
+          // console.log(matchingBinder);
+
+          // Print the remaining binders
+          console.log("Remaining Binders:");
+          console.log(remainingBinders);
+          Binder2 = remainingBinders;
+          var EditSubcategory = true
+          res.render('admin/forms/addSubCategory', { admin: true, EditSubcategory, AllCategory, SubCategory, Binders, Gram, Liter, Matt, Gloss, Binder2 });
+        } else {
+          var EditSubcategory = true
+          res.render('admin/forms/addSubCategory', { admin: true, EditSubcategory, AllCategory, SubCategory, Binders, Gram, Liter, Matt, Gloss, Binder2 });
+        }
+
+
+      })
+    })
+  })
+})
+
+
+router.post('/EditSubCategory',(req,res)=>{
+  // console.log(req.body);
+  adminHelpers.EditSubcategoryBy(req.body).then((response)=>{
+    res.redirect('/admin/Sub-Category');
+  })
+})
+
+router.get('/Product', (req, res) => { 
+  adminHelpers.getCategory().then((AllCategory) => { 
     // console.log(AllCategory)
     adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
       // console.log(AllSubCategory)

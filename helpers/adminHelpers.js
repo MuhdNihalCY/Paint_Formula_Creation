@@ -119,10 +119,36 @@ module.exports = {
             }
         })
     },
+    EditSubcategoryBy:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+            State = {
+                status :false,
+                err: ''
+            }
+
+            await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateOne({"SubCategory":data.SubCategory},{$unset:{
+                Gram:"",Liter:"",Gloss:"",Matt:"",Binder1:"",Binder2:""
+            }}).then((response)=>{
+                console.log(response);
+            })
+
+            await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateOne({"SubCategory":data.SubCategory},{$set:data}).then((response)=>{
+                console.log(response);
+                resolve(response);
+            })
+        })
+    },
     GetAllSubCategory: () => {
         return new Promise(async (resolve, reject) => {
             var SubCategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).find().sort({ "InsertedTime": 1 }).toArray()
             resolve(SubCategories);
+        })
+    },
+    getSubCategoryById: (id) => {
+        return new Promise(async (resolve, reject) => {
+            var Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({"SubCategory_Id": parseInt(id)});
+            // console.log(Subcategory);
+            resolve(Subcategory);
         })
     },
     addProduct: (data) => {
@@ -390,7 +416,7 @@ module.exports = {
             var State = {
                 Status: false,
                 error: ""
-            } 
+            }
 
             await db.get().collection(collection.EMPLOYEE_COLLECTION).updateOne({ Employee_Id: parseInt(id) }, { $set: data }).then((response) => {
                 console.log(response);
@@ -403,7 +429,7 @@ module.exports = {
             })
         })
     },
-    DeleteEmployeeById:(id)=>{
+    DeleteEmployeeById: (id) => {
         return new Promise(async (resolve, reject) => {
             var State = {
                 Status: false,
@@ -419,7 +445,7 @@ module.exports = {
             })
         })
     },
-    AddCustomer:(data)=>{
+    AddCustomer: (data) => {
         return new Promise(async (resolve, reject) => {
             var State = {
                 Status: false,
@@ -449,24 +475,24 @@ module.exports = {
             })
         })
     },
-    getAllCustomers:()=>{
+    getAllCustomers: () => {
         return new Promise(async (resolve, reject) => {
             var Customers = await db.get().collection(collection.CUSTOMER_COLLECTION).find().toArray();
             resolve(Customers);
         })
     },
-    GetCustomerById:(id)=>{
+    GetCustomerById: (id) => {
         return new Promise(async (resolve, reject) => {
             var Customer = await db.get().collection(collection.CUSTOMER_COLLECTION).findOne({ Customer_Id: parseInt(id) });
             resolve(Customer);
         })
     },
-    UpdateCustomer:(data, id) => {
+    UpdateCustomer: (data, id) => {
         return new Promise(async (resolve, reject) => {
             var State = {
                 Status: false,
                 error: ""
-            } 
+            }
 
             await db.get().collection(collection.CUSTOMER_COLLECTION).updateOne({ Customer_Id: parseInt(id) }, { $set: data }).then((response) => {
                 console.log(response);
@@ -479,7 +505,7 @@ module.exports = {
             })
         })
     },
-    DeleteCustomerById:(id)=>{
+    DeleteCustomerById: (id) => {
         return new Promise(async (resolve, reject) => {
             var State = {
                 Status: false,
