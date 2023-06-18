@@ -3,12 +3,22 @@ var router = express.Router();
 var adminHelpers = require('../helpers/adminHelpers');
 
 const AdminUser = {
-  userName: "AdminMP",
+  userName: "Admin",
   password: "1"
 }
 
+
+// verify login
+const verifyLogin = (req, res, next) => {
+  if (req.session.AdminLog) {
+    next()
+  } else {
+    res.redirect('/admin/login');
+  }
+}
+
 /* GET users listing. */
-router.get('/', function (req, res, next) {
+router.get('/', verifyLogin, function (req, res, next) {
   adminHelpers.getCategory().then((AllCategory) => {
     // console.log("Calling Admin Dash")
     if (req.query.Error) {
@@ -17,6 +27,46 @@ router.get('/', function (req, res, next) {
     res.render('admin/Dashboard', { admin: true, AllCategory });
   })
 });
+
+router.get('/login', (req, res) => {
+  res.render('admin/forms/AdminLogin', { admin: true });
+})
+
+router.post('/Login', (req, res) => {
+  console.log(req.body);
+  adminHelpers.AdminLogin(req.body, AdminUser).then((response) => {
+    if (response.Status) {
+      //good Login
+      req.session.AdminLog = true;
+      res.redirect('/admin');
+    } else {
+      //wrong Login
+      res.render('admin/forms/AdminLogin', { admin: true, StateErr: response.err });
+    }
+  })
+})
+
+router.get('/logout', verifyLogin, (req, res) => {
+  req.session.AdminLog = false;
+  res.redirect("/admin");
+})
+
+router.get('/change-password', (req, res) => {
+  res.render('admin/forms/ChangePassword', { admin: true });
+})
+
+router.post('/change-password', (req, res) => {
+  console.log(req.body);
+  adminHelpers.AdminPasswordChange(req.body, AdminUser).then((response) => {
+    console.log(response);
+    if (response.Status == false) {
+      res.render('admin/forms/ChangePassword', { admin: true, StateError: response.err });
+    } else {
+      res.redirect("/admin");
+    }
+  })
+
+})
 
 router.post('/addCategory', (req, res) => {
   // console.log(req.body);
@@ -205,15 +255,15 @@ router.get('/edit-subcategory/:id', (req, res) => {
 })
 
 
-router.post('/EditSubCategory',(req,res)=>{
+router.post('/EditSubCategory', (req, res) => {
   // console.log(req.body);
-  adminHelpers.EditSubcategoryBy(req.body).then((response)=>{
+  adminHelpers.EditSubcategoryBy(req.body).then((response) => {
     res.redirect('/admin/Sub-Category');
   })
 })
 
-router.get('/Product', (req, res) => { 
-  adminHelpers.getCategory().then((AllCategory) => { 
+router.get('/Product', (req, res) => {
+  adminHelpers.getCategory().then((AllCategory) => {
     // console.log(AllCategory)
     adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
       // console.log(AllSubCategory)

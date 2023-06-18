@@ -119,20 +119,22 @@ module.exports = {
             }
         })
     },
-    EditSubcategoryBy:(data)=>{
-        return new Promise(async(resolve,reject)=>{
+    EditSubcategoryBy: (data) => {
+        return new Promise(async (resolve, reject) => {
             State = {
-                status :false,
+                status: false,
                 err: ''
             }
 
-            await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateOne({"SubCategory":data.SubCategory},{$unset:{
-                Gram:"",Liter:"",Gloss:"",Matt:"",Binder1:"",Binder2:""
-            }}).then((response)=>{
+            await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateOne({ "SubCategory": data.SubCategory }, {
+                $unset: {
+                    Gram: "", Liter: "", Gloss: "", Matt: "", Binder1: "", Binder2: ""
+                }
+            }).then((response) => {
                 console.log(response);
             })
 
-            await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateOne({"SubCategory":data.SubCategory},{$set:data}).then((response)=>{
+            await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateOne({ "SubCategory": data.SubCategory }, { $set: data }).then((response) => {
                 console.log(response);
                 resolve(response);
             })
@@ -146,7 +148,7 @@ module.exports = {
     },
     getSubCategoryById: (id) => {
         return new Promise(async (resolve, reject) => {
-            var Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({"SubCategory_Id": parseInt(id)});
+            var Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ "SubCategory_Id": parseInt(id) });
             // console.log(Subcategory);
             resolve(Subcategory);
         })
@@ -519,6 +521,83 @@ module.exports = {
                 }
                 resolve(State)
             })
+        })
+    },
+    AdminPasswordChange: (data, AdminUser) => {
+        return new Promise(async (resolve, reject) => {
+            var CurrentPassword = data.CurrentPassword
+            var Newpassword = data.Newpassword1
+
+
+            var IsAdmin = await db.get().collection(collection.ADMIN_COLLECTION).findOne();
+            console.log("IsAdmin", IsAdmin);
+            var Admin = {
+                name: "Admin",
+                password: Newpassword
+            };
+            console.log("New Data: ", Admin);
+
+            if (IsAdmin) {
+                // check password mathced and update
+                // Already changed the password One Time
+                if (IsAdmin.password === CurrentPassword) {
+                    //Old Passwprd matches
+                    await db.get().collection(collection.ADMIN_COLLECTION).updateOne({ "password": CurrentPassword }, { $set: Admin }).then((response) => {
+                        console.log("password Updated in database")
+                        if (response.modifiedCount) {
+                            resolve({ Status: true })
+                        } else {
+                            resolve({ Status: false, err: "Password not updated!" })
+                        }
+                    })
+                } else {
+                    // Old passswrod doesn't match
+                    resolve({ Status: false, err: "Old Passwrod doesn't match. Password not updated!" })
+                }
+            } else {
+                // change the password for first Time
+
+                if (AdminUser.password === CurrentPassword) {
+                    await db.get().collection(collection.ADMIN_COLLECTION).insertOne(Admin).then((response) => {
+                        console.log(response.insertedId);
+                        console.log("Password Added to database!");
+                        if (response.insertedId) {
+                            resolve(response.insertedId)
+                        } else {
+                            resolve({ Status: false, err: "Password not Changed!" })
+                        }
+                    })
+                } else {
+                    resolve({ Status: false, err: "Old Passwrod doesn't match. Password not updated!" })
+                }
+
+            }
+        })
+    },
+    AdminLogin: (data,AdminUser) => {
+        return new Promise(async (resolve, reject) => {
+            var IsAdmin = await db.get().collection(collection.ADMIN_COLLECTION).findOne();
+            console.log("IsAdmin", IsAdmin);
+
+            if(IsAdmin){
+                // admin Data already in database
+                if(IsAdmin.name == data.userName && IsAdmin.password == data.password){
+                    // Good Login Input
+                    resolve({Status:true});
+                }else{
+                    // wrong login input
+                    resolve({Status :false, err: "Wrong login credentials"})
+                }
+            }else{
+                // admin data not on database
+                if(AdminUser.userName == data.userName && AdminUser.password == data.password){
+                    // Good Login Input
+                    resolve({Status:true});
+                }else{
+                    // wrong login input
+                    resolve({Status :false, err: "Wrong login credentials"})
+                }
+            }
         })
     }
 }  
