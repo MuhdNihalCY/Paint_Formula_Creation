@@ -51,11 +51,11 @@ router.get('/logout', verifyLogin, (req, res) => {
   res.redirect("/admin");
 })
 
-router.get('/change-password', (req, res) => {
+router.get('/change-password', verifyLogin, (req, res) => {
   res.render('admin/forms/ChangePassword', { admin: true });
 })
 
-router.post('/change-password', (req, res) => {
+router.post('/change-password', verifyLogin, (req, res) => {
   console.log(req.body);
   adminHelpers.AdminPasswordChange(req.body, AdminUser).then((response) => {
     console.log(response);
@@ -68,7 +68,7 @@ router.post('/change-password', (req, res) => {
 
 })
 
-router.post('/addCategory', (req, res) => {
+router.post('/addCategory', verifyLogin, (req, res) => {
   // console.log(req.body);
   adminHelpers.AddCategory(req.body).then((State) => {
     // console.log(State)
@@ -80,13 +80,13 @@ router.post('/addCategory', (req, res) => {
   })
 })
 
-router.get('/Detele-Category/:id', (req, res) => {
+router.get('/Detele-Category/:id', verifyLogin, (req, res) => {
   adminHelpers.DeleteCategory(req.params.id).then((State) => {
     res.redirect('/admin');
   })
 })
 
-router.get('/Sub-Category', (req, res) => {
+router.get('/Sub-Category', verifyLogin, (req, res) => {
   adminHelpers.getCategory().then((AllCategory) => {
     adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
       // Loop through each subcategory
@@ -132,7 +132,7 @@ router.get('/Subcategories/api', (req, res) => {
   })
 })
 
-router.get('/addSubCategory', (req, res) => {
+router.get('/addSubCategory', verifyLogin, (req, res) => {
   adminHelpers.getCategory().then((AllCategory) => {
     adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
       // Loop through each subcategory
@@ -157,7 +157,7 @@ router.get('/addSubCategory', (req, res) => {
   })
 })
 
-router.post('/AddSubCategory', (req, res) => {
+router.post('/AddSubCategory', verifyLogin, (req, res) => {
   // console.log(req.body)
   adminHelpers.AddSubCategory(req.body).then((State) => {
     if (State.Status) {
@@ -168,7 +168,7 @@ router.post('/AddSubCategory', (req, res) => {
   })
 })
 
-router.get('/edit-subcategory/:id', (req, res) => {
+router.get('/edit-subcategory/:id', verifyLogin, (req, res) => {
   adminHelpers.getSubCategoryById(req.params.id).then((SubCategory) => {
     adminHelpers.getCategory().then((AllCategory) => {
       adminHelpers.GetAllBinders().then((Binders) => {
@@ -255,14 +255,14 @@ router.get('/edit-subcategory/:id', (req, res) => {
 })
 
 
-router.post('/EditSubCategory', (req, res) => {
+router.post('/EditSubCategory', verifyLogin, (req, res) => {
   // console.log(req.body);
   adminHelpers.EditSubcategoryBy(req.body).then((response) => {
     res.redirect('/admin/Sub-Category');
   })
 })
 
-router.get('/Product', (req, res) => {
+router.get('/Product', verifyLogin, (req, res) => {
   adminHelpers.getCategory().then((AllCategory) => {
     // console.log(AllCategory)
     adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
@@ -312,7 +312,7 @@ router.get('/GetAllProduct-Cat-Sub/api', (req, res) => {
   })
 })
 
-router.get('/addProduct', (req, res) => {
+router.get('/addProduct', verifyLogin, (req, res) => {
   adminHelpers.getCategory().then((AllCategory) => {
     // console.log(AllCategory)
     adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
@@ -324,7 +324,7 @@ router.get('/addProduct', (req, res) => {
   })
 })
 
-router.post('/addProducts', (req, res) => {
+router.post('/addProducts', verifyLogin, (req, res) => {
   adminHelpers.addProduct(req.body).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Product');
@@ -340,7 +340,7 @@ router.get('/Categories/api', (req, res) => {
   })
 })
 
-router.get('/editProduct/:id', (req, res) => {
+router.get('/editProduct/:id', verifyLogin, (req, res) => {
   console.log(req.params.id);
   adminHelpers.GetProductByID(req.params.id).then((product) => {
     adminHelpers.getCategory().then((AllCategory) => {
@@ -361,7 +361,7 @@ router.get('/editProduct/:id', (req, res) => {
   })
 })
 
-router.post('/UpdateProducts', (req, res) => {
+router.post('/UpdateProducts', verifyLogin, (req, res) => {
   adminHelpers.UpdateProduct(req.body).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Product')
@@ -369,7 +369,7 @@ router.post('/UpdateProducts', (req, res) => {
   })
 });
 
-router.get('/DeleteProduct/:id', (req, res) => {
+router.get('/DeleteProduct/:id', verifyLogin, (req, res) => {
   adminHelpers.DeleteProductById(req.params.id).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Product');
@@ -380,13 +380,13 @@ router.get('/DeleteProduct/:id', (req, res) => {
 })
 
 
-router.get('/Additives', (req, res) => {
+router.get('/Additives', verifyLogin, (req, res) => {
   adminHelpers.GetAllAdditives().then((Additives) => {
     res.render('admin/Additives', { admin: true, Additives });
   })
 })
 
-router.post('/AddAdditives', (req, res) => {
+router.post('/AddAdditives', verifyLogin, (req, res) => {
   adminHelpers.AddAdditives(req.body).then((State) => {
     console.log(State)
     if (State.Status) {
@@ -397,7 +397,7 @@ router.post('/AddAdditives', (req, res) => {
   })
 })
 
-router.get('/deleteAdditive/:id', (req, res) => {
+router.get('/deleteAdditive/:id', verifyLogin, (req, res) => {
   adminHelpers.DeleteAdditiveById(req.params.id).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Additives');
@@ -407,13 +407,13 @@ router.get('/deleteAdditive/:id', (req, res) => {
   })
 })
 
-router.get('/Binders', (req, res) => {
+router.get('/Binders', verifyLogin, (req, res) => {
   adminHelpers.GetAllBinders().then((Binders) => {
     res.render('admin/Binders', { admin: true, Binders });
   })
 })
 
-router.post('/AddBinders', (req, res) => {
+router.post('/AddBinders', verifyLogin, (req, res) => {
   adminHelpers.AddBinders(req.body).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Binders');
@@ -423,7 +423,7 @@ router.post('/AddBinders', (req, res) => {
   })
 })
 
-router.get('/deleteBinder/:id', (req, res) => {
+router.get('/deleteBinder/:id', verifyLogin, (req, res) => {
   adminHelpers.DeleteBinderById(req.params.id).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Binders');
@@ -433,7 +433,7 @@ router.get('/deleteBinder/:id', (req, res) => {
   })
 })
 
-router.post('/AddEmployee', (req, res) => {
+router.post('/AddEmployee', verifyLogin, (req, res) => {
   adminHelpers.AddEmployee(req.body).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Employees');
@@ -443,26 +443,26 @@ router.post('/AddEmployee', (req, res) => {
   })
 })
 
-router.get('/Employees', (req, res) => {
+router.get('/Employees', verifyLogin, (req, res) => {
   adminHelpers.GetAllEmployees().then((Employees) => {
     res.render('admin/Employees', { admin: true, Employees });
   })
 })
 
-router.get('/editEmployee/:id', (req, res) => {
+router.get('/editEmployee/:id', verifyLogin, (req, res) => {
   adminHelpers.GetEmployeeById(req.params.id).then((Employee) => {
     console.log(Employee);
     res.render('admin/forms/editEmployee', { admin: true, Employee });
   })
 })
 
-router.post('/EditEmployee/:id', (req, res) => {
+router.post('/EditEmployee/:id', verifyLogin, (req, res) => {
   adminHelpers.UpdateEmployee(req.body, req.params.id).then(() => {
     res.redirect('/admin/Employees');
   })
 })
 
-router.get('/deleteEmployee/:id', (req, res) => {
+router.get('/deleteEmployee/:id', verifyLogin, (req, res) => {
   adminHelpers.DeleteEmployeeById(req.params.id).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Employees');
@@ -472,14 +472,14 @@ router.get('/deleteEmployee/:id', (req, res) => {
   })
 })
 
-router.get('/Customers', (req, res) => {
+router.get('/Customers', verifyLogin, (req, res) => {
   adminHelpers.getAllCustomers().then((customers) => {
     res.render('admin/Customer', { admin: true, customers });
   })
 })
 
 
-router.post('/AddCustomer', (req, res) => {
+router.post('/AddCustomer', verifyLogin, (req, res) => {
   adminHelpers.AddCustomer(req.body).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Customers');
@@ -489,13 +489,13 @@ router.post('/AddCustomer', (req, res) => {
   })
 })
 
-router.get('/editCustomer/:id', (req, res) => {
+router.get('/editCustomer/:id', verifyLogin, (req, res) => {
   adminHelpers.GetCustomerById(req.params.id).then((Customer) => {
     res.render('admin/forms/editCustomer', { admin: true, Customer });
   })
 })
 
-router.post('/EditCustomer/:id', (req, res) => {
+router.post('/EditCustomer/:id', verifyLogin, (req, res) => {
   adminHelpers.UpdateCustomer(req.body, req.params.id).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Customers');
@@ -505,7 +505,7 @@ router.post('/EditCustomer/:id', (req, res) => {
   })
 })
 
-router.get('/DeleteCustomer/:id', (req, res) => {
+router.get('/DeleteCustomer/:id', verifyLogin, (req, res) => {
   adminHelpers.DeleteCustomerById(req.params.id).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Customers');
