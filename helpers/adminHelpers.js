@@ -421,7 +421,7 @@ module.exports = {
             }
 
             await db.get().collection(collection.EMPLOYEE_COLLECTION).updateOne({ Employee_Id: parseInt(id) }, { $set: data }).then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response.modifiedCount > 0) {
                     State.Status = true;
                 } else {
@@ -535,7 +535,7 @@ module.exports = {
                 name: "Admin",
                 password: Newpassword
             };
-            console.log("New Data: ", Admin);
+            // console.log("New Data: ", Admin);
 
             if (IsAdmin) {
                 // check password mathced and update
@@ -543,7 +543,7 @@ module.exports = {
                 if (IsAdmin.password === CurrentPassword) {
                     //Old Passwprd matches
                     await db.get().collection(collection.ADMIN_COLLECTION).updateOne({ "password": CurrentPassword }, { $set: Admin }).then((response) => {
-                        console.log("password Updated in database")
+                        // console.log("password Updated in database")
                         if (response.modifiedCount) {
                             resolve({ Status: true })
                         } else {
@@ -559,8 +559,8 @@ module.exports = {
 
                 if (AdminUser.password === CurrentPassword) {
                     await db.get().collection(collection.ADMIN_COLLECTION).insertOne(Admin).then((response) => {
-                        console.log(response.insertedId);
-                        console.log("Password Added to database!");
+                        // console.log(response.insertedId);
+                        // console.log("Password Added to database!");
                         if (response.insertedId) {
                             resolve(response.insertedId)
                         } else {
@@ -577,7 +577,7 @@ module.exports = {
     AdminLogin: (data,AdminUser) => {
         return new Promise(async (resolve, reject) => {
             var IsAdmin = await db.get().collection(collection.ADMIN_COLLECTION).findOne();
-            console.log("IsAdmin", IsAdmin);
+            // console.log("IsAdmin", IsAdmin);
 
             if(IsAdmin){
                 // admin Data already in database

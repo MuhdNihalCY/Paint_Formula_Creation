@@ -53,7 +53,13 @@
             </div>
 
             <div class="ADAccountExpandDiv">
-                <a href="/logout">
+                <a href="/admin/change-password">
+                    <div class="ADlogoutDiv">
+                        <p>Change Password</p>
+                        {{!-- <img src="/images/Icons/logout.png" alt="" class="ADLogoutIcon"> --}}
+                    </div>
+                </a>
+                <a href="/admin/logout">
                     <div class="ADlogoutDiv">
                         <p>Logout</p>
                         <img src="/images/Icons/logout.png" alt="" class="ADLogoutIcon">
@@ -70,10 +76,10 @@
             </div>
             <div class="ADMainAddButtonDiv">
                 <a href="/admin/addSubCategory">
-                <div class="ADMainAddButton">
-                    <p>Add New</p>
-                    <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
-                </div>
+                    <div class="ADMainAddButton">
+                        <p>Add New</p>
+                        <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
+                    </div>
                 </a>
             </div>
             <div class="ADSubCategorySelectionArea">
@@ -106,7 +112,8 @@
                             <td>{{this.SubCategory_Id}}</td>
                             <td>{{this.SubCategory}}</td>
                             <td>{{this.Category_Id}} - {{this.Category}}</td>
-                            <td><a href="/admin/edit-subcategory/{{this.SubCategory_Id}}" class="btn btn-primary">Edit</a></td>
+                            <td><a href="/admin/edit-subcategory/{{this.SubCategory_Id}}"
+                                    class="btn btn-primary">Edit</a></td>
                         </tr>
                         {{/each}}
                         {{else}}
@@ -120,7 +127,7 @@
 
             </div>
         </div>
-        
+
     </section>
 </section>
 
