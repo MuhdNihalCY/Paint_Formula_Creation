@@ -136,3 +136,25 @@
     alert(AddingError);
 </script>
 {{/if}}
+
+
+<style>
+    .AdminPage {
+        display: flex;
+    }
+
+    .ADSidebar {
+        flex: 0 0 auto;
+        /* Prevent the sidebar from growing or shrinking */
+        min-height: 100%;
+        /* Minimum height to fill the container */
+    }
+
+    .AdMainArea {
+        flex: 1;
+        /* Allow the main area to grow and fill the remaining space */
+        min-height: 100vh;
+        /* Minimum height of the viewport */
+        /* Add any other styling you want for the main area */
+    }
+</style>

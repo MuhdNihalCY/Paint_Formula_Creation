@@ -326,7 +326,10 @@ module.exports = {
                 error: ""
             }
             var SameBinder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Name: data.Binder_Name });
-            if (!SameBinder) {
+            if (SameBinder) {
+               // console.log("Same Binder: ",SameBinder);
+                State.error = "This Binder Already Added!"
+            } else {
                 data.InsertedTime = Date.now();
                 var latestBinder = await db.get().collection(collection.BINDER_COLLECTION).find().sort({ InsertedTime: -1 }).toArray();
                 if (latestBinder.length > 0) {
@@ -342,8 +345,6 @@ module.exports = {
                         State.error = "Binder Not Added!"
                     }
                 })
-            } else {
-                State.error = "This Binder Already Added!"
             }
             resolve(State);
         })
@@ -574,28 +575,28 @@ module.exports = {
             }
         })
     },
-    AdminLogin: (data,AdminUser) => {
+    AdminLogin: (data, AdminUser) => {
         return new Promise(async (resolve, reject) => {
             var IsAdmin = await db.get().collection(collection.ADMIN_COLLECTION).findOne();
             // console.log("IsAdmin", IsAdmin);
 
-            if(IsAdmin){
+            if (IsAdmin) {
                 // admin Data already in database
-                if(IsAdmin.name == data.userName && IsAdmin.password == data.password){
+                if (IsAdmin.name == data.userName && IsAdmin.password == data.password) {
                     // Good Login Input
-                    resolve({Status:true});
-                }else{
+                    resolve({ Status: true });
+                } else {
                     // wrong login input
-                    resolve({Status :false, err: "Wrong login credentials"})
+                    resolve({ Status: false, err: "Wrong login credentials" })
                 }
-            }else{
+            } else {
                 // admin data not on database
-                if(AdminUser.userName == data.userName && AdminUser.password == data.password){
+                if (AdminUser.userName == data.userName && AdminUser.password == data.password) {
                     // Good Login Input
-                    resolve({Status:true});
-                }else{
+                    resolve({ Status: true });
+                } else {
                     // wrong login input
-                    resolve({Status :false, err: "Wrong login credentials"})
+                    resolve({ Status: false, err: "Wrong login credentials" })
                 }
             }
         })

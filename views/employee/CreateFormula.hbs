@@ -1,348 +1,1027 @@
 <section>
-    <div class="containerForCF">
-        <div class="CFBorder">
-            <div class="Cf_Header_Area">
-                <div class="containerForCF">
-                    <div class="MixerDetails" hidden>
-                        <p class="MixerNameLabel">Mixer Name</p>
-                        <input type="text" name="MixerName" id=""> {{!--  Enter Mixer Name Here By Dynamic Process --}}
-                    </div>
-                    <div class="Cf_Header_Area_Buttons">
-                        <button class="Cf_Header_Area_Buttons_EachOne">Clear All</button>
-                        <button class="Cf_Header_Area_Buttons_EachOne">Save</button>
-                        <button class="Cf_Header_Area_Buttons_EachOne">Save as New</button>
-                        <div class="CFdropdown Cf_Header_Area_Buttons_EachOne">
-                            <button class="CFdropdown-button" onclick="CFtoggleDropdown()">
-                                <p>Print</p>
-                            </button>
-                            <div class="CFdropdown-content">
-                                <button>Print Formula</button>
-                                <button>Print Label</button>
+    <form action="/CreateFormula" method="post">
+        <div class="containerForCF">
+            <div class="CFBorder">
+                <div class="Cf_Header_Area">
+                    <div class="containerForCF">
+                        <div class="MixerDetails" hidden>
+                            <p class="MixerNameLabel">Mixer Name</p>
+                            <input type="text" name="MixerName" id="">
+                            {{!--  Enter Mixer Name Here By Dynamic Process --}}
+                        </div>
+                        <div class="Cf_Header_Area_Buttons">
+                            <button class="Cf_Header_Area_Buttons_EachOne">Clear All</button>
+                            <button class="Cf_Header_Area_Buttons_EachOne">Save</button>
+                            <button class="Cf_Header_Area_Buttons_EachOne">Save as New</button>
+                            <div class="CFdropdown Cf_Header_Area_Buttons_EachOne">
+                                <button class="CFdropdown-button" onclick="CFtoggleDropdown()">
+                                    <p>Print</p>
+                                </button>
+                                <div class="CFdropdown-content">
+                                    <button>Print Formula</button>
+                                    <button>Print Label</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="BasicDetailsMainDiv">
-                <div class="containerForCF">
-                    <div class="BasicDetails">
-                        <div class="BasicDetailsLeftSection">
-                            <div class="CFDateDiv">
-                                <p class="CFDateLabel">Date:</p>
-                                <input type="date" name="Date" id="dateInput" disabled value=''>
+                <div class="BasicDetailsMainDiv">
+                    <div class="containerForCF">
+                        <div class="BasicDetails">
+                            <div class="BasicDetailsLeftSection">
+                                <div class="CFDateDiv">
+                                    <p class="CFDateLabel">Date:</p>
+                                    <input type="date" name="Date" id="dateInput" disabled value=''>
+                                </div>
+                                <div class="CFFileNODiv">
+                                    <p class="CFFileNOLabel">File No:</p>
+                                    <input type="text" name="FileNo">
+                                </div>
+                                <div class="CFProjectNoDiv">
+                                    <p class="CFProjectNoLabel">Project No:</p>
+                                    <input type="text" name="ProjectNo">
+                                </div>
                             </div>
-                            <div class="CFFileNODiv">
-                                <p class="CFFileNOLabel">File No:</p>
-                                <input type="text" name="FileNo">
+                            <div class="BasicDetailsCenterSection">
+                                <div class="CFCustomerNameDiv">
+                                    <p class="CFCustomerNameLabel">Customer Name:</p>
+                                    <input type="text" name="CustomerName">
+                                </div>
+                                <div class="CFCustomerRefDiv">
+                                    <p class="CFCustomerRefLabel">Customer Ref:</p>
+                                    <input type="text" name="CustomerRef">
+                                </div>
                             </div>
-                            <div class="CFProjectNoDiv">
-                                <p class="CFProjectNoLabel">Project No:</p>
-                                <input type="text" name="ProjectNo">
+                            <div class="BasicDetailsRightSection">
+                                <div class="CFColorCodeDiv">
+                                    <p class="CFColorCodeLabel">Color Code:</p>
+                                    <input type="text" name="ColorCode">
+                                </div>
+                                <div class="CFColorNameDiv">
+                                    <p class="CFColorNameLabel">Color Name:</p>
+                                    <input type="text" name="ColorName">
+                                </div>
                             </div>
                         </div>
-                        <div class="BasicDetailsCenterSection">
-                            <div class="CFCustomerNameDiv">
-                                <p class="CFCustomerNameLabel">Customer Name:</p>
-                                <input type="text" name="CustomerName">
-                            </div>
-                            <div class="CFCustomerRefDiv">
-                                <p class="CFCustomerRefLabel">Customer Ref:</p>
-                                <input type="text" name="CustomerRef">
-                            </div>
-                        </div>
-                        <div class="BasicDetailsRightSection">
-                            <div class="CFColorCodeDiv">
-                                <p class="CFColorCodeLabel">Color Code:</p>
-                                <input type="text" name="ColorCode">
-                            </div>
-                            <div class="CFColorNameDiv">
-                                <p class="CFColorNameLabel">Color Name:</p>
-                                <input type="text" name="ColorName">
-                            </div>
-                        </div>
-                    </div>
-                    {{!-- Basic Details Ends Here --}}
+                        {{!-- Basic Details Ends Here --}}
 
-                    <hr class="BasicDetailsEndHR">
+                        <hr class="BasicDetailsEndHR">
 
-                    {{!-- Category selection Starts --}}
-                    <div class="CFSelectionHeader">
-                        <div class="CFSelectCategory">
-                            <p class="CFSelectCategoryLabel">Category</p>
-                            <select name="Category" class="CFCategory" id="category">
-                                <option value="" disabled selected>Select Category</option>
-                                <option value="Paint">Paint</option>
-                            </select>
-                        </div>
-                        <div class="CFSelectSubCategory">
-                            <p class="CFSelectSubCategoryLabel">Sub Category</p>
-                            <select name="SubCategory" class="CFSubCategory" id="subCategory">
-                                <option value="" disabled selected>Select Sub Category</option>
-                                <option value="mipa 2k PUR">mipa 2k PUR</option>
-                            </select>
-                        </div>
-                    </div>
-                    {{!-- Category selection ends --}}
-
-                    <div class="MainMixingTableDiv">
-                        <table border="1" style="width:100%">
-                            <tr class="CFTableHeadRow">
-                                <th class="CFTableHead" rowspan="2">SL No</th>
-                                <th class="CFTableHead" rowspan="2">Tinters</th>
-                                <th class="CFTableHead" colspan="2">Total Quantity</th>
-                                <th class="CFTableHead" colspan="6" rowspan="2">QTY</th>
-                            </tr>
-                            <tr class="CFTableHeadRow">
-                                <th class="CFTableHead">in Grams</th>
-                                <th class="CFTableHead">in Volume</th>
-                            </tr>
-                            {{!-- Add Loop from here --}}
-                            <tr>
-                                <td class="CFTableRowData">1</td>
-                                <td class="CFTableRowData">R903</td>
-                                <td class="CFTableRowData">0.00</td>
-                                <td class="CFTableRowData">0.00</td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                            </tr>
-                            <tr>
-                                <td class="CFTableRowData">1</td>
-                                <td class="CFTableRowData">R903</td>
-                                <td class="CFTableRowData">0.00</td>
-                                <td class="CFTableRowData">0.00</td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                            </tr>
-                            <tr>
-                                <td class="CFTableRowData">1</td>
-                                <td class="CFTableRowData">R903</td>
-                                <td class="CFTableRowData">0.00</td>
-                                <td class="CFTableRowData">0.00</td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                            </tr>
-                            <tr>
-                                <td class="CFTableRowData">1</td>
-                                <td class="CFTableRowData">R903</td>
-                                <td class="CFTableRowData">0.00</td>
-                                <td class="CFTableRowData">0.00</td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                                <td class="CFTableRowData">0.00 <img class="AddIcon" src="/images/Icons/add.png"
-                                        alt="AddIcon"></td>
-                            </tr>
-                            <tr>
-                                <td class="CFTableRowData"></td>
-                                <td class="CFTableRowData"></td>
-                                <td class="CFTableRowData"></td>
-                                <td class="CFTableRowData"></td>
-                                <td class="CFTableRowData"></td>
-                                <td class="CFTableRowData"></td>
-                                <td class="CFTableRowData"></td>
-                                <td class="CFTableRowData"></td>
-                                <td class="CFTableRowData"></td>
-                                <td class="CFTableRowData"></td>
-                            </tr>
-                        </table>
-                        {{!-- mixing Table Ends --}}
-                        {{!-- Total Calculations Starts Here --}}
-
-                    </div>
-
-
-                    {{!-- bulk  CoversionTable and  Binders  and Additives--}}
-                    <div class="CFBulkConverstedTableandBindersAndAdditives">
-                        {{!-- total without additives --}}
-                        <div class="CFBindersAndAdditives">
-                            <div class="CFBindersAndAdditivesUnits">
-                                <div class="CFeachUnit">
-                                    <p class="CFUnitsTotal">QTY (Grams)</p>
-                                </div>
-                                <div class="CFeachUnit">
-                                    <p class="CFUnitsTotal">Volume (ml)</p>
-                                </div>
-                            </div>
-                            <div class="CFBinder1Div">
-                                <p class="CFBinderName">Total Without Additives</p>
-                                <div class="CFTotalCalcDiv">
-                                    <input type="text" class="CFTotalInputElements" disabled value="43">
-                                    <input type="text" class="CFTotalInputElements" disabled value="43">
-                                </div>
-                            </div>
-                            <hr>
-                            {{!-- Binders  and Additives starts Here --}}
-                            <div class="CFBinderHead">
-                                <p class="CFBindersHeading">Binder</p>
-                                <div class="CFBindersAndAdditivesUnits">
-                                    <div class="CFeachUnit">
-                                        <p class="CFUnitsTotal">QTY (Grams)</p>
-                                    </div>
-                                    <div class="CFeachUnit">
-                                        <p class="CFUnitsTotal">Volume (ml)</p>
-                                    </div>
-                                </div>
-                            </div>
-                            {{!-- <hr> --}}
-                            <div class="CFBinder1Div">
-                                <p class="CFBinderName">PU 240-90</p>
-                                <div class="CFTotalCalcDiv">
-                                    <input type="text" class="CFTotalInputElements" disabled value="43">
-                                    <input type="text" class="CFTotalInputElements" disabled value="43">
-                                </div>
-                            </div>
-                            <div class="CFBinder2Div">
-                                <p class="CFBinderName">PU 240-90</p>
-                                <div class="CFTotalCalcDiv">
-                                    <input type="text" class="CFTotalInputElements" disabled value="43">
-                                    <input type="text" class="CFTotalInputElements" disabled value="43">
-                                </div>
-
-
-                            </div>
-                            <hr>
-                            <p class="CFBindersHeading">Additives</p>
-                            <div class="CFBinder1Div CFSelectAdditivesDiv">
-                                <p class="CFBinderName">Select Additive</p>
-                                <select class="CFSelectAdditives" name="additives" id="">
-                                    <option value="" disabled selected>Select Additive</option>
-                                    <option value="2K-Elastic">2K-Elastic</option>
-                                    <option value="2K-Elastic">2K-Elastic</option>
+                        {{!-- Category selection Starts --}}
+                        <div class="CFSelectionHeader">
+                            <div class="CFSelectCategory">
+                                <p class="CFSelectCategoryLabel">Category</p>
+                                <select name="Category" class="CFCategory" id="CategorySelect"
+                                    onchange="ADcategorySelect()">
+                                    <option value="" disabled selected>Select Category</option>
+                                    {{#each AllCategory}}
+                                    <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
+                                        {{this.Category_Id}} -
+                                        {{this.Category}}</option>
+                                    {{/each}}
                                 </select>
                             </div>
-                            <div class="CFBinder1Div">
-                                <p class="CFBinderName">Enter Additives in Percentage (%)</p>
-                                <input type="text" value="43">
+                            <div class="CFSelectSubCategory">
+                                <p class="CFSelectSubCategoryLabel">Sub Category</p>
+                                <select name="SubCategory" class="CFSubCategory" id="SubCategorySelect"
+                                    onchange="CFSubcategorySelect()">
+                                    <option value="0" disabled selected>Select Sub Category</option>
+                                </select>
                             </div>
-                            <div class="CFBinder1Div">
-                                <p class="CFBinderName">Additives</p>
-                                <input type="text" disabled value="43">
-                            </div>
-                            {{!-- Binders and Additives Ends Here --}}
-                            <hr>
-                            {{!-- total Start Here --}}
-                            <div class="CFTotalWithAdditives">
-                                <div class="CFTotalWithAddUnit">
-                                    <div class="CFeachUnit">
+                        </div>
+                        {{!-- Category selection ends --}}
+
+                        <div class="MainMixingTableDiv">
+                            <table border="1" style="width:100%" id="FormulaCreateTable">
+                                <tr class="CFTableHeadRow">
+                                    <th class="CFTableHead CFslNo" rowspan="2">SL No</th>
+                                    <th class="CFTableHead CfTinders" rowspan="2">Tinters</th>
+                                    <th class="CFTableHead" colspan="2">Total Quantity</th>
+                                    <th class="CFTableHead" colspan="6" rowspan="2">QTY</th>
+                                </tr>
+                                <tr class="CFTableHeadRow">
+                                    <th class="CFTableHead ">in Grams</th>
+                                    <th class="CFTableHead ">in Volume</th>
+                                </tr>
+                                {{!-- Add Loop from here --}}
+                                <tr class="row-template">
+                                    <td class="CFTableRowData">1</td>
+                                    <td class="CFTableRowData">
+                                        <select name="TintersR1" class="TintersR1 CFTinters" id="CFTinters"
+                                            onchange="disableSelectedOption(this)">
+
+                                        </select>
+                                    </td>
+
+                                    <td class="CFTableRowData"><input name="GramInputTotalR1" type="number" min="0.00"
+                                            id="GramInputTotalR1" value="0.00" disabled
+                                            class="GramInputTotal CFINP CFInputTotal  ">
+                                    </td>
+
+                                    <td class="CFTableRowData"><input name="LiterInputTotalR1" type="number" min="0.00"
+                                            id="LiterInputTotalR1" value="0.00" disabled
+                                            class="LiterInputTotal CFINP CFInputTotal ">
+                                    </td>
+
+                                    <td class="CFTableRowData "><input name="R1C1" type="text" value="0.00"
+                                            class="R1Sub R1C1 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
+                                        <img class="AddIcon" src="/images/Icons/add.png" alt="AddIcon">
+                                    </td>
+
+                                    <td class="CFTableRowData"><input name="R1C2" type="text" value="0.00"
+                                            class="R1Sub R1C2 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)"> <img
+                                            class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td>
+
+                                    <td class="CFTableRowData"><input name="R1C3" type="text" value="0.00"
+                                            class="R1Sub R1C3 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)"> <img
+                                            class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td>
+
+                                    <td class="CFTableRowData"><input name="R1C4" type="text" value="0.00"
+                                            class=" R1Sub R1C4 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)"> <img
+                                            class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td>
+
+                                    <td class="CFTableRowData"><input name="R1C5" type="text" value="0.00"
+                                            class="R1Sub R1C5 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)"><img
+                                            class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td>
+
+                                    <td class="CFTableRowData"><input name="R1C6" type="text" value="0.00"
+                                            class="R1Sub R1C6 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)"> <img
+                                            class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td>
+                                </tr>
+
+                            </table>
+                            {{!-- mixing Table Ends --}}
+                            {{!-- Total Calculations Starts Here --}}
+
+                        </div>
+
+
+                        {{!-- bulk  CoversionTable and  Binders  and Additives--}}
+                        <div class="CFBulkConverstedTableandBindersAndAdditives">
+                            {{!-- total without additives --}}
+                            <div class="CFBindersAndAdditives">
+                                <div class="CFBindersAndAdditivesUnits">
+                                    <div class="CFeachUnit CFGram">
                                         <p class="CFUnitsTotal">QTY (Grams)</p>
                                     </div>
-                                    <div class="CFeachUnit">
+                                    <div class="CFeachUnit CFLiter">
                                         <p class="CFUnitsTotal">Volume (ml)</p>
                                     </div>
                                 </div>
-                                <div class="CFTotalWithAddAndBinder">
-                                    <p class="CFBindersHeading">Total</p>
-                                    <div class="CFtotalwithAddValuesDiv">
-                                        <div class="CFtotalwithAddValues">
-                                            <p class="CFBindersHeading ">9745</p>
+                                <div class="CFBinder1Div">
+                                    <p class="CFBinderName">Total Without Additives</p>
+                                    <div class="CFTotalCalcDiv ">
+                                        <input type="text" class="CFTotalInputElementsGrams CFGram" disabled
+                                            value="0.00">
+                                        <input type="text" class="CFTotalInputElementsLiter CFLiter" disabled
+                                            value="0.00">
+                                    </div>
+                                </div>
+                                <div id="mattOrGloss" class="CFBinder1Div">
+                                    <p class="CFBinderName MattOrGloss"></p>
+                                    <div class="CFTotalCalcDiv ">
+                                        <input type="text" name="mattOrGloss"
+                                            class="CFTotalInputElementsGrams MattOrGlossINP " value="0">
+                                    </div>
+                                </div>
+                                <hr>
+                                {{!-- Binders  and Additives starts Here --}}
+                                <div class="CFBinderHead">
+                                    <p class="CFBindersHeading">Binder</p>
+                                    {{!-- <div class="CFBindersAndAdditivesUnits">
+                                        <div class="CFeachUnit CFGram">
+                                            <p class="CFUnitsTotal">QTY (Grams)</p>
                                         </div>
-                                        <div class="CFtotalwithAddValues">
-                                            <p class="CFBindersHeading ">9745</p>
+                                        <div class="CFeachUnit CFLiter">
+                                            <p class="CFUnitsTotal">Volume (ml)</p>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                                {{!-- <hr> --}}
+                                <div class="CFBinder1Div Binder1DIV">
+                                    <p class="CFBinderName Binder1"></p>
+                                    <div class="CFTotalCalcDiv">
+                                        <input name="Binder1" type="text" class="CFTotalInputElements " id="Binder1INP"
+                                            disabled value="">
+                                        {{!-- <input type="text" class="CFTotalInputElements " disabled value="43"> --}}
+                                    </div>
+                                </div>
+                                <div class="CFBinder2Div Binder2DIV">
+                                    <p class="CFBinderName Binder2"></p>
+                                    <div class="CFTotalCalcDiv">
+                                        <input type="text" name="Binder2" class="CFTotalInputElements " id="Binder2INP"
+                                            disabled value="">
+                                        {{!-- <input type="text" class="CFTotalInputElements " disabled value="43"> --}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <p class="CFBindersHeading">Additives</p>
+                                <div class="CFBinder1Div CFSelectAdditivesDiv">
+                                    <p class="CFBinderName">Select Additive</p>
+                                    <select class="CFSelectAdditives" name="additives" id="">
+                                        <option value="" disabled selected>Select Additive</option>
+                                        <option value="2K-Elastic">2K-Elastic</option>
+                                        <option value="2K-Elastic">2K-Elastic</option>
+                                    </select>
+                                </div>
+                                <div class="CFBinder1Div">
+                                    <p class="CFBinderName">Enter Additives in Percentage (%)</p>
+                                    <input type="text" value="43">
+                                </div>
+                                <div class="CFBinder1Div">
+                                    <p class="CFBinderName">Additives</p>
+                                    <input type="text" disabled value="43">
+                                </div>
+                                {{!-- Binders and Additives Ends Here --}}
+                                <hr>
+                                {{!-- total Start Here --}}
+                                <div class="CFTotalWithAdditives">
+                                    <div class="CFTotalWithAddUnit">
+                                        <div class="CFeachUnit CFGram">
+                                            <p class="CFUnitsTotal">QTY (Grams)</p>
+                                        </div>
+                                        <div class="CFeachUnit CFLiter">
+                                            <p class="CFUnitsTotal">Volume (ml)</p>
+                                        </div>
+                                    </div>
+                                    <div class="CFTotalWithAddAndBinder">
+                                        <p class="CFBindersHeading">Total</p>
+                                        <div class="CFtotalwithAddValuesDiv">
+                                            <div class="CFtotalwithAddValues CFGram">
+                                                <p class="CFBindersHeading ">9745</p>
+                                            </div>
+                                            <div class="CFtotalwithAddValues CFLiter">
+                                                <p class="CFBindersHeading ">9745</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            {{!-- total without additives Ends --}}
+
+                            {{!-- bulk convertion table Starts Here --}}
+                            {{!-- <div class="CFBulkConvertionTable">
+                                <table border="1" style="width:100%">
+                                    <tr class="CFTableHeadRow">
+                                        <th class="CFTableHead" rowspan="2"></th>
+                                        <th class="CFTableHead" rowspan="2">Tinters</th>
+                                    </tr>
+                                    <tr class="CFTableHeadRow">
+                                        <th class="CFTableHead">in Grams</th>
+                                        <th class="CFTableHead">in Volume</th>
+                                    </tr>
+                                </table>
+                            </div> --}}
+                            {{!-- bulk convertion table Ends Here --}}
+                            {{!-- Solid Content start here --}}
+                            <div class="CFsolidContentCalcDivArea">
+                                <div class="CFsolidContentCalcDiv">
+                                    <p class="CFBinderName">Solid Content(%): </p>
+                                    <input class="CFSolidContentInput" type="text" value="9.67" disabled>
+                                </div>
+                                <div class="CFsolidContentCalcDiv">
+                                    <p class="CFBinderName">VOC (g/Ltr): </p>
+                                    <input class="CFSolidContentInput" type="text" value="670.14" disabled>
+                                </div>
+                                <div class="CFsolidContentCalcDiv">
+                                    <p class="CFBinderName">Density (g/Ltr): </p>
+                                    <input class="CFSolidContentInput" type="text" value="909.709" disabled>
+                                </div>
+                                <div class="CFsolidContentCalcDivNoLabel">
+                                    {{!-- <p class="CFBinderName">Density (g/Ltr): </p> --}}
+                                    <input class="CFSolidContentInputNoLabel" type="text" value="247.33" disabled>
+                                </div>
+                                <div class="CFsolidContentCalcDivNoLabel">
+                                    {{!-- <p class="CFBinderName">Density (g/Ltr): </p> --}}
+                                    <input class="CFSolidContentInputNoLabel" type="text"
+                                        value="271.878173427678/247.330033186" disabled>
+                                </div>
+                                <div class="CFsolidContentCalcDiv">
+                                    <p class="CFBinderName">Sampled QTY: </p>
+                                    <input class="CFSolidContentInput" type="text" value="573.6/630.531271391685"
+                                        disabled>
+                                </div>
+                            </div>
+                            {{!-- Solid Content ends here --}}
                         </div>
 
-                        {{!-- total without additives Ends --}}
 
-                        {{!-- bulk convertion table Starts Here --}}
-                        <div class="CFBulkConvertionTable">
-                            <table border="1" style="width:100%">
-                                <tr class="CFTableHeadRow">
-                                    <th class="CFTableHead" rowspan="2"></th>
-                                    <th class="CFTableHead" rowspan="2">Tinters</th>
-                                </tr>
-                                <tr class="CFTableHeadRow">
-                                    <th class="CFTableHead">in Grams</th>
-                                    <th class="CFTableHead">in Volume</th>
-                                </tr>
-                            </table>
+                        {{!-- remark Start Here --}}
+                        <div class="CFRemark">
+                            <div class="CFRemarkHeading">
+                                <p>Remarks</p>
+                            </div>
+                            <div class="CFRemarksDIv">
+                                <p>Mixing with MS Hardener in 2:1 ratio by volume and 10 - 20 % Mipa 2K Thinner</p>
+                            </div>
                         </div>
-                        {{!-- bulk convertion table Ends Here --}}
+                        {{!-- remark Ends Here --}}
+
+
+
+
                     </div>
-
-                    {{!-- Solid Content start here --}}
-                    <div class="CFsolidContentCalcDivArea">
-                        <div class="CFsolidContentCalcDiv">
-                            <p class="CFBinderName">Solid Content(%): </p>
-                            <input class="CFSolidContentInput" type="text" value="9.67" disabled>
-                        </div>
-                        <div class="CFsolidContentCalcDiv">
-                            <p class="CFBinderName">VOC (g/Ltr): </p>
-                            <input class="CFSolidContentInput" type="text" value="670.14" disabled>
-                        </div>
-                        <div class="CFsolidContentCalcDiv">
-                            <p class="CFBinderName">Density (g/Ltr): </p>
-                            <input class="CFSolidContentInput" type="text" value="909.709" disabled>
-                        </div>
-                        <div class="CFsolidContentCalcDivNoLabel">
-                            {{!-- <p class="CFBinderName">Density (g/Ltr): </p> --}}
-                            <input class="CFSolidContentInputNoLabel" type="text" value="247.33" disabled>
-                        </div>
-                        <div class="CFsolidContentCalcDivNoLabel">
-                            {{!-- <p class="CFBinderName">Density (g/Ltr): </p> --}}
-                            <input class="CFSolidContentInputNoLabel" type="text" value="271.878173427678/247.330033186"
-                                disabled>
-                        </div>
-                        <div class="CFsolidContentCalcDiv">
-                            <p class="CFBinderName">Sampled QTY: </p>
-                            <input class="CFSolidContentInput" type="text" value="573.6/630.531271391685" disabled>
-                        </div>
-                    </div>
-                    {{!-- Solid Content ends here --}}
-
-                    {{!-- remark Start Here --}}
-                    <div class="CFRemark">
-                        <div class="CFRemarkHeading"><p>Remarks</p></div>
-                        <div class="CFRemarksDIv">
-                            <p>Mixing with MS Hardener in 2:1 ratio by volume and 10 - 20 % Mipa 2K Thinner</p>
-                        </div>
-                    </div>
-                    {{!-- remark Ends Here --}}
-
-
-
-
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </section>
+
+
+<script>
+
+
+    //ajax
+    function ADgetAllSubCategories() {
+        return fetch('/admin/Subcategories/api')
+            .then(response => response.json())
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+    function ADgetAllCategories() {
+        return fetch('/admin/Categories/api')
+            .then(response => response.json())
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+    Promise.all([ADgetAllSubCategories(), ADgetAllCategories()])
+        .then(([subCategories, categories]) => {
+            // Process the retrieved subcategories and categories
+            console.log(subCategories);
+            console.log(categories);
+
+            // Assign the values to the variables
+            var subCategories = subCategories;
+            var categories = categories;
+
+            // Continue with your code here...
+
+
+
+            // Get the category select element
+            const categorySelect = document.getElementById('CategorySelect');
+
+            // Get the subcategory select element
+            const subCategorySelect = document.getElementById('SubCategorySelect');
+
+            // Add an event listener to the category select element
+            categorySelect.addEventListener('change', () => {
+                // Get the selected category ID
+                const categoryId = categorySelect.value;
+
+
+                // Filter the subcategories based on the selected category ID
+                const filteredSubCategories = subCategories.filter(subCategory => subCategory.Category_Id === categoryId);
+
+                // Clear the subcategory select box
+                subCategorySelect.innerHTML = '';
+
+                // Create and append the option elements for the filtered subcategories
+
+                if (filteredSubCategories.length > 0) {
+
+
+
+                    filteredSubCategories.forEach(subCategory => {
+                        const option = document.createElement('option');
+                        option.value = subCategory.SubCategory_Id;
+                        option.textContent = subCategory.SubCategory;
+                        subCategorySelect.appendChild(option);
+                    });
+                    // Enable the subcategory select box
+                    CFSubcategorySelect();
+                    //subCategorySelect.disabled = false;
+                } else {
+                    // Add a "No Subcategory" option
+                    const option = document.createElement('option');
+                    option.value = "0";
+                    option.textContent = 'No SubCategory available';
+                    subCategorySelect.appendChild(option);
+
+                    // Disable the subcategory select box
+
+                    //subCategorySelect.disabled = true;
+                }
+
+                //console.log(subCategorySelect.value);
+            });
+        });
+
+
+
+
+
+    //table
+
+    let rowCount = 1;
+
+
+    function handleInput(input) {
+        console.log(input);
+        // Remove any non-numeric characters except dot (.)
+        input.value = input.value.replace(/[^0-9.]/g, '');
+
+        // Ensure minimum value of 0.00
+        if (parseFloat(input.value) < 0) {
+            input.value = '0.00';
+        }
+
+        //input.classList.add('resized');
+        input.style.width = input.scrollWidth + 'px';
+
+
+        // Calculate the totals for the current row
+        const row = input.parentNode.parentNode;
+        const rSubInputs = row.getElementsByClassName('R1Sub');
+        const gramTotalInput = row.getElementsByClassName('GramInputTotal')[0];
+        const literTotalInput = row.getElementsByClassName('LiterInputTotal')[0];
+
+        var totalGrams = 0.0;
+        var totalLiters = 0.0;
+
+        for (let i = 0; i < rSubInputs.length; i++) {
+            const inputValue = parseFloat(rSubInputs[i].value);
+            if (!isNaN(inputValue)) {
+                totalGrams += inputValue;
+                totalLiters += inputValue;
+            }
+        }
+
+        gramTotalInput.value = formatDecimal(totalGrams);
+        literTotalInput.value = formatDecimal(totalLiters);
+
+
+
+
+        function formatDecimal(value) {
+            if (value % 1 === 0) {
+                // If the value is an integer, display it without decimal places
+                return value.toFixed(0);
+            } else {
+                // Display the value with a minimum of two decimal places
+                return value.toFixed(Math.max(2, value.toString().split('.')[1].length));
+            }
+        }
+
+        // Check if a new row needs to be added
+        const tableBody = document.getElementById('FormulaCreateTable').lastElementChild;
+        const lastRow = tableBody.lastElementChild;
+        const lastRowColumns = lastRow.getElementsByTagName('td');
+
+        if (input.value !== '0.00' && row === lastRow) {
+            console.log("Calling to add row");
+            addRow();
+        }
+
+        calculateTotalGrams(input);
+    }
+
+    function handleDelete(input) {
+
+        if (input.value === '0.00') {
+            return;
+        }
+
+        //input.classList.add('resized');
+        input.style.width = input.scrollWidth + 'px';
+        calculateTotalGrams(input);
+    }
+
+    function handleBackspace(input) {
+
+        if (input.value === '0.00') {
+            return;
+        }
+
+        //input.classList.add('resized');
+        input.style.width = input.scrollWidth + 'px';
+        calculateTotalGrams(input);
+    }
+
+
+
+    function addRow(button) {
+        var SubCategoryValue = document.getElementById("SubCategorySelect").value;
+        if (SubCategoryValue === "0") {
+            // Do nothing if SubCategoryValue is 0
+        } else {
+            const rowTemplate = document.getElementsByClassName('row-template')[0];
+            const newRow = rowTemplate.cloneNode(true);
+
+            // Update the row number
+            newRow.children[0].textContent = ++rowCount;
+
+            // Clear input values of the new row
+            const rSubInputs = newRow.getElementsByClassName('CFINP');
+            for (let i = 0; i < rSubInputs.length; i++) {
+                rSubInputs[i].value = '0.00';
+
+                // Generate the name attribute dynamically
+                const columnName = 'R' + rowCount + 'C' + (i + 1);
+                rSubInputs[i].setAttribute('name', columnName);
+            }
+
+            // Update the name attribute of GramInputTotal and LiterInputTotal inputs
+            const gramTotalInput = newRow.getElementsByClassName('GramInputTotal')[0];
+            const literTotalInput = newRow.getElementsByClassName('LiterInputTotal')[0];
+            const productSelectBox = newRow.getElementsByClassName('TintersR1')[0];
+            gramTotalInput.setAttribute('name', 'GramInputTotalR' + rowCount);
+            literTotalInput.setAttribute('name', 'LiterInputTotalR' + rowCount);
+            productSelectBox.setAttribute('name', 'TintersR' + rowCount);
+
+            // Append the new row to the table
+            const tableBody = document.getElementById('FormulaCreateTable').lastElementChild;
+            tableBody.appendChild(newRow);
+
+            // Attach event listeners to the new row inputs
+            const newRSubInputs = newRow.getElementsByClassName('R1Sub');
+            for (let i = 0; i < newRSubInputs.length; i++) {
+                newRSubInputs[i].addEventListener('input', function () {
+                    handleInput(this);
+                    calculateTotalGrams(this);
+                });
+                newRSubInputs[i].addEventListener('keyup', function () {
+                    handleDelete(this);
+                });
+                newRSubInputs[i].addEventListener('keydown', function () {
+                    handleBackspace(this);
+                });
+            }
+
+            // Attach event listener to the new row select box
+            productSelectBox.addEventListener('change', function () {
+                disableSelectedOption(this);
+            });
+
+            // Remove the "Add" button from the current row if a button is provided
+            if (button) {
+                button.remove();
+            }
+        }
+    }
+
+    function disableSelectedOption(selectBox) {
+        const selectedOption = selectBox.value;
+        const allSelectBoxes = document.querySelectorAll('select[class="TintersR1"]');
+
+        console.log(allSelectBoxes);
+
+        // Enable all options in other select boxes
+        for (const box of allSelectBoxes) {
+            const options = box.options;
+            for (const option of options) {
+                option.disabled = false;
+            }
+        }
+
+        // Disable the selected option in other select boxes
+        for (const box of allSelectBoxes) {
+            if (box !== selectBox) {
+                const options = box.options;
+                for (const option of options) {
+                    if (option.value === selectedOption) {
+                        option.disabled = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+
+    function CFSubcategorySelect() {
+
+        var subCategorySelect = document.getElementById("SubCategorySelect");
+        var selectedOption = subCategorySelect.value;
+
+        // Make an AJAX call
+        fetch(`/GetProductWithSubCatagory/api`, {
+            method: "POST", // or "GET" depending on your API
+            body: JSON.stringify({ selectedOption }), // Send the selected option as data
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(function (response) {
+                // Handle the response from the server
+                if (response.ok) {
+
+                    return response.json();
+                } else {
+                    throw new Error("Error: " + response.status);
+                }
+            })
+            .then(function (datas) {
+                // Process the received data
+                // console.log(data);
+                // Update the <select> element with the received options
+
+                var data = datas.Products;
+                var Sub_Category = datas.SubCategory;
+
+
+
+
+
+
+
+                console.table(datas);
+
+                var tintersSelect = document.getElementById("CFTinters");
+                tintersSelect.innerHTML = ""; // Clear any existing options
+
+                // Loop through the data and create <option> elements
+                var option = document.createElement("option");
+                option.value = ''; // Set the option value
+                option.textContent = 'Select a product'; // Set the option text
+                tintersSelect.appendChild(option);
+
+                for (var i = 0; i < data.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = data[i].Product_Id; // Set the option value
+                    option.textContent = data[i].Product_Name; // Set the option text
+                    tintersSelect.appendChild(option); // Add the option to the <select>
+                }
+
+                // Update the UI or perform any other actions with the data
+                // Assuming you have a variable `Sub_Category` with the relevant properties
+
+                if (Sub_Category.Liter === "on") {
+                    var elements = document.getElementsByClassName("CFLiter");
+                    var gramElements = document.getElementsByClassName("CFGram");
+
+                    // Hide elements with class "CFGram"
+                    for (var i = 0; i < gramElements.length; i++) {
+                        gramElements[i].style.display = "none";
+                    }
+
+                    // Show elements with class "CFLiter"
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].style.display = "flex";
+                    }
+                } else if (Sub_Category.Gram === "on") {
+                    var elements = document.getElementsByClassName("CFGram");
+                    var literElements = document.getElementsByClassName("CFLiter");
+
+                    // Hide elements with class "CFLiter"
+                    for (var i = 0; i < literElements.length; i++) {
+                        literElements[i].style.display = "none";
+                    }
+
+                    // Show elements with class "CFGram"
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].style.display = "flex";
+                    }
+                }
+                makeChangesInBinderMattGloss()
+            })
+            .catch(function (error) {
+                // Handle any errors that occurred during the AJAX call
+                console.error(error);
+            });
+    }
+
+
+    function calculateTotalGrams(element) {
+        //console.log(element);
+        var totalGrams = 0;
+        var totalLiter = 0;
+
+        // Get all the rows with class "row-template"
+        var rows = document.getElementsByClassName("row-template");
+
+        // Loop through each row
+        for (var i = 1; i <= rows.length; i++) {
+            // Get the input value for the current row
+            var inputGram = parseFloat(rows[i - 1].querySelector(`input[name="GramInputTotalR${i}"]`).value);
+            var inputLiter = parseFloat(rows[i - 1].querySelector(`input[name="LiterInputTotalR${i}"]`).value);
+            // Check if the input value is a valid number
+            if (!isNaN(inputGram)) {
+                // Add the input value to the totalGrams
+                totalGrams += inputGram;
+            }
+            if (!isNaN(inputLiter)) {
+                // Add the input value to the totalGrams
+                totalLiter += inputLiter;
+            }
+        }
+
+        // Update the total grams input value with the calculated sum
+        var totalGramsInput = document.getElementsByClassName("CFTotalInputElementsGrams")[0];
+        totalGramsInput.value = totalGrams;
+
+        var totalLiterInput = document.getElementsByClassName("CFTotalInputElementsLiter")[0];
+        totalLiterInput.value = totalLiter;
+
+        //disableSelectedOption(element)
+    }
+
+    /*  function disableSelectedOption(selectBox) {
+          const selectedOption = selectBox.value;
+          const allSelectBoxes = document.querySelectorAll('select[name="Tinters"]');
+  
+          // Enable all options in other select boxes
+          for (const box of allSelectBoxes) {
+              const options = box.options;
+              for (const option of options) {
+                  option.disabled = false;
+              }
+          }
+  
+          // Disable the selected option in other select boxes
+          for (const box of allSelectBoxes) {
+              if (box !== selectBox) {
+                  const options = box.options;
+                  for (const option of options) {
+                      if (option.value === selectedOption) {
+                          option.disabled = true;
+                          break;
+                      }
+                  }
+              }
+          }
+      }*/
+
+
+    function makeChangesInBinderMattGloss() {
+
+        //api ajax
+
+        var subCategorySelect = document.getElementById("SubCategorySelect");
+        var selectedOption = subCategorySelect.value;
+
+        // Make an AJAX call
+        fetch(`/GetProductWithSubCatagory/api`, {
+            method: "POST", // or "GET" depending on your API
+            body: JSON.stringify({ selectedOption }), // Send the selected option as data
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(function (response) {
+                // Handle the response from the server
+                if (response.ok) {
+
+                    return response.json();
+                } else {
+                    throw new Error("Error: " + response.status);
+                }
+            })
+            .then(function (datas) {
+                // Process the received data
+                // console.log(data);
+                // Update the <select> element with the received options
+
+
+
+
+                //sdgdsgfdsfsdfsfsdf
+                var data = datas.Products;
+                var Sub_Category = datas.SubCategory;
+
+                var Binder1 = datas.Binder1;
+                var Binder2 = datas.Binder2;
+
+                var matt = Sub_Category.Matt;
+                var gloss = Sub_Category.Gloss;
+
+                var mattOrGlossDiv = document.getElementById("mattOrGloss");
+                var mattOrGlossName = mattOrGlossDiv.getElementsByClassName("MattOrGloss")[0];
+                var mattOrGlossInput = mattOrGlossDiv.getElementsByClassName("MattOrGlossINP")[0];
+
+                if (matt === "on") {
+                    mattOrGlossDiv.style.display = "flex";
+                    mattOrGlossName.textContent = "Matt value";
+                    mattOrGlossInput.setAttribute("name", "matt");
+                } else {
+                    mattOrGlossDiv.style.display = "none";
+                }
+                if (gloss === "on") {
+                    mattOrGlossDiv.style.display = "flex";
+                    mattOrGlossName.textContent = "Gloss value";
+                    mattOrGlossInput.setAttribute("name", "gloss");
+                } else {
+                    mattOrGlossDiv.style.display = "none";
+                }
+
+
+                var Binder1PTag = document.querySelector(".Binder1");
+                var Binder2PTag = document.querySelector(".Binder2");
+                var Binder1DIV = document.querySelector('.Binder1DIV');
+                var Binder2DIV = document.querySelector('.Binder2DIV');
+                var Binder1input = document.getElementById("Binder1INP");
+                var Binder2input = document.getElementById("Binder2INP");
+
+
+
+                if (datas.Binder1) {
+                    //alert();
+                    // put Binder1 name
+                    Binder1DIV.style.display = "flex";
+                    Binder1PTag.textContent = Binder1.Binder_Name
+                    FindBinderValue(Sub_Category);
+
+                    if (datas.Binder2) {
+                        //put Binder2 Name
+                        Binder2DIV.style.display = "flex";
+                        Binder2PTag.textContent = Binder2.Binder_Name
+
+
+                    } else {
+                        //alert("no Binder2");
+                        //remove Binder 2
+                        Binder2DIV.style.display = "none";
+                    }
+                } else {
+                    //remove Binder 1
+                    Binder1DIV.style.display = "none";
+                }
+            })
+    }
+
+    function FindBinderValue(Sub_Category) {
+        //alert("Find Biner value")
+        console.log(Sub_Category);
+        var Sub_Category_Name = Sub_Category.SubCategory
+
+        // Binder Calculations
+
+        var Sub_Category;
+        var Binder1_EQ;
+        var Binder2_EQ;
+        var Sum_qty;
+        var mattValue;
+        var gloss;
+        var total_PP;
+
+        var BinderError = false;
+        var err;
+
+
+
+        // Switch Case for the binder calculations based on sub category selected in dropdown menu
+
+        switch (Sub_Category) {
+            case "Mipa_2K_PUR":
+                Binder1_EQ = Sum_qty * mattValue;
+                break;
+
+            case "Mipa_BC":
+                Binder1_EQ = Sum_qty * 0.2;
+                break;
+
+            case "Mipa_2K_PMI":
+            case "PU_240_XX":
+                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
+                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
+                break;
+
+            case "Rosner_PU":
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 85 + total_PP;
+                Binder2_EQ = (Sum_qty * 80 / 20) + total_PP - Binder1_EQ;
+                break;
+
+            case "Rosner_NC":
+                Binder1_EQ = ((Sum_qty * 85 / 15 * gloss) - (10 * 88 / 15 * Sum_qty)) / 80 + total_PP;
+                Binder2_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
+                break;
+
+            case "PU_250_XX":
+                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
+                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
+                break;
+
+            case "PU_248_90":
+                Binder1_EQ = (Sum_qty * 67 / 33);
+                break;
+
+            case "PU_330_20":
+                Binder1_EQ = Sum_qty * 9;
+                break;
+
+            case "BC_201_30":
+                Binder1_EQ = Sum_qty * 3;
+                break;
+
+            case "PU_240_XX":
+                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
+                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ
+                break;
+
+            case "EP_275_70":
+                Binder1_EQ = (Sum_qty / 0.12 * 0.88);
+                break;
+
+            case "AK_232_90":
+                Binder1_EQ = (Sum_qty / 0.25 * 0.73);
+                Binder2_EQ = (Sum_qty / 0.25 * 0.02);
+                break;
+
+            case "EP_150_70":
+                Binder1_EQ = Sum_qty * 9;
+                break;
+
+            case "Rosner_PU_Effects":
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 85;
+                Binder2_EQ = (Sum_qty * 80 / 20) - Binder1_EQ;
+                break;
+
+            case "Rosner_NC_Effects":
+                Binder1_EQ = ((Sum_qty * 85 / 15 * gloss) - (10 * 85 / 15 * Sum_qty)) / 80;
+                Binder2_EQ = (Sum_qty * 85 / 15) - Binder1_EQ;
+                break;
+
+            case "Mipa_2K_PMI_Effects":
+                Binder1_EQ = ((Sum_qty * 3 * gloss) - (10 * 3 * Sum_qty)) / 80;
+                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
+                break;
+
+            case "Rosner_Acrylic_Effects":
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
+                Binder2_EQ = (Sum_qty * 80 / 20) - Binder1_EQ;
+                break;
+
+            case "BC_201_30_Effects":
+                Binder1_EQ = Sum_qty * 3;
+                break;
+
+            case "EP_100_20":
+                Binder1_EQ = Sum_qty * 9;
+                break;
+
+            case "EP_140_30":
+                Binder1_EQ = Sum_qty * 85 / 15;
+                break;
+
+            case "VB_103_20":
+                Binder1_EQ = Sum_qty * 4;
+                break;
+
+            case "WPU_2425_XX":
+                Binder1_EQ = ((Sum_qty * 3 * gloss) - (10 * 3 * Sum_qty)) / 80;
+                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
+                break;
+
+            case "Rosner_Treppenlack":
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
+                Binder2_EQ = (Sum_qty * 4) - Binder1_EQ;
+                break;
+
+            case "WEP_1000_20":
+                Binder1_EQ = Sum_qty * 9;
+                break;
+
+            case "Mipa_VIP":
+                Binder1_EQ = Sum_qty * 9;
+                break;
+
+            case "WPU_4005_XX":
+                Binder1_EQ = ((Sum_qty * 3 * gloss) - (10 * 3 * Sum_qty)) / 80;
+                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
+                break;
+
+            case "WPU_8300_05":
+                Binder1_EQ = Sum_qty * 4;
+                break;
+
+            case "WPA_2400_70":
+                Binder1_EQ = Sum_qty * 3;
+                break;
+
+            case "WPU_2425_XX_Effects":
+                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
+                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
+                break;
+
+            case "Treppenlack_Effects":
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
+                Binder2_EQ = (Sum_qty * 4) - Binder1_EQ;
+                break;
+
+            case "PU_100_20":
+                Binder1_EQ = Sum_qty * 85 / 15;
+                break;
+
+            default:
+                BinderError = true;
+                err = "Binder Not Found!";
+                break;
+        }
+
+
+
+
+    }
+
+</script>

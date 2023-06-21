@@ -484,7 +484,7 @@ td {
 }
 
 .CFBindersAndAdditives {
-  width: 40%;
+  width: 49%;
   border: 1px solid rgba(0, 0, 0, 0.319);
   padding: 1rem;
 }
@@ -508,7 +508,7 @@ td {
 
 .CFBinder1Div input[type="text"],
 .CFBinder2Div input[type="text"] {
-  width: 100px;
+  width: 150px;
   text-align: center;
 }
 
@@ -565,8 +565,8 @@ td {
 }
 
 .CFsolidContentCalcDivArea {
-  margin-top: 3rem;
-  width: 40%;
+  margin-top: 0rem;
+  width: 49%;
   border: 1px solid rgba(0, 0, 0, 0.319);
   padding: 2rem 1rem;
 }
@@ -627,6 +627,62 @@ td {
   padding: 1rem;
   color: whitesmoke;
 }
+
+.CFslNo {
+  width: 1rem;
+}
+
+.CfTinders {
+  width: 10rem;
+}
+
+.GramInputTotal,
+.LiterInputTotal,
+.R1C1,
+.R1C2,
+.R1C3,
+.R1C4,
+.R1C5,
+.R1C6 {
+  border: none;
+  background-color: transparent;
+  /*transparent;*/
+  outline: none;
+  width: 4rem;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.GramInputTotal,
+.LiterInputTotal {
+  width: 7rem;
+}
+
+.CFTinters {
+  background-color: transparent;
+  font: 30px;
+  font-weight: 600;
+  width: 10rem;
+  padding: 1rem 1rem;
+  border: none;
+}
+
+.CFInputTotal {
+  font-size: 1.4rem;
+}
+
+.CFInpValue {
+  font-size: 1.2rem;
+}
+
+.CFTotalInputElementsGrams,
+.CFTotalInputElementsLiter {
+  width: auto;
+}
+
+
+
+
 
 
 /* Creating formula Ends */
@@ -788,8 +844,8 @@ td {
   margin-left: 25%;
   width: 75%;
   height: 100;
-  padding-bottom: 84vh;
-  background-color: #f7f5f1cc;
+  /* padding-bottom: 84vh; */
+  /* background-color: #f7f5f1cc; */
 }
 
 .ADMainAreaHeader {
@@ -835,6 +891,11 @@ td {
 .ADMainTableDiv {
   margin: 5vh 0 0 3vw;
   width: 85%;
+  max-height: 80vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  border: 1px solid gray;
+  border-radius: 25px;
 }
 
 .ADMainTable {
@@ -1076,24 +1137,25 @@ td {
   font-weight: 700;
 }
 
-.ADEmployeePass{
+.ADEmployeePass {
   padding-right: 2.5rem;
 }
 
-.ADEmplyeeTablePassBox{
+.ADEmplyeeTablePassBox {
   border: none;
   /* width: 150px; */
   margin-left: -40px;
   margin-right: -60px;
 }
 
-.ADTBpassword-icon{
+.ADTBpassword-icon {
   position: relative;
   top: 0px;
   left: 20%;
   cursor: pointer;
 }
-#AdEditEmployee{
+
+#AdEditEmployee {
   position: fixed;
   top: 0;
   left: 0;
@@ -1101,12 +1163,12 @@ td {
   height: 100vh;
 }
 
-#ADEditEmployeeSubDiv{
+#ADEditEmployeeSubDiv {
   width: 50%;
   margin: 3rem auto;
 }
 
-.ADpassword-icons{
+.ADpassword-icons {
   position: relative;
   top: -62px;
   left: 95%;
@@ -1141,12 +1203,13 @@ td {
   font-weight: 600;
 }
 
-.ADPopUpRadioButton input[type="radio"]:checked + label {
+.ADPopUpRadioButton input[type="radio"]:checked+label {
   background-color: #4d67b6;
   color: whitesmoke;
 }
 
-.BinderSelect, .BinderSelect option {
+.BinderSelect,
+.BinderSelect option {
   padding: 1rem;
   font-size: 18px;
   font-weight: 600;

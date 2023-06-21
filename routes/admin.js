@@ -409,6 +409,7 @@ router.get('/deleteAdditive/:id', verifyLogin, (req, res) => {
 
 router.get('/Binders', verifyLogin, (req, res) => {
   adminHelpers.GetAllBinders().then((Binders) => {
+    console.log(Binders);
     res.render('admin/Binders', { admin: true, Binders });
   })
 })
