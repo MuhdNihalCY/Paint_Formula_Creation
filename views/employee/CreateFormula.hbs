@@ -123,7 +123,7 @@
                                             class="LiterInputTotal CFINP CFInputTotal ">
                                     </td>
 
-                                    <td class="CFTableRowData "><input name="R1C1" type="text" value="0.00"
+                                    <td class="CFTableRowData "><input name="R1C1" type="text" value="0.00" id="R1C1"
                                             class="R1Sub R1C1 CFINP CFInpValue" oninput="handleInput(this)"
                                             onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
                                         <img class="AddIcon" src="/images/Icons/add.png" alt="AddIcon">
@@ -167,27 +167,29 @@
                             {{!-- total without additives --}}
                             <div class="CFBindersAndAdditives">
                                 <div class="CFBindersAndAdditivesUnits">
-                                    <div class="CFeachUnit CFGram">
+                                    <div class="CFeachUnit ">
                                         <p class="CFUnitsTotal">QTY (Grams)</p>
                                     </div>
-                                    <div class="CFeachUnit CFLiter">
+                                    <div class="CFeachUnit ">
                                         <p class="CFUnitsTotal">Volume (ml)</p>
                                     </div>
                                 </div>
                                 <div class="CFBinder1Div">
                                     <p class="CFBinderName">Total Without Additives</p>
                                     <div class="CFTotalCalcDiv ">
-                                        <input type="text" id="TotalGramInput" class="CFTotalInputElementsGrams CFGram"
+                                        <input type="text" id="TotalGramInput" name="TotalWithoutAdditves"
+                                            class="CFTotalInputElementsGrams " disabled value="0.00">
+                                        <input type="text" id="TotalLiterInput" class="CFTotalInputElementsLiter "
                                             disabled value="0.00">
-                                        <input type="text" id="TotalLiterInput"
-                                            class="CFTotalInputElementsLiter CFLiter" disabled value="0.00">
                                     </div>
                                 </div>
                                 <div id="mattOrGloss" class="CFBinder1Div">
                                     <p class="CFBinderName MattOrGloss"></p>
                                     <div class="CFTotalCalcDiv ">
                                         <input type="text" name="mattOrGloss" id="MattOrGlossINPTag"
-                                            class="CFTotalInputElementsGrams MattOrGlossINP " value="0" >
+                                            class="CFTotalInputElementsGrams MattOrGlossINP " value="0"
+                                            oninput="LoadTableSingleData()">
+                                        {{!-- oninput="LoadTableSingleData()"   --}}
                                     </div>
                                 </div>
                                 <hr>
@@ -205,7 +207,7 @@
                                 </div>
                                 {{!-- <hr> --}}
                                 <div class="CFBinder1Div Binder1DIV">
-                                    <p class="CFBinderName Binder1"></p>
+                                    <p class="CFBinderName Binder1" id="Binder1"></p>
                                     <div class="CFTotalCalcDiv">
                                         <input name="Binder1" type="text" class="CFTotalInputElements " id="Binder1INP"
                                             disabled value="">
@@ -213,7 +215,7 @@
                                     </div>
                                 </div>
                                 <div class="CFBinder2Div Binder2DIV">
-                                    <p class="CFBinderName Binder2"></p>
+                                    <p class="CFBinderName Binder2" id="Binder2"></p>
                                     <div class="CFTotalCalcDiv">
                                         <input type="text" name="Binder2" class="CFTotalInputElements " id="Binder2INP"
                                             disabled value="">
@@ -224,40 +226,46 @@
                                 <p class="CFBindersHeading">Additives</p>
                                 <div class="CFBinder1Div CFSelectAdditivesDiv">
                                     <p class="CFBinderName">Select Additive</p>
-                                    <select class="CFSelectAdditives" name="additives" id="">
+                                    <select class="CFSelectAdditives" name="additives" id="CFSelectAdditivess"
+                                        onchange="handleAdditivePercentageChange()">
                                         <option value="" disabled selected>Select Additive</option>
-                                        <option value="2K-Elastic">2K-Elastic</option>
-                                        <option value="2K-Elastic">2K-Elastic</option>
+                                        {{#each Additives}}
+                                        <option value="{{this.Additive_Id}}">{{this.Additive_Name}}</option>
+                                        {{/each}}
                                     </select>
                                 </div>
                                 <div class="CFBinder1Div">
                                     <p class="CFBinderName">Enter Additives in Percentage (%)</p>
-                                    <input type="text" value="43">
+                                    <input type="text" value="0" name="AdditivePercentage" id="AdditivePercentage"
+                                        placeholder="Enter the % of Additive" oninput="handleAdditivePercentageChange()"
+                                        onkeypress="return isNumeric(event)">
                                 </div>
                                 <div class="CFBinder1Div">
                                     <p class="CFBinderName">Additives</p>
-                                    <input type="text" disabled value="43">
+                                    <input type="text" name="TotalAdditives" id="TotalAdditives" disabled value="0">
                                 </div>
                                 {{!-- Binders and Additives Ends Here --}}
                                 <hr>
                                 {{!-- total Start Here --}}
                                 <div class="CFTotalWithAdditives">
                                     <div class="CFTotalWithAddUnit">
-                                        <div class="CFeachUnit CFGram">
+                                        <div class="CFeachUnit ">
                                             <p class="CFUnitsTotal">QTY (Grams)</p>
                                         </div>
-                                        <div class="CFeachUnit CFLiter">
+                                        <div class="CFeachUnit ">
                                             <p class="CFUnitsTotal">Volume (ml)</p>
                                         </div>
                                     </div>
                                     <div class="CFTotalWithAddAndBinder">
                                         <p class="CFBindersHeading">Total</p>
                                         <div class="CFtotalwithAddValuesDiv">
-                                            <div class="CFtotalwithAddValues CFGram">
-                                                <p class="CFBindersHeading ">9745</p>
+                                            <div class="CFtotalwithAddValues ">
+                                                <input type="text" disabled class=" " value="0" id="TotalQtyInGram"
+                                                    name="TotalQtyInGram">
                                             </div>
-                                            <div class="CFtotalwithAddValues CFLiter">
-                                                <p class="CFBindersHeading ">9745</p>
+                                            <div class="CFtotalwithAddValues ">
+                                                <input type="text" disabled class="" value="0" name=""
+                                                    id="TotalQtyInLiter" name="TotalQtyInLiter">
                                             </div>
                                         </div>
                                     </div>
@@ -284,29 +292,32 @@
                             <div class="CFsolidContentCalcDivArea">
                                 <div class="CFsolidContentCalcDiv">
                                     <p class="CFBinderName">Solid Content(%): </p>
-                                    <input class="CFSolidContentInput" type="text" value="9.67" disabled>
+                                    <input class="CFSolidContentInput" type="text" name="SolidContent" value="0"
+                                        id="CFFormulaSolidContent" disabled>
                                 </div>
                                 <div class="CFsolidContentCalcDiv">
                                     <p class="CFBinderName">VOC (g/Ltr): </p>
-                                    <input class="CFSolidContentInput" type="text" value="670.14" disabled>
+                                    <input class="CFSolidContentInput" type="text" name="VOC" value="0"
+                                        id="CFFormulaVOC" disabled>
                                 </div>
                                 <div class="CFsolidContentCalcDiv">
                                     <p class="CFBinderName">Density (g/Ltr): </p>
-                                    <input class="CFSolidContentInput" type="text" value="909.709" disabled>
+                                    <input class="CFSolidContentInput" type="text" name="Density" id="CFFormulaDensity"
+                                        value="0" disabled>
                                 </div>
                                 <div class="CFsolidContentCalcDivNoLabel">
                                     {{!-- <p class="CFBinderName">Density (g/Ltr): </p> --}}
-                                    <input class="CFSolidContentInputNoLabel" type="text" value="247.33" disabled>
+                                    {{!-- <input class="CFSolidContentInputNoLabel" type="text" value="247.33" disabled> --}}
                                 </div>
                                 <div class="CFsolidContentCalcDivNoLabel">
                                     {{!-- <p class="CFBinderName">Density (g/Ltr): </p> --}}
-                                    <input class="CFSolidContentInputNoLabel" type="text"
-                                        value="271.878173427678/247.330033186" disabled>
+                                    {{!-- <input class="CFSolidContentInputNoLabel" type="text"
+                                        value="271.878173427678/247.330033186" disabled> --}}
                                 </div>
                                 <div class="CFsolidContentCalcDiv">
                                     <p class="CFBinderName">Sampled QTY: </p>
-                                    <input class="CFSolidContentInput" type="text" value="573.6/630.531271391685"
-                                        disabled>
+                                    <input class="CFSolidContentInput" name="SampleQty" id="SampleQty" type="text"
+                                        value="0" disabled>
                                 </div>
                             </div>
                             {{!-- Solid Content ends here --}}
@@ -319,7 +330,9 @@
                                 <p>Remarks</p>
                             </div>
                             <div class="CFRemarksDIv">
-                                <p>Mixing with MS Hardener in 2:1 ratio by volume and 10 - 20 % Mipa 2K Thinner</p>
+                                <textarea disabled id="CFRemarks" name="Remark"></textarea>
+
+                                {{!-- <p>Mixing with MS Hardener in 2:1 ratio by volume and 10 - 20 % Mipa 2K Thinner</p> --}}
                             </div>
                         </div>
                         {{!-- remark Ends Here --}}
@@ -446,21 +459,81 @@
         const rSubInputs = row.getElementsByClassName('R1Sub');
         const gramTotalInput = row.getElementsByClassName('GramInputTotal')[0];
         const literTotalInput = row.getElementsByClassName('LiterInputTotal')[0];
+        /* const Product = row.getElementsByClassName('CFTinters');
+         console.log("Product: ",Product.options[Product.selectedIndex]);*/
+        var selectElement = document.getElementById("CFTinters");
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
 
-        var totalGrams = 0.0;
-        var totalLiters = 0.0;
+        // Get the value and text content of the selected option
+        var selectedValue = selectedOption.value;
+        var selectedProduct = selectedOption.textContent;
 
-        for (let i = 0; i < rSubInputs.length; i++) {
-            const inputValue = parseFloat(rSubInputs[i].value);
-            if (!isNaN(inputValue)) {
-                totalGrams += inputValue;
-                totalLiters += inputValue;
-            }
-        }
+        console.log('selected Product', selectedProduct);
 
-        gramTotalInput.value = formatDecimal(totalGrams);
-        literTotalInput.value = formatDecimal(totalLiters);
 
+
+        // do ajax call to find density of product by product name.
+        var Product_Density = 0;
+        fetch(`/FindProductByName/api`, {
+            method: "POST", // or "GET" depending on your API
+            body: JSON.stringify({ selectedProduct }), // Send the selected option as data
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(function (response) {
+                // Handle the response from the server
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Error: " + response.status);
+                }
+            })
+            .then(function (OneProduct) {
+                // Handle the data received from the server
+                // Use the 'datas' variable to access the response data
+                //console.log(OneProduct);
+                Product_Density = parseFloat(OneProduct.Product_Density);
+                console.log("Product_Density in side ajax: ", Product_Density);
+
+                var PP_Qty;
+
+
+                var totalGrams = 0.0;
+                var totalLiters = 0.0;
+
+                for (let i = 0; i < rSubInputs.length; i++) {
+                    var inputValue = parseFloat(rSubInputs[i].value);
+
+                    if (selectedProduct === "M100 Powder Pigment" || selectedProduct === "M120 Powder Pigment" || selectedProduct === "M200 Powder Pigment" || selectedProduct === "M210 Powder Pigment" || selectedProduct === "M300 Powder Pigment" || selectedProduct === "M310 Powder Pigment" || selectedProduct === "M400 Powder Pigment" || selectedProduct === "M600 Powder Pigment" || selectedProduct === "M900 Powder Pigment" || selectedProduct === "M910 Powder Pigment" || selectedProduct === "M920 Powder Pigment") {
+                        inputValue = inputValue * 4;
+                        console.log("InputValue", inputValue);
+                    } else {
+                        PP_Qty = 0;
+
+                    }
+
+
+                    if (!isNaN(inputValue)) {
+                        console.log("Product_Density: ", Product_Density);
+                        totalGrams += inputValue;
+                        console.log("Total Grams", totalGrams)
+                        totalLiters = (totalGrams * 1000) / Product_Density;
+                    }
+                }
+
+                gramTotalInput.value = formatDecimal(totalGrams);
+                literTotalInput.value = formatDecimal(totalLiters);
+                calculateTotalGrams(input);
+                makeChangesInBinderMattGloss()
+
+
+
+            })
+            .catch(function (error) {
+                // Handle any errors that occurred during the request
+                console.error("Error: ", error);
+            });
 
 
 
@@ -484,8 +557,7 @@
             addRow();
         }
 
-        calculateTotalGrams(input);
-        makeChangesInBinderMattGloss()
+
     }
 
     function handleDelete(input) {
@@ -685,7 +757,10 @@
                         elements[i].style.display = "flex";
                     }
                 }
+                var Remarks = Sub_Category.Remarks
+                document.getElementById('CFRemarks').value = Remarks
                 makeChangesInBinderMattGloss()
+                handleAdditivePercentageChange()
             })
             .catch(function (error) {
                 // Handle any errors that occurred during the AJAX call
@@ -718,6 +793,8 @@
             }
         }
 
+        console.log("totalLiter", totalLiter);
+
         // Update the total grams input value with the calculated sum
         var totalGramsInput = document.getElementsByClassName("CFTotalInputElementsGrams")[0];
         totalGramsInput.value = totalGrams;
@@ -725,6 +802,7 @@
         var totalLiterInput = document.getElementsByClassName("CFTotalInputElementsLiter")[0];
         totalLiterInput.value = totalLiter;
 
+        handleAdditivePercentageChange()
         //disableSelectedOption(element)
     }
 
@@ -847,6 +925,7 @@
                     //remove Binder 1
                     Binder1DIV.style.display = "none";
                 }
+                handleAdditivePercentageChange()
             })
     }
 
@@ -871,11 +950,8 @@
         var err;
 
         // gram or liter
-        if (Sub_Category.Gram) {
-            Sum_qty = parseFloat(document.getElementById('TotalGramInput').value);
-        } else if (Sub_Category.Liter) {
-            Sum_qty = parseFloat(document.getElementById('TotalLiterInput').value);
-        }
+
+        Sum_qty = parseFloat(document.getElementById('TotalGramInput').value);
 
 
         // Do if Powder Pigment
@@ -1122,15 +1198,413 @@
                 err = "Binder Not Found!";
                 break;
         }
+        handleAdditivePercentageChange()
 
         function AlertBinder(Binder1_, Binder2_) {
             alert("Binder 1: ", Binder1_);
             alert("Binder 2: ", Binder2_);
         }
 
+    }
+
+
+    function handleAdditivePercentageChange() {
+        var AdditivePercentage = parseFloat(document.getElementById('AdditivePercentage').value);
+        var TotalGramInput = parseFloat(document.getElementById('TotalGramInput').value);
+        var TotalAdditivesInp = document.getElementById('TotalAdditives');
+
+        var TotalAdditives = 0;
+
+        var Binder1INP = parseFloat(document.getElementById('Binder1INP').value);
+        var Binder2INP = parseFloat(document.getElementById('Binder2INP').value);
+
+        if (!isNaN(Binder1INP)) {
+            // Binder1INP is a number (int or float)
+            // Perform actions for numeric value
+            TotalAdditives = ((TotalGramInput + Binder1INP) / 100) * AdditivePercentage
+            //console.log("Binder1: ", TotalAdditives);
+
+            if (!isNaN(Binder2INP)) {
+                // Binder2INP is a number (int or float)
+                // Perform actions for numeric value
+                TotalAdditives = ((TotalGramInput + Binder1INP + Binder2INP) / 100) * AdditivePercentage
+                //console.log("Binder2: ", TotalAdditives);
+
+            } else {
+                // Binder2INP is not a number or cannot be parsed as a number
+                // Perform actions for non-numeric value
+                //console.log("Binder2 bad: ", Binder2INP);
+            }
+
+        } else {
+            // Binder1INP is not a number or cannot be parsed as a number
+            // Perform actions for non-numeric value
+            //console.log("Binder1 bad:", Binder1INP);
+            TotalAdditives = (TotalGramInput / 100) * AdditivePercentage
+        }
+
+        //console.log("TotalAdditives:",TotalAdditives);
+        TotalAdditivesInp.value = TotalAdditives;
+        findTotalOfFormulation();
+
+
+    }
+
+    function findTotalOfFormulation() {
+
+        var TotalQtyOfFormula = 0;
+        var TotalVolumeOfFormula = 0;
+        var TotalGramInput = parseFloat(document.getElementById('TotalGramInput').value);
+        var TotalVolumeInput = parseFloat(document.getElementById('TotalLiterInput').value);
+        var TotalAdditivesInp = parseFloat(document.getElementById('TotalAdditives').value);
+        var selectAdditive = document.getElementById("CFSelectAdditivess"); // Replace "your-select-id" with the actual ID of your <select> element
+        var selectedAdditiveOptionValue = selectAdditive.value;
+
+        var Binder1Name = document.getElementById('Binder1').textContent;
+        var Binder2Name = document.getElementById('Binder2').textContent;
+
+        var ADditiveBinder = {
+            Binder1: Binder1Name,
+            Binder2: Binder2Name,
+            Additive: selectedAdditiveOptionValue
+        }
+
+
+
+
+
+        // do an ajax call for getting the density of additives.
+        fetch(`/FindAdditiveBinderDensityById/api`, {
+            method: "POST", // or "GET" depending on your API
+            body: JSON.stringify({ ADditiveBinder }), // Send the selected option as data
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(function (response) {
+                // Handle the response from the server
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Error: " + response.status);
+                }
+            })
+            .then(function (ReceivedObject) {
+                // Handle the data received from the server
+                // Use the 'datas' variable to access the response data
+                console.log("ReceivedObjectAdditive: ", ReceivedObject.Additive);
+                console.log("ReceivedObjectBinder1: ", ReceivedObject.Binder1);
+
+                if (isNaN(TotalAdditivesInp)) {
+
+
+                    var Binder1 = ReceivedObject.Binder1
+                    var Binder2 = ReceivedObject.Binder2
+
+
+
+                    //var Additive_Density = additive.Additive_Density;
+
+                    var TotalQtyInGram = document.getElementById('TotalQtyInGram');
+                    var TotalQtyInLiter = document.getElementById('TotalQtyInLiter');
+
+
+                    var Binder1INP = parseFloat(document.getElementById('Binder1INP').value);
+                    var Binder2INP = parseFloat(document.getElementById('Binder2INP').value);
+
+
+
+                    if (!isNaN(Binder1INP)) {
+                        // Binder1INP is a number (int or float)
+                        // Perform actions for numeric value
+                        var Binder1_Density = parseFloat(Binder1.Binder_Density)
+                        TotalQtyOfFormula = TotalGramInput + Binder1INP;
+                        TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * 1000) / Binder1_Density)
+
+
+                        if (!isNaN(Binder2INP)) {
+                            // Binder2INP is a number (int or float)
+                            // Perform actions for numeric value
+                            var Binder2_Density = parseFloat(Binder2.Binder_Density)
+                            TotalQtyOfFormula = TotalGramInput + Binder1INP + Binder2INP;
+                            TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * 1000) / Binder1_Density) + ((Binder2INP * 1000) / Binder2_Density)
+
+                        } else {
+                            // Binder2INP is not a number or cannot be parsed as a number
+                            // Perform actions for non-numeric value
+                            //console.log("Binder2 bad: ", Binder2INP);
+                        }
+
+                    } else {
+                        // Binder1INP is not a number or cannot be parsed as a number
+                        // Perform actions for non-numeric value
+                        //console.log("Binder1 bad:", Binder1INP);
+                        TotalQtyOfFormula = TotalGramInput
+                        TotalVolumeOfFormula = TotalVolumeInput
+                    }
+
+                    TotalQtyInGram.value = TotalQtyOfFormula.toString();
+                    TotalQtyInLiter.value = TotalVolumeOfFormula.toString();
+
+
+                    console.log("TotalQtyOfFormula", TotalQtyOfFormula)
+                    FindSolidContentOfProducts()
+                } else if (ReceivedObject.Additive) {
+                    var additive = ReceivedObject.Additive
+                    var Binder1 = ReceivedObject.Binder1
+                    var Binder2 = ReceivedObject.Binder2
+
+
+
+                    var Additive_Density = additive.Additive_Density;
+
+                    var TotalQtyInGram = document.getElementById('TotalQtyInGram');
+                    var TotalQtyInLiter = document.getElementById('TotalQtyInLiter');
+
+
+                    var Binder1INP = parseFloat(document.getElementById('Binder1INP').value);
+                    var Binder2INP = parseFloat(document.getElementById('Binder2INP').value);
+
+
+
+                    if (!isNaN(Binder1INP)) {
+                        // Binder1INP is a number (int or float)
+                        // Perform actions for numeric value
+                        var Binder1_Density = parseFloat(Binder1.Binder_Density)
+                        TotalQtyOfFormula = TotalGramInput + TotalAdditivesInp + Binder1INP;
+                        TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * 1000) / Additive_Density) + ((Binder1INP * 1000) / Binder1_Density)
+
+
+                        if (!isNaN(Binder2INP)) {
+                            // Binder2INP is a number (int or float)
+                            // Perform actions for numeric value
+                            var Binder2_Density = parseFloat(Binder2.Binder_Density)
+                            TotalQtyOfFormula = TotalGramInput + TotalAdditivesInp + Binder1INP + Binder2INP;
+                            TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * 1000) / Additive_Density) + ((Binder1INP * 1000) / Binder1_Density) + ((Binder2INP * 1000) / Binder2_Density)
+
+                        } else {
+                            // Binder2INP is not a number or cannot be parsed as a number
+                            // Perform actions for non-numeric value
+                            //console.log("Binder2 bad: ", Binder2INP);
+                        }
+
+                    } else {
+                        // Binder1INP is not a number or cannot be parsed as a number
+                        // Perform actions for non-numeric value
+                        //console.log("Binder1 bad:", Binder1INP);
+                        TotalQtyOfFormula = TotalGramInput + TotalAdditivesInp;
+                        TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * 1000) / Additive_Density)
+                    }
+
+                    TotalQtyInGram.value = TotalQtyOfFormula.toString();
+                    TotalQtyInLiter.value = TotalVolumeOfFormula.toString();
+
+
+                    console.log("TotalQtyOfFormula", TotalQtyOfFormula)
+                    FindSolidContentOfProducts()
+                } else {
+
+
+                    var Binder1 = ReceivedObject.Binder1
+                    var Binder2 = ReceivedObject.Binder2
+
+
+
+                    //var Additive_Density = additive.Additive_Density;
+
+                    var TotalQtyInGram = document.getElementById('TotalQtyInGram');
+                    var TotalQtyInLiter = document.getElementById('TotalQtyInLiter');
+
+
+                    var Binder1INP = parseFloat(document.getElementById('Binder1INP').value);
+                    var Binder2INP = parseFloat(document.getElementById('Binder2INP').value);
+
+
+
+                    if (!isNaN(Binder1INP)) {
+                        // Binder1INP is a number (int or float)
+                        // Perform actions for numeric value
+                        var Binder1_Density = parseFloat(Binder1.Binder_Density)
+                        TotalQtyOfFormula = TotalGramInput + Binder1INP;
+                        TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * 1000) / Binder1_Density)
+
+
+                        if (!isNaN(Binder2INP)) {
+                            // Binder2INP is a number (int or float)
+                            // Perform actions for numeric value
+                            var Binder2_Density = parseFloat(Binder2.Binder_Density)
+                            TotalQtyOfFormula = TotalGramInput + Binder1INP + Binder2INP;
+                            TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * 1000) / Binder1_Density) + ((Binder2INP * 1000) / Binder2_Density)
+
+                        } else {
+                            // Binder2INP is not a number or cannot be parsed as a number
+                            // Perform actions for non-numeric value
+                            //console.log("Binder2 bad: ", Binder2INP);
+                        }
+
+                    } else {
+                        // Binder1INP is not a number or cannot be parsed as a number
+                        // Perform actions for non-numeric value
+                        //console.log("Binder1 bad:", Binder1INP);
+                        TotalQtyOfFormula = TotalGramInput
+                        TotalVolumeOfFormula = TotalVolumeInput
+                    }
+
+                    TotalQtyInGram.value = TotalQtyOfFormula.toString();
+                    TotalQtyInLiter.value = TotalVolumeOfFormula.toString();
+
+
+                    console.log("TotalQtyOfFormula", TotalQtyOfFormula)
+                    FindSolidContentOfProducts()
+                }
+
+            })
+            .catch(function (error) {
+                // Handle any errors that occurred during the request
+                console.error("Error: ", error);
+            });
+
 
 
 
     }
+
+    function isNumeric(event) {
+        var key = event.keyCode || event.which;
+        var keyChar = String.fromCharCode(key);
+
+        // Allow only numeric characters and special keys like Backspace, Delete, etc.
+        if (!/[\d.-]/.test(keyChar) && key !== 8 && key !== 9 && key !== 13 && key !== 27 && key !== 46) {
+            event.preventDefault();
+            return false;
+        }
+    }
+
+
+    function FindSolidContentOfProducts() {
+        var Products = []; // Create an empty array to store selected option values
+
+        // Get all select elements with class "CFTinters"
+        var selectElements = document.getElementsByClassName("CFTinters");
+
+        // Iterate over each select element
+        for (var i = 0; i < selectElements.length; i++) {
+            var selectElement = selectElements[i];
+
+            // Get the selected option from the current select element
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+
+            // Get the value of the selected option
+            var selectedValue = selectedOption.value;
+
+            // Push the selected value into the "Products" array
+            Products.push(selectedValue);
+        }
+
+        console.log("Products: ", Products)
+
+        // Make an AJAX call using fetch
+        fetch("/GetProductsSolidContent/api", {
+            method: "POST", // or "GET" depending on your API
+            body: JSON.stringify({ selectedOption: Products }), // Send the selected options as data
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(function (response) {
+                // Handle the response from the server
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Error: " + response.status);
+                }
+            })
+            .then(function (products) {
+                // Handle the response data
+                console.log(products);
+                // Perform additional actions with the response data
+
+                // find SolidContentFor each Product by Solid content= solid content of each product * quantity of the product used in formula creation /100
+                var TotalQtyOfFormula = parseFloat(document.getElementById('TotalQtyInGram').value);
+                var SumOfSolidContentOfProducts = 0;
+                var VocOfProducts = 0;
+                for (var i = 0; i < products.length; i++) {
+                    var j = i + 1;
+                    var GramInputTotalID = "GramInputTotalR" + j;
+                    //console.log('GramInputTotalID:',GramInputTotalID)
+                    var GramInputTotal = parseFloat(document.getElementById(GramInputTotalID).value);
+                    //console.log("SumOfSolidContentOfProducts",GramInputTotal)
+                    var OneProduct = products[i]
+                    var SolidContentOfProduct = parseFloat(OneProduct.SolidContent);
+                    var VocOfProduct = parseFloat(OneProduct.VOC);
+                    SumOfSolidContentOfProducts += (GramInputTotal * SolidContentOfProduct) / 100
+                    VocOfProducts += (GramInputTotal * VocOfProduct) / 100
+                    console.log("Voc of Products: ", (GramInputTotal * VocOfProduct) / 100)
+                    //console.log("SolidContentOfProduct",SolidContentOfProduct)
+                }
+                //Solid content of Formulation= (sum of solid content of each row/  Total Quantity of Formulation)* 100
+                var SolidContentOfFormulation = (SumOfSolidContentOfProducts / TotalQtyOfFormula) * 100
+                var SumOfVoc = (VocOfProducts / TotalQtyOfFormula) * 100
+
+                var TotalQtyInGram = parseFloat(document.getElementById('TotalQtyInGram').value);
+                var TotalQtyInLiter = parseFloat(document.getElementById('TotalQtyInLiter').value);
+                var DensityOfFormula = (TotalQtyInGram / TotalQtyInLiter) * 1000
+
+                document.getElementById('CFFormulaDensity').value = DensityOfFormula;
+
+                var VocOfFormulation = SumOfVoc * 10 * (DensityOfFormula / 1000)
+                //console.log("Solid content of Formulation: ",SolidContentOfFormulation);
+                //alert("Solid content of Formulation: ",SolidContentOfFormulation.toString());
+                if (!isNaN(SolidContentOfFormulation)) {
+                    document.getElementById('CFFormulaSolidContent').value = SolidContentOfFormulation;
+                }
+
+                if (!isNaN(VocOfFormulation)) {
+                    document.getElementById('CFFormulaVOC').value = VocOfFormulation;
+                }
+
+                var SampledQty = TotalQtyInGram + "/" + TotalQtyInLiter;
+                document.getElementById('SampleQty').value = SampledQty;
+
+
+
+
+
+            })
+            .catch(function (error) {
+                // Handle any errors that occurred during the AJAX call
+                console.error("Error: ", error);
+            });
+
+
+    }
+
+    // to load one Sample data for reload the table.
+    function LoadTableSingleData() {
+        var R1C1 = document.getElementById('R1C1').value;
+        document.getElementById('R1C1').value = "0";
+        document.getElementById('R1C1').value = R1C1;
+        //console.log("R1C1", R1C1);
+
+        function triggerInputEvents() {
+            var inputElement = document.getElementById('R1C1');
+
+            // Trigger the oninput event
+            inputElement.dispatchEvent(new Event('input'));
+
+            // Trigger the onkeyup event
+            inputElement.dispatchEvent(new KeyboardEvent('keyup'));
+
+            // Trigger the onkeydown event
+            inputElement.dispatchEvent(new KeyboardEvent('keydown'));
+        }
+
+        // Call the function to trigger the events
+        triggerInputEvents();
+
+    }
+
+
+
 
 </script>

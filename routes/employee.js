@@ -19,13 +19,15 @@ router.get('/printlabel', (req, res) => {
 
 router.get('/CreateFormula', (req, res) => {
   employeeHelpers.getAllCollections().then((AllCategory) => {
-   // console.log(AllCategory);
-    res.render('employee/CreateFormula', { AllCategory });
+    employeeHelpers.GetAllAdditives().then((Additives) => {
+      // console.log(AllCategory);
+      res.render('employee/CreateFormula', { AllCategory, Additives });
+    })
   })
 })
 
 router.post('/GetProductWithSubCatagory/api', (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   var SubId = req.body.selectedOption;
   employeeHelpers.GetSubcategotyById(SubId).then((SubCategory) => {
 
@@ -42,7 +44,7 @@ router.post('/GetProductWithSubCatagory/api', (req, res) => {
                 Binder1: binder1,
                 Binder2: binder2
               }
-              console.log(Data);
+              //console.log(Data);
               res.json(Data);
             })
           } else {
@@ -51,24 +53,76 @@ router.post('/GetProductWithSubCatagory/api', (req, res) => {
               SubCategory: SubCategory,
               Binder1: binder1
             }
-            console.log(Data);
+            // console.log(Data);
             res.json(Data);
           }
 
         })
 
       } else {
-        console.log(SubCategory)
+        //console.log(SubCategory)
         var Data = {
           Products: Products,
           SubCategory: SubCategory
         }
-        console.log(Data);
+        //console.log(Data);
         res.json(Data);
       }
     })
   })
 })
+
+router.post('/GetProductsSolidContent/api', (req, res) => {
+  //console.log("ProductsHere: ",req.body);
+  employeeHelpers.GetProductByArrayOfProductById(req.body.selectedOption).then((Products) => {
+    res.json(Products);
+  })
+})
+
+router.post('/FindProductByName/api', (req, res) => {
+  // console.log("Productname: ",req.body);
+  employeeHelpers.FindProductByName(req.body.selectedProduct).then((Product) => {
+    res.json(Product);
+  })
+})
+
+
+router.post('/FindAdditiveBinderDensityById/api', async (req, res) => {
+  console.log(req.body.ADditiveBinder);
+  var BodyObject = req.body.ADditiveBinder
+
+  var ReturnObject = {};
+
+  var promises = [];
+
+  if (BodyObject.Binder1) {
+    var promise1 = employeeHelpers.FindBinderByName(BodyObject.Binder1).then((Binder1) => {
+      ReturnObject.Binder1 = Binder1;
+    });
+    promises.push(promise1);
+  }
+
+  if (BodyObject.Binder2) {
+    var promise2 = employeeHelpers.FindBinderByName(BodyObject.Binder2).then((Binder2) => {
+      ReturnObject.Binder2 = Binder2;
+    });
+    promises.push(promise2);
+  }
+
+  if (BodyObject.Additive) {
+    var promise3 = employeeHelpers.FindAdditiveDensityById(BodyObject.Additive).then((Additive) => {
+      ReturnObject.Additive = Additive;
+    });
+    promises.push(promise3);
+  }
+
+  await Promise.all(promises); // Wait for all promises to resolve
+
+  console.log("Return OBJ: ",ReturnObject);
+
+  res.json(ReturnObject);
+});
+
 
 router.post('/CreateFormula', (req, res) => {
   console.log(req.body);

@@ -430,8 +430,8 @@ td {
 }
 
 .CFeachUnit {
-  width: 100px;
-  margin-left: 2rem;
+  width: 136px;
+  margin-left: 0rem;
 }
 
 .CFUnitsTotal {
@@ -555,7 +555,7 @@ td {
 }
 
 .CFtotalwithAddValues {
-  width: 100px;
+  width: 200px;
   text-align: center;
   margin-left: 2rem;
 }
@@ -626,6 +626,7 @@ td {
   height: 6rem;
   padding: 1rem;
   color: whitesmoke;
+  width: 100%;
 }
 
 .CFslNo {
@@ -678,6 +679,25 @@ td {
 .CFTotalInputElementsGrams,
 .CFTotalInputElementsLiter {
   width: auto;
+}
+
+#TotalQtyInGram, #TotalQtyInLiter {
+  width: 180px;
+  background-color: transparent;
+  text-align: center;
+}
+
+#TotalAdditives{
+  width: 50%;
+}
+
+
+#CFRemarks {
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  color: whitesmoke;
+  font-size: 20px;
 }
 
 

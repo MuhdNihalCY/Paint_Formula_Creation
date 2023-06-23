@@ -251,3 +251,18 @@ if (Sub_Category === "Mipa_2K_PUR") {
     BinderError = true;
     err = "Binder Not Found!";
 }
+
+
+
+
+
+// powder Pigment Equations
+
+var PP_Qty
+
+
+if (product === "M100 Powder Pigment" || product === "M120 Powder Pigment" || product === "M200 Powder Pigment" || product === "M210 Powder Pigment" || product === "M300 Powder Pigment" || product === "M310 Powder Pigment" || product === "M400 Powder Pigment" || product === "M600 Powder Pigment" || product === "M900 Powder Pigment" || product === "M910 Powder Pigment" || product === "M920 Powder Pigment") {
+    PP_Qty = Product_Qty * 4;
+}else{
+    PP_Qty = 0;
+}
