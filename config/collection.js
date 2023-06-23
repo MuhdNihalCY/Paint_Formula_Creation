@@ -6,5 +6,6 @@ module.exports={
     BINDER_COLLECTION: 'Binder_collection',
     EMPLOYEE_COLLECTION: 'Employee_Collection',
     CUSTOMER_COLLECTION: 'Customer_Collection',
-    ADMIN_COLLECTION: 'Admin_Collection'
+    ADMIN_COLLECTION: 'Admin_Collection',
+    FORMULA_COLLECTION: 'Formula_Collection'
 };

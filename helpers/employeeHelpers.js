@@ -43,26 +43,39 @@ module.exports = {
                 var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: parseInt(ArrayOfProduct[i]) });
                 Products.push(Product);
             }
-           // console.log("ProductByID:",Products);
+            // console.log("ProductByID:",Products);
             resolve(Products)
         })
     },
-    FindProductByName:(ProductName)=>{
-        return new Promise(async(resolve,reject)=>{
-            let product=await db.get().collection(collection.PRODUCT_COLLECTION).findOne({"Product_Name":ProductName})
+    FindProductByName: (ProductName) => {
+        return new Promise(async (resolve, reject) => {
+            let product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": ProductName })
             resolve(product)
         })
     },
-    FindAdditiveDensityById:(Add_Id)=>{
-        return new Promise(async(resolve,reject)=>{
-            let additive=await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({"Additive_Id":parseFloat(Add_Id)});
+    FindAdditiveDensityById: (Add_Id) => {
+        return new Promise(async (resolve, reject) => {
+            let additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Id": parseFloat(Add_Id) });
             resolve(additive);
         })
     },
-    FindBinderByName:(BinderName)=>{
-        return new Promise(async(resovle,reject)=>{
-            let Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({"Binder_Name":BinderName});
+    FindBinderByName: (BinderName) => {
+        return new Promise(async (resovle, reject) => {
+            let Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": BinderName });
             resovle(Binder);
+        })
+    },
+    SaveFormulaData: (Data) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.FORMULA_COLLECTION).insertOne(Data).then((Response) => {
+                if (!Response) {
+                    throw "Error";
+                } else {
+                    resolve({
+                        Status: true
+                    })
+                }
+            })
         })
     }
 }

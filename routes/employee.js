@@ -118,7 +118,7 @@ router.post('/FindAdditiveBinderDensityById/api', async (req, res) => {
 
   await Promise.all(promises); // Wait for all promises to resolve
 
-  console.log("Return OBJ: ",ReturnObject);
+  console.log("Return OBJ: ", ReturnObject);
 
   res.json(ReturnObject);
 });
@@ -126,6 +126,64 @@ router.post('/FindAdditiveBinderDensityById/api', async (req, res) => {
 
 router.post('/CreateFormula', (req, res) => {
   console.log(req.body);
+  function calculateRatios(data) {
+    const ratios = {};
+
+    // Get the Total Quantity
+    const totalQty = parseFloat(data.TotalQtyInGram);
+
+    // Calculate the ratios
+    ratios.totalQty = 1;
+    ratios.additive = totalQty !== 0 ? parseFloat(data.TotalAdditives) / totalQty : 0;
+    ratios.binder1 = totalQty !== 0 ? parseFloat(data.Binder1) / totalQty : 0;
+    ratios.binder2 = totalQty !== 0 ? parseFloat(data.Binder2 || 0) / totalQty : 0;
+
+    ratios.tinters = {};
+    const tinterKeys = Object.keys(data).filter(key => key.startsWith('GramInputTotalR'));
+    const tinterCount = tinterKeys.length;
+    const tinterSum = tinterKeys.reduce((sum, key) => sum + parseFloat(data[key] || 0), 0);
+    tinterKeys.forEach((key, index) => {
+      const tinterNo = key.slice(15);
+      ratios.tinters[tinterNo] = totalQty !== 0 ? (parseFloat(data[key]) || 0) / totalQty : 0;
+    });
+
+    return ratios;
+  }
+
+  var Datas = req.body;
+
+
+  // Usage
+  const data = {
+    TotalQtyInGram: Datas.TotalQtyInGram,
+    TotalAdditives: Datas.TotalAdditives,
+    Binder1: Datas.Binder1,
+    Binder2: Datas.Binder2,
+    GramInputTotalR1: Datas.GramInputTotalR1,
+    GramInputTotalR2: Datas.GramInputTotalR2,
+    GramInputTotalR3: Datas.GramInputTotalR3
+  };
+
+  const result = calculateRatios(data);
+  console.log('Total Quantity:', result.totalQty);
+  console.log('Additive Ratio:', result.additive);
+  console.log('Binder1 Ratio:', result.binder1);
+  console.log('Binder2 Ratio:', result.binder2);
+  console.log('Tinters Ratios:', result.tinters);
+  Datas.AdditiveRatio = result.additive;
+  Datas.Binder1Ratio = result.binder1;
+  Datas.Binder2Ratio = result.binder2;
+  Datas.TintersRatioObject = result.tinters;
+  Datas.TintersRatioArray = Object.values(result.tinters);
+  Datas.TintersCount = Datas.TintersRatioArray.length;
+  Datas.InsertedTime = Date.now()
+
+
+
+  employeeHelpers.SaveFormulaData(Datas).then((State) => {
+    res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
+  })
+
 })
 
 
