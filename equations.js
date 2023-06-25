@@ -90,6 +90,7 @@ switch (Sub_Category) {
         Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
         break;
 
+    case "Rosner_Acrylic":
     case "Rosner_Acrylic_Effects":
         Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
         Binder2_EQ = (Sum_qty * 80 / 20) - Binder1_EQ;
@@ -263,6 +264,57 @@ var PP_Qty
 
 if (product === "M100 Powder Pigment" || product === "M120 Powder Pigment" || product === "M200 Powder Pigment" || product === "M210 Powder Pigment" || product === "M300 Powder Pigment" || product === "M310 Powder Pigment" || product === "M400 Powder Pigment" || product === "M600 Powder Pigment" || product === "M900 Powder Pigment" || product === "M910 Powder Pigment" || product === "M920 Powder Pigment") {
     PP_Qty = Product_Qty * 4;
-}else{
+} else {
     PP_Qty = 0;
+}
+
+
+var formula = {
+    "_id": { "$oid": "649870b7d8c92051fb9ac649" },
+    "MixerName": "Nihal",
+    "Date": "2023-06-25",
+    "FileNo": "10000",
+    "ProjectNo": "436546",
+    "CustomerName": "Hisadf",
+    "CustomerRef": "asdfsa",
+    "ColorCode": "sdfs",
+    "ColorName": "ewrf",
+    "Category": "100",
+    "SubCategory": "1000",
+    "TintersR1": "10005",
+    "GramInputTotalR1": "30",
+    "LiterInputTotalR1": "31.199950080079873",
+    "TintersR2": "10001",
+    "GramInputTotalR2": "50",
+    "LiterInputTotalR2": "51.99991680013312",
+    "TintersR3": "10000",
+    "GramInputTotalR3": "5",
+    "LiterInputTotalR3": "5.199991680013312",
+    "TintersR4": "", "GramInputTotalR4": "0.00",
+    "LiterInputTotalR4": "0.00",
+    "TotalWithoutAdditves": "85",
+    "matt": "20", "Binder1": "1700",
+    "Binder2": "", "additives": "1002",
+    "AdditivePercentage": "2",
+    "TotalAdditives": "35.7",
+    "TotalQtyInGram": "1820.7",
+    "SolidContent": "56.199999999999996",
+    "VOC": "421.15452",
+    "Density": "961.54",
+    "SampleQty": "30/31.199950080079873",
+    "Remark": "Mixing with 50% Mipa 2K MS Hardener and 25 - 40 % Mipa 2K Thinner",
+    "AdditiveRatio": { "$numberDouble": "0.0196078431372549" },
+    "Binder1Ratio": { "$numberDouble": "0.9337068160597572" },
+    "Binder2Ratio": { "$numberInt": "0" },
+    "TintersRatioObject": { "1": { "$numberDouble": "0.01647717910693689" }, "2": { "$numberDouble": "0.027461965178228152" }, "3": { "$numberDouble": "0.0027461965178228152" } },
+    "TintersRatioArray": [{ "$numberDouble": "0.01647717910693689" }, { "$numberDouble": "0.027461965178228152" }, { "$numberDouble": "0.0027461965178228152" }],
+    "TintersCount": { "$numberInt": "3" },
+    "InsertedTime": { "$numberDouble": "1687711926127.0" },
+    "CategoryName": "Paints",
+    "SubCategoryName": "Mipa_2K_PUR",
+    "TinterNameR1": "PUR 42",
+    "TinterNameR2": "PUR 6",
+    "TinterNameR3": "PUR 5",
+    "AdditiveName": "Str-Add fein",
+    "Binder1Name": "Multi-mat"
 }

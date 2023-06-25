@@ -1,2 +1,154 @@
-<h1>Employee Home</h1>
-<a href="/CreateFormula">Create Formula</a>
+<div id='center' class="main" style="text-align: left;">
+    <div class="mainInner">
+        <div>Welcome Employee</div>
+        <div class="stocks">
+            <div class="stock-alert">
+                Stock Alerts!
+                <div class="line"></div>
+                <div class="lfr">
+                    <div class="left-row">
+                        <div class="items">
+                            Item name: PUR_42 <br>
+                            Category: Paints <br>
+                            Sub Category: Mipa_2K_PUR <br>
+                        </div>
+                    </div>
+                    <div class="right-row">
+                        <div class="new-div">
+                            Remaining stock : 5 litre
+                            <button class="tkaction">Take Action</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="line2"></div>
+            </div>
+            <div class="stock-alert">
+
+                <div class="lfr">
+                    <div class="left-row">
+                        <div class="items">
+                            Item name: PUR_42 <br>
+                            Category: Paints <br>
+                            Sub Category: Mipa_2K_PUR <br>
+                        </div>
+                    </div>
+                    <div class="right-row">
+                        <div class="new-div">
+                            Remaining stock : 5 litre
+                            <button class="tkaction">Take Action</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="line2"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .main {
+
+        display: block;
+        margin-top: 60px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        margin-top: 80px;
+        margin-left: 25px;
+    }
+
+    .mainInner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: left;
+        height: 100%;
+        margin: 0 auto;
+        /* Add this line */
+    }
+
+
+    .mainInner div {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+
+    .stocks {
+        border: 1px solid #000;
+        border-radius: 10px;
+        width: 80%;
+        height: fit-content;
+        margin-top: 30px;
+        margin-left: 30px;
+        padding: 20px;
+    }
+
+    .stock-alert {
+
+        color: red;
+        font-weight: 800;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .line {
+        width: 100%;
+        height: .5px;
+        background-color: #000;
+        margin: 10px auto;
+    }
+
+    .line2 {
+
+        width: 90%;
+        height: .5px;
+        background-color: #000;
+        margin: 0 auto;
+        /* Add this line */
+    }
+
+    .items {
+        color: #000;
+    }
+
+    .lfr {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .left-row {
+        flex: 1;
+    }
+
+    .right-row {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
+
+    .new-div {
+        font-size: 10px;
+    }
+
+    .tkaction {
+        display: block;
+        margin: 10px auto;
+        padding: 5px;
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        color: #fff;
+        background-color: red;
+        border: 2px solid #fff;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+        width: 100%;
+        height: 40px;
+    }
+</style>

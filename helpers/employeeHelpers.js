@@ -1,8 +1,44 @@
 var db = require('../config/connection');
 var collection = require('../config/collection');
 const { ObjectId } = require('mongodb');
+const { use } = require('../routes/employee');
 
 module.exports = {
+    DoLogin: (Data) => {
+        return new Promise(async (resolve, reject) => {
+            var State = {}
+            var User = await db.get().collection(collection.EMPLOYEE_COLLECTION).findOne({ "Employee_Name": Data.userName });
+            if (User) {
+                // user ok. 
+                //check password
+                if (User.Password === Data.password) {
+                    State.employeeLooged = true;
+                } else {
+                    State.employeeLooged = false;
+                    State.err = "Incorrect Password!"
+                }
+            } else {
+                //check user by email
+                var User = await db.get().collection(collection.EMPLOYEE_COLLECTION).findOne({ "Email": Data.userName });
+                if (User) {
+                    // user Ok 
+                    // check password
+                    if (User.Password === Data.password) {
+                        State.employeeLooged = true;
+                    } else {
+                        State.employeeLooged = false;
+                        State.err = "Incorrect Password!"
+                    }
+                } else {
+                    State.employeeLooged = false;
+                    State.err = 'No User Found!'
+                }
+            }
+            resolve(State);
+        })
+    },
+    CreateNewUser: () => {
+    },
     getAllCollections: () => {
         return new Promise(async (resovle, reject) => {
             var AllCategory = await db.get().collection(collection.CATEGORY_COLLECTION).find().toArray();
@@ -26,6 +62,8 @@ module.exports = {
     getBinderById: (id) => {
         return new Promise(async (resolve, reject) => {
             var Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Id: parseInt(id) });
+            // console.log("kfdjslfkjdfjshafkljsfjhsflhdjsfjdshfklsdhfdshfklsdfjdhsflhdsklfdhsfhdlshfksdhfdklsflkdjsf");
+            // console.log(Binder);
             resolve(Binder);
         })
     },
@@ -76,6 +114,71 @@ module.exports = {
                     })
                 }
             })
+        })
+    },
+    GetAllFormulations: () => {
+        return new Promise(async (resolve, reject) => {
+            var Formulations = db.get().collection(collection.FORMULA_COLLECTION).find().toArray();
+            resolve(Formulations)
+        })
+    },
+    getAllCategories: () => {
+        return new Promise(async (resolve, reject) => {
+            let Categories = db.get().collection(collection.CATEGORY_COLLECTION).find().toArray();
+            resolve(Categories);
+        })
+    },
+    GetAllSubCategories: () => {
+        return new Promise(async (resolve, reject) => {
+            let SubCategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).find().toArray();
+            resolve(SubCategories)
+        })
+    },
+    FindFormulaByFileNo: (FileNo) => {
+        return new Promise(async (resolve, reject) => {
+            let Formula = await db.get().collection(collection.FORMULA_COLLECTION).findOne({ "FileNo": FileNo });
+            resolve(Formula);
+        })
+    },
+    getThisFormulaFileNo: () => {
+        return new Promise(async (resolve, reject) => {
+            var FileNo = 0;
+            let LatestFormula = await db.get().collection(collection.FORMULA_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
+            if (LatestFormula.length > 0) {
+                //console.log(LatestFormula);
+                var LatestFileNo = parseInt(LatestFormula[0].FileNo);
+                FileNo = LatestFileNo + 1;
+            } else {
+                console.log("No Latest Formula");
+                FileNo = 10000
+            }
+            FileNo = FileNo + "";
+            resolve(FileNo);
+        })
+    },
+    GetAllProducts: () => {
+        return new Promise(async (resolve, reject) => {
+            var Products = await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray();
+            resolve(Products);
+        })
+    },
+    GetAllBinders: () => {
+        return new Promise(async (resolve, reject) => {
+            var Binders = await db.get().collection(collection.BINDER_COLLECTION).find().toArray();
+            resolve(Binders);
+        })
+    },
+    GetSubCategoriesById: (Id) => {
+        return new Promise(async (resolve, reject) => {
+            //console.log("SubCategory ID: ",Id);
+            var SubCategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ "SubCategory_Id": parseInt(Id) })
+            resolve(SubCategory);
+        })
+    },
+    FindAdditiveById: (Id) => {
+        return new Promise(async (resolve, reject) => {
+            var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Id": parseInt(Id) })
+            resolve(Additive);
         })
     }
 }

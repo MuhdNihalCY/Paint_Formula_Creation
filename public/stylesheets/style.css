@@ -236,6 +236,26 @@ a {
   font-size: 18px;
 }
 
+.CFClearAllBTN {
+  text-decoration: none;
+}
+
+.CFClearAllBTN:hover {
+  color: whitesmoke;
+}
+
+.CFHeaderDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.CFHeaderLable {
+  font-size: 35px;
+  font-weight: 700;
+}
+
 .CFdropdown {
   position: relative;
   display: inline-block;
@@ -674,6 +694,7 @@ td {
 
 .CFInpValue {
   font-size: 1.2rem;
+  border-bottom: 1px solid black;
 }
 
 .CFTotalInputElementsGrams,
@@ -681,13 +702,14 @@ td {
   width: auto;
 }
 
-#TotalQtyInGram, #TotalQtyInLiter {
+#TotalQtyInGram,
+#TotalQtyInLiter {
   width: 180px;
   background-color: transparent;
   text-align: center;
 }
 
-#TotalAdditives{
+#TotalAdditives {
   width: 50%;
 }
 
@@ -698,6 +720,20 @@ td {
   border: none;
   color: whitesmoke;
   font-size: 20px;
+}
+
+
+.readonly-input {
+  outline: none;
+  border: none;
+  background-color: rgba(224, 224, 224, 0.255);
+  padding: 1rem 0;
+  text-align: center;
+  /* Add more styles as needed */
+}
+
+.CFAllDiv{
+  margin-bottom: 10rem;
 }
 
 
@@ -1250,4 +1286,319 @@ td {
 
 .DivForVerticalGap {
   margin-top: 2rem;
+}
+
+
+/* Create formula finished */
+
+
+/* Order Placement */
+
+.Container {
+  width: 100vw;
+  padding: 3rem;
+}
+
+.BOAllArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.BOHeader {
+  /* background-color: #03a9f4; */
+  padding: 3rem 0;
+  margin-bottom: 0rem;
+  width: 100%;
+}
+
+.BOHeader p {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.BOMainSection {
+  width: 100%;
+  padding: 3rem;
+  border: 1px solid gray;
+  border-radius: 30px;
+}
+
+.BOTopsection {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+
+.BOTopSection1,
+.BOTopSection3 {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.BODateDiv,
+.BOFileNoDiv,
+.BOCutomerRefDiv,
+.BOCustomerNameDiv,
+.BOProjectNo,
+.BOMixer,
+.BOColorName,
+.BOColorCode,
+.BOCategory,
+.BOSubCategory {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.BOTopsection input[type="text"] {
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid black;
+  outline: none;
+  /* Optional: Removes the default outline style */
+}
+
+.BOTopSection2Line {
+  border: 1px solid gray;
+}
+
+.BOEnterQuantityDiv {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: 600;
+  margin: 3rem 0;
+}
+
+.BOEnterQuantityDiv label {
+  margin-top: 10px;
+  margin-right: 1rem;
+}
+
+.BOEnterQuantityDiv input[type="text"] {
+  height: auto !important;
+  padding: .7em 1em;
+  text-align: center;
+  width: 250px;
+}
+
+/* BO Table */
+.BOTableDiv {
+  width: 100%;
+  border: 1px solid gray;
+}
+
+.BOQTYTable {
+  width: 100%;
+}
+
+.BOTableHeader {
+  background-color: #636363;
+  color: whitesmoke;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.BOTableDataRow {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.BOTableDataRow input[type="text"],
+.BOBinderLeftSection input[type="text"],
+.BOBinderRightSection input[type="text"],
+.BOAdditiveLeftSection input[type="text"],
+.BOAdditiveRightSection input[type="text"],
+.BOBottomLeftItem input[type="text"],
+.BORemarksPDiv input[type="text"] {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+
+.BOBinderDIv,
+.BOAdditiveDiv,
+.BOBottomSectionDiv {
+  width: 70%;
+  font-size: 25px;
+  margin: 3rem 0;
+  padding: 0 2rem;
+}
+
+.BOBinderHeader,
+.BOAdditiveHeader {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.BOBinder1Div,
+.BOBinder2Div,
+.AdditiveMainSection {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+
+.BOBinderLeftSection,
+.BOBinderRightSection,
+.BOAdditiveLeftSection,
+.BOAdditiveRightSection {
+  display: flex;
+}
+
+.BOBinderLeftSection label,
+.BOBinderRightSection label,
+.BOAdditiveLeftSection label,
+.BOAdditiveRightSection label,
+.BOBottomLeftItem label {
+  margin: 1rem;
+}
+
+.BOBottomSectionDiv {
+  width: 100%;
+}
+
+.BOBottomLeftSection,
+.BOBottomRightSection {
+  width: 50%;
+}
+
+.BOBottomLeftItem {
+  display: flex;
+}
+
+.BOBottomSectionDiv {
+  display: flex;
+}
+
+
+.BORemarksDIVBox {
+  margin: 0 4rem;
+  width: 90%;
+  height: 15rem;
+  background-color: #656a6f;
+}
+
+.BORemarkHeaderDiv {
+  width: 100%;
+  height: 5rem;
+  background-color: #434343;
+}
+
+.BORemarkHeader {
+  color: white;
+  font-size: 25px;
+  padding: 1.5rem 2rem;
+  font-weight: 700;
+}
+
+.BORemarksPDiv input[type="text"] {
+  padding: 1rem 2rem;
+  font-size: 23px;
+  font-weight: 600;
+  color: whitesmoke;
+}
+
+.BOFormSubmitBTNDiv {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 3rem 0;
+  margin-top: 4rem;
+}
+
+.BOFormSubmitBTNDiv input[type="submit"] {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  padding: 1rem 3rem;
+  background-color: #336699;
+  color: whitesmoke;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.BOFormSubmitBTNDiv input[type="submit"]:hover {
+  color: white;
+  background-color: #1c3753;
+}
+
+/* Bulk Order Placements ENd Here */
+
+
+
+/* Formula Lists */
+
+.FLmainArea {
+  margin-top: 8rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.FLHeaderDiv {
+  width: 100%;
+}
+
+.FLHeader {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.FLMainSectionDiv {
+  border: 1px solid gray;
+  border-radius: 25px;
+  padding: 3rem 0;
+}
+
+.FLEachItemDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 1rem 0;
+}
+
+.FLEachItemLeftSection,
+.FLEachItemRightSection {
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.EachItemLabel {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.FLBulkHyperDIv {
+  padding: 1rem 7rem;
+  background-color: #1c3753;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+}
+
+.FLEachItemRightSection a {
+  text-decoration: none;
+}
+
+.FLBulkHyperLabel {
+  color: whitesmoke;
+  font-size: 25px;
+  font-weight: 600;
+  margin-top: 0.5rem;
 }

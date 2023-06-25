@@ -1,0 +1,31 @@
+<section>
+    <div class="container">
+        <div class="FLmainArea">
+            <div class="FLHeaderDiv">
+                <p class="FLHeader">Formulations</p>
+            </div>
+            <div class="FLMainSectionDiv">
+                {{#each Formulation}}
+                <div class="FLEachItemDiv">
+                    <div class="FLEachItemLeftSection">
+                        <p class="EachItemLabel">Customer Name : {{this.CustomerName}}</p>
+                        <p class="EachItemLabel">Color Name : {{this.ColorName}}</p>
+                        <p class="EachItemLabel">Color Code : {{this.ColorCode}}</p>
+                        <p class="EachItemLabel">Category : {{this.CategoryName}}</p>
+                    </div>
+                    <div class="FLEachItemRightSection">
+                        <p class="EachItemLabel">File no : {{this.FileNo}}</p>
+                        <p class="EachItemLabel">Project no : {{this.ProjectNo}}</p>
+                        <a href="/BulkOrder/{{this.FileNo}}">
+                            <div class="FLBulkHyperDIv">
+                                <p class="FLBulkHyperLabel">Order</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <hr>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</section>

@@ -136,7 +136,7 @@
         return fetch('/admin/Subcategories/api')
             .then(response => response.json())
             .catch(error => {
-                console.log('Error:', error);
+                // console.log('Error:', error);
             });
     }
 
@@ -144,15 +144,15 @@
         return fetch('/admin/Categories/api')
             .then(response => response.json())
             .catch(error => {
-                console.log('Error:', error);
+                // console.log('Error:', error);
             });
     }
 
     Promise.all([ADgetAllSubCategories(), ADgetAllCategories()])
         .then(([subCategories, categories]) => {
             // Process the retrieved subcategories and categories
-            console.log(subCategories);
-            console.log(categories);
+            // console.log(subCategories);
+            // console.log(categories);
 
             // Assign the values to the variables
             var subCategories = subCategories;
@@ -229,7 +229,7 @@
                     }
                 }
 
-                console.log(subCategorySelect.value);
+                // console.log(subCategorySelect.value);
             });
         });
 
@@ -240,7 +240,7 @@
         const subCategoryData = data.SubCategory;
         const productData = data.Products;
 
-        console.log("Calling Addproducts to Table");
+        // console.log("Calling Addproducts to Table");
         console.table(categoryData);
         console.table(subCategoryData);
         console.table(productData);
@@ -255,9 +255,9 @@
             function updateProductData() {
                 productData.forEach((product) => {
                     const category = categoryData.find((category) => category.Category_Id === parseInt(product.Category));
-                    console.log("Product: ", product.Product_Name, " category: ", category);
+                    // console.log("Product: ", product.Product_Name, " category: ", category);
                     const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === parseInt(product.SubCategory));
-                    console.log("Product: ", product.Product_Name, " category: ", subCategory);
+                    // console.log("Product: ", product.Product_Name, " category: ", subCategory);
 
                     if (category) {
                         product.CategoryName = category.Category;
@@ -266,8 +266,8 @@
                         product.SubCategoryName = subCategory.SubCategory;
                     }
                 });
-                console.log("Updates Product Data with category and sub category");
-                //console.log(productData[0].CategoryName);
+                // console.log("Updates Product Data with category and sub category");
+                //// console.log(productData[0].CategoryName);
             }
 
             // Call the function to update product data
@@ -309,7 +309,7 @@
 
     function ADSubcategorySelect(value) {
         const subCategorySelect = document.getElementById('SubCategorySelect');
-        alert(subCategorySelect.value)
+        //alert(subCategorySelect.value)
 
         var SubCategory_Id = subCategorySelect.value;
 
@@ -328,7 +328,7 @@
                     if (response.ok) {
                         const data = await response.json();
                         // Process the data received from the backend
-                        console.log(data);
+                        // console.log(data);
                         // Call a function or perform any actions with the data
                         AddProductsToTable(data);
 
@@ -355,7 +355,7 @@
                     if (response.ok) {
                         const data = await response.json();
                         // Process the data received from the backend
-                        console.log(data);
+                        // console.log(data);
 
                         // Call a function or perform any actions with the data
                         AddProductsToTable(data);
@@ -389,7 +389,7 @@
                 if (response.ok) {
                     const data = await response.json();
                     // Process the data received from the backend
-                    console.log(data);
+                    // console.log(data);
                     // Call a function or perform any actions with the data
                     AddProductsToTable(data);
 
