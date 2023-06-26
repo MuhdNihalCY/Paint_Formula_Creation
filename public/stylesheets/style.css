@@ -1037,7 +1037,7 @@ td {
 }
 
 #ADpopupContentAdditive {
-  height: 400px;
+  height: 510px;
 }
 
 #ADpopupContentEmployee {
@@ -1532,6 +1532,23 @@ td {
 .BOFormSubmitBTNDiv input[type="submit"]:hover {
   color: white;
   background-color: #1c3753;
+}
+
+#BORemarksTextArea {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  color: whitesmoke;
+  font-weight: 600;
+  padding: 2rem;
+  overflow: hidden ;
+  border: none;
+}
+
+.BOLowStocks {
+  color: red;
+  font-size: 20px;
+  text-align: center;
 }
 
 /* Bulk Order Placements ENd Here */

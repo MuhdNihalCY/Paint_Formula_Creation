@@ -58,13 +58,22 @@
                         </div>
                     </div>
                     <hr>
+                    {{#if TotalQTY}}
+                    <p class="BOLowStocks">Stocks Not available for {{Item}}</p>
+                    <input type="text" value="{{TotalQTY}}" id="BOTotalQTYLOW" hidden>
+                    {{/if}}
                     <div class="BOEnterQuantityDiv">
                         {{#if Liter}}
                         <label for="">Enter Quantity (in Ltr) : </label>
                         {{else}}
                         <label for="">Enter Quantity (in Kg) : </label>
                         {{/if}}
+
+                        {{#if TotalQTY}}
+                        <input type="text" name="Quantity" value="{{TotalQTY}}" id="ProductQTY" >
+                        {{else}}
                         <input type="text" name="Quantity" value="" id="ProductQTY">
+                        {{/if}}
                     </div>
                     <hr>
                     <div class="BOTableDiv">
@@ -155,7 +164,9 @@
                                     <p class="BORemarkHeader">Remarks</p>
                                 </div>
                                 <div class="BORemarksPDiv">
-                                    <input type="text" name="remarks" value="{{Formulation.Remark}}" id="" readonly>
+                                    <textarea name="remarks" id="BORemarksTextArea" cols="" rows=""
+                                        readonly>{{Formulation.Remark}}</textarea>
+                                    {{!-- <input type="text" name="remarks" value="{{Formulation.Remark}}" id="" readonly> --}}
                                 </div>
                             </div>
                         </div>
@@ -172,6 +183,12 @@
 <script>
     // Get the input element
     const quantityInput = document.querySelector('input[name="Quantity"]');
+
+    var BOTotalQTYLOW = parseFloat(document.getElementById('ProductQTY').value);
+    if (BOTotalQTYLOW > 0) {
+       // document.getElementById('ProductQTY').value = BOTotalQTYLOW.toString();
+        QtyEnteredUser();
+    }
 
 
 
@@ -280,7 +297,7 @@
             //calculate Additive
             var AdditiveValue = Formula.TotalAdditives;
             if (AdditiveValue) {
-                var additiveQty = (AdditiveValue * InputedQTY * 1000)/FromulaVolume
+                var additiveQty = (AdditiveValue * InputedQTY * 1000) / FromulaVolume
                 TotalQTY += additiveQty
                 additiveQty = additiveQty + "";
                 document.getElementById('AdditiveQTY').value = additiveQty;

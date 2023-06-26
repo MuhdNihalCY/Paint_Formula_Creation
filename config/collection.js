@@ -7,5 +7,6 @@ module.exports={
     EMPLOYEE_COLLECTION: 'Employee_Collection',
     CUSTOMER_COLLECTION: 'Customer_Collection',
     ADMIN_COLLECTION: 'Admin_Collection',
-    FORMULA_COLLECTION: 'Formula_Collection'
+    FORMULA_COLLECTION: 'Formula_Collection',
+    BULK_ORDER_COLLECTION: 'Bulk_Order_Collection'
 };
