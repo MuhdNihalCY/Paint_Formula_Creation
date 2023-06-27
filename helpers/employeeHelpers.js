@@ -255,101 +255,77 @@ module.exports = {
         })
     },
 
-
-    //this is for give stock 250;
-    // AddStocksToBinders:()=>{
-    //     return new Promise(async(resolve,reject)=>{
-    //         await db.get().collection(collection.ADDITIVE_COLLECTION).updateMany({},{$set:{Stock:"250"}}).then((Response)=>{
-    //             console.log(Response);
-    //         })
-    //     })
-    // },
-
-
-    // BulkOrderUpdate: (OrderFile) => {
-    //     return new Promise(async (resolve, reject) => {
-    //         console.log("OrderFile From Helpers: ", OrderFile);
-    //         var TinterCount = parseInt(OrderFile.TinterCount);
-
-    //         //Update Product stock
-    //         for (i = 1; i <= TinterCount; i++) {
-    //             var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": OrderFile[`TineterName${i}`] });
-    //             var OldStock = parseFloat(Product.Stock);
-    //             var NewStock = OldStock - parseFloat(OrderFile[`TinterGram${i}`]);
-    //             await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Name": OrderFile[`TineterName${i}`] }, { $set: { Stock: NewStock } });
-    //         }
-
-    //         //Update Binder Stock
-    //         if (OrderFile.Binder1) {
-    //             var Binder1 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder1 });
-    //             var BindersOldStock = parseFloat(Binder1.Stock);
-    //             var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder1QTY);
-    //             await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder1 }, { $set: { Stock: BindersNewStock } });
-    //         }
-
-    //         if (OrderFile.Binder2) {
-    //             var Binder2 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder2 });
-    //             var BindersOldStock = parseFloat(Binder2.Stock);
-    //             var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder2QTY);
-    //             await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder2 }, { $set: { Stock: BindersNewStock } });
-    //         }
-
-    //         //update Additve Stock
-    //         if(OrderFile.Additive) {
-    //             var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({"Additive_Name": OrderFile.Additive});
-    //             var AdditveOldStock = parseFloat(Additive.Stock);
-    //             var AdditiveNewStock = AdditveOldStock - parseFloat(OrderFile.AdditiveQTY);
-    //             await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({"Additive_Name": OrderFile.Additive}, { $set: { Stock: AdditiveNewStock } })
-    //         }
-
-    //         resolve();
-    //     })
-    // }
-
     BulkOrderUpdate: (OrderFile) => {
         return new Promise(async (resolve, reject) => {
-          try {
-            console.log("OrderFile From Helpers: ", OrderFile);
-            var TinterCount = parseInt(OrderFile.TinterCount);
+            try {
+                console.log("OrderFile From Helpers: ", OrderFile);
+                var TinterCount = parseInt(OrderFile.TinterCount);
 
-            OrderFile.InsertedTime = Date.now();
-            await db.get().collection(collection.BULK_ORDER_COLLECTION).insertOne(OrderFile);
-      
-            // Update Product stock
-            for (let i = 1; i <= TinterCount; i++) {
-              var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": OrderFile[`TineterName${i}`] });
-              var OldStock = parseFloat(Product.Stock);
-              var NewStock = OldStock - parseFloat(OrderFile[`TinterGram${i}`]);
-              await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Name": OrderFile[`TineterName${i}`] }, { $set: { Stock: NewStock } });
+                OrderFile.InsertedTime = Date.now();
+                await db.get().collection(collection.BULK_ORDER_COLLECTION).insertOne(OrderFile);
+
+                // Update Product stock
+                for (let i = 1; i <= TinterCount; i++) {
+                    var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": OrderFile[`TineterName${i}`] });
+                    var OldStock = parseFloat(Product.Stock);
+                    var NewStock = OldStock - parseFloat(OrderFile[`TinterGram${i}`]);
+                    await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Name": OrderFile[`TineterName${i}`] }, { $set: { Stock: NewStock } });
+                }
+
+                // Update Binder Stock
+                if (OrderFile.Binder1) {
+                    var Binder1 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder1 });
+                    var BindersOldStock = parseFloat(Binder1.Stock);
+                    var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder1QTY);
+                    await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder1 }, { $set: { Stock: BindersNewStock } });
+                }
+
+                if (OrderFile.Binder2) {
+                    var Binder2 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder2 });
+                    var BindersOldStock = parseFloat(Binder2.Stock);
+                    var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder2QTY);
+                    await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder2 }, { $set: { Stock: BindersNewStock } });
+                }
+
+                if (OrderFile.Additive) {
+                    var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Name": OrderFile.Additive });
+                    var AdditiveOldStock = parseFloat(Additive.Stock);
+                    var AdditiveNewStock = AdditiveOldStock - parseFloat(OrderFile.AdditiveQTY);
+                    await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Name": OrderFile.Additive }, { $set: { Stock: AdditiveNewStock } });
+                }
+
+                resolve(); // Resolve the promise after all operations are completed
+            } catch (error) {
+                reject(error);
             }
-      
-            // Update Binder Stock
-            if (OrderFile.Binder1) {
-              var Binder1 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder1 });
-              var BindersOldStock = parseFloat(Binder1.Stock);
-              var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder1QTY);
-              await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder1 }, { $set: { Stock: BindersNewStock } });
-            }
-      
-            if (OrderFile.Binder2) {
-              var Binder2 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder2 });
-              var BindersOldStock = parseFloat(Binder2.Stock);
-              var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder2QTY);
-              await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder2 }, { $set: { Stock: BindersNewStock } });
-            }
-      
-            if (OrderFile.Additive) {
-              var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Name": OrderFile.Additive });
-              var AdditiveOldStock = parseFloat(Additive.Stock);
-              var AdditiveNewStock = AdditiveOldStock - parseFloat(OrderFile.AdditiveQTY);
-              await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Name": OrderFile.Additive }, { $set: { Stock: AdditiveNewStock } });
-            }
-      
-            resolve(); // Resolve the promise after all operations are completed
-          } catch (error) {
-            reject(error);
-          }
         });
-      }
-      
+    },
+    UpdateProductStockById: (Data) => {
+        return new Promise(async (resolve, reject) => {
+            var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Id": parseInt(Data.ProductId) })
+            var OldStock = parseFloat(Product.Stock);
+            var NewStock = OldStock + (parseFloat(Data.NewStock));
+            await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            resolve();
+        })
+    },
+    UpdateBinderStockById: (Data) => {
+        return new Promise(async (resolve, reject) => {
+            var Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Id": parseInt(Data.ProductId) })
+            var OldStock = parseFloat(Binder.Stock);
+            var NewStock = OldStock + (parseFloat(Data.NewStock));
+            await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            resolve();
+        })
+    },
+    UpdateAdditiveStockById: (Data) => {
+        return new Promise(async (resolve, reject) => {
+            var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Id": parseInt(Data.ProductId) })
+            var OldStock = parseFloat(Additive.Stock);
+            var NewStock = OldStock + (parseFloat(Data.NewStock));
+            await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            resolve();
+        })
+    }
+
 }

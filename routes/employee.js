@@ -395,7 +395,7 @@ router.get('/api/BulkOrder/:FileNo', verifyLogin, (req, res) => {
   })
 })
 
-router.post('/BulkOrder/:id', async (req, res) => {
+router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
   var OrderFile = req.body;
   let id = req.params.id;
   var TotalQty = OrderFile.Quantity;
@@ -496,116 +496,100 @@ router.post('/BulkOrder/:id', async (req, res) => {
   }
 });
 
+router.get('/UpdateStocks', verifyLogin, (req, res) => {
+  employeeHelpers.GetAllProducts().then((products) => {
+    // console.log(Products);
+    employeeHelpers.getAllCategories().then((AllCategory) => {
+      employeeHelpers.GetAllSubCategories().then((AllSubCategory) => {
+        var Products = products
+        var Categories = AllCategory;
+        var Sub_Categories = AllSubCategory;
+
+        // console.log("Products:", Products);
+        // console.log("Categories:", Categories);
+        // console.log("Sub_Categories:", Sub_Categories);
 
 
+        // Function to modify the Products array
+        function modifyProductsArray() {
+          // Loop through each product
+          for (var i = 0; i < Products.length; i++) {
+            var product = Products[i];
 
-// router.post('/BulkOrder/:id', async (req, res) => {
-//   var OrderFile = req.body;
-//   //console.log(OrderFile);
-//   let id = req.params.id;
-//   var TotalQty = OrderFile.Quantity;
-//   var LowStockFlag = {
-//     Status : false
-//   };
+            // Find the matching category
+            var category = Categories.find(function (category) {
+              return category.Category_Id === parseInt(product.Category);
+            });
 
-//   try {
-//     let FormulaFile = await employeeHelpers.GetFormulaByFileNo(id);
-//     let TinterCount = parseInt(FormulaFile.TintersCount);
+            // Find the matching subcategory
+            var subcategory = Sub_Categories.find(function (subcategory) {
+              return subcategory.SubCategory_Id === parseInt(product.SubCategory);
+            });
 
-//     OrderFile.TinterCount = TinterCount;
+            // Add category name and subcategory name to the product object
+            if (category) {
+              product.Category_Name = category.Category;
+            }
+            if (subcategory) {
+              product.SubCategory_Name = subcategory.SubCategory;
+            }
+          }
 
-//     let promises = [];
+          // Print the modified Products array
+          // console.log("Modified Products:", Products);
+        }
 
-//     for (let i = 1; i <= TinterCount; i++) {
-//       var TinterName = OrderFile["TineterName" + i];
-//       var TinterQty = OrderFile["TinterGram" + i];
-//       console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
+        // Call the function to modify the Products array
+        modifyProductsArray();
 
-//       promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
-//     }
-
-//     let states = await Promise.all(promises);
-
-//     for (let i = 0; i < states.length; i++) {
-//       let State = states[i];
-//       console.log(State);
-//       if (!State.HaveStock) {
-//         LowStocks(OrderFile["TineterName" + (i + 1)], TotalQty);
-//         LowStockFlag.Status = true;
-//         return; // Exit the loop when there is low stock
-//       }
-//     }
-
-//     // All stocks are available, continue processing
-
-
-//     //check Binder Stocks and Addiitves Stock.
-
-//     if (OrderFile.Binder1) {
-//       var Binder1Qty = OrderFile.Binder1QTY;
-//       employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty).then((State) => {
-//         if (!State.HaveStock) {
-//           LowStocks(OrderFile.Binder1, TotalQty);
-//           console.log(" Binder1 Stocks are not available. ");
-//           LowStockFlag.Status = true;
-//           return; // Exit the loop when there is low stock
-//         }
-//         if (OrderFile.Binder2) {
-//           var Binder2Qty = OrderFile.Binder2QTY;
-//           employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty).then((State) => {
-//             if (!State.HaveStock) {
-//               LowStocks(OrderFile.Binder2, TotalQty);
-//               console.log(" Binder2 Stocks are not available. ");
-//               LowStockFlag.Status = true;
-//               return; // Exit the loop when there is low stock
-//             }
-//           })
-//         }
-//       })
-
-//     }
-
-//     if (OrderFile.Additive) {
-//       var AdditiveQTY = OrderFile.AdditiveQTY
-//       employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY).then((State) => {
-//         if (!State.HaveStock) {
-//           LowStocks(OrderFile.Additive, TotalQty);
-//           console.log(" Additive Stocks are not available. ");
-//           LowStockFlag.Status = true;
-//           return; // Exit the loop when there is low stock
-//         }
-//       })
-//     }
+        res.render('employee/UpdateStocks', { Products });
+        // res.json(Products)
+      })
+    })
+  })
+})
 
 
+router.post('/UpdateProductStock/:id', verifyLogin, (req, res) => {
+  var Data = req.body;
+  Data.ProductId = req.params.id;
+  //console.log(Data);
+  employeeHelpers.UpdateProductStockById(Data).then(()=>{
+    res.redirect('/UpdateStocks');
+  }) 
 
-//   } catch (error) {
-//     console.error(error);
-//   }
+})
 
-//   if(!LowStockFlag.Status){
-//     console.log(" Tinter Stocks are available. ");
-//     BulkOrderNow(OrderFile);
-//   }
+router.get('/BinderStockUpdate',verifyLogin,(req,res)=>{
+  employeeHelpers.GetAllBinders().then((Binders)=>{
+    res.render('employee/BinderStockUpdate',{Binders});
+  })
+})
 
-//   function BulkOrderNow(orderFile) {
-//     employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
-//     })
-//   }
+router.post('/UpdateBinderStock/:id', verifyLogin, (req, res) => {
+  var Data = req.body;
+  Data.ProductId = req.params.id;
+  console.log(Data);
+  employeeHelpers.UpdateBinderStockById(Data).then(()=>{
+    res.redirect('/BinderStockUpdate');
+  }) 
+})
 
-
-//   function LowStocks(tinterName, TotalQty) {
-//     var FileNo = id;
-//     var stockQuery = "low";
-//     var itemQuery = tinterName;
-//     var TotalQTY = TotalQty;
-
-//     var url = `/BulkOrder/${FileNo}?Stock=${stockQuery}&Item=${itemQuery}&TotalQTY=${TotalQTY}`;
-//     res.redirect(url);
-//   }
-// });
+router.get('/AdditiveStockUpdate',verifyLogin,(req,res)=>{
+  employeeHelpers.GetAllAdditives().then((Additives)=>{
+    res.render('employee/AdditiveStockUpdate',{Additives});
+  })
+})
 
 
+router.post('/UpdateAdditiveStock/:id', verifyLogin, (req, res) => {
+  var Data = req.body;
+  Data.ProductId = req.params.id;
+  console.log(Data);
+  employeeHelpers.UpdateAdditiveStockById(Data).then(()=>{
+    res.redirect('/AdditiveStockUpdate');
+  }) 
+})
 
 
 module.exports = router;
