@@ -19,8 +19,14 @@ const verifyLogin = (req, res, next) => {
 /* GET home page. */
 router.get('/', verifyLogin, function (req, res, next) {
   var EmployeeName = req.session.EmployeeName;
-  res.render('employee/home',{EmployeeName});
+  res.render('employee/home', { EmployeeName });
 });
+
+router.get('/logout', verifyLogin, (req, res) => {
+  req.session.EmployeeLogged = false;
+  req.session.EmployeeName = "";
+  res.redirect('/'); 
+})
 
 router.get('/login', (req, res) => {
   var loginpage = true
@@ -555,15 +561,15 @@ router.post('/UpdateProductStock/:id', verifyLogin, (req, res) => {
   var Data = req.body;
   Data.ProductId = req.params.id;
   //console.log(Data);
-  employeeHelpers.UpdateProductStockById(Data).then(()=>{
+  employeeHelpers.UpdateProductStockById(Data).then(() => {
     res.redirect('/UpdateStocks');
-  }) 
+  })
 
 })
 
-router.get('/BinderStockUpdate',verifyLogin,(req,res)=>{
-  employeeHelpers.GetAllBinders().then((Binders)=>{
-    res.render('employee/BinderStockUpdate',{Binders});
+router.get('/BinderStockUpdate', verifyLogin, (req, res) => {
+  employeeHelpers.GetAllBinders().then((Binders) => {
+    res.render('employee/BinderStockUpdate', { Binders });
   })
 })
 
@@ -571,14 +577,14 @@ router.post('/UpdateBinderStock/:id', verifyLogin, (req, res) => {
   var Data = req.body;
   Data.ProductId = req.params.id;
   console.log(Data);
-  employeeHelpers.UpdateBinderStockById(Data).then(()=>{
+  employeeHelpers.UpdateBinderStockById(Data).then(() => {
     res.redirect('/BinderStockUpdate');
-  }) 
+  })
 })
 
-router.get('/AdditiveStockUpdate',verifyLogin,(req,res)=>{
-  employeeHelpers.GetAllAdditives().then((Additives)=>{
-    res.render('employee/AdditiveStockUpdate',{Additives});
+router.get('/AdditiveStockUpdate', verifyLogin, (req, res) => {
+  employeeHelpers.GetAllAdditives().then((Additives) => {
+    res.render('employee/AdditiveStockUpdate', { Additives });
   })
 })
 
@@ -587,9 +593,9 @@ router.post('/UpdateAdditiveStock/:id', verifyLogin, (req, res) => {
   var Data = req.body;
   Data.ProductId = req.params.id;
   console.log(Data);
-  employeeHelpers.UpdateAdditiveStockById(Data).then(()=>{
+  employeeHelpers.UpdateAdditiveStockById(Data).then(() => {
     res.redirect('/AdditiveStockUpdate');
-  }) 
+  })
 })
 
 
