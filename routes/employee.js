@@ -10,15 +10,16 @@ const verifyLogin = (req, res, next) => {
   if (req.session.EmployeeLogged) {
     next()
   } else {
-    next()
-    //res.redirect('/login');
+    // next()
+    res.redirect('/login');
   }
 }
 
 
 /* GET home page. */
 router.get('/', verifyLogin, function (req, res, next) {
-  res.render('employee/home');
+  var EmployeeName = req.session.EmployeeName;
+  res.render('employee/home',{EmployeeName});
 });
 
 router.get('/login', (req, res) => {

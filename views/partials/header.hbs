@@ -1,215 +1,104 @@
-<div class="header_container">
-    <header>
-        <div class="header"></div>
-        <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu">
-        <label for="openSidebarMenu" class="sidebarIconToggle">
-            <div class="spinner diagonal part-1"></div>
-            <div class="spinner horizontal"></div>
-            <div class="spinner diagonal part-2"></div>
-        </label>
-        <style>
-            @import url('https://fonts.googleapis.com/css?family=Varela+Round');
+<header>
+    <div class="HeaderMainALl">
 
-            /* html,
-            body {
-                overflow-x: hidden;
-                height: 100%;
-            }*/
-
-            /*            body {
-                background: #fff;
-                padding: 0;
-                margin: 0;
-                font-family: "Inter", sans-serif;
-            }*/
-
-            .header_container {
-                overflow-x: hidden;
-                height: 100%;
-            }
-
-            .header {
-                display: block;
-                margin: 0 auto;
-                width: 100%;
-                max-width: 100%;
-                box-shadow: none;
-                background-color: #3D3D3D;
-                position: fixed;
-                height: 60px !important;
-                overflow: hidden;
-                z-index: 10;
-            }
-
-            #sidebarMenu {
-                height: 100%;
-                position: fixed;
-                left: 0;
-                width: 250px;
-                margin-top: 60px;
-                transform: translateX(-250px);
-                transition: transform 250ms ease-in-out;
-                background: linear-gradient(180deg, #3D3D3D 0%, #6A6A6A 100%);
-            }
-
-            .sidebarMenuInner {
-                margin: 0;
-                padding: 0;
-                border-top: 1px solid rgba(255, 255, 255, 0.10);
-            }
-
-            .sidebarMenuInner li {
-                list-style: none;
-                color: #fff;
-                font-weight: bold;
-                padding: 20px;
-                cursor: pointer;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.10);
-            }
-
-            .sidebarMenuInner li span {
-                display: block;
-                font-size: 14px;
-                color: rgba(255, 255, 255, 0.50);
-            }
-
-            .sidebarMenuInner li a {
-                color: #fff;
-                font-weight: bold;
-                cursor: pointer;
-                text-decoration: none;
-            }
-
-            input[type="checkbox"]:checked~#sidebarMenu {
-                transform: translateX(0);
-            }
-
-            input[type=checkbox] {
-                transition: all 0.3s;
-                box-sizing: border-box;
-                display: none;
-            }
-
-            .sidebarIconToggle {
-                transition: all 0.3s;
-                box-sizing: border-box;
-                cursor: pointer;
-                position: absolute;
-                z-index: 99;
-                height: 100%;
-                width: 100%;
-                top: 22px;
-                left: 15px;
-                height: 22px;
-                width: 22px;
-            }
-
-            .spinner {
-                transition: all 0.3s;
-                box-sizing: border-box;
-                position: absolute;
-                height: 3px;
-                width: 100%;
-                background-color: #fff;
-            }
-
-            .horizontal {
-                transition: all 0.3s;
-                box-sizing: border-box;
-                position: relative;
-                float: left;
-                margin-top: 3px;
-            }
-
-            .diagonal.part-1 {
-                position: relative;
-                transition: all 0.3s;
-                box-sizing: border-box;
-                float: left;
-            }
-
-            .diagonal.part-2 {
-                transition: all 0.3s;
-                box-sizing: border-box;
-                position: relative;
-                float: left;
-                margin-top: 3px;
-            }
-
-            input[type=checkbox]:checked~.sidebarIconToggle>.horizontal {
-                transition: all 0.3s;
-                box-sizing: border-box;
-                opacity: 0;
-            }
-
-            input[type=checkbox]:checked~.sidebarIconToggle>.diagonal.part-1 {
-                transition: all 0.3s;
-                box-sizing: border-box;
-                transform: rotate(135deg);
-                margin-top: 8px;
-            }
-
-            input[type=checkbox]:checked~.sidebarIconToggle>.diagonal.part-2 {
-                transition: all 0.3s;
-                box-sizing: border-box;
-                transform: rotate(-135deg);
-                margin-top: -9px;
-            }
-
-            .sidebarMenuInner button:hover {
-                background-color: #fff;
-                color: #000;
-            }
-
-            .sidebarMenuInner li:hover {
-                font-size: 17px;
-                /* Adjust the desired font size */
-            }
-
-            .Containers {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 10px;
-                height: 100px;
-                /* Adjust the height of the container as needed */
-            }
-
-            .sidebarMenuInner button {
-                display: block;
-                margin: 10px auto;
-                padding: 5px;
-                border: none;
-                border-radius: 20px;
-                font-weight: bold;
-                color: #fff;
-                background-color: #6A6A6A;
-                border: 2px solid #fff;
-                cursor: pointer;
-                transition: background-color 0.3s, color 0.3s;
-                width: 50%;
-                height: 40px;
-            }
-        </style>
-        <div id="sidebarMenu">
-            <ul class="sidebarMenuInner">
-                <div class="container">
-                    <div class="Containers">
-                        <img src="/images/Logo/logo.svg" width="100" height="140" alt="logo">
-                    </div>
+        <div class="Container">
+            <a href="/">
+                <div class="logo">
+                    <img src="/images/Logo/logo.jpg" alt="logo">
                 </div>
-                <li><a href="/CreateFormula">Create Formula ></a></li>
-                <li><a href="/FormulaList">Formula List ></a></li>
-                <li><a href="/Orders">Orders ></a></li>
-                <li><a href="/UpdateStocks">Inventory ></a></li>
-                <button>View Profile</button>
-            </ul>
+            </a>
+            <nav>
+                <ul class="menu">
+                    <li><a href="/CreateFormula">
+                            <div class="HeaderLinkItem">Create Formula </div>
+                        </a></li>
+                    <li><a href="/FormulaList"><div class="HeaderLinkItem">Formula List </div> </a></li>
+                    <li><a href="/Orders"><div class="HeaderLinkItem">Orders </div> </a></li>
+                    <li><a href="/UpdateStocks"><div class="HeaderLinkItem">Inventory</div> </a></li>
+                    <li><a class="profile-btn" href="/Logout">Logout </a></li>
+                </ul>
+            </nav>
+
         </div>
-    </header>
-</div>
+
+    </div>
+</header>
 
 <style>
-    header {
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .Container {
+        padding: 1rem 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+    }
+
+    .HeaderMainALl {
+        background-color: #3D3D3D;
         margin-bottom: 5rem;
+    }
+
+    .logo img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .menu li {
+        margin-right: 3rem;
+    }
+
+
+    .menu li a {
+        text-decoration: none;
+        color: whitesmoke;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+
+    .menu {
+        display: flex;
+        justify-content: space-between;
+        padding: 0;
+        list-style: none;
+    }
+
+
+
+    .menu li:last-child {
+        margin-right: 0;
+        /* Remove right margin from the last list item */
+    }
+
+    .HeaderLinkItem {
+        border-bottom: 2px solid gray;
+    }
+
+    .HeaderLinkItem:hover {
+        border-bottom: 4px solid rgb(206, 206, 206);
+    }
+
+    .profile-btn {
+        background-color: rgb(87, 87, 87);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 25px;
     }
 </style>
