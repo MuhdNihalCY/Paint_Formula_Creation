@@ -2,6 +2,7 @@ var db = require('../config/connection');
 var collection = require('../config/collection');
 const { ObjectId } = require('mongodb');
 const { use } = require('../routes/employee');
+const { reset } = require('nodemon');
 
 module.exports = {
     DoLogin: (Data) => {
@@ -325,6 +326,27 @@ module.exports = {
             var NewStock = OldStock + (parseFloat(Data.NewStock));
             await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
             resolve();
+        })
+    },
+    getProductsWithLowStocks:()=>{
+        return new Promise(async(resolve,reject)=>{
+            var Products = await db.get().collection(collection.PRODUCT_COLLECTION).find({ Stock: { $lt: 200 } }).toArray()
+            console.log("Products:",Products);
+            resolve(Products);
+        })
+    },
+    getAllBinderWithLowStocks:()=>{
+        return new Promise(async(resolve,reject)=>{
+            var Binders = await db.get().collection(collection.BINDER_COLLECTION).find({ Stock: { $lt: 100 } }).toArray()
+            console.log('Binders : ',Binders)
+            resolve(Binders);
+        })
+    },
+    getAllAdditivesWithLowStocks:()=>{
+        return new Promise(async(resolve,reject)=>{
+            var Additives = await db.get().collection(collection.ADDITIVE_COLLECTION).find({ Stock: { $lt: 100 } }).toArray()
+            console.log('Additives:', Additives)
+            resolve(Additives)
         })
     }
 

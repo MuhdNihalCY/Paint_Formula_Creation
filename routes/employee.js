@@ -19,7 +19,31 @@ const verifyLogin = (req, res, next) => {
 /* GET home page. */
 router.get('/', verifyLogin, function (req, res, next) {
   var EmployeeName = req.session.EmployeeName;
-  res.render('employee/home', { EmployeeName });
+
+  var Products = false;
+  var Binders = false;
+  var Additives = false;
+
+  employeeHelpers.getProductsWithLowStocks().then((products)=>{
+   // console.log('Products: ',Products)
+   if(products.length > 0){
+    Products = products
+   }
+   employeeHelpers.getAllBinderWithLowStocks().then((binders)=>{
+    // console.log("Binders: ",Binders)
+    if(binders.length > 0){
+      Binders = binders;
+    }
+    employeeHelpers.getAllAdditivesWithLowStocks().then((additives)=>{
+      //console.log("Additive: ", Additives )
+      if(additives.length > 0){
+        Additives = additives;
+      }
+      res.render('employee/home', { EmployeeName ,Products, Binders, Additives  });
+    })
+   })
+
+  })
 });
 
 router.get('/logout', verifyLogin, (req, res) => {

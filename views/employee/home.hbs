@@ -1,47 +1,71 @@
 <div id='center' class="main" style="text-align: left;">
     <div class="mainInner">
         <div>Welcome {{EmployeeName}}</div>
+        <br>
         <div class="stocks">
-            <div class="stock-alert">
-                Stock Alerts!
-                <div class="line"></div>
-                <div class="lfr">
-                    <div class="left-row">
-                        <div class="items">
-                            Item name: PUR_42 <br>
-                            Category: Paints <br>
-                            Sub Category: Mipa_2K_PUR <br>
-                        </div>
+            <p class="StockAlerts">Stock Alerts!</p>
+            {{!-- for Products --}}
+            {{#if Products}}
+            <hr>
+            <p class="ItemName">Products</p>
+            {{#each Products}}
+            <div class="EachItemDIv">
+                <hr>
+                <div class="StockAlertItemNameDiv">
+                    <div class="StockAlertLayerDIv">
+                        <p>Item Name : {{this.Product_Name}}</p>
+                        <p class="RemainingStocks">Remaining Stocks: {{this.Stock}}</p>
                     </div>
-                    <div class="right-row">
-                        <div class="new-div">
-                            Remaining stock : 5 litre
-                            <button class="tkaction">Take Action</button>
-                        </div>
+                    {{!-- <div class="StockAlertLayerDIv">
+                        <p>Category : PUR 5</p>
+                        <p>SubCategory : POUY</p>
+                    </div> --}}
+                </div>
+            </div>
+            {{!-- sample --}}
+            {{/each}}
+            {{else}}
+            {{/if}}
+            <hr>
+            <div class="StockVerticalGap"></div>
+            {{!-- Binders --}}
+            {{#if Binders}}
+            <p class="ItemName">Binders</p>
+            {{#each Binders}}
+            <div class="EachItemDIv">
+                <hr>
+                <div class="StockAlertItemNameDiv">
+                    <div class="StockAlertLayerDIv">
+                        <p class="StocksData">Item Name : {{this.Binder_Name}}</p>
+                        <p class="RemainingStocks">Remaining Stocks: {{this.Stock}}</p>
                     </div>
                 </div>
-                <div class="line2"></div>
             </div>
-            <div class="stock-alert">
-
-                <div class="lfr">
-                    <div class="left-row">
-                        <div class="items">
-                            Item name: PUR_42 <br>
-                            Category: Paints <br>
-                            Sub Category: Mipa_2K_PUR <br>
-                        </div>
+            {{/each}}
+            {{else}}
+            {{/if}}
+            <hr>
+            <div class="StockVerticalGap"></div>
+            {{!-- for Additives --}}
+            {{#if Additives}}
+            <p class="ItemName">Additives</p>
+            {{#each Additives}}
+            <div class="EachItemDIv">
+                <hr>
+                <div class="StockAlertItemNameDiv">
+                    <div class="StockAlertLayerDIv">
+                        <p>Item Name : {{this.Additive_Name}}</p>
+                        <p class="RemainingStocks">Remaining Stocks: {{this.Stock}}</p>
                     </div>
-                    <div class="right-row">
-                        <div class="new-div">
-                            Remaining stock : 5 litre
-                            <button class="tkaction">Take Action</button>
-                        </div>
+                    <div class="StockAlertLayerDIv">
+                        <p>Category : PUR 5</p>
+                        <p>SubCategory : POUY</p>
                     </div>
                 </div>
-                <div class="line2"></div>
             </div>
-
+            {{/each}}
+            {{else}}
+            {{/if}}
         </div>
     </div>
 </div>
@@ -81,74 +105,49 @@
     .stocks {
         border: 1px solid #000;
         border-radius: 10px;
-        width: 80%;
-        height: fit-content;
+        width: 50vw;
         margin-top: 30px;
         margin-left: 30px;
         padding: 20px;
+        margin-left: -2rem;
     }
 
-    .stock-alert {
-
+    .StockAlerts {
+        font-size: 25px;
+        font-weight: 600;
         color: red;
-        font-weight: 800;
-        justify-content: center;
-        align-items: center;
     }
 
-    .line {
-        width: 100%;
-        height: .5px;
-        background-color: #000;
-        margin: 10px auto;
-    }
-
-    .line2 {
-
-        width: 90%;
-        height: .5px;
-        background-color: #000;
-        margin: 0 auto;
-        /* Add this line */
-    }
-
-    .items {
-        color: #000;
-    }
-
-    .lfr {
+    .StockAlertLayerDIv {
         display: flex;
-        flex-wrap: wrap;
+        justify-content: space-between;
     }
 
-    .left-row {
-        flex: 1;
+    .StocksData {
+        color: rgb(48, 48, 48);
     }
 
-    .right-row {
-        flex: 1;
-        display: flex;
-        justify-content: flex-end;
-        align-items: flex-end;
+
+    .StockAlertItemNameDiv {
+        padding-right: 4rem;
     }
 
-    .new-div {
-        font-size: 10px;
+    .StockAlertItemNameDiv p {
+        margin-bottom: 1rem;
+        padding: 0;
     }
 
-    .tkaction {
-        display: block;
-        margin: 10px auto;
-        padding: 5px;
-        border: none;
-        border-radius: 20px;
-        font-weight: bold;
-        color: #fff;
-        background-color: red;
-        border: 2px solid #fff;
-        cursor: pointer;
-        transition: background-color 0.3s, color 0.3s;
-        width: 100%;
-        height: 40px;
+    .RemainingStocks {
+        color: rgb(146, 1, 1);
+    }
+
+    .ItemName {
+        font-size: 25px;
+        font-weight: 700;
+        color: black;
+    }
+
+    .StockVerticalGap {
+        height: 2rem;
     }
 </style>
