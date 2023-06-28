@@ -1,6 +1,6 @@
 <section>
     <form action="" method="post">
-        <div class="Container">
+        <div class="container">
             <div class="BOAllArea">
                 <div class="BOHeader">
                     <p>Order</p>
@@ -70,9 +70,13 @@
                         {{/if}}
 
                         {{#if TotalQTY}}
-                        <input type="text" name="Quantity" value="{{TotalQTY}}" id="ProductQTY" >
+                        <input type="text" name="Quantity" value="{{TotalQTY}}" id="ProductQTY">
+                        {{else}}
+                        {{#if QTY}}
+                        <input type="text" name="Quantity" value="{{QTY}}" id="ProductQTY">
                         {{else}}
                         <input type="text" name="Quantity" value="" id="ProductQTY">
+                        {{/if}}
                         {{/if}}
                     </div>
                     <hr>
@@ -186,7 +190,7 @@
 
     var BOTotalQTYLOW = parseFloat(document.getElementById('ProductQTY').value);
     if (BOTotalQTYLOW > 0) {
-       // document.getElementById('ProductQTY').value = BOTotalQTYLOW.toString();
+        // document.getElementById('ProductQTY').value = BOTotalQTYLOW.toString();
         QtyEnteredUser();
     }
 

@@ -231,9 +231,15 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #434343;
+  background-color: rgb(17, 21, 28);
   color: whitesmoke;
   font-size: 18px;
+}
+
+.Cf_Header_Area_Buttons_EachOne:hover {
+  font-weight: 600;
+  background-color: rgb(7, 12, 81);
+  color: aliceblue;
 }
 
 .CFClearAllBTN {
@@ -1303,6 +1309,7 @@ td {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 10rem;
 }
 
 .BOHeader {
@@ -1523,15 +1530,17 @@ td {
   cursor: pointer;
   text-transform: uppercase;
   padding: 1rem 3rem;
-  background-color: #336699;
+  background-color: rgb(17, 21, 28);
   color: whitesmoke;
   font-size: 25px;
   font-weight: 600;
+  border-radius: 10px;
 }
 
 .BOFormSubmitBTNDiv input[type="submit"]:hover {
-  color: white;
-  background-color: #1c3753;
+  color: aliceblue;
+  background-color: rgb(7, 12, 81);
+  border-radius: 5px;
 }
 
 #BORemarksTextArea {
@@ -1686,17 +1695,17 @@ td {
   margin-right: 2rem;
 }
 
-.USAtag{
+.USAtag {
   text-decoration: none;
   color: rgb(11, 11, 11);
 }
 
-.USAtag:hover{
+.USAtag:hover {
   text-decoration: none;
   color: rgb(0, 0, 0);
 }
 
-.USHeader{
+.USHeader {
   font-size: 30px;
   font-weight: 600;
 }

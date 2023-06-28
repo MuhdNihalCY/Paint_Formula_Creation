@@ -10,7 +10,7 @@ const verifyLogin = (req, res, next) => {
   if (req.session.EmployeeLogged) {
     next()
   } else {
-    // next()
+    //next()
     res.redirect('/login');
   }
 }
@@ -24,24 +24,36 @@ router.get('/', verifyLogin, function (req, res, next) {
   var Binders = false;
   var Additives = false;
 
-  employeeHelpers.getProductsWithLowStocks().then((products)=>{
-   // console.log('Products: ',Products)
-   if(products.length > 0){
-    Products = products
-   }
-   employeeHelpers.getAllBinderWithLowStocks().then((binders)=>{
-    // console.log("Binders: ",Binders)
-    if(binders.length > 0){
-      Binders = binders;
-    }
-    employeeHelpers.getAllAdditivesWithLowStocks().then((additives)=>{
-      //console.log("Additive: ", Additives )
-      if(additives.length > 0){
-        Additives = additives;
+  employeeHelpers.getProductsWithLowStocks().then((products) => {
+    // console.log('Products: ',Products)
+    if (products.length > 0) {
+      Products = products
+      for (let i = 0; i < Products.length; i++) {
+        let product = Products[i];
+        product.Stock = parseFloat(product.Stock).toFixed(3);
       }
-      res.render('employee/home', { EmployeeName ,Products, Binders, Additives  });
+    }
+    employeeHelpers.getAllBinderWithLowStocks().then((binders) => {
+      // console.log("Binders: ",Binders)
+      if (binders.length > 0) {
+        Binders = binders;
+        for (let i = 0; i < Binders.length; i++) {
+          let binder = Binders[i];
+          binder.Stock = parseFloat(binder.Stock).toFixed(3);
+        }
+      }
+      employeeHelpers.getAllAdditivesWithLowStocks().then((additives) => {
+        //console.log("Additive: ", Additives )
+        if (additives.length > 0) {
+          Additives = additives; 
+          for (let i = 0; i < Additives.length; i++) {
+            let Additive = Additives[i];
+            Additive.Stock = parseFloat(Additive.Stock).toFixed(3);
+          }
+        }
+        res.render('employee/home', { EmployeeName, Products, Binders, Additives });
+      })
     })
-   })
 
   })
 });
@@ -49,7 +61,7 @@ router.get('/', verifyLogin, function (req, res, next) {
 router.get('/logout', verifyLogin, (req, res) => {
   req.session.EmployeeLogged = false;
   req.session.EmployeeName = "";
-  res.redirect('/'); 
+  res.redirect('/');
 })
 
 router.get('/login', (req, res) => {
@@ -278,7 +290,9 @@ router.post('/CreateFormula', (req, res) => {
         }
         employeeHelpers.FindAdditiveById(Datas.additives).then((Additive) => {
           //console.log(Additive);
-          Datas.AdditiveName = Additive.Additive_Name;
+          if (Additive) {
+            Datas.AdditiveName = Additive.Additive_Name;
+          }
 
           employeeHelpers.GetSubCategoriesById(Datas.SubCategory).then((SubCategory) => {
             //console.log(SubCategory)
@@ -340,6 +354,35 @@ router.get('/FormulaList', verifyLogin, (req, res) => {
       res.render('employee/FormulaList', { Formulation });
     })
   })
+})
+
+router.get('/BulkOrder/:FileNo/:Qty', verifyLogin, (req, res) => {
+  var FileNo = req.params.FileNo;
+  var QTY = req.params.Qty;
+  //employeeHelpers.AddStocksToBinders()
+
+
+  // no query , 
+  employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
+    //console.log(Formulation);
+    var Binder1 = false;
+    var Binder2 = false;
+    if (Formulation.Binder1) {
+      Binder1 = true;
+    }
+    if (Formulation.Binder2) {
+      Binder2 = true;
+    }
+
+    var Liter = false;
+    employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+      if (Sub_Category.Liter) {
+        Liter = true
+      }
+      res.render("employee/BulkOrder", { Formulation, Binder1, Binder2, Liter, QTY });
+    })
+  })
+
 })
 
 router.get('/BulkOrder/:FileNo', verifyLogin, (req, res) => {
@@ -619,6 +662,12 @@ router.post('/UpdateAdditiveStock/:id', verifyLogin, (req, res) => {
   console.log(Data);
   employeeHelpers.UpdateAdditiveStockById(Data).then(() => {
     res.redirect('/AdditiveStockUpdate');
+  })
+})
+
+router.get('/Orders', verifyLogin, (req, res) => {
+  employeeHelpers.GetAllOrderList().then((Orders) => {
+    res.render('employee/Orders', { Orders })
   })
 })
 

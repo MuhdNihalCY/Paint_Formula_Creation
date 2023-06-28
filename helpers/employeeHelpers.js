@@ -119,7 +119,7 @@ module.exports = {
     },
     GetAllFormulations: () => {
         return new Promise(async (resolve, reject) => {
-            var Formulations = db.get().collection(collection.FORMULA_COLLECTION).find().toArray();
+            var Formulations = db.get().collection(collection.FORMULA_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
             resolve(Formulations)
         })
     },
@@ -347,6 +347,12 @@ module.exports = {
             var Additives = await db.get().collection(collection.ADDITIVE_COLLECTION).find({ Stock: { $lt: 100 } }).toArray()
             console.log('Additives:', Additives)
             resolve(Additives)
+        })
+    },
+    GetAllOrderList:()=>{
+        return new Promise(async(resolve,reject)=>{
+            var Orders = await db.get().collection(collection.BULK_ORDER_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
+            resolve(Orders);
         })
     }
 

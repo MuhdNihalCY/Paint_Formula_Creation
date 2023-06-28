@@ -1,0 +1,226 @@
+<section>
+    <div class="container">
+        <div class="OmainAreaDiv">
+            <div class="OHeader">
+                <p>Orders</p>
+            </div>
+            <div class="OMainContentAreaDIv">
+                {{#if Orders}}
+                {{#each Orders}}
+                <div class="OOrderEachItemDiv">
+                    <div class="OTopLevel">
+                        <p>Order No: {{this.InsertedTime}} </p>
+                        <p>ProjectNo: {{this.ProjectNo}} </p>
+                        <p>Date: {{this.order_date}}</p>
+                    </div>
+                    <div class="OSecondLevel">
+                        <p>Formula No: {{this.FileName}}</p>
+                        <p>Quantity: {{this.Quantity}}</p>
+                        <p>Mixer: {{this.Mixer}}</p>
+                    </div>
+                    <div class="OThirdLevel">
+                        <p>Customer Name: {{this.CustomerName}}</p>
+                        <p>Color Name: {{this.ColorName}}</p>
+                    </div>
+                    <div class="OforthLevel">
+                        <p>Customer Ref: {{this.CustomerRef}}</p>
+                        <p>Color Code: {{this.ColorCde}}</p>
+                    </div>
+                    <div class="OfifthLevel">
+                        <p>Category: {{this.Category}}</p>
+                        <p>Sub Category: {{this.SubCategory}}</p>
+                    </div>
+                    <div class="OSixthLevel">
+                        <p>Remarks: {{this.remarks}}</p>
+                    </div>
+                    <div class="OSeventhLevel">
+                        <a href="/PrintLabel">
+                            <div class="OPrintLabelDiv">
+                                <p>Print Label</p>
+                            </div>
+                        </a>
+                        <a href="/BulkOrder/{{this.FileName}}/{{this.Quantity}}">
+                            <div class="OPrintLabelDiv">
+                                <p>Repeat Order</p>
+                            </div>
+                        </a>
+                    </div>
+                <hr>
+                </div>
+                {{/each}}
+                {{!-- Sample Start --}}
+                {{#each Orders}}
+                <div class="OOrderEachItemDiv">
+                    <div class="OTopLevel">
+                        <p>Order No: {{this.InsertedTime}} </p>
+                        <p>ProjectNo: {{this.ProjectNo}} </p>
+                        <p>Date: {{this.order_date}}</p>
+                    </div>
+                    <div class="OSecondLevel">
+                        <p>Formula No: {{this.FileName}}</p>
+                        <p>Quantity: {{this.Quantity}}</p>
+                        <p>Mixer: {{this.Mixer}}</p>
+                    </div>
+                    <div class="OThirdLevel">
+                        <p>Customer Name: {{this.CustomerName}}</p>
+                        <p>Color Name: {{this.ColorName}}</p>
+                    </div>
+                    <div class="OforthLevel">
+                        <p>Customer Ref: {{this.CustomerRef}}</p>
+                        <p>Color Code: {{this.ColorCde}}</p>
+                    </div>
+                    <div class="OfifthLevel">
+                        <p>Category: {{this.Category}}</p>
+                        <p>Sub Category: {{this.SubCategory}}</p>
+                    </div>
+                    <div class="OSixthLevel">
+                        <p>Remarks: {{this.remarks}}</p>
+                    </div>
+                    <div class="OSeventhLevel">
+                        <a href="/PrintLabel">
+                            <div class="OPrintLabelDiv">
+                                <p>Print Label</p>
+                            </div>
+                        </a>
+                        <a href="/Order/{{this.FileName}}/{{this.Quantity}}">
+                            <div class="OPrintLabelDiv">
+                                <p>Repeat Order</p>
+                            </div>
+                        </a>
+                    </div>
+                <hr>
+                </div>
+                {{/each}} {{#each Orders}}
+                <div class="OOrderEachItemDiv">
+                    <div class="OTopLevel">
+                        <p>Order No: {{this.InsertedTime}} </p>
+                        <p>ProjectNo: {{this.ProjectNo}} </p>
+                        <p>Date: {{this.order_date}}</p>
+                    </div>
+                    <div class="OSecondLevel">
+                        <p>Formula No: {{this.FileName}}</p>
+                        <p>Quantity: {{this.Quantity}}</p>
+                        <p>Mixer: {{this.Mixer}}</p>
+                    </div>
+                    <div class="OThirdLevel">
+                        <p>Customer Name: {{this.CustomerName}}</p>
+                        <p>Color Name: {{this.ColorName}}</p>
+                    </div>
+                    <div class="OforthLevel">
+                        <p>Customer Ref: {{this.CustomerRef}}</p>
+                        <p>Color Code: {{this.ColorCde}}</p>
+                    </div>
+                    <div class="OfifthLevel">
+                        <p>Category: {{this.Category}}</p>
+                        <p>Sub Category: {{this.SubCategory}}</p>
+                    </div>
+                    <div class="OSixthLevel">
+                        <p>Remarks: {{this.remarks}}</p>
+                    </div>
+                    <div class="OSeventhLevel">
+                        <a href="/PrintLabel">
+                            <div class="OPrintLabelDiv">
+                                <p>Print Label</p>
+                            </div>
+                        </a>
+                        <a href="/Order/{{this.FileName}}/{{this.Quantity}}">
+                            <div class="OPrintLabelDiv">
+                                <p>Repeat Order</p>
+                            </div>
+                        </a>
+                    </div>
+                <hr>
+                </div>
+                {{/each}}
+                {{!-- Sample ends --}}
+                {{else}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<style>
+    .OmainAreaDiv{
+        margin-bottom: 10rem;
+    }
+    .OHeader {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .OHeader p {
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .OMainContentAreaDIv {
+        border: 1px solid gray;
+        border-radius: 25px;
+        padding: 4rem;
+    }
+
+    .OOrderEachItemDiv {
+        margin-bottom: 4rem;
+    }
+
+    .OOrderEachItemDiv p {
+        font-size: 20px;
+        font-weight: 600;
+        color: rgb(36, 36, 36);
+    }
+
+    .OTopLevel,
+    .OSecondLevel,
+    .OThirdLevel,
+    .OforthLevel,
+    .OfifthLevel,
+    .OSixthLevel,
+    .OSeventhLevel {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .OSeventhLevel a {
+        margin-top: 2rem;
+        text-decoration: none;
+        color: whitesmoke;
+    }
+
+    .OSeventhLevel {
+        justify-content: space-around;
+    }
+
+    .OSeventhLevel a:hover {
+        text-decoration: none;
+        color: rgb(190, 207, 242);
+    }
+
+    .OPrintLabelDiv {
+        width: 15rem;
+        padding: 1rem 3rem;
+        background-color: rgb(17, 21, 28);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border-radius: 1rem;
+    }
+
+    .OPrintLabelDiv p {
+        color: white;
+    }
+
+    .OPrintLabelDiv:hover p,
+    .OPrintLabelDiv:hover {
+        background-color: rgb(7, 12, 81);
+        color: aliceblue;
+    }
+
+    .OPrintLabelDiv p {
+        margin: 0;
+    }
+</style>
