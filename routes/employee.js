@@ -5,7 +5,7 @@ const employeeHelpers = require('../helpers/employeeHelpers');
 
 
 
-// verify login
+// verify login 
 const verifyLogin = (req, res, next) => {
   if (req.session.EmployeeLogged) {
     next()
