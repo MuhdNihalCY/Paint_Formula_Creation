@@ -10,134 +10,171 @@
 
                 {{#if EditSubcategory}}
                 <form action="/admin/EditSubCategory" method="post">
-                {{else}}
-                <form action="/admin/AddSubCategory" method="post">
-                {{/if}}
-                    <div class="ADAddCategoryFromDiv">
-                        <p class="ADAddCategoryLabel">Category Name:</p>
-                        <select class="ADSelectCategory" name="Category_Id" id="">
-                            {{#each AllCategory}}
-                            <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">{{this.Category_Id}} -
-                                {{this.Category}}</option>
-                            {{/each}}
-                        </select>
-                        <p class="ADAddCategoryLabel">Sub Category Name:</p>
-                        {{#if EditSubcategory}}
-                        <input required class="ADAddCategoryTextInput" type="text" name="SubCategory"
-                            placeholder="Enter the Name of Sub Category" value="{{SubCategory.SubCategory}}">
-                        {{else}}
-                        <input required class="ADAddCategoryTextInput" type="text" name="SubCategory"
-                            placeholder="Enter the Name of Sub Category">
+                    {{else}}
+                    <form action="/admin/AddSubCategory" method="post">
                         {{/if}}
-                        <div class="ADPopUpRadioButtonDIV">
-                            {{!-- unit RAdio Button --}}
-                            <p class="ADAddCategoryLabel">Unit:</p>
-
-                            {{#if Gram}}
-                            <div class="ADPopUpRadioButton">
-                                <input type="radio" id="gram" name="Gram" checked>
-                                <label for="gram">Kilo Gram</label>
-                            </div>
+                        <div class="ADAddCategoryFromDiv">
+                            <p class="ADAddCategoryLabel">Category Name:</p>
+                            <select class="ADSelectCategory" name="Category_Id" id="">
+                                {{#each AllCategory}}
+                                <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
+                                    {{this.Category_Id}} -
+                                    {{this.Category}}</option>
+                                {{/each}}
+                            </select>
+                            <p class="ADAddCategoryLabel">Sub Category Name:</p>
+                            {{#if EditSubcategory}}
+                            <input required class="ADAddCategoryTextInput" type="text" name="SubCategory"
+                                placeholder="Enter the Name of Sub Category" value="{{SubCategory.SubCategory}}">
                             {{else}}
-                            <div class="ADPopUpRadioButton">
-                                <input type="radio" id="gram" name="Gram">
-                                <label for="gram">Kilo Gram</label>
-                            </div>
+                            <input required class="ADAddCategoryTextInput" type="text" name="SubCategory"
+                                placeholder="Enter the Name of Sub Category">
                             {{/if}}
 
-                            {{#if Liter}}
-                            <div class="ADPopUpRadioButton">
-                                <input type="radio" id="liter" name="Liter" checked>
-                                <label for="liter">Liter</label>
-                            </div>
-                            {{else}}
-                            <div class="ADPopUpRadioButton">
-                                <input type="radio" id="liter" name="Liter">
-                                <label for="liter">Liter</label>
-                            </div>
-                            {{/if}}
-                        </div>
+                            <div class="ADPopUpRadioButtonDIV">
+                                {{!-- unit RAdio Button --}}
+                                <p class="ADAddCategoryLabel">Brand:</p>
 
-                        <div class="ADPopUpRadioButtonDIV">
-                            {{!-- shine radio BTN --}}
-
-                            <p class="ADAddCategoryLabel">Level of Shine:</p>
-                            {{#if Matt}}
-                            <div class="ADPopUpRadioButton">
-                                <input type="radio" id="matt" name="Matt" checked>
-                                <label for="matt">Matt</label>
-                            </div>
-                            {{else}}
-                            <div class="ADPopUpRadioButton">
-                                <input type="radio" id="matt" name="Matt">
-                                <label for="matt">Matt</label>
-                            </div>
-                            {{/if}}
-
-
-                            {{#if Gloss}}
-                            <div class="ADPopUpRadioButton">
-                                <input type="radio" id="gloss" name="Gloss" checked>
-                                <label for="gloss">Gloss</label>
-                            </div>
-                            {{else}}
-                            <div class="ADPopUpRadioButton">
-                                <input type="radio" id="gloss" name="Gloss">
-                                <label for="gloss">Gloss</label>
-                            </div>
-                            {{/if}}
-                        </div>
-
-
-                        {{!-- Select Binder --}}
-                        <div class="BinderSelectDiv">
-                            <p class="ADAddCategoryLabel">Select Binder 1:</p>
-                            <select class="BinderSelect" name="Binder1" id="Binder1">
-
-                                {{#if EditSubcategory}}
+                                {{#if Mipa}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="mipa" name="Mipa" checked>
+                                    <label for="mipa">Mipa</label>
+                                </div>
                                 {{else}}
-                                <option value="">Select an option</option>
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="mipa" name="Mipa">
+                                    <label for="mipa">Mipa</label>
+                                </div>
                                 {{/if}}
 
-                                {{#each Binders}}
-                                <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}</option>
-                                {{/each}}
-
-                                {{#if EditSubcategory}}
-                                <option value="">Select an option</option>
+                                {{#if Rosner}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="rosner" name="Rosner" checked>
+                                    <label for="rosner">Rosner</label>
+                                </div>
                                 {{else}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="rosner" name="Rosner">
+                                    <label for="rosner">Rosner</label>
+                                </div>
                                 {{/if}}
-                            </select>
-                            <div class="DivForVerticalGap"></div>
-                            <p class="ADAddCategoryLabel">Select Binder 2:</p>
-                            {{#if Binder2}}
-                            <select class="BinderSelect" name="Binder2" id="Binder2">
-                                {{#each Binder2}}
-                                <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}</option>
-                                {{/each}}
-                                <option value="">Select an option</option>
-                            </select>
+                            </div>
+
+
+                            <div class="ADPopUpRadioButtonDIV">
+                                {{!-- unit RAdio Button --}}
+                                <p class="ADAddCategoryLabel">Unit:</p>
+
+                                {{#if Gram}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="gram" name="Gram" checked>
+                                    <label for="gram">Kilo Gram</label>
+                                </div>
+                                {{else}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="gram" name="Gram">
+                                    <label for="gram">Kilo Gram</label>
+                                </div>
+                                {{/if}}
+
+                                {{#if Liter}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="liter" name="Liter" checked>
+                                    <label for="liter">Liter</label>
+                                </div>
+                                {{else}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="liter" name="Liter">
+                                    <label for="liter">Liter</label>
+                                </div>
+                                {{/if}}
+                            </div>
+
+                            <div class="ADPopUpRadioButtonDIV">
+                                {{!-- shine radio BTN --}}
+
+                                <p class="ADAddCategoryLabel">Level of Shine:</p>
+                                {{#if Matt}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="matt" name="Matt" checked>
+                                    <label for="matt">Matt</label>
+                                </div>
+                                {{else}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="matt" name="Matt">
+                                    <label for="matt">Matt</label>
+                                </div>
+                                {{/if}}
+
+
+                                {{#if Gloss}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="gloss" name="Gloss" checked>
+                                    <label for="gloss">Gloss</label>
+                                </div>
+                                {{else}}
+                                <div class="ADPopUpRadioButton">
+                                    <input type="radio" id="gloss" name="Gloss">
+                                    <label for="gloss">Gloss</label>
+                                </div>
+                                {{/if}}
+                            </div>
+
+
+                            {{!-- Select Binder --}}
+                            <div class="BinderSelectDiv">
+                                <p class="ADAddCategoryLabel">Select Binder 1:</p>
+                                <select class="BinderSelect" name="Binder1" id="Binder1">
+
+                                    {{#if EditSubcategory}}
+                                    {{else}}
+                                    <option value="">Select an option</option>
+                                    {{/if}}
+
+                                    {{#each Binders}}
+                                    <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}
+                                    </option>
+                                    {{/each}}
+
+                                    {{#if EditSubcategory}}
+                                    <option value="">Select an option</option>
+                                    {{else}}
+                                    {{/if}}
+                                </select>
+                                <div class="DivForVerticalGap"></div>
+                                <p class="ADAddCategoryLabel">Select Binder 2:</p>
+                                {{#if Binder2}}
+                                <select class="BinderSelect" name="Binder2" id="Binder2">
+                                    {{#each Binder2}}
+                                    <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}
+                                    </option>
+                                    {{/each}}
+                                    <option value="">Select an option</option>
+                                </select>
+                                {{else}}
+                                <select class="BinderSelect" name="Binder2" id="Binder2" disabled>
+                                    <option value="">Select an option</option>
+                                    {{#each Binders}}
+                                    <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}
+                                    </option>
+                                    {{/each}}
+                                </select>
+                                {{/if}}
+                            </div>
+
+                            <p class="ADAddCategoryLabel">Remarks</p>
+                            <input class="ADAddCategoryTextInput" type="text" name="Remarks" placeholder="Enter Remarks"
+                                required value="{{SubCategory.Remarks}}">
+
+                            {{#if EditSubcategory}}
+                            <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Edit Sub
+                                Category</button>
                             {{else}}
-                            <select class="BinderSelect" name="Binder2" id="Binder2" disabled>
-                                <option value="">Select an option</option>
-                                {{#each Binders}}
-                                <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}</option>
-                                {{/each}}
-                            </select>
+                            <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Sub
+                                Category</button>
                             {{/if}}
                         </div>
-
-                        <p class="ADAddCategoryLabel">Remarks</p>
-                        <input class="ADAddCategoryTextInput" type="text" name="Remarks" placeholder="Enter Remarks"
-                            required value="{{SubCategory.Remarks}}">
-
-                        {{#if EditSubcategory}}
-                        <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Edit Sub Category</button>
-                        {{else}}
-                        <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Sub Category</button>
-                        {{/if}}
-                    </div>
-                </form>
+                    </form>
 
             </div>
         </div>
@@ -232,6 +269,25 @@
             Gram.checked = false;
         }
     });
+
+    const Mipa = document.getElementById('mipa');
+    const Rosner = document.getElementById('rosner');
+
+
+    // Add event listener to the Mipa radio button
+    Mipa.addEventListener('change', function () {
+        if (Mipa.checked) {
+            Rosner.checked = false;
+        }
+    });
+
+    // Add event listener to the Rosner radio button
+    Rosner.addEventListener('change', function () {
+        if (Rosner.checked) {
+            Mipa.checked = false;
+        }
+    });
+
 
 
 

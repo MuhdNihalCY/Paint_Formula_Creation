@@ -354,6 +354,18 @@ module.exports = {
             var Orders = await db.get().collection(collection.BULK_ORDER_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
             resolve(Orders);
         })
+    },
+    getOrderByInsertedTime:(time)=>{
+        return new Promise(async(resolve,reject)=>{
+            var Order = await db.get().collection(collection.BULK_ORDER_COLLECTION).findOne({InsertedTime: parseInt(time)});
+            resolve(Order);
+        })
+    },
+    GetSubCategoriesByName:(name)=>{
+        return new Promise(async(resolve,reject)=>{
+            var Sub_Category = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({SubCategory:name});
+            resolve(Sub_Category)
+        })
     }
 
 }

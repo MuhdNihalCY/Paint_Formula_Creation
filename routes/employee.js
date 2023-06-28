@@ -45,7 +45,7 @@ router.get('/', verifyLogin, function (req, res, next) {
       employeeHelpers.getAllAdditivesWithLowStocks().then((additives) => {
         //console.log("Additive: ", Additives )
         if (additives.length > 0) {
-          Additives = additives; 
+          Additives = additives;
           for (let i = 0; i < Additives.length; i++) {
             let Additive = Additives[i];
             Additive.Stock = parseFloat(Additive.Stock).toFixed(3);
@@ -86,8 +86,57 @@ router.post('/login', (req, res) => {
   })
 })
 
-router.get('/printlabel', verifyLogin, (req, res) => {
-  res.render('employee/Invoice')
+router.get('/printlabel/:orderNo', verifyLogin, (req, res) => {
+  var OrderNo = req.params.orderNo;
+  employeeHelpers.getOrderByInsertedTime(OrderNo).then((Order) => {
+    var Print = true;
+    //console.log("Order",Order)
+    employeeHelpers.GetSubCategoriesByName(Order.SubCategory).then((SubCategory) => {
+      var Liter = false
+      if (SubCategory.Liter) {
+        Liter = true;
+      }
+
+      var SC = Order;
+      SC.SolidContent = parseFloat(SC.SolidContent).toFixed(2)
+
+      SC.Density = parseFloat(SC.Density).toFixed(2)
+
+      SC.VOC = parseFloat(SC.VOC).toFixed(2)
+
+      var Mipa = false;
+      if(SubCategory.Mipa){
+        Mipa = true;
+      }
+
+      //date Formate
+      // Timestamp value
+      const timestamp = parseInt(Order.InsertedTime);
+
+      // Create a new Date object using the timestamp
+      const date = new Date(timestamp);
+
+      // Define the month names
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      // Get the day, month, year, hours, and minutes from the Date object
+      const day = date.getDate();
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+
+      // Format the date and time string
+      const formattedDate = `${day}-${month}-${year}`;
+      const formattedTime = `${hours.toString().padStart(2, '0')}.${minutes.toString().padStart(2, '0')}`;
+      const DateTime = `${formattedDate} ${formattedTime}`;
+
+      //console.log(DateTime);
+
+      res.render('employee/Invoice', { Order, Print, Liter,DateTime,Mipa })
+
+    })
+  })
 })
 
 router.get('/CreateFormula', verifyLogin, (req, res) => {

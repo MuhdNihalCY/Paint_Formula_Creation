@@ -17,12 +17,15 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
 
     <title>Mega Paints</title>
+    <link rel="icon" href="/images/Logo/logo.jpg" type="image/icon type">
 
 
 </head>
 
 <body>
-
+    {{#if Print}}
+    {{{body}}}
+    {{else}}
     {{#if loginpage}}
     {{{body}}}
     {{else}}
@@ -32,6 +35,7 @@
     {{>header}}
     {{{body}}}
     {{>footer}}
+    {{/if}}
     {{/if}}
     {{/if}}
 
