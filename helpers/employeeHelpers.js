@@ -55,7 +55,7 @@ module.exports = {
     },
     GetSubcategotyById: (SubId) => {
         return new Promise(async (resolve, reject) => {
-            console.log(SubId)
+            // console.log(SubId)
             var SubCategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ SubCategory_Id: parseInt(SubId) })
             resolve(SubCategory)
         })
@@ -150,7 +150,7 @@ module.exports = {
                 var LatestFileNo = parseInt(LatestFormula[0].FileNo);
                 FileNo = LatestFileNo + 1;
             } else {
-                console.log("No Latest Formula");
+                // console.log("No Latest Formula");
                 FileNo = 10000
             }
             FileNo = FileNo + "";
@@ -259,7 +259,7 @@ module.exports = {
     BulkOrderUpdate: (OrderFile) => {
         return new Promise(async (resolve, reject) => {
             try {
-                console.log("OrderFile From Helpers: ", OrderFile);
+                // console.log("OrderFile From Helpers: ", OrderFile);
                 var TinterCount = parseInt(OrderFile.TinterCount);
 
                 OrderFile.InsertedTime = Date.now();
@@ -331,21 +331,21 @@ module.exports = {
     getProductsWithLowStocks:()=>{
         return new Promise(async(resolve,reject)=>{
             var Products = await db.get().collection(collection.PRODUCT_COLLECTION).find({ Stock: { $lt: 200 } }).toArray()
-            console.log("Products:",Products);
+            // console.log("Products:",Products);
             resolve(Products);
         })
     },
     getAllBinderWithLowStocks:()=>{
         return new Promise(async(resolve,reject)=>{
             var Binders = await db.get().collection(collection.BINDER_COLLECTION).find({ Stock: { $lt: 100 } }).toArray()
-            console.log('Binders : ',Binders)
+            // console.log('Binders : ',Binders)
             resolve(Binders);
         })
     },
     getAllAdditivesWithLowStocks:()=>{
         return new Promise(async(resolve,reject)=>{
             var Additives = await db.get().collection(collection.ADDITIVE_COLLECTION).find({ Stock: { $lt: 100 } }).toArray()
-            console.log('Additives:', Additives)
+            // console.log('Additives:', Additives)
             resolve(Additives)
         })
     },

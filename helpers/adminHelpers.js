@@ -10,10 +10,10 @@ module.exports = {
 
             // Daclare State of the process
             var State = {};
-            console.log(collection.CATEGORY_COLLECTION);
+            //  console.log(collection.CATEGORY_COLLECTION);
             // first check whether the category is already entered in the database
             var SameCatagory = await db.get().collection(collection.CATEGORY_COLLECTION).findOne({ "Category": data.Category })
-            console.log(SameCatagory);
+            //console.log(SameCatagory);
             if (SameCatagory) {
                 // if the category is already entered, return the category id
                 State.Status = false
@@ -24,7 +24,7 @@ module.exports = {
                 // console.log(Date.now())
                 // find Last added Category
                 var LastAddedCategory = await db.get().collection(collection.CATEGORY_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray()
-                console.log(LastAddedCategory);
+                //  console.log(LastAddedCategory);
 
                 if (LastAddedCategory.length > 0) {
                     LastAddedCategory = LastAddedCategory[0];
@@ -71,10 +71,10 @@ module.exports = {
     },
     DeleteCategory: (id) => {
         return new Promise(async (resolve, reject) => {
-            console.log("Going to delete category with id", id);
+            // console.log("Going to delete category with id", id);
             var State = { Status: false, error: "" }
             await db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({ "_id": new ObjectId(id) }).then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response.deletedCount) {
                     State.Status = true;
                 } else {
@@ -95,7 +95,7 @@ module.exports = {
             } else {
                 // get latest Inserted SubCategory
                 var InsertedSubCategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
-                console.log(InsertedSubCategories);
+                // console.log(InsertedSubCategories);
                 if (InsertedSubCategories.length > 0) {
                     var latestInsertSubCategory = InsertedSubCategories[0];
                     data.SubCategory_Id = latestInsertSubCategory.SubCategory_Id + 1;
@@ -104,10 +104,10 @@ module.exports = {
                 }
 
                 data.InsertedTime = Date.now();
-                console.log("Going to add Sub Category", data);
+                //  console.log("Going to add Sub Category", data);
                 var State = { Status: false, error: "" }
                 await db.get().collection(collection.SUB_CATEGORY_COLLECTION).insertOne(data).then((response) => {
-                    console.log(response);
+                    //  console.log(response);
                     if (response.insertedId) {
                         State.Status = true;
                     } else {
@@ -131,11 +131,11 @@ module.exports = {
                     Gram: "", Liter: "", Gloss: "", Matt: "", Binder1: "", Binder2: ""
                 }
             }).then((response) => {
-                console.log(response);
+                //  console.log(response);
             })
 
             await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateOne({ "SubCategory": data.SubCategory }, { $set: data }).then((response) => {
-                console.log(response);
+                //  console.log(response);
                 resolve(response);
             })
         })
@@ -204,7 +204,7 @@ module.exports = {
     },
     GetProductByID: (id) => {
         return new Promise(async (resolve, reject) => {
-            console.log(id);
+            //  console.log(id);
             var product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: parseInt(id) });
             resolve(product);
         })
@@ -327,7 +327,7 @@ module.exports = {
             }
             var SameBinder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Name: data.Binder_Name });
             if (SameBinder) {
-               // console.log("Same Binder: ",SameBinder);
+                // console.log("Same Binder: ",SameBinder);
                 State.error = "This Binder Already Added!"
             } else {
                 data.InsertedTime = Date.now();
@@ -408,7 +408,7 @@ module.exports = {
         })
     },
     GetEmployeeById: (id) => {
-        console.log(id);
+        // console.log(id);
         return new Promise(async (resolve, reject) => {
             var Employee = await db.get().collection(collection.EMPLOYEE_COLLECTION).findOne({ Employee_Id: parseInt(id) });
             resolve(Employee);
@@ -498,7 +498,7 @@ module.exports = {
             }
 
             await db.get().collection(collection.CUSTOMER_COLLECTION).updateOne({ Customer_Id: parseInt(id) }, { $set: data }).then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response.modifiedCount > 0) {
                     State.Status = true;
                 } else {
@@ -531,7 +531,7 @@ module.exports = {
 
 
             var IsAdmin = await db.get().collection(collection.ADMIN_COLLECTION).findOne();
-            console.log("IsAdmin", IsAdmin);
+            // console.log("IsAdmin", IsAdmin);
             var Admin = {
                 name: "Admin",
                 password: Newpassword

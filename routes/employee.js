@@ -70,7 +70,7 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   employeeHelpers.DoLogin(req.body).then((State) => {
     if (State.employeeLooged) {
       //user OK
@@ -213,7 +213,7 @@ router.post('/FindProductByName/api', verifyLogin, (req, res) => {
 
 
 router.post('/FindAdditiveBinderDensityById/api', verifyLogin, async (req, res) => {
-  console.log(req.body.ADditiveBinder);
+  // console.log(req.body.ADditiveBinder);
   var BodyObject = req.body.ADditiveBinder
 
   var ReturnObject = {};
@@ -243,14 +243,14 @@ router.post('/FindAdditiveBinderDensityById/api', verifyLogin, async (req, res) 
 
   await Promise.all(promises); // Wait for all promises to resolve
 
-  console.log("Return OBJ: ", ReturnObject);
+  // console.log("Return OBJ: ", ReturnObject);
 
   res.json(ReturnObject);
 });
 
 
 router.post('/CreateFormula', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   function calculateRatios(data) {
     const ratios = {};
 
@@ -290,11 +290,11 @@ router.post('/CreateFormula', (req, res) => {
   };
 
   const result = calculateRatios(data);
-  console.log('Total Quantity:', result.totalQty);
-  console.log('Additive Ratio:', result.additive);
-  console.log('Binder1 Ratio:', result.binder1);
-  console.log('Binder2 Ratio:', result.binder2);
-  console.log('Tinters Ratios:', result.tinters);
+  // console.log('Total Quantity:', result.totalQty);
+  // console.log('Additive Ratio:', result.additive);
+  // console.log('Binder1 Ratio:', result.binder1);
+  // console.log('Binder2 Ratio:', result.binder2);
+  // console.log('Tinters Ratios:', result.tinters);
   Datas.AdditiveRatio = result.additive;
   Datas.Binder1Ratio = result.binder1;
   Datas.Binder2Ratio = result.binder2;
@@ -442,7 +442,7 @@ router.get('/BulkOrder/:FileNo', verifyLogin, (req, res) => {
   // Extract the query parameters
   var { Stock, Item, TotalQTY } = req.query;
 
-  console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
+ // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
 
   if (Stock) {
     // low stocks
@@ -537,7 +537,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
     for (let i = 1; i <= TinterCount; i++) {
       var TinterName = OrderFile["TineterName" + i];
       var TinterQty = OrderFile["TinterGram" + i];
-      console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
+    //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
 
       promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
     }
@@ -546,7 +546,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
 
     for (let i = 0; i < states.length; i++) {
       let State = states[i];
-      console.log(State);
+    //  console.log(State);
       if (!State.HaveStock) {
         LowStocks(OrderFile["TineterName" + (i + 1)], TotalQty);
         LowStockFlag.Status = true;
@@ -563,7 +563,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
       let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
       if (!binder1State.HaveStock) {
         LowStocks(OrderFile.Binder1, TotalQty);
-        console.log(" Binder1 Stocks are not available. ");
+       // console.log(" Binder1 Stocks are not available. ");
         LowStockFlag.Status = true;
         return; // Exit the loop when there is low stock
       }
@@ -572,7 +572,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
         let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
         if (!binder2State.HaveStock) {
           LowStocks(OrderFile.Binder2, TotalQty);
-          console.log(" Binder2 Stocks are not available. ");
+        //  console.log(" Binder2 Stocks are not available. ");
           LowStockFlag.Status = true;
           return; // Exit the loop when there is low stock
         }
@@ -584,13 +584,13 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
       let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
       if (!additiveState.HaveStock) {
         LowStocks(OrderFile.Additive, TotalQty);
-        console.log(" Additive Stocks are not available. ");
+       // console.log(" Additive Stocks are not available. ");
         LowStockFlag.Status = true;
         return; // Exit the loop when there is low stock
       }
     }
 
-    console.log(" Tinter Stocks are available. ");
+   // console.log(" Tinter Stocks are available. ");
 
   } catch (error) {
     console.error(error);
@@ -603,7 +603,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
   function BulkOrderNow(orderFile) {
     employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
       // Rest of the code...
-      console.log("Bulk Updated!");
+    //  console.log("Bulk Updated!");
       res.redirect('/Orders');
     });
   }
@@ -692,7 +692,7 @@ router.get('/BinderStockUpdate', verifyLogin, (req, res) => {
 router.post('/UpdateBinderStock/:id', verifyLogin, (req, res) => {
   var Data = req.body;
   Data.ProductId = req.params.id;
-  console.log(Data);
+ // console.log(Data);
   employeeHelpers.UpdateBinderStockById(Data).then(() => {
     res.redirect('/BinderStockUpdate');
   })
@@ -708,7 +708,7 @@ router.get('/AdditiveStockUpdate', verifyLogin, (req, res) => {
 router.post('/UpdateAdditiveStock/:id', verifyLogin, (req, res) => {
   var Data = req.body;
   Data.ProductId = req.params.id;
-  console.log(Data);
+ // console.log(Data);
   employeeHelpers.UpdateAdditiveStockById(Data).then(() => {
     res.redirect('/AdditiveStockUpdate');
   })

@@ -33,7 +33,7 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/Login', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   adminHelpers.AdminLogin(req.body, AdminUser).then((response) => {
     if (response.Status) {
       //good Login
@@ -56,9 +56,9 @@ router.get('/change-password', verifyLogin, (req, res) => {
 })
 
 router.post('/change-password', verifyLogin, (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   adminHelpers.AdminPasswordChange(req.body, AdminUser).then((response) => {
-    console.log(response);
+    //console.log(response);
     if (response.Status == false) {
       res.render('admin/forms/ChangePassword', { admin: true, StateError: response.err });
     } else {
@@ -104,7 +104,7 @@ router.get('/Sub-Category', verifyLogin, (req, res) => {
       }
 
       adminHelpers.GetAllBinders().then((Binders) => {
-        console.log(Binders)
+        // console.log(Binders)
         res.render('admin/subCategory', { admin: true, AllCategory, AllSubCategory, Binders });
       })
     })
@@ -150,7 +150,7 @@ router.get('/addSubCategory', verifyLogin, (req, res) => {
       }
 
       adminHelpers.GetAllBinders().then((Binders) => {
-        console.log(Binders)
+        //  console.log(Binders)
         res.render('admin/forms/addSubCategory', { admin: true, AllCategory, AllSubCategory, Binders });
       })
     })
@@ -195,7 +195,7 @@ router.get('/edit-subcategory/:id', verifyLogin, (req, res) => {
         AllCategory = matchingCategories;
         Binders = matchingBinders;
 
-        console.log(SubCategory);
+        // console.log(SubCategory);
 
         var Gram, Liter, Matt, Gloss, Binder2;
 
@@ -211,7 +211,7 @@ router.get('/edit-subcategory/:id', verifyLogin, (req, res) => {
           Gloss = true;
         }
 
-        console.log(Gram, Liter, Matt, Gloss);
+        // console.log(Gram, Liter, Matt, Gloss);
 
         if (SubCategory.Binder2) {
           Binder2 = SubCategory.Binder2
@@ -238,8 +238,8 @@ router.get('/edit-subcategory/:id', verifyLogin, (req, res) => {
           // console.log(matchingBinder);
 
           // Print the remaining binders
-          console.log("Remaining Binders:");
-          console.log(remainingBinders);
+          //  console.log("Remaining Binders:");
+          //  console.log(remainingBinders);
           Binder2 = remainingBinders;
           var EditSubcategory = true
           res.render('admin/forms/addSubCategory', { admin: true, EditSubcategory, AllCategory, SubCategory, Binders, Gram, Liter, Matt, Gloss, Binder2 });
@@ -341,11 +341,11 @@ router.get('/Categories/api', (req, res) => {
 })
 
 router.get('/editProduct/:id', verifyLogin, (req, res) => {
-  console.log(req.params.id);
+  // console.log(req.params.id);
   adminHelpers.GetProductByID(req.params.id).then((product) => {
     adminHelpers.getCategory().then((AllCategory) => {
       adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
-        console.log(product);
+        // console.log(product);
         var CategoryID = product.Category;
         var SubCategoryID = product.SubCategory
 
@@ -388,7 +388,7 @@ router.get('/Additives', verifyLogin, (req, res) => {
 
 router.post('/AddAdditives', verifyLogin, (req, res) => {
   adminHelpers.AddAdditives(req.body).then((State) => {
-    console.log(State)
+    // console.log(State)
     if (State.Status) {
       res.redirect('/admin/Additives');
     } else {
@@ -409,7 +409,7 @@ router.get('/deleteAdditive/:id', verifyLogin, (req, res) => {
 
 router.get('/Binders', verifyLogin, (req, res) => {
   adminHelpers.GetAllBinders().then((Binders) => {
-    console.log(Binders);
+    // console.log(Binders);
     res.render('admin/Binders', { admin: true, Binders });
   })
 })
@@ -452,7 +452,7 @@ router.get('/Employees', verifyLogin, (req, res) => {
 
 router.get('/editEmployee/:id', verifyLogin, (req, res) => {
   adminHelpers.GetEmployeeById(req.params.id).then((Employee) => {
-    console.log(Employee);
+    // console.log(Employee);
     res.render('admin/forms/editEmployee', { admin: true, Employee });
   })
 })
