@@ -116,7 +116,7 @@
                                     <tr class="row-template">
                                         <td class="CFTableRowData">1</td>
                                         <td class="CFTableRowData">
-                                            <select name="TintersR1" class="TintersR1 CFTinters" id="CFTinters"
+                                            <select name="TintersR1" class="TintersR1 CFTinters" id="CFTintersR1"
                                                 onchange="disableSelectedOption(this)">
 
                                             </select>
@@ -474,16 +474,21 @@
         const literTotalInput = row.getElementsByClassName('LiterInputTotal')[0];
         /* const Product = row.getElementsByClassName('CFTinters');
          //console.log("Product: ",Product.options[Product.selectedIndex]);*/
-        var selectElement = document.getElementById("CFTinters");
+        
+        var firstTd = row.querySelector(".CFTableRowData:first-child");
+        var firstTdText = firstTd.textContent;
+      //  console.log("Row Count: ",firstTdText );
+
+        var selectElement = document.getElementById(`CFTintersR${firstTdText}`);
         var selectedOption = selectElement.options[selectElement.selectedIndex];
 
         // Get the value and text content of the selected option
         var selectedValue = selectedOption.value;
         var selectedProduct = selectedOption.textContent;
-        console.log("Selected Option: ",selectedOption)
+      //  console.log("Selected Option: ", selectedOption)
 
 
-        console.log('selected Product', selectedProduct);
+      //  console.log('selected Product', selectedProduct);
 
 
 
@@ -517,6 +522,8 @@
                 var totalGrams = 0.0;
                 var totalLiters = 0.0;
 
+            //    console.log("Handle Input!");
+
                 for (let i = 0; i < rSubInputs.length; i++) {
                     var inputValue = parseFloat(rSubInputs[i].value);
 
@@ -536,7 +543,7 @@
                         //console.log("Total Grams", totalGrams)
                         //totalLiters = (totalGrams * 1000) / Product_Density;
                         totalLiters = (totalGrams * Product_Density) / 1000;
-                        console.log("Total Grams : ",totalGrams, " Product_Density: ",Product_Density," totalLiters: ",totalLiters)
+                     //   console.log("Total Grams : ", totalGrams, " Product_Density: ", Product_Density, " totalLiters: ", totalLiters)
                     }
                 }
 
@@ -569,6 +576,8 @@
         const tableBody = document.getElementById('FormulaCreateTable').lastElementChild;
         const lastRow = tableBody.lastElementChild;
         const lastRowColumns = lastRow.getElementsByTagName('td');
+        
+      //  console.log("Add Row Is now going to Calling!");
 
         if (input.value !== '0.00' && row === lastRow) {
             //console.log("Calling to add row");
@@ -603,6 +612,7 @@
 
 
     function addRow(button) {
+      //  console.log("Add Row Is now Calling!");
         var SubCategoryValue = document.getElementById("SubCategorySelect").value;
         if (SubCategoryValue === "0") {
             // Do nothing if SubCategoryValue is 0
@@ -628,8 +638,10 @@
             const literTotalInput = newRow.getElementsByClassName('LiterInputTotal')[0];
             const productSelectBox = newRow.getElementsByClassName('TintersR1')[0];
             gramTotalInput.setAttribute('name', 'GramInputTotalR' + rowCount);
+            gramTotalInput.setAttribute('id', 'GramInputTotalR' + rowCount);
             literTotalInput.setAttribute('name', 'LiterInputTotalR' + rowCount);
             productSelectBox.setAttribute('name', 'TintersR' + rowCount);
+            productSelectBox.setAttribute('id', 'CFTintersR' + rowCount);
 
             // Append the new row to the table
             const tableBody = document.getElementById('FormulaCreateTable').lastElementChild;
@@ -729,7 +741,7 @@
 
                 console.table(datas);
 
-                var tintersSelect = document.getElementById("CFTinters");
+                var tintersSelect = document.getElementById("CFTintersR1");
                 tintersSelect.innerHTML = ""; // Clear any existing options
 
                 // Loop through the data and create <option> elements
@@ -1549,10 +1561,10 @@
                 var VocOfProducts = 0;
                 for (var i = 0; i < products.length; i++) {
                     var j = i + 1;
-                    var GramInputTotalID = `GramInputTotalR${j}`; 
-                    console.log('GramInputTotalID:',GramInputTotalID)
+                    var GramInputTotalID = `GramInputTotalR${j}`;
+               //     console.log('GramInputTotalID:', GramInputTotalID)
                     var GramInputTotal = parseFloat(document.getElementById(GramInputTotalID).value);
-                    ////console.log("SumOfSolidContentOfProducts",GramInputTotal)
+             //       console.log("SumOfSolidContentOfProducts",GramInputTotal)
                     var OneProduct = products[i]
                     var SolidContentOfProduct = parseFloat(OneProduct.SolidContent);
                     var VocOfProduct = parseFloat(OneProduct.VOC);
