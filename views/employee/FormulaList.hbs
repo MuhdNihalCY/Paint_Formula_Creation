@@ -5,7 +5,7 @@
                 <p class="FLHeader">Formulations</p>
             </div>
             <div class="FLMainSectionDiv">
-                {{#each Formulation}}
+                {{!-- {{#each Formulation}}
                 <div class="FLEachItemDiv">
                     <div class="FLEachItemLeftSection">
                         <p class="EachItemLabel">Customer Name : {{this.CustomerName}}</p>
@@ -25,8 +25,60 @@
                     </div>
                 </div>
                 <hr>
-                {{/each}}
+                {{/each}} --}}
+
+                <table id="FormulaTable" class="display">
+                    <thead>
+                        <tr>
+                            <th class="text-center FLTableHeader" style="font-size: 20px;">File no</th>
+                            <th class="text-center FLTableHeader" style="font-size: 20px;">Customer Name</th>
+                            <th class="text-center FLTableHeader" style="font-size: 20px;">Color Name</th>
+                            <th class="text-center FLTableHeader" style="font-size: 20px;">Color Code</th>
+                            <th class="text-center FLTableHeader" style="font-size: 20px;">Category</th>
+                            <th class="text-center FLTableHeader" style="font-size: 20px;">Sub-Category</th>
+                            <th class="text-center FLTableHeader" style="font-size: 20px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each Formulation}}
+                        <tr>
+                            <td class="FLTableData">{{this.FileNo}}</td>
+                            <td class="FLTableData">{{this.CustomerName}}</td>
+                            <td class="FLTableData">{{this.ColorName}}</td>
+                            <td class="FLTableData">{{this.ColorCode}}</td>
+                            <td class="FLTableData">{{this.CategoryName}}</td>
+                            <td class="FLTableData">{{this.SubCategoryName}}</td>
+                            <td class="FLTableData"><a class="BulkOrderAtag" href="/BulkOrder/{{this.FileNo}}">
+                                    <div class="FLBulkHyperDIv">
+                                        <p class="FLBulkHyperLabel">Order</p>
+                                    </div>
+                                </a></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
+
             </div>
         </div>
     </div>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script>
+    $("#FormulaTable").DataTable();
+
+    function isNumeric(event) {
+        var key = event.keyCode || event.which;
+        var keyChar = String.fromCharCode(key);
+
+        // Allow only numeric characters and special keys like Backspace, Delete, etc.
+        if (!/[\d.-]/.test(keyChar) && key !== 8 && key !== 9 && key !== 13 && key !== 27 && key !== 46) {
+            event.preventDefault();
+            return false;
+        }
+    }
+
+
+</script>
