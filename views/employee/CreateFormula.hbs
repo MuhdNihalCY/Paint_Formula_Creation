@@ -480,8 +480,10 @@
         // Get the value and text content of the selected option
         var selectedValue = selectedOption.value;
         var selectedProduct = selectedOption.textContent;
+        console.log("Selected Option: ",selectedOption)
 
-        //console.log('selected Product', selectedProduct);
+
+        console.log('selected Product', selectedProduct);
 
 
 
@@ -532,7 +534,9 @@
                         //console.log("Product_Density: ", Product_Density);
                         totalGrams += inputValue;
                         //console.log("Total Grams", totalGrams)
-                        totalLiters = (totalGrams * 1000) / Product_Density;
+                        //totalLiters = (totalGrams * 1000) / Product_Density;
+                        totalLiters = (totalGrams * Product_Density) / 1000;
+                        console.log("Total Grams : ",totalGrams, " Product_Density: ",Product_Density," totalLiters: ",totalLiters)
                     }
                 }
 
@@ -990,7 +994,7 @@
 
         switch (Sub_Category_Name) {
             case "Mipa_2K_PUR":
-                Binder1_EQ = Sum_qty * mattValue;
+                Binder1_EQ = Sum_qty * mattValue / 100;
                 Binder1INP.value = Binder1_EQ.toString();
                 ////console.log("Binder1_EQ",Binder1_EQ)
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
@@ -1004,7 +1008,7 @@
 
             case "Mipa_2K_PMI":
             case "PU_240_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
+                Binder1_EQ = ((Sum_qty * 3 * gloss / 100) - (5 * 3 * Sum_qty)) / 85;
                 Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
                 Binder1INP.value = Binder1_EQ.toString();
                 Binder2INP.value = Binder2_EQ.toString();
@@ -1012,7 +1016,7 @@
                 break;
 
             case "Rosner_PU":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 85 + total_PP;
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss / 100) - (5 * 80 / 20 * Sum_qty)) / 85 + total_PP;
                 Binder2_EQ = (Sum_qty * 80 / 20) + total_PP - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1020,15 +1024,15 @@
                 break;
 
             case "Rosner_NC":
-                Binder1_EQ = ((Sum_qty * 85 / 15 * gloss) - (10 * 85 / 15 * Sum_qty)) / 80 + total_PP;
-                Binder2_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
+                Binder1_EQ = ((Sum_qty * 85 / 15 * gloss / 100) - (10 * 85 / 15 * Sum_qty)) / 80 + total_PP;
+                Binder2_EQ = ((Sum_qty * 80 / 20 * gloss / 100) - (5 * 80 / 20 * Sum_qty)) / 65;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
                 Binder2INP.value = Binder2_EQ.toString();
                 break;
 
             case "PU_250_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
+                Binder1_EQ = ((Sum_qty * 3 * gloss / 100) - (5 * 3 * Sum_qty)) / 85;
                 Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1054,7 +1058,7 @@
                 break;
 
             case "PU_240_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
+                Binder1_EQ = ((Sum_qty * 3 * gloss / 100) - (5 * 3 * Sum_qty)) / 85;
                 Binder2_EQ = (Sum_qty * 3) - Binder1_EQ
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1082,7 +1086,7 @@
                 break;
 
             case "Rosner_PU_Effects":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 85;
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss / 100) - (5 * 80 / 20 * Sum_qty)) / 85;
                 Binder2_EQ = (Sum_qty * 80 / 20) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1090,7 +1094,7 @@
                 break;
 
             case "Rosner_NC_Effects":
-                Binder1_EQ = ((Sum_qty * 85 / 15 * gloss) - (10 * 85 / 15 * Sum_qty)) / 80;
+                Binder1_EQ = ((Sum_qty * 85 / 15 * gloss / 100) - (10 * 85 / 15 * Sum_qty)) / 80;
                 Binder2_EQ = (Sum_qty * 85 / 15) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1098,7 +1102,7 @@
                 break;
 
             case "Mipa_2K_PMI_Effects":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (10 * 3 * Sum_qty)) / 80;
+                Binder1_EQ = ((Sum_qty * 3 * gloss / 100) - (10 * 3 * Sum_qty)) / 80;
                 Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1107,7 +1111,7 @@
 
             case "Rosner_Acrylic":
             case "Rosner_Acrylic_Effects":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss / 100) - (5 * 80 / 20 * Sum_qty)) / 65;
                 Binder2_EQ = (Sum_qty * 80 / 20) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1139,7 +1143,7 @@
                 break;
 
             case "WPU_2425_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (10 * 3 * Sum_qty)) / 80;
+                Binder1_EQ = ((Sum_qty * 3 * gloss / 100) - (10 * 3 * Sum_qty)) / 80;
                 Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1147,7 +1151,7 @@
                 break;
 
             case "Rosner_Treppenlack":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss / 100) - (5 * 80 / 20 * Sum_qty)) / 65;
                 Binder2_EQ = (Sum_qty * 4) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1167,7 +1171,7 @@
                 break;
 
             case "WPU_4005_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (10 * 3 * Sum_qty)) / 80;
+                Binder1_EQ = ((Sum_qty * 3 * gloss / 100) - (10 * 3 * Sum_qty)) / 80;
                 Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1187,7 +1191,7 @@
                 break;
 
             case "WPU_2425_XX_Effects":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
+                Binder1_EQ = ((Sum_qty * 3 * gloss / 100) - (5 * 3 * Sum_qty)) / 85;
                 Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1195,7 +1199,7 @@
                 break;
 
             case "Treppenlack_Effects":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
+                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss / 100) - (5 * 80 / 20 * Sum_qty)) / 65;
                 Binder2_EQ = (Sum_qty * 4) - Binder1_EQ;
                 //AlertBinder(Binder1_EQ, Binder2_EQ);
                 Binder1INP.value = Binder1_EQ.toString();
@@ -1545,8 +1549,8 @@
                 var VocOfProducts = 0;
                 for (var i = 0; i < products.length; i++) {
                     var j = i + 1;
-                    var GramInputTotalID = "GramInputTotalR" + j;
-                    ////console.log('GramInputTotalID:',GramInputTotalID)
+                    var GramInputTotalID = `GramInputTotalR${j}`; 
+                    console.log('GramInputTotalID:',GramInputTotalID)
                     var GramInputTotal = parseFloat(document.getElementById(GramInputTotalID).value);
                     ////console.log("SumOfSolidContentOfProducts",GramInputTotal)
                     var OneProduct = products[i]
