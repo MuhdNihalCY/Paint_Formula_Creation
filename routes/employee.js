@@ -105,7 +105,7 @@ router.get('/printlabel/:orderNo', verifyLogin, (req, res) => {
       SC.VOC = parseFloat(SC.VOC).toFixed(2)
 
       var Mipa = false;
-      if(SubCategory.Mipa){
+      if (SubCategory.Mipa) {
         Mipa = true;
       }
 
@@ -133,7 +133,7 @@ router.get('/printlabel/:orderNo', verifyLogin, (req, res) => {
 
       //console.log(DateTime);
 
-      res.render('employee/Invoice', { Order, Print, Liter,DateTime,Mipa })
+      res.render('employee/Invoice', { Order, Print, Liter, DateTime, Mipa })
 
     })
   })
@@ -299,7 +299,15 @@ router.post('/CreateFormula', (req, res) => {
   Datas.Binder1Ratio = result.binder1;
   Datas.Binder2Ratio = result.binder2;
   Datas.TintersRatioObject = result.tinters;
+  console.log("Tinters Ratio: ", result.tinters);
+  for (var key in result.tinters) {
+    if (result.tinters[key] === 0) {
+      delete result.tinters[key];
+    }
+  }
+  console.log("Tinters Ratio: ", result.tinters);
   Datas.TintersRatioArray = Object.values(result.tinters);
+
   Datas.TintersCount = Datas.TintersRatioArray.length;
   Datas.InsertedTime = Date.now()
 
@@ -355,6 +363,7 @@ router.post('/CreateFormula', (req, res) => {
                     Datas.Binder2Name = Binder2.Binder_Name;
                     // res .send data
                     employeeHelpers.SaveFormulaData(Datas).then((State) => {
+                      //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
                       res.redirect(`/BulkOrder/${Datas.FileNo}`)
                       // res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                     })
@@ -363,6 +372,7 @@ router.post('/CreateFormula', (req, res) => {
                   Datas.Binder1Name = Binder1.Binder_Name;
                   // res .send data
                   employeeHelpers.SaveFormulaData(Datas).then((State) => {
+                    //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
                     res.redirect(`/BulkOrder/${Datas.FileNo}`)
                     //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                   })
@@ -371,6 +381,7 @@ router.post('/CreateFormula', (req, res) => {
             } else {
               // res .send data
               employeeHelpers.SaveFormulaData(Datas).then((State) => {
+                //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
                 res.redirect(`/BulkOrder/${Datas.FileNo}`)
                 //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
               })
@@ -442,7 +453,7 @@ router.get('/BulkOrder/:FileNo', verifyLogin, (req, res) => {
   // Extract the query parameters
   var { Stock, Item, TotalQTY } = req.query;
 
- // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
+  // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
 
   if (Stock) {
     // low stocks
@@ -537,7 +548,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
     for (let i = 1; i <= TinterCount; i++) {
       var TinterName = OrderFile["TineterName" + i];
       var TinterQty = OrderFile["TinterGram" + i];
-    //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
+      //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
 
       promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
     }
@@ -546,7 +557,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
 
     for (let i = 0; i < states.length; i++) {
       let State = states[i];
-    //  console.log(State);
+      //  console.log(State);
       if (!State.HaveStock) {
         LowStocks(OrderFile["TineterName" + (i + 1)], TotalQty);
         LowStockFlag.Status = true;
@@ -563,7 +574,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
       let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
       if (!binder1State.HaveStock) {
         LowStocks(OrderFile.Binder1, TotalQty);
-       // console.log(" Binder1 Stocks are not available. ");
+        // console.log(" Binder1 Stocks are not available. ");
         LowStockFlag.Status = true;
         return; // Exit the loop when there is low stock
       }
@@ -572,7 +583,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
         let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
         if (!binder2State.HaveStock) {
           LowStocks(OrderFile.Binder2, TotalQty);
-        //  console.log(" Binder2 Stocks are not available. ");
+          //  console.log(" Binder2 Stocks are not available. ");
           LowStockFlag.Status = true;
           return; // Exit the loop when there is low stock
         }
@@ -584,13 +595,13 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
       let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
       if (!additiveState.HaveStock) {
         LowStocks(OrderFile.Additive, TotalQty);
-       // console.log(" Additive Stocks are not available. ");
+        // console.log(" Additive Stocks are not available. ");
         LowStockFlag.Status = true;
         return; // Exit the loop when there is low stock
       }
     }
 
-   // console.log(" Tinter Stocks are available. ");
+    // console.log(" Tinter Stocks are available. ");
 
   } catch (error) {
     console.error(error);
@@ -603,7 +614,7 @@ router.post('/BulkOrder/:id', verifyLogin, async (req, res) => {
   function BulkOrderNow(orderFile) {
     employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
       // Rest of the code...
-    //  console.log("Bulk Updated!");
+      //  console.log("Bulk Updated!");
       res.redirect('/Orders');
     });
   }
@@ -692,7 +703,7 @@ router.get('/BinderStockUpdate', verifyLogin, (req, res) => {
 router.post('/UpdateBinderStock/:id', verifyLogin, (req, res) => {
   var Data = req.body;
   Data.ProductId = req.params.id;
- // console.log(Data);
+  // console.log(Data);
   employeeHelpers.UpdateBinderStockById(Data).then(() => {
     res.redirect('/BinderStockUpdate');
   })
@@ -708,7 +719,7 @@ router.get('/AdditiveStockUpdate', verifyLogin, (req, res) => {
 router.post('/UpdateAdditiveStock/:id', verifyLogin, (req, res) => {
   var Data = req.body;
   Data.ProductId = req.params.id;
- // console.log(Data);
+  // console.log(Data);
   employeeHelpers.UpdateAdditiveStockById(Data).then(() => {
     res.redirect('/AdditiveStockUpdate');
   })
@@ -717,6 +728,30 @@ router.post('/UpdateAdditiveStock/:id', verifyLogin, (req, res) => {
 router.get('/Orders', verifyLogin, (req, res) => {
   employeeHelpers.GetAllOrderList().then((Orders) => {
     res.render('employee/Orders', { Orders })
+  })
+})
+
+router.get('/Printsmlabel/:fileNo', verifyLogin, (req, res) => {
+  //console.log(req.params.fileNo);
+  var FileNo = req.params.fileNo;
+  employeeHelpers.GetFormulaByFileNo(FileNo).then((Formula) => {
+    var Print = true;
+    employeeHelpers.GetSubCategoriesByName(Formula.SubCategoryName).then((SubCategory) => {
+
+      var SC = Formula;
+      SC.SolidContent = parseFloat(SC.SolidContent).toFixed(2)
+
+      SC.Density = parseFloat(SC.Density).toFixed(2)
+
+      SC.VOC = parseFloat(SC.VOC).toFixed(2)
+
+      var Mipa = false;
+      if (SubCategory.Mipa) {
+        Mipa = true;
+      }
+      res.render('employee/SmallLabel',{Formula,Print,Mipa});
+      //res.redirect(`/BulkOrder/${FileNo}`)
+    })
   })
 })
 

@@ -5,28 +5,6 @@
                 <p class="FLHeader">Formulations</p>
             </div>
             <div class="FLMainSectionDiv">
-                {{!-- {{#each Formulation}}
-                <div class="FLEachItemDiv">
-                    <div class="FLEachItemLeftSection">
-                        <p class="EachItemLabel">Customer Name : {{this.CustomerName}}</p>
-                        <p class="EachItemLabel">Color Name : {{this.ColorName}}</p>
-                        <p class="EachItemLabel">Color Code : {{this.ColorCode}}</p>
-                        <p class="EachItemLabel">Category : {{this.CategoryName}}</p>
-                        <p class="EachItemLabel">Sub-Category : {{this.SubCategoryName}}</p>
-                    </div>
-                    <div class="FLEachItemRightSection">
-                        <p class="EachItemLabel">File no : {{this.FileNo}}</p>
-                        <p class="EachItemLabel">Project no : {{this.ProjectNo}}</p>
-                        <a href="/BulkOrder/{{this.FileNo}}">
-                            <div class="FLBulkHyperDIv">
-                                <p class="FLBulkHyperLabel">Order</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <hr>
-                {{/each}} --}}
-
                 <table id="FormulaTable" class="display">
                     <thead>
                         <tr>
@@ -48,11 +26,20 @@
                             <td class="FLTableData">{{this.ColorCode}}</td>
                             <td class="FLTableData">{{this.CategoryName}}</td>
                             <td class="FLTableData">{{this.SubCategoryName}}</td>
-                            <td class="FLTableData"><a class="BulkOrderAtag" href="/BulkOrder/{{this.FileNo}}">
-                                    <div class="FLBulkHyperDIv">
-                                        <p class="FLBulkHyperLabel">Order</p>
-                                    </div>
-                                </a></td>
+                            <td class="FLTableData">
+                                <div class="FLActions">
+                                    <a class="BulkOrderAtag" target="_blank" href="/Printsmlabel/{{this.FileNo}}">
+                                        <div class="FLBulkHyperDIvPrint">
+                                            <p class="FLBulkHyperLabelPrint">Print Label</p>
+                                        </div>
+                                    </a>
+                                    <a class="BulkOrderAtag" href="/BulkOrder/{{this.FileNo}}">
+                                        <div class="FLBulkHyperDIv">
+                                            <p class="FLBulkHyperLabel">Order</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                         {{/each}}
                     </tbody>

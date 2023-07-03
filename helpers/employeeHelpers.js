@@ -195,8 +195,12 @@ module.exports = {
         }
 
         return new Promise(async (resolve, reject) => {
+            console.log("TinterName: ",TinterName)
+            console.log("TinterQTY: ",TinterQty)
             var Tinter = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": TinterName });
             TinterQty = parseFloat(TinterQty);
+            console.log("Tinter: ",Tinter);
+            console.log("parseFloat(Tinter.Stock): ",parseFloat(Tinter.Stock));
             if (parseFloat(Tinter.Stock) > TinterQty) {
                 // have Stock for this formula
                 State.HaveStock = true;

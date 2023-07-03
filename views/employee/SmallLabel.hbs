@@ -1,0 +1,104 @@
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            printContent();
+            window.close();
+        });
+
+        function printContent() {
+            var content = document.getElementById("SmallLabelBorder");
+            var pri = window.open();
+            pri.document.write(content.innerHTML);
+            pri.document.close();
+            pri.focus();
+            pri.print();
+            window.close();
+        }
+    </script>
+<section id="SmallLabelBorder" class="MainAllSetion">
+
+    <div class="SmallLabelBorder">
+        <div class="SMLHeader">
+            <p class="SMLHeaderPTag">{{Formula.SubCategoryName}}</p>
+            <p class="SMLFileNO">File no : {{Formula.FileNo}}</p>
+        </div>
+        <div class="SMLSecondLevelDIv">
+            <p class="SMLSecondLevelPtag">Matt (%) : {{Formula.matt}}</p>
+            <p class="SMLSecondLevelPtag">Multi-Matt : + {{Formula.AdditivePercentage}}%</p>
+        </div>
+        <div class="SMLRemarksDiv">
+            <p class="SMLRemarks">
+                {{Formula.Remark}}
+            </p>
+        </div>
+        <div class="SMLImg">
+            {{#if Mipa}}
+            <img src="/images/Logo/mipa.jpeg" class="SmlImage" alt="" />
+            {{else}}
+            <img src="/images/Logo/rosner-logo.jpeg" class="SmlImage" alt="" />
+            {{/if}}
+        </div>
+
+        <style>
+            p {
+                margin: 0;
+            }
+
+            .MainAllSetion {
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .SmallLabelBorder {
+                height: 35mm;
+                width: 75mm;
+                border: 2px dotted gray;
+                padding: 3mm;
+            }
+
+            .SMLHeader {
+                display: flex;
+                justify-content: space-between;
+                font-size: 4mm;
+                font-weight: 600;
+                width: 100%;
+            }
+
+            .SMLFileNO {
+                font-size: 4mm;
+            }
+
+            .SMLSecondLevelDIv {
+                width: 100%;
+                padding-top: 2mm;
+                font-size: 4mm;
+                font-weight: 600;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .SMLRemarks {
+                font-size: 2.5mm;
+            }
+
+            .SMLRemarksDiv {
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                padding-top: 1mm;
+            }
+
+            .SMLImg {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding-top: 1mm;
+            }
+
+            .SmlImage {
+                height: 15mm;
+            }
+        </style>
+    </div>
+</section>
