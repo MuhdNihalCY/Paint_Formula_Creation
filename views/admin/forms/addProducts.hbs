@@ -18,10 +18,10 @@
                         <div class="ADFormAdding">
                             <div class="ADFormAddingCatgorySelection">
                                 <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">Select Category</p>
-                                    <select required class="ADSubCategorySelectionSelectBox" name="Category"
-                                        id="CategorySelect">
-                                        {{#if editProduct}}
+
+                                    {{#if editProduct}}
+                                    {{!-- <select required class="ADSubCategorySelectionSelectBox" name="Category"
+                                        id="CategorySelect" disabled>
                                         <option class="ADSelectCategoryOptions"
                                             value="{{matchingCategory.Category_Id}}">
                                             {{matchingCategory.Category_Id}} - {{matchingCategory.Category}}</option>
@@ -30,21 +30,25 @@
                                             {{this.Category_Id}} -
                                             {{this.Category}}</option>
                                         {{/each}}
-
-                                        {{else}}
+                                    </select> --}}
+                                    {{else}}
+                                    <p class="ADSubCategorySelectionLabel">Select Category</p>
+                                    <select required class="ADSubCategorySelectionSelectBox" name="Category"
+                                        id="CategorySelect">
                                         {{#each AllCategory}}
                                         <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
                                             {{this.Category_Id}} -
                                             {{this.Category}}</option>
                                         {{/each}}
-                                        {{/if}}
                                     </select>
+                                    {{/if}}
+
                                 </div>
                                 <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">Select Sub Category</p>
-                                    <select required class="ADSubCategorySelectionSelectBox" name="SubCategory"
-                                        id="SubCategorySelect">
-                                        {{#if editProduct}}
+
+                                    {{#if editProduct}}
+                                    {{!-- <select required class="ADSubCategorySelectionSelectBox" name="SubCategory"
+                                        id="SubCategorySelect" disabled>
                                         <option class="ADSelectCategoryOptions"
                                             value="{{matchingSubCategory.SubCategory_Id}}">
                                             {{matchingSubCategory.SubCategory_Id}} - {{matchingSubCategory.SubCategory}}
@@ -53,13 +57,18 @@
                                         <option class="ADSelectCategoryOptions" value="{{this.SubCategory_Id}}">
                                             {{this.SubCategory_Id}} - {{this.SubCategory}}</option>
                                         {{/each}}
-                                        {{else}}
+                                    </select> --}}
+                                    {{else}}
+                                    <p class="ADSubCategorySelectionLabel">Select Sub Category</p>
+                                    <select required class="ADSubCategorySelectionSelectBox" name="SubCategory"
+                                        id="SubCategorySelect">
                                         {{#each AllSubCategory}}
                                         <option class="ADSelectCategoryOptions" value="{{this.SubCategory_Id}}">
                                             {{this.SubCategory_Id}} - {{this.SubCategory}}</option>
                                         {{/each}}
-                                        {{/if}}
                                     </select>
+                                    {{/if}}
+
                                 </div>
                             </div>
                             <div class="ADFormAddingCatgorySelection">
@@ -86,24 +95,62 @@
                             </div>
                             <div class="ADFormAddingCatgorySelection">
                                 <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">Price (in liter)</p>
+                                    <p class="ADSubCategorySelectionLabel">Price</p>
                                     {{#if editProduct}}
-                                    <input type="number" step="any" name="Price_Liter" class="ADProductInputBox"
-                                        value="{{product.Price_Liter}}" required>
+                                    <input type="number" step="any" name="Price" class="ADProductInputBox"
+                                        value="{{product.Price}}" required>
                                     {{else}}
-                                    <input type="number" step="any" name="Price_Liter" class="ADProductInputBox"
+                                    <input type="number" step="any" name="Price" class="ADProductInputBox" required>
+                                    {{/if}}
+                                </div>
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Unit</p>
+                                    <select name="PriceUnit" id="" class="ADProductInputBox" required>
+                                        {{#if editProduct}}
+                                        {{#if PriceUnitLtr}}
+                                        <option value="Ltr">Liter</option>
+                                        <option value="kg">Kilogram</option>
+                                        {{else}}
+                                        <option value="kg">Kilogram</option>
+                                        <option value="Ltr">Liter</option>
+                                        {{/if}}
+                                        {{else}}
+                                        <option selected disabled hidden>Select Unit For Price</option>
+                                        <option value="kg">Kilogram</option>
+                                        <option value="Ltr">Liter</option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="ADFormAddingCatgorySelection">
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Standard Quantity</p>
+                                    {{#if editProduct}}
+                                    <input type="number" step="any" name="StandardQuatity" class="ADProductInputBox"
+                                        value="{{product.StandardQuatity}}" required>
+                                    {{else}}
+                                    <input type="number" step="any" name="StandardQuatity" class="ADProductInputBox"
                                         required>
                                     {{/if}}
                                 </div>
                                 <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">Price (in kilogram)</p>
-                                    {{#if editProduct}}
-                                    <input type="number" step="any" name="Price_Kilogram" class="ADProductInputBox"
-                                        value="{{product.Price_Kilogram}}" required>
-                                    {{else}}
-                                    <input type="number" step="any" name="Price_Kilogram" class="ADProductInputBox"
-                                        required>
-                                    {{/if}}
+                                    <p class="ADSubCategorySelectionLabel">Unit</p>
+                                    <select name="StandardQuantityUnit" id="" class="ADProductInputBox">
+                                        {{#if editProduct}}
+                                        {{#if STDUnitLtr}}
+                                        <option value="Ltr">Liter</option>
+                                        <option value="kg">Kilogram</option>
+                                        {{else}}
+                                        <option value="kg">Kilogram</option>
+                                        <option value="Ltr">Liter</option>
+                                        {{/if}}
+                                        {{else}}
+                                        <option selected disabled hidden>Select Unit For StandardQuatity</option>
+                                        <option value="kg">Kilogram</option>
+                                        <option value="Ltr">Liter</option>
+                                        {{/if}}
+
+                                    </select>
                                 </div>
                             </div>
                             <div class="ADFormAddingCatgorySelection">
@@ -131,8 +178,13 @@
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Stock</p>
                                     {{#if editProduct}}
+                                    {{#if RealStock}}
+                                    <input type="number" name="Stock" class="ADProductInputBox" value="{{RealStock}}"
+                                        required>
+                                    {{else}}
                                     <input type="number" name="Stock" class="ADProductInputBox"
                                         value="{{product.Stock}}" required>
+                                    {{/if}}
                                     {{else}}
                                     <input type="number" name="Stock" class="ADProductInputBox" required>
                                     {{/if}}
@@ -145,7 +197,11 @@
                                     return confirm('Are you sure you want to delete this product?');
                                 }
                             </script>
-                            <a class="btn btn-danger productDeleteBTN" href="/admin/DeleteProduct/{{product.Product_Id}}"
+                            <a href="/admin/copyproduct/{{product.Product_Id}}"
+                                class="btn btn-primary PCopyBtn ADPRoductSubmitBTN">Copy
+                                This Product to other SubCategory</a>
+                            <a class="btn btn-danger productDeleteBTN"
+                                href="/admin/DeleteProduct/{{product.Product_Id}}"
                                 onclick="return confirmProductDelete()">Delete Product</a>
                             {{/if}}
                         </div>

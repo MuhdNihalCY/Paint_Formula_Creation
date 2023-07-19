@@ -106,6 +106,7 @@ module.exports = {
                 data.InsertedTime = Date.now();
                 //  console.log("Going to add Sub Category", data);
                 var State = { Status: false, error: "" }
+                data.Products = [];
                 await db.get().collection(collection.SUB_CATEGORY_COLLECTION).insertOne(data).then((response) => {
                     //  console.log(response);
                     if (response.insertedId) {
@@ -146,6 +147,12 @@ module.exports = {
             resolve(SubCategories);
         })
     },
+    getSubCategoryByCategoryId: (id) => {
+        return new Promise(async (resolve, reject) => {
+            var SubCategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).find({ Category_Id: id }).sort({ "InsertedTime": 1 }).toArray()
+            resolve(SubCategories);
+        })
+    },
     getSubCategoryById: (id) => {
         return new Promise(async (resolve, reject) => {
             var Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ "SubCategory_Id": parseInt(id) });
@@ -155,7 +162,6 @@ module.exports = {
     },
     addProduct: (data) => {
         return new Promise(async (resolve, reject) => {
-            // console.log(data)
             var SameProduct = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": data.Product_Name });
             // console.log(SameProduct);
             var State = {
@@ -174,26 +180,77 @@ module.exports = {
                     data.Product_Id = parseInt(latestProductAdded.Product_Id) + 1;
                 } else {
                     data.Product_Id = 10000;
+                } //Product_Collection
+
+                var SubCategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ SubCategory_Id: parseInt(data.SubCategory) });
+                console.log(data);
+                console.log(SubCategory);
+                var ProductsArrayInSubcategory = SubCategory.Products;
+                var ProductId = data.Product_Id;
+                // Check if the product ID is present in the array
+                var isPresent = ProductsArrayInSubcategory.includes(ProductId);
+
+                // Output the result
+                if (isPresent) {
+                    // Already Product added to subcategory
+                    State.Status = false;
+                    State.error = "Product is Already added to subcategory";
+                    // console.log("Product ID", pId, "is present in the array.");
+                } else {
+                    // console.log("Product ID", pId, "is not present in the array.");
+                    ProductsArrayInSubcategory.push(ProductId);
+                    console.log(SubCategory);
+                    // remove Category and subcategory from data
+                    delete data.Category;
+                    delete data.SubCategory;
+
+                    console.log("Product to Insert: ", data);
+                    await db.get().collection(collection.PRODUCT_COLLECTION).insertOne(data).then((response) => {
+                        if (response.insertedId) {
+                            UpdateProductsArray(SubCategory)
+                            State.Status = true;
+                            console.log("Product Added");
+                        } else {
+                            State.Status = false;
+                            State.error = "Product is not Added, Try Again."
+                        }
+                    })
                 }
 
-                await db.get().collection(collection.PRODUCT_COLLECTION).insertOne(data).then((response) => {
-                    if (response.insertedId) {
-                        State.Status = true;
-                    } else {
-                        State.Status = false;
-                        State.error = "Product is not Added, Try Again."
-                    }
-                })
             } else {
                 State.error = "Product Already Exists."
             }
+
+            async function UpdateProductsArray(SubCategory) {
+                await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateOne({ SubCategory_Id: SubCategory.SubCategory_Id }, {
+                    $set: {
+                        Products: SubCategory.Products
+                    }
+                })
+            }
+
             resolve(State);
         })
     },
+    // this method is no using 
+    // remove this.***
     GetProduct: (id) => {
         return new Promise(async (resolve, reject) => {
             var Product = await db.get().collection(collection.PRODUCT_COLLECTION).find({ SubCategory: id }).toArray();
             resolve(Product);
+        })
+    },
+    getAllProductsByArrayOfId: (ArrayOfPId) => {
+        return new Promise(async (resolve, reject) => {
+
+            const productPromises = ArrayOfPId.map(async (productId) => {
+                const product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: parseInt(productId) });
+                return product;
+            });
+
+            const productList = await Promise.all(productPromises);
+            console.log("Product List : ", productList);
+            resolve(productList);
         })
     },
     GetAllProduct: () => {
@@ -225,15 +282,15 @@ module.exports = {
                     { _id: SameProduct._id },
                     {
                         $set: {
-                            Category: data.Category,
-                            SubCategory: data.SubCategory,
                             Product_Name: data.Product_Name,
                             Product_Density: data.Product_Density,
-                            Price_Liter: data.Price_Liter,
-                            Price_Kilogram: data.Price_Kilogram,
+                            Price: data.Price,
+                            PriceUnit: data.PriceUnit,
+                            StandardQuatity: data.StandardQuatity,
+                            StandardQuantityUnit: data.StandardQuantityUnit,
                             VOC: data.VOC,
                             SolidContent: data.SolidContent,
-                            Stock: data.Stock
+                            Stock: parseFloat(data.Stock) * parseFloat(data.StandardQuatity)
                         }
                     }
                 ).then((response) => {
@@ -255,6 +312,13 @@ module.exports = {
                 error: ""
             }
 
+            // remove This product from all Subcategories
+
+            var Subcategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateMany(
+                { Products: parseInt(id) },
+                { $pull: { Products: parseInt(id) } }
+            )
+            // delete product details
             await db.get().collection(collection.PRODUCT_COLLECTION).deleteOne({ Product_Id: parseInt(id) }).then((response) => {
                 // console.log(response)
                 if (response.deletedCount) {
@@ -263,6 +327,55 @@ module.exports = {
                     State.error = "Product Id Not Found"
                 }
                 resolve(State);
+            })
+        })
+    },
+    CopyProductById: (id, data) => {
+        return new Promise(async (resolve, reject) => {
+            //console.log(data)
+            var Status = {
+                State: false,
+                Error: "",
+            }
+            var SubCategory_Id = parseInt(data.SubCategory);
+            var SubCategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ SubCategory_Id: SubCategory_Id });
+
+            // Check if SubCategory.Products is an array and initialize it if not
+            if (!Array.isArray(SubCategory.Products)) {
+                console.log("Make it into an Array");
+                SubCategory.Products = [];
+            }
+
+            // check for id
+            if (!SubCategory.Products.includes(parseInt(id))) {
+                SubCategory.Products.push(parseInt(id));
+                await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateOne({ SubCategory_Id: SubCategory_Id }, {
+                    $set: {
+                        Products: SubCategory.Products
+                    }
+                }).then(() => {
+                    console.log("ID added successfully.");
+                    Status.State = true
+                    resolve(Status);
+                })
+            } else {
+                console.log("ID already exists in the array.");
+                Status.Error = "Product Already Present in that Subcategory : " + SubCategory.SubCategory;
+                resolve(Status);
+            }
+
+        })
+    },
+    RemoveProductFromSubcategory: (Subcategory_Id, ProductId) => {
+
+        return new Promise(async (resolve, reject) => {
+            // remove This product from all Subcategories
+
+            await db.get().collection(collection.SUB_CATEGORY_COLLECTION).updateMany(
+                { SubCategory_Id: parseInt(Subcategory_Id) },
+                { $pull: { Products: parseInt(ProductId) } }
+            ).then(() => {
+                resolve();
             })
         })
     },

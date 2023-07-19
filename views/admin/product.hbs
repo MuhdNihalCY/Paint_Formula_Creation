@@ -103,23 +103,18 @@
                 </div>
             </div>
             <div class="ADMainTableDiv">
-                <table class="ADMainTable">
+                <table id="" class="ADMainTable">
                     <thead class="ADTableHead">
                         <tr class="ADTableHeadTR">
                             <th>ID</th>
                             <th>Product Name</th>
-                            <th>Sub Category Name</th>
-                            <th>Category Name</th>
                             <th>Density</th>
-                            <th>Stock</th>
-                            <th>Price (ltr)</th>
-                            <th>Price (kg)</th>
+                            <th>Stock (Ltr or Kg)</th> {{!--   --}}
+                            <th>Price</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -128,9 +123,15 @@
 </section>
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
 
 
 <script>
+
+    $("#FormulaTable").DataTable();
+
+
     //ajax
     function ADgetAllSubCategories() {
         return fetch('/admin/Subcategories/api')
@@ -241,9 +242,9 @@
         const productData = data.Products;
 
         // console.log("Calling Addproducts to Table");
-        console.table(categoryData);
+        /*console.table(categoryData);
         console.table(subCategoryData);
-        console.table(productData);
+        console.table(productData);*/
 
         function populateTable(categoryData, subCategoryData, productData) {
             const tableBody = document.querySelector('.ADMainTable tbody');
@@ -273,33 +274,50 @@
             // Call the function to update product data
             updateProductData(productData);
 
-            console.table()
+            //console.table()
 
-            // Iterate over productData array and create table rows
-            productData.forEach((product) => {
-                // Find the category and subcategory names based on IDs
-                const category = categoryData.find((category) => category.Category_Id === product.Category);
-                const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === product.SubCategory);
+            if (productData.length > 0) {
+                // Iterate over productData array and create table rows
+                productData.forEach((product) => {
+                    // Find the category and subcategory names based on IDs
+                    const category = categoryData.find((category) => category.Category_Id === product.Category);
+                    const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === product.SubCategory);
+
+                    // Create a new table row
+                    const row = document.createElement('tr');
+
+                    var ProductStock = parseFloat(product.Stock) * parseFloat(product.StandardQuatity)
+                    // Populate table cells with data
+                    row.innerHTML = `
+      <td>${product.Product_Id}</td>
+      <td>${product.Product_Name}</td>
+      <td>${product.Product_Density}</td>
+      <td>${ProductStock}</td>
+      <td>${product.Price} Per ${product.PriceUnit}</td>
+      <td><a class="btn btn-primary ADProductEditBTN" href="/admin/editProduct/${product.Product_Id}">Edit</a></td>
+    `;
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } else {
+                // Iterate over productData array and create table rows
+
 
                 // Create a new table row
                 const row = document.createElement('tr');
 
                 // Populate table cells with data
                 row.innerHTML = `
-      <td>${product.Product_Id}</td>
-      <td>${product.Product_Name}</td>
-      <td>${product.SubCategoryName}</td>
-      <td>${product.CategoryName}</td>
-      <td>${product.Product_Density}</td>
-      <td>${product.Stock}</td>
-      <td>${product.Price_Liter}</td>
-      <td>${product.Price_Kilogram}</td>
-      <td><a class="btn btn-primary ADProductEditBTN" href="/admin/editProduct/${product.Product_Id}">Edit</a></td>
+     <td class="ADSubCategoryNotAvailable" colspan="9">No Product is Added</td>
     `;
 
                 // Append the row to the table body
                 tableBody.appendChild(row);
-            });
+
+            }
+
+
         }
 
         // Call the function to populate the table
@@ -391,6 +409,7 @@
                     // Process the data received from the backend
                     // console.log(data);
                     // Call a function or perform any actions with the data
+                    //console.log(data);
                     AddProductsToTable(data);
 
                 } else {
@@ -402,4 +421,6 @@
         }
         fetchData();
     };
+
+
 </script>

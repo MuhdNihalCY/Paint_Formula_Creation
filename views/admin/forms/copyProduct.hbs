@@ -1,0 +1,102 @@
+<section>
+    <div class="CPProductWholeFrame">
+        <div class="container">
+            <div class="CPProductInnerFrame">
+                <p class="CPProductMainHeader text-center">Copy Product</p>
+                <hr>
+                <p class="CPProductsecondaryHeader">Product Details</p>
+                <div class="CPProductDetailsDiv">
+                    <div class="CPPLeftSection col-md-6">
+                        <p class="CPPnameQ">Product Name : </p>
+                        <p class="CPPnameA">{{Product.Product_Name}}</p>
+                    </div>
+                    <div class="CPPRightSection col-md-6">
+                        <p class="CPPnameQ">Product Density : </p>
+                        <p class="CPPnameA">{{Product.Product_Density}}</p>
+                    </div>
+                </div>
+                <div class="CPProductDetailsDiv">
+                    <div class="CPPRightSection col-md-6">
+                        <p class="CPPnameQ">Price : </p>
+                        <p class="CPPnameA">{{Product.Price}} / {{Product.PriceUnit}}</p>
+                    </div>
+                    <div class="CPPLeftSection col-md-6">
+                        <p class="CPPnameQ">Standard Quantity : </p>
+                        <p class="CPPnameA">{{Product.StandardQuatity}} {{Product.StandardQuantityUnit}}</p>
+                    </div>
+                </div>
+                <div class="CPProductDetailsDiv">
+                    <div class="CPPLeftSection col-md-6">
+                        <p class="CPPnameQ">VOC : </p>
+                        <p class="CPPnameA">{{Product.VOC}}</p>
+                    </div>
+                    <div class="CPPRightSection col-md-6">
+                        <p class="CPPnameQ">Solid Content : </p>
+                        <p class="CPPnameA">{{Product.SolidContent}}</p>
+                    </div>
+                </div>
+                <hr>
+                <form action="/admin/copyproduct/{{Product.Product_Id}}" method="post">
+                    <p class="CPProductsecondaryHeader">Copy Product To : </p>
+                    <p class="text-center text-danger">{{OPError}}</p>
+                    <div class="CPProductDetailsDiv">
+                        <div class="CPPLeftSection col-md-6">
+                            <p class="CPPnameQ">Category</p>
+                            <select name="Category" class="CPPSelectBox" onchange="handleCategoryChange(this)">
+                                <option value="" selected disabled>Select Category</option>
+                                {{#each Category}}
+                                <option value="{{this.Category_Id}}">{{this.Category_Id}} - {{this.Category}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="CPPRightSection col-md-6">
+                            <p class="CPPnameQ">Sub-Category</p>
+                            <select name="SubCategory" class="CPPSelectBox" id="" required>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="CPPCopyBTNSection">
+                        <input type="submit" class='ADPRoductSubmitBTN' value="Copy Product">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function handleCategoryChange(selectElement) {
+        var selectedValue = selectElement.value;
+        //alert(selectedValue);
+        $.get(`/admin/api/GetSubcategoryByCategoryId/${selectedValue}`)
+            .done(function (response) {
+                //console.log(response);
+                // Perform any necessary DOM manipulation or further processing here
+
+                var subCategorySelect = document.getElementsByName("SubCategory")[0];
+                subCategorySelect.innerHTML = ""; // Clear existing options
+
+                if (response.subcategories.length > 0) {
+                    // Create and append new options based on the response
+                    response.subcategories.forEach(function (subcategory) {
+                        var option = document.createElement("option");
+                        option.value = subcategory.SubCategory_Id;
+                        option.text = subcategory.SubCategory;
+                        subCategorySelect.appendChild(option);
+                    });
+                } else {
+                    var option = document.createElement("option");
+                    option.value = "0"
+                    option.text = "No Sub-Category Available! "
+                    option.selected = true;
+                    option.disabled = true;
+                    subCategorySelect.appendChild(option);
+                }
+
+            })
+            .fail(function (xhr, status, error) {
+                console.error(error);
+            });
+    }
+</script>

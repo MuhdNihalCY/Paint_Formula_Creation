@@ -950,6 +950,22 @@ td {
   margin-top: 8px;
 }
 
+.VPPTable td{
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.VPPRemoveBTN{
+  background-color: #de1111e0;
+  color: whitesmoke;
+  font-weight: 600;
+}
+
+.VPPRemoveBTN:hover {
+  color: white;
+  background-color: #db0505;
+}
+
 .ADMainTableDiv {
   margin: 5vh 0 0 3vw;
   width: 85%;
@@ -1108,6 +1124,49 @@ td {
   font-weight: 600;
 }
 
+.ADSubCategoryWholeFrame {
+  margin-top: -1rem;
+  background-color: rgba(145, 136, 115, 0.5);
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.ADSubCategorySubPageSsection {
+  width: 100%;
+  background-color: #F7F7F8;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5rem;
+  border-radius: 25px;
+}
+
+.ADEditSubRProDiv {
+  display: flex;
+  justify-content: end;
+}
+
+.viewProductsBTN {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  background-color: #008bc2;
+  margin: 0;
+  padding: 0.5rem 2rem;
+  border-radius: 10px;
+}
+
+.VPPHeading {
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.viewProductsBTN:hover {
+  color: rgb(241, 241, 241);
+  background-color: #0280b2;
+}
+
 .ADSubCategoryNotAvailable {
   font-size: 2rem;
   font-weight: 600;
@@ -1180,6 +1239,11 @@ td {
 .ADProductEditBTN {
   width: 5rem;
   font-weight: 800;
+}
+
+.PCopyBtn {
+  margin-top: -3rem;
+  margin-bottom: 4rem;
 }
 
 .productDeleteBTN {
@@ -1270,6 +1334,7 @@ td {
   color: whitesmoke;
 }
 
+
 .BinderSelect,
 .BinderSelect option {
   padding: 1rem;
@@ -1287,7 +1352,7 @@ td {
 
 .AddSubCategoryPage {
   height: auto;
-  margin-bottom: 10rem;
+  margin-bottom: 3rem;
 }
 
 .DivForVerticalGap {
@@ -1635,7 +1700,7 @@ td {
   padding: 0.5rem;
 }
 
-.FLBulkHyperLabelPrint{
+.FLBulkHyperLabelPrint {
   margin: 0;
   color: #1c3753;
 }
@@ -1756,3 +1821,65 @@ td {
   font-size: 30px;
   font-weight: 600;
 }
+
+/* Admin Copy Product Starts Here */
+
+.CPProductWholeFrame {
+  display: flex;
+  justify-content: center;
+  padding-top: 5rem;
+  background-color: rgba(145, 136, 115, 0.5);
+  padding-bottom: 5rem;
+}
+
+.CPProductInnerFrame {
+  width: 100%;
+  padding: 3rem;
+  background-color: #faf9f9;
+  border-radius: 25px;
+}
+
+.CPProductMainHeader {
+  font-size: 35px;
+  font-weight: 700;
+}
+
+.CPProductsecondaryHeader {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.CPProductDetailsDiv {
+  width: 100%;
+  display: flex;
+}
+
+.CPPLeftSection,
+.CPPRightSection {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.CPPnameQ,
+.CPPnameA {
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 2rem;
+  margin-top: 1rem;
+}
+
+.CPPSelectBox {
+  font-size: 20px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+}
+
+.CPPCopyBTNSection {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* Admin Copy Product ends Here */

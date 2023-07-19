@@ -1,0 +1,51 @@
+<section>
+    <div class="ADSubCategoryWholeFrame">
+        <div class="container">
+            <div class="ADSubCategorySubPageSsection">
+                <div class="col-sm-12">
+                    <div class="AddSubCategoryPage">
+                        <p class="ADAddCategoryFromHeader text-center">Sub-Category: {{SubCategory.SubCategory}}</p>
+                        <p class="text-start VPPHeading">Prodcuts</p>
+                        <hr>
+                        {{!-- Table --}}
+                        <table id="FormulaTable" class="display">
+                            <thead>
+                                <tr>
+                                    <th class="text-center FLTableHeader" style="font-size: 20px;">Product Name</th>
+                                    <th class="text-center FLTableHeader" style="font-size: 20px;">Product Density</th>
+                                    <th class="text-center FLTableHeader" style="font-size: 20px;">Price</th>
+                                    <th class="text-center FLTableHeader" style="font-size: 20px;">Std Qty</th>
+                                    <th class="text-center FLTableHeader" style="font-size: 20px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each Products}}
+                                <tr class="VPPTable">
+                                    <td>{{this.Product_Name}}</td>
+                                    <td>{{this.Product_Density}}</td>
+                                    <td>{{this.Price}} / {{this.PriceUnit}}</td>
+                                    <td>{{this.StandardQuatity}} / {{this.StandardQuantityUnit}}</td>
+                                    <td>
+                                        <a class="btn btn-primary ADProductEditBTN"
+                                            href="/admin/editProduct/{{this.Product_Id}}">Edit</a>
+                                        <a class=" btn VPPRemoveBTN"
+                                            href="/admin/RemoveProduct/{{RemoveProductPath}}">Remove
+                                            from this List</a>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script>
+    $("#FormulaTable").DataTable();
+</script>
