@@ -73,15 +73,23 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             // console.log("Going to delete category with id", id);
             var State = { Status: false, error: "" }
-            await db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({ "_id": new ObjectId(id) }).then((response) => {
-                // console.log(response);
-                if (response.deletedCount) {
-                    State.Status = true;
-                } else {
-                    State.Status = false;
-                }
+
+            var Subcategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).find({ Category_Id: id }).toArray();
+            if (Subcategories.length > 0) {
+                await db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({ "_id": new ObjectId(id) }).then((response) => {
+                    // console.log(response);
+                    if (response.deletedCount) {
+                        State.Status = true;
+                    } else {
+                        State.error = "Category Not Deleted, Try Again. "
+                        State.Status = false;
+                    }
+                    resolve(State);
+                })
+            } else {
+                State.error = "Category Must be empty before deleting the Category. ie, no Subcategory Should be avalailable under this Category."
                 resolve(State);
-            })
+            }
         })
     },
     AddSubCategory: (data) => {
@@ -234,12 +242,12 @@ module.exports = {
     },
     // this method is no using 
     // remove this.***
-    GetProduct: (id) => {
-        return new Promise(async (resolve, reject) => {
-            var Product = await db.get().collection(collection.PRODUCT_COLLECTION).find({ SubCategory: id }).toArray();
-            resolve(Product);
-        })
-    },
+    // GetProduct: (id) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         var Product = await db.get().collection(collection.PRODUCT_COLLECTION).find({ SubCategory: id }).toArray();
+    //         resolve(Product);
+    //     })
+    // },
     getAllProductsByArrayOfId: (ArrayOfPId) => {
         return new Promise(async (resolve, reject) => {
 

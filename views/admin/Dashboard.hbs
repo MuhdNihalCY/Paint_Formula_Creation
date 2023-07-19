@@ -75,6 +75,9 @@
                 <p class="ADMainAreaHeader">Category</p>
             </div>
             <div class="ADMainAddButtonDiv">
+                <div class="CategoryDelErrorDiv">
+                    <p class="CategoryDelError">{{DelError}}</p>
+                </div>
                 {{!-- <a href="/admin/addCategory"> --}}
                 <div onclick="OpenCategoryAddingForm()" class="ADMainAddButton">
                     <p>Add New</p>
@@ -131,6 +134,26 @@
 </section>
 
 <script>
+
+    // Check if the page is being refreshed
+    if (performance.navigation.type === 1 && !sessionStorage.getItem('refreshed')) {
+        // Clear the query parameters
+        const url = new URL(window.location.href);
+        url.search = '';
+        window.history.replaceState(null, '', url.toString());
+
+        // Set the 'refreshed' flag in sessionStorage
+        sessionStorage.setItem('refreshed', true);
+
+        // Refresh the page
+        location.reload();
+    } else {
+        // Clear the 'refreshed' flag from sessionStorage
+        sessionStorage.removeItem('refreshed');
+    }
+
+
+
     function confirmProductDelete() {
         return confirm('Are you sure you want to delete this Category?');
     }

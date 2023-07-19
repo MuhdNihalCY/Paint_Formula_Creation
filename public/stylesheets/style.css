@@ -950,12 +950,12 @@ td {
   margin-top: 8px;
 }
 
-.VPPTable td{
+.VPPTable td {
   font-size: 19px;
   font-weight: 600;
 }
 
-.VPPRemoveBTN{
+.VPPRemoveBTN {
   background-color: #de1111e0;
   color: whitesmoke;
   font-weight: 600;
@@ -964,6 +964,14 @@ td {
 .VPPRemoveBTN:hover {
   color: white;
   background-color: #db0505;
+}
+
+.CategoryDelErrorDiv {
+  padding: 2rem;
+}
+
+.CategoryDelError {
+  color: red;
 }
 
 .ADMainTableDiv {

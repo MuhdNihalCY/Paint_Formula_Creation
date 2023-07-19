@@ -24,8 +24,13 @@ router.get('/', verifyLogin, function (req, res, next) {
     // console.log("Calling Admin Dash")
     if (req.query.Error) {
       res.render('admin/Dashboard', { admin: true, AllCategory, AddError: req.query.Error });
+    } else if (req.query.DelError) {
+      var DelError = req.query.DelError
+      res.render('admin/Dashboard', { admin: true, AllCategory, DelError });
+    } else {
+      res.render('admin/Dashboard', { admin: true, AllCategory });
+      //res.redirect(req.originalUrl.split('?')[0]); // Redirect to the same route without query parameters
     }
-    res.render('admin/Dashboard', { admin: true, AllCategory });
   })
 });
 
@@ -83,7 +88,11 @@ router.post('/addCategory', verifyLogin, (req, res) => {
 
 router.get('/Detele-Category/:id', verifyLogin, (req, res) => {
   adminHelpers.DeleteCategory(req.params.id).then((State) => {
-    res.redirect('/admin');
+    if (State.Status) {
+      res.redirect('/admin');
+    } else {
+      res.redirect(`/admin/?DelError=${State.error}`);
+    }
   })
 })
 
@@ -458,7 +467,7 @@ router.get('/View-Product-from-subcategory/:id', verifyLogin, (req, res) => {
       console.log(Products);
 
       Products.forEach(obj => {
-        obj.RemoveProductPath = SubCategoryId+'/'+obj.Product_Id;
+        obj.RemoveProductPath = SubCategoryId + '/' + obj.Product_Id;
       });
 
       res.render('admin/ViewProducts', { admin: true, Products, SubCategory })
@@ -467,12 +476,12 @@ router.get('/View-Product-from-subcategory/:id', verifyLogin, (req, res) => {
   })
 })
 
-router.get('/RemoveProduct/:sub/:Product',verifyLogin,(req,res)=>{
+router.get('/RemoveProduct/:sub/:Product', verifyLogin, (req, res) => {
   var SubCategory_Id = req.params.sub;
   var product_Id = req.params.Product;
 
-  adminHelpers.RemoveProductFromSubcategory(SubCategory_Id,product_Id).then(()=>{
-    res.redirect(`/admin/View-Product-from-subcategory/${SubCategory_Id}`); 
+  adminHelpers.RemoveProductFromSubcategory(SubCategory_Id, product_Id).then(() => {
+    res.redirect(`/admin/View-Product-from-subcategory/${SubCategory_Id}`);
   })
 })
 
