@@ -1,74 +1,253 @@
 <div id='center' class="main" style="text-align: left;">
+
+    <div id="fullscreen-popup">
+        <!-- Popup content -->
+        <div class="popupContent">
+            <div class="PopHeaderDiv">
+                <p class="PopHeader">Select Date</p>
+                <button class="Popclose-button" onclick="closeFullscreenPopup()">X</button>
+            </div>
+            <hr>
+            <div class="PopUpDatesDiv">
+                <p class="PopUpLabel">Start Date</p>
+                <input type="date" placeholder="Select Start Date" name="StartDate" id="StartDate">
+                <p class="PopUpLabel">End Date</p>
+                <input type="date" placeholder="Select Start Date" name="EndDate" id="EndDate">
+            </div>
+            <div class="PopButtonDiv">
+                <button class="PopSubmitBtn" onclick="submitDateRange()">Apply Dates</button>
+                <button class="PopCancelBtn" onclick="ClearDate()">Clear Filters</button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="mainInner">
         <div>Welcome {{EmployeeName}}</div>
         <br>
-        <div class="stocks">
-            <p class="StockAlerts">Stock Alerts!</p>
-            {{!-- for Products --}}
-            {{#if Products}}
-            <hr>
-            <p class="ItemName">Products</p>
-            {{#each Products}}
-            <div class="EachItemDIv">
-                <hr>
-                <div class="StockAlertItemNameDiv">
-                    <div class="StockAlertLayerDIv">
-                        <p>Item Name : {{this.Product_Name}}</p>
-                        <p class="RemainingStocks">Remaining Stocks: {{this.Stock}}</p>
-                    </div>
-                    {{!-- <div class="StockAlertLayerDIv">
-                        <p>Category : PUR 5</p>
-                        <p>SubCategory : POUY</p>
-                    </div> --}}
+        <div class="MainInnerDiv">
+            <a href="/CreateFormula" class="btn newFromulaBTN">New Formula</a>
+        </div>
+        <div class="EMSearchFormDiv">
+            <div class="input-container">
+                <label for="customerName">Customer Name</label>
+                <input type="text" id="customerName" class="autocomplete-input" />
+                <div class="autocomplete-options" id="customerNameOptions"></div>
+            </div>
+
+            <div class="input-container">
+                <label for="colorCode">Color Code</label>
+                <input type="text" id="colorCode" class="autocomplete-input" />
+                <div class="autocomplete-options" id="colorCodeOptions"></div>
+            </div>
+
+            <div class="input-container">
+                <label for="colorName">Color Name</label>
+                <input type="text" id="colorName" class="autocomplete-input" />
+                <div class="autocomplete-options" id="colorNameOptions"></div>
+            </div>
+
+            <div class="input-container">
+                <label for="StartDate">Date</label>
+                <div id="dateRangeContainer">
+                    <input disabled type="text" id="DateRange" class="autocomplete-input DateInputS" />
                 </div>
             </div>
-            {{!-- sample --}}
-            {{/each}}
-            {{else}}
-            {{/if}}
-            <hr>
-            <div class="StockVerticalGap"></div>
-            {{!-- Binders --}}
-            {{#if Binders}}
-            <p class="ItemName">Binders</p>
-            {{#each Binders}}
-            <div class="EachItemDIv">
-                <hr>
-                <div class="StockAlertItemNameDiv">
-                    <div class="StockAlertLayerDIv">
-                        <p class="StocksData">Item Name : {{this.Binder_Name}}</p>
-                        <p class="RemainingStocks">Remaining Stocks: {{this.Stock}}</p>
-                    </div>
-                </div>
-            </div>
-            {{/each}}
-            {{else}}
-            {{/if}}
-            <hr>
-            <div class="StockVerticalGap"></div>
-            {{!-- for Additives --}}
-            {{#if Additives}}
-            <p class="ItemName">Additives</p>
-            {{#each Additives}}
-            <div class="EachItemDIv">
-                <hr>
-                <div class="StockAlertItemNameDiv">
-                    <div class="StockAlertLayerDIv">
-                        <p>Item Name : {{this.Additive_Name}}</p>
-                        <p class="RemainingStocks">Remaining Stocks: {{this.Stock}}</p>
-                    </div>
-                    {{!-- <div class="StockAlertLayerDIv">
-                        <p>Category : PUR 5</p>
-                        <p>SubCategory : POUY</p>
-                    </div> --}}
-                </div>
-            </div>
-            {{/each}}
-            {{else}}
-            {{/if}}
+
+        </div>
+        <div class="FormSubmitDivArea">
+            <button>Search</button>
+            <button>Clear Form</button>
         </div>
     </div>
 </div>
+
+
+
+<!-- Add this script tag in the <head> section of your HTML file -->
+<script>
+    // Replace this dummy data with your actual data fetched via Ajax API call
+    const Formulations = [
+        { CustomerName: "John Doe", ColorCode: "A1", ColorName: "Red" },
+        { CustomerName: "Jane Smith", ColorCode: "B2", ColorName: "Blue" },
+        { CustomerName: "Bob Johnson", ColorCode: "C3", ColorName: "Green" },
+        // Add more data as needed
+    ];
+
+    const customerNameInput = document.getElementById("customerName");
+    const colorCodeInput = document.getElementById("colorCode");
+    const colorNameInput = document.getElementById("colorName");
+
+    customerNameInput.addEventListener("input", handleInput);
+    colorCodeInput.addEventListener("input", handleInput);
+    colorNameInput.addEventListener("input", handleInput);
+
+    document.addEventListener("click", (event) => {
+        const target = event.target;
+        if (
+            target !== customerNameInput &&
+            target !== colorCodeInput &&
+            target !== colorNameInput
+        ) {
+            hideAutocompleteOptions();
+        }
+    });
+
+    function handleInput(event) {
+        const inputElement = event.target;
+        const inputValue = inputElement.value.trim();
+        const optionsContainerId = `${inputElement.id}Options`;
+        const optionsContainer = document.getElementById(optionsContainerId);
+
+        // Clear previous options
+        optionsContainer.innerHTML = "";
+
+        if (inputValue) {
+            const matchingData = getMatchingData(inputElement.id, inputValue);
+
+            if (matchingData.length > 0) {
+                matchingData.forEach((data) => {
+                    const optionElement = document.createElement("p");
+                    optionElement.textContent = data;
+                    optionElement.addEventListener("click", () => {
+                        inputElement.value = data;
+                        hideAutocompleteOptions();
+                    });
+                    optionsContainer.appendChild(optionElement);
+                });
+
+                showAutocompleteOptions(optionsContainer);
+            } else {
+                hideAutocompleteOptions();
+            }
+        } else {
+            hideAutocompleteOptions();
+        }
+    }
+
+    function getMatchingData(inputId, inputValue) {
+        const key = inputId === "customerName" ? "CustomerName" : inputId === "colorCode" ? "ColorCode" : "ColorName";
+        const matchingData = Formulations.filter((item) =>
+            item[key].toLowerCase().includes(inputValue.toLowerCase())
+        );
+
+        return matchingData.map((item) => item[key]);
+    }
+
+    function showAutocompleteOptions(optionsContainer) {
+        optionsContainer.style.display = "block";
+    }
+
+    function hideAutocompleteOptions() {
+        const allOptionsContainers = document.querySelectorAll(".autocomplete-options");
+        allOptionsContainers.forEach((container) => {
+            container.style.display = "none";
+        });
+    }
+
+
+    // Date Popup
+
+    const dateRangeContainer = document.getElementById("dateRangeContainer");
+
+    dateRangeContainer.addEventListener("click", openFullScreenPopup);
+
+    function openFullScreenPopup() {
+        var element = document.getElementById('fullscreen-popup');
+        element.style.display = "flex";
+    }
+
+    function closeFullscreenPopup() {
+        var element = document.getElementById('fullscreen-popup');
+        element.style.display = "none";
+    }
+
+
+
+    function ClearDate() {
+        var StartDate = document.getElementById('StartDate');
+        var EndDate = document.getElementById('EndDate');
+        var DateRange = document.getElementById('DateRange');
+
+        StartDate.value = "";
+        EndDate.value = "";
+        DateRange.value = "";
+        StartDate.max = "";
+        EndDate.min = "";
+    }
+
+    function HandleStartDate() {
+        var startDateInp = document.getElementById('StartDate');
+        var endDateInp = document.getElementById('EndDate');
+        endDateInp.min = startDateInp.value;
+    }
+
+    function HandleEndDate() {
+        var startDateInp = document.getElementById('StartDate');
+        var endDateInp = document.getElementById('EndDate');
+        startDateInp.max = endDateInp.value;
+    }
+
+    const startDateInput = document.getElementById('StartDate');
+    const endDateInput = document.getElementById('EndDate');
+
+    // When the Start Date changes, update the minimum date for the End Date
+    startDateInput.addEventListener('change', () => {
+        HandleStartDate()
+    });
+
+    // When the End Date changes, update the maximum date for the Start Date
+    endDateInput.addEventListener('change', () => {
+        HandleEndDate()
+    });
+
+    function submitDateRange() {
+        var startDateIn = document.getElementById('StartDate').value;
+        var endDateIn = document.getElementById('EndDate').value;
+
+        // Check if both start date and end date are selected
+        if (startDateIn && endDateIn) {
+            // Convert to Date objects
+            const startDate = new Date(startDateIn);
+            const endDate = new Date(endDateIn);
+
+            // Function to format the date as "day month year" (e.g., "5 July 2023")
+            function formatDate(date) {
+                const day = date.getDate();
+                const month = date.toLocaleString('default', { month: 'long' });
+                const year = date.getFullYear();
+                return `${day} ${month} ${year}`;
+            }
+
+            // Convert to formatted date strings
+            const formattedStartDate = formatDate(startDate);
+            const formattedEndDate = formatDate(endDate);
+
+            // Output
+            //console.log("Formatted Date:", formattedStartDate, " to ", formattedEndDate);
+
+            var FormattedDate = formattedStartDate + " to " + formattedEndDate;
+
+            document.getElementById('DateRange').value = FormattedDate;
+            closeFullscreenPopup();
+        } else {
+            // Handle case when no date is selected
+            document.getElementById('DateRange').value = "";
+            alert("Select two Dates!")
+        }
+
+
+    }
+
+
+</script>
+
+
+
+
+
+
+
 
 <style>
     .main {
@@ -81,6 +260,89 @@
         align-items: start;
         margin-top: 80px;
         margin-left: 25px;
+    }
+
+    #fullscreen-popup {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(34, 37, 49, .7);
+        z-index: 9999;
+        overflow: hidden;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popupContent {
+        width: 40rem;
+        height: 18rem;
+        background-color: rgb(229, 233, 242);
+    }
+
+    .PopHeaderDiv {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 3rem;
+        padding-right: 2rem;
+    }
+
+    .PopHeader {
+        font-size: 25px;
+        font-weight: 600;
+        margin-top: 2rem;
+    }
+
+    .Popclose-button {
+        border: none;
+        font-size: 30px;
+        font-weight: 700;
+        background-color: rgb(229, 233, 242);
+        color: gray;
+    }
+
+    .Popclose-button:hover {
+        color: rgb(20, 20, 20);
+    }
+
+    .PopUpDatesDiv {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .PopUpLabel {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 1rem;
+        margin-left: 2rem;
+    }
+
+    #StartDate,
+    #EndDate {
+        padding: 1rem;
+        margin-right: 2rem;
+    }
+
+    .PopButtonDiv {
+        display: flex;
+        justify-content: center;
+    }
+
+    .PopButtonDiv button {
+        margin: 2rem;
+        background-color: #3b3be1;
+        padding: 1rem 2rem;
+        color: whitesmoke;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .PopButtonDiv button:hover {
+        background-color: #2121be;
     }
 
     .mainInner {
@@ -101,53 +363,94 @@
         margin-bottom: 20px;
     }
 
-
-    .stocks {
-        border: 1px solid #000;
-        border-radius: 10px;
-        width: 50vw;
-        margin-top: 30px;
-        margin-left: 30px;
-        padding: 20px;
-        margin-left: -2rem;
-    }
-
-    .StockAlerts {
-        font-size: 25px;
+    .newFromulaBTN {
+        padding: .5rem 4rem;
+        font-size: 20px;
         font-weight: 600;
-        color: red;
+        border-radius: 25px;
+        background-color: #3b3be1;
+        color: whitesmoke;
     }
 
-    .StockAlertLayerDIv {
+    .newFromulaBTN:hover {
+        background-color: #1111be;
+        color: whitesmoke;
+    }
+
+    .EMSearchFormDiv {
+        margin: 2rem 0;
         display: flex;
-        justify-content: space-between;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        flex-wrap: wrap
     }
 
-    .StocksData {
-        color: rgb(48, 48, 48);
+    /*From Starts*/
+    .input-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-size: 15px;
+        margin: 0 1rem;
+    }
+
+    .InputContainerDate {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .autocomplete-input {
+        border: 1px solid lightgray;
+        border-left-color: blue;
+        border-left-width: 3px; 
+        padding: 5px;
+        font-size: 15px;
+        width: 200px;
+        margin: 0 1rem;
+    }
+
+    .DateInputS {
+        width: 300px;
+    }
+
+    .autocomplete-options {
+        position: absolute;
+        background-color: white;
+        border: 1px solid lightgray;
+        width: 200px;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+        z-index: 1;
+        margin-top: 46px;
+        margin-left: 1rem;
+    }
+
+    .autocomplete-options p {
+        padding: 5px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .autocomplete-options p:hover {
+        background-color: lightgray;
+    }
+
+    .FormSubmitDivArea{
+        display: flex;
+        justify-content: start;
     }
 
 
-    .StockAlertItemNameDiv {
-        padding-right: 4rem;
-    }
 
-    .StockAlertItemNameDiv p {
-        margin-bottom: 1rem;
-        padding: 0;
-    }
 
-    .RemainingStocks {
-        color: rgb(146, 1, 1);
-    }
 
-    .ItemName {
-        font-size: 25px;
-        font-weight: 700;
-        color: black;
-    }
 
-    .StockVerticalGap {
-        height: 2rem;
-    }
+
+    /*Form ends*/
 </style>

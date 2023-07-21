@@ -13,8 +13,8 @@ const verifyLogin = (req, res, next) => {
   if (req.session.AdminLog) {
     next()
   } else {
-    next()
-    // res.redirect('/admin/login');
+    res.redirect('/admin/login');
+    // next()
   }
 }
 
