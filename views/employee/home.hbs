@@ -31,33 +31,33 @@
         <div class="EMSearchFormDiv">
             <div class="input-container">
                 <label for="customerName">Customer Name</label>
-                <input type="text" id="customerName" class="autocomplete-input" />
+                <input type="text" id="customerName" placeholder="Enter Customer Name" class="autocomplete-input" />
                 <div class="autocomplete-options" id="customerNameOptions"></div>
             </div>
 
             <div class="input-container">
                 <label for="colorCode">Color Code</label>
-                <input type="text" id="colorCode" class="autocomplete-input" />
+                <input type="text" id="colorCode" placeholder="Enter Color Code" class="autocomplete-input" />
                 <div class="autocomplete-options" id="colorCodeOptions"></div>
             </div>
 
             <div class="input-container">
                 <label for="colorName">Color Name</label>
-                <input type="text" id="colorName" class="autocomplete-input" />
+                <input type="text" id="colorName" placeholder="Enter Color Name"  class="autocomplete-input" />
                 <div class="autocomplete-options" id="colorNameOptions"></div>
             </div>
 
             <div class="input-container">
                 <label for="StartDate">Date</label>
                 <div id="dateRangeContainer">
-                    <input disabled type="text" id="DateRange" class="autocomplete-input DateInputS" />
+                    <input disabled type="text" id="DateRange" placeholder="Select Date Range" class="autocomplete-input DateInputS" />
                 </div>
             </div>
 
         </div>
         <div class="FormSubmitDivArea">
-            <button>Search</button>
-            <button>Clear Form</button>
+            <button class="FormSearchBTN">Search</button>
+            <button onclick="onClearAllForm()" class="FormClearBTN">Clear Form</button>
         </div>
     </div>
 </div>
@@ -235,8 +235,15 @@
             document.getElementById('DateRange').value = "";
             alert("Select two Dates!")
         }
+    }
 
-
+    function onClearAllForm() {
+        document.getElementById('customerName').value = "";
+        document.getElementById('colorCode').value = "";
+        document.getElementById('colorName').value = "";
+        document.getElementById('DateRange').value = "";
+        document.getElementById('StartDate').value = "";
+        document.getElementById('EndDate').value = "";
     }
 
 
@@ -407,7 +414,7 @@
     .autocomplete-input {
         border: 1px solid lightgray;
         border-left-color: blue;
-        border-left-width: 3px; 
+        border-left-width: 3px;
         padding: 5px;
         font-size: 15px;
         width: 200px;
@@ -441,11 +448,27 @@
         background-color: lightgray;
     }
 
-    .FormSubmitDivArea{
+    .FormSubmitDivArea {
         display: flex;
         justify-content: start;
+        width: 100%;
+        margin-left: 35px;
     }
 
+    .FormSearchBTN,
+    .FormClearBTN {
+        padding: .5rem 2rem;
+        margin-right: 2rem;
+        background-color: #3b3be1;
+        color: whitesmoke;
+        border-radius: 10px;
+        border: none;
+        font-weight: 600;
+    }
+
+    .FormClearBTN {
+        background-color: gray;
+    }
 
 
 
