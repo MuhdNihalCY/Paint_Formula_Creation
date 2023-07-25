@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var EmployeeHeplers = require('../helpers/employeeHelpers');
 const employeeHelpers = require('../helpers/employeeHelpers');
+const { json } = require('express/lib/response');
 
 
 
@@ -57,6 +58,13 @@ router.get('/', verifyLogin, function (req, res, next) {
 
   })
 });
+
+router.get('/getAllFormula/api',verifyLogin,(req,res)=>{
+  employeeHelpers.GetAllFormulations().then((Formula)=>{
+    // console.log(Formula);
+    res.json(Formula);
+  })
+})
 
 router.get('/logout', verifyLogin, (req, res) => {
   req.session.EmployeeLogged = false;

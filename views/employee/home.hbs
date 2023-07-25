@@ -43,21 +43,48 @@
 
             <div class="input-container">
                 <label for="colorName">Color Name</label>
-                <input type="text" id="colorName" placeholder="Enter Color Name"  class="autocomplete-input" />
+                <input type="text" id="colorName" placeholder="Enter Color Name" class="autocomplete-input" />
                 <div class="autocomplete-options" id="colorNameOptions"></div>
             </div>
 
             <div class="input-container">
-                <label for="StartDate">Date</label>
+                <label for="Date">Date</label>
                 <div id="dateRangeContainer">
-                    <input disabled type="text" id="DateRange" placeholder="Select Date Range" class="autocomplete-input DateInputS" />
+                    <input disabled type="text" id="DateRange" placeholder="Select Date Range"
+                        class="autocomplete-input DateInputS" />
                 </div>
             </div>
 
         </div>
         <div class="FormSubmitDivArea">
-            <button class="FormSearchBTN">Search</button>
+            <button onclick="SearchFromForm()" class="FormSearchBTN">Search</button>
             <button onclick="onClearAllForm()" class="FormClearBTN">Clear Form</button>
+        </div>
+
+        <hr>
+
+        <div class="SearchFoundResult">
+            <p id="SerachREsultCount" class="SerachREsultCount"></p>
+        </div>
+        <div class="SearchTableDiv">
+            <table id="myTable">
+                <thead>
+                    <tr>
+                        <th>File no.:</th>
+                        <th>Customer Name</th>
+                        <th>Color code</th>
+                        <th>Color name</th>
+                        <th>Date of production</th>
+                        <th>Category</th>
+                        <th>Sub-Category</th>
+                        <th>Created by</th>
+                    </tr>
+                </thead>
+                <tbody class="SearchTableBody">
+
+                </tbody>
+            </table>
+
         </div>
     </div>
 </div>
@@ -67,12 +94,27 @@
 <!-- Add this script tag in the <head> section of your HTML file -->
 <script>
     // Replace this dummy data with your actual data fetched via Ajax API call
-    const Formulations = [
-        { CustomerName: "John Doe", ColorCode: "A1", ColorName: "Red" },
-        { CustomerName: "Jane Smith", ColorCode: "B2", ColorName: "Blue" },
-        { CustomerName: "Bob Johnson", ColorCode: "C3", ColorName: "Green" },
-        // Add more data as needed
-    ];
+    var Formulations = [];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Perform the AJAX call
+        console.log("Calling Api")
+        fetch('/getAllFormula/api') // Replace with your API URL
+            .then(response => response.json())
+            .then(data => {
+                // Handle the successful response here
+                //console.log(data);
+                Formulations = data;
+                //console.log(Formulations);
+                // Call the function to populate the table
+                populateTable(Formulations);
+
+            })
+            .catch(error => {
+                // Handle errors here
+                console.log('Error:', error);
+            });
+    });
 
     const customerNameInput = document.getElementById("customerName");
     const colorCodeInput = document.getElementById("colorCode");
@@ -104,6 +146,18 @@
 
         if (inputValue) {
             const matchingData = getMatchingData(inputElement.id, inputValue);
+
+            // Convert the array to a Set to remove duplicates
+            const uniqueData = new Set(matchingData);
+
+            // Convert the Set back to an array
+            const uniqueMatchingData = Array.from(uniqueData);
+
+            // Update the original array with the unique values
+            matchingData.length = 0; // Clear the original array
+            matchingData.push(...uniqueMatchingData);
+
+            //console.log(matchingData);
 
             if (matchingData.length > 0) {
                 matchingData.forEach((data) => {
@@ -246,6 +300,142 @@
         document.getElementById('EndDate').value = "";
     }
 
+    // Function to populate the table with data from the Formulations array
+    function populateTable(Formulationss) {
+
+        //alert("ds");
+        var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+
+        // Clear the table body before adding new rows
+        table.innerHTML = '';
+
+        Formulationss.forEach(function (formulation) {
+            var newRow = table.insertRow(table.rows.length);
+            newRow.insertCell(0).textContent = formulation.FileNo;
+            newRow.insertCell(1).textContent = formulation.CustomerName;
+            newRow.insertCell(2).textContent = formulation.ColorCode;
+            newRow.insertCell(3).textContent = formulation.ColorName;
+            newRow.insertCell(4).textContent = formatDate(formulation.Date); // Format the date
+            newRow.insertCell(5).textContent = formulation.CategoryName;
+            newRow.insertCell(6).textContent = formulation.SubCategoryName;
+            newRow.insertCell(7).textContent = formulation.MixerName;
+        });
+    }
+
+    // Function to format the date as "DD Month YYYY"
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
+
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December"
+        ];
+
+        return `${day} ${monthNames[monthIndex]} ${year}`;
+    }
+
+
+    /*// Check if any of the variables are empty
+     if (
+         //startDate === "" &&
+         //endDate === "" &&
+         customerName === "" &&
+         colorCode === "" &&
+         colorName === "" &&
+         dateRange === ""
+     ) {
+         // Display an alert if any of the variables are empty
+         alert("Please fill in all the data.");
+         return; // Stop further processing
+     }*/
+
+    function formatDateToApiFormat(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+
+
+
+    // Function to compare only the date parts (year, month, and day) of two dates
+    function compareDatesOnly(date1, date2) {
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+        );
+    }
+
+    function SearchFromForm() {
+        // Get values from the input fields
+        const startDate = formatDate(document.getElementById("StartDate").value);
+        const endDate = formatDate(document.getElementById("EndDate").value);
+        const customerName = document.getElementById("customerName").value;
+        const colorCode = document.getElementById("colorCode").value;
+        const colorName = document.getElementById("colorName").value;
+        const dateRange = document.getElementById("DateRange").value;
+
+        // Check if any of the variables are empty
+        if (customerName === "" && colorCode === "" && colorName === "" && dateRange === "") {
+            // Display an alert if any of the variables are empty
+            alert("Please fill in at least one search criteria.");
+            return; // Stop further processing
+        }
+
+        // Filter the Formulations array based on the search criteria
+        let SearchedFormula = Formulations;
+
+        // Check customerName and filter if there's a value
+        if (customerName !== "") {
+            SearchedFormula = SearchedFormula.filter(formulation => formulation.CustomerName.includes(customerName));
+        }
+
+        // Check colorCode and filter if there's a value
+        if (colorCode !== "") {
+            SearchedFormula = SearchedFormula.filter(formulation => formulation.ColorCode === colorCode);
+        }
+
+        // Check colorName and filter if there's a value
+        if (colorName !== "") {
+            SearchedFormula = SearchedFormula.filter(formulation => formulation.ColorName.includes(colorName));
+        }
+
+        // Check dateRange and filter if there's a value
+        if (dateRange !== "") {
+            const searchStartDate = new Date(startDate);
+            const searchEndDate = new Date(endDate);
+
+            SearchedFormula = SearchedFormula.filter(formulation => {
+                const formulationDate = new Date(formulation.Date);
+
+                // Check if the date falls within the search range
+                const dateInRange = (
+                    compareDatesOnly(formulationDate, searchStartDate) ||
+                    compareDatesOnly(formulationDate, searchEndDate) ||
+                    (formulationDate > searchStartDate && formulationDate < searchEndDate)
+                );
+
+                return dateInRange;
+            });
+        }
+
+        // Call the populateTable function with the filtered results
+        var SerachREsultCount = document.getElementById('SerachREsultCount');
+        SerachREsultCount.style.display = "Flex";
+        SerachREsultCount.textContent = SearchedFormula.length + " Records Found!"
+        populateTable(SearchedFormula);
+    }
+
+
+
+
+
 
 </script>
 
@@ -257,6 +447,10 @@
 
 
 <style>
+    body {
+        background-color: #eef0fd;
+    }
+
     .main {
 
         display: block;
@@ -419,10 +613,12 @@
         font-size: 15px;
         width: 200px;
         margin: 0 1rem;
+        border-radius: 5px;
     }
 
     .DateInputS {
         width: 300px;
+        background-color: white;
     }
 
     .autocomplete-options {
@@ -470,10 +666,37 @@
         background-color: gray;
     }
 
-
-
-
-
-
     /*Form ends*/
+
+    hr {
+        width: 100%
+    }
+
+    .SerachREsultCount {
+        display: none;
+        font-weight: 400;
+    }
+
+    /* CSS for the table header and cells */
+    th,
+    td {
+        border: 1px solid #3b3be1;
+        padding: 8px;
+    }
+
+    /* CSS for the table header */
+    th {
+        background-color: #3b3be1;
+        color: white;
+    }
+
+    /* CSS for the table */
+    table {
+        border-collapse: collapse;
+        border: 2px solid #3b3be1;
+    }
+
+    .SearchTableBody tr td {
+        padding: 1rem;
+    }
 </style>
