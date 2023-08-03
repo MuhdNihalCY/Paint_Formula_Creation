@@ -630,4 +630,18 @@ router.get('/api/GetSubcategoryByCategoryId/:id', verifyLogin, (req, res) => {
   })
 })
 
+// Add Cost
+router.get('/AddCost/Dev/:id', (req, res) => {
+  adminHelpers.getAdditiveById(req.params.id).then((Additive) => {
+    console.log(Additive);
+    res.render('admin/forms/AddCost', { Additive })
+  })
+})
+
+router.post('/addCost',(req,res)=>{
+  adminHelpers.PutCostByID(req.body).then(()=>{
+    res.redirect('/admin/Binders');
+  })
+})
+
 module.exports = router;

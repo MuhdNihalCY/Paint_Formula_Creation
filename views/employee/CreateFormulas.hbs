@@ -1,177 +1,193 @@
 <section>
-    <div class="CFAllDiv">
-        <form action="/CreateFormula" method="post" id="Formsss">
-            <div class="containerForCF">
-                <div class="CFBorder">
-                    <div class="Cf_Header_Area">
-                        <div class="containerForCF">
-                            <div class="CFHeaderDiv">
-                                <div class="MixerDetails" hidden>
-                                    <p class="MixerNameLabel">Mixer Name</p>
-                                    <input type="text" name="MixerName" value="{{MixerName}}" id="">
-                                    {{!--  Enter Mixer Name Here By Dynamic Process --}}
-                                </div>
-                                <div class="CFHeaderLableDIV">
-                                    <p class="CFHeaderLable">Create Formula</p>
-                                </div>
-                                <div class="Cf_Header_Area_Buttons">
-                                    {{!-- <button class="Cf_Header_Area_Buttons_EachOne">Clear All</button> --}}
-                                    <a href="/CreateFormula" class="Cf_Header_Area_Buttons_EachOne CFClearAllBTN">Clear
-                                        All</a>
-                                    <button class="Cf_Header_Area_Buttons_EachOne">Save</button>
+    <form action="/CreateFormula" method="post"  enctype="multipart/form-data">
+        <div class="CreateFormulaMainDivArea">
+            <div class="containers">
+                <div class="CFMainHeader">
+                    <h2 class="CFheader">Create Formula</h2>
+                    <div class="CFMinHeaderBTNs">
+                        <a class="CFclearAllBTN btn" href="#">Clear All</a>
+                        <input type="submit" value="Save" class="CFSaveBTN btn" id="">
+                    </div>
+                </div>
+                <hr>
+                <div class="MainArea">
+                    <aside class="CFAside">
+                        <div class="MixerDetails" hidden>
+                            <p class="MixerNameLabel">Mixer Name</p>
+                            <input type="text" name="MixerName" value="{{MixerName}}" id="">
+                            {{!-- Enter Mixer Name Here By Dynamic Process --}}
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Date</p>
 
-                                    {{!-- <button class="Cf_Header_Area_Buttons_EachOne">Save as New</button> --}}
-                                    {{!-- <div class="CFdropdown Cf_Header_Area_Buttons_EachOne">
-                                <button class="CFdropdown-button" onclick="CFtoggleDropdown()">
-                                    <p>Print</p>
-                                </button>
-                                <div class="CFdropdown-content">
-                                    <button>Print Formula</button>
-                                    <button>Print Label</button>
-                                </div>
+                            <input type="date" name="Date" class="CFBasicInp" id="dateInput" readonly value=''>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">File no.</p>
+                            <input type="text" class="CFBasicInp" name="FileNo" placeholder="Enter File No"
+                                value="{{FileNo}}" readonly required>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Customer Name</p>
+                            <input type="text" class="CFBasicInp" name="CustomerName" placeholder="Enter Customer Name"
+                                required>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Color Code</p>
+                            <input type="text" class="CFBasicInp" name="ColorCode" placeholder="Enter Color Code"
+                                required>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Color Name</p>
+                            <input type="text" class="CFBasicInp" name="ColorName" placeholder="Enter Color Name"
+                                required>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Customer Ref</p>
+                            <input type="text" class="CFBasicInp" name="CustomerRef" placeholder="Enter Customer Ref"
+                                required>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Project No</p>
+                            <input type="text" class="CFBasicInp" name="ProjectNo" placeholder="Enter Project No"
+                                required>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Referance Image</p>
+                            <input type="file" class="CFBasicInp" name="Image" accept="image/*" id="imageInput">
+                        </div>
+                        <div class="CFBasicDetailsImg">
+                            {{!-- Display referance image that is selected --}}
+                            <img src="" alt="" id="CFselectedImage">
+                        </div>
+
+                        {{!-- Solid Content start here --}}
+                        <div class="CFsolidContentCalcDivArea">
+                            <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">Solid Content(%): </p>
+                                <input class="CFSolidContentInput" type="text" name="SolidContent" value="0"
+                                    id="CFFormulaSolidContent" readonly>
+                            </div>
+                            <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">VOC (g/Ltr): </p>
+                                <input class="CFSolidContentInput" type="text" name="VOC" value="0" id="CFFormulaVOC"
+                                    readonly>
+                            </div>
+                            <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">Density (g/Ltr): </p>
+                                <input class="CFSolidContentInput" type="text" name="Density" id="CFFormulaDensity"
+                                    value="0" readonly>
+                            </div>
+                            {{!-- <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">Costing : </p>
+                                <input class="CFSolidContentInput" type="text" name="Cost" id="CFFormulaDensity"
+                                    value="0" readonly>
                             </div> --}}
-                                </div>
+                            {{!-- <div class="CFsolidContentCalcDivNoLabel">
+                                <p class="CFBinderName">Density (g/Ltr): </p>
+                                <input class="CFSolidContentInputNoLabel" type="text"
+                                    value="271.878173427678/247.330033186" readonly>
+                            </div> --}}
+                            <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">Sampled QTY: </p>
+                                <input class="CFSolidContentInput" name="SampleQty" id="SampleQty" type="text" value="0"
+                                    readonly>
                             </div>
                         </div>
-                    </div>
-                    <div class="BasicDetailsMainDiv">
-                        <div class="containerForCF">
-                            <div class="BasicDetails">
-                                <div class="BasicDetailsLeftSection">
-                                    <div class="CFDateDiv">
-                                        <p class="CFDateLabel">Date:</p>
-                                        <input type="date" name="Date" id="dateInput" readonly value=''>
-                                    </div>
-                                    <div class="CFFileNODiv">
-                                        <p class="CFFileNOLabel">File No:</p>
-                                        <input type="text" name="FileNo" value="{{FileNo}}" readonly>
-                                    </div>
-                                    <div class="CFProjectNoDiv">
-                                        <p class="CFProjectNoLabel">Project No:</p>
-                                        <input type="text" name="ProjectNo" required>
-                                    </div>
-                                </div>
-                                <div class="BasicDetailsCenterSection">
-                                    <div class="CFCustomerNameDiv">
-                                        <p class="CFCustomerNameLabel">Customer Name:</p>
-                                        <input type="text" name="CustomerName" required>
-                                    </div>
-                                    <div class="CFCustomerRefDiv">
-                                        <p class="CFCustomerRefLabel">Customer Ref:</p>
-                                        <input type="text" name="CustomerRef" required>
-                                    </div>
-                                </div>
-                                <div class="BasicDetailsRightSection">
-                                    <div class="CFColorCodeDiv">
-                                        <p class="CFColorCodeLabel">Color Code:</p>
-                                        <input type="text" name="ColorCode" required>
-                                    </div>
-                                    <div class="CFColorNameDiv">
-                                        <p class="CFColorNameLabel">Color Name:</p>
-                                        <input type="text" name="ColorName" required>
-                                    </div>
-                                </div>
+                        {{!-- Solid Content ends here --}}
+                    </aside>
+                    <div class="CFMainContent">
+                        <div class="CFMainContentHeader">
+                            <div class="CFMainSelectionDiv">
+                                <p class="CFmainSelection">Category</p>
+                                <select name="Category" class="CFCategory" id="CategorySelect"
+                                    onchange="ADcategorySelect()" required>
+                                    <option value="" readonly selected>Select Category</option>
+                                    {{#each AllCategory}}
+                                    <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
+                                        {{this.Category_Id}} -
+                                        {{this.Category}}</option>
+                                    {{/each}}
+                                </select>
                             </div>
-                            {{!-- Basic Details Ends Here --}}
-
-                            <hr class="BasicDetailsEndHR">
-
-                            {{!-- Category selection Starts --}}
-                            <div class="CFSelectionHeader">
-                                <div class="CFSelectCategory">
-                                    <p class="CFSelectCategoryLabel">Category</p>
-                                    <select name="Category" class="CFCategory" id="CategorySelect"
-                                        onchange="ADcategorySelect()" required>
-                                        <option value="" readonly selected>Select Category</option>
-                                        {{#each AllCategory}}
-                                        <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
-                                            {{this.Category_Id}} -
-                                            {{this.Category}}</option>
-                                        {{/each}}
-                                    </select>
-                                </div>
-                                <div class="CFSelectSubCategory">
-                                    <p class="CFSelectSubCategoryLabel">Sub Category</p>
-                                    <select name="SubCategory" class="CFSubCategory" id="SubCategorySelect"
-                                        onchange="CFSubcategorySelect()" required>
-                                        <option value="0" readonly selected>Select Sub Category</option>
-                                    </select>
-                                </div>
+                            <div class="CFMainSelectionDiv">
+                                <p class="CFmainSelection">Sub-Category</p>
+                                <select name="SubCategory" class="CFSubCategory" id="SubCategorySelect"
+                                    onchange="CFSubcategorySelect()" required>
+                                    <option value="0" readonly selected>Select Sub Category</option>
+                                </select>
                             </div>
-                            {{!-- Category selection ends --}}
-
-                            <div class="MainMixingTableDiv">
-                                <table border="1" style="width:100%" id="FormulaCreateTable">
-                                    <tr class="CFTableHeadRow">
-                                        <th class="CFTableHead CFslNo" rowspan="2">SL No</th>
-                                        <th class="CFTableHead CfTinders" rowspan="2">Tinters</th>
-                                        <th class="CFTableHead" colspan="2">Total Quantity</th>
-                                        <th class="CFTableHead" colspan="6" rowspan="2">QTY</th>
-                                    </tr>
-                                    <tr class="CFTableHeadRow">
-                                        <th class="CFTableHead ">in Grams</th>
-                                        <th class="CFTableHead ">in Volume</th>
-                                    </tr>
-                                    {{!-- Add Loop from here --}}
-                                    <tr class="row-template">
-                                        <td class="CFTableRowData">1</td>
-                                        <td class="CFTableRowData">
-                                            <select name="TintersR1" class="TintersR1 CFTinters" id="CFTintersR1"
-                                                onchange="disableSelectedOption(this)">
-
-                                            </select>
-                                        </td>
-
-                                        <td class="CFTableRowData"><input type="text" name="GramInputTotalR1" readonly
-                                                id="GramInputTotalR1" value="0.00"
-                                                class="GramInputTotal CFINP CFInputTotal">
-                                        </td>
-
-                                        <td class="CFTableRowData"><input name="LiterInputTotalR1" type="text"
-                                                min="0.00" readonly id="LiterInputTotalR1" value="0.00"
-                                                class="LiterInputTotal CFINP CFInputTotal ">
-                                        </td>
-
-                                        <td class="CFTableRowData "><input name="" type="text" value="0.00" id="R1C1"
-                                                class="R1Sub R1C1 CFINP CFInpValue" oninput="handleInput(this)"
-                                                onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
-                                            {{!-- <img class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"> --}}
-                                        </td>
-
-                                        <td class="CFTableRowData"><input name="" type="text" value="0.00"
-                                                class="R1Sub R1C2 CFINP CFInpValue" oninput="handleInput(this)"
-                                                onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
-                                            {{!-- <img class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td> --}}
-
-                                        <td class="CFTableRowData"><input name="" type="text" value="0.00"
-                                                class="R1Sub R1C3 CFINP CFInpValue" oninput="handleInput(this)"
-                                                onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
-                                            {{!-- <img class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td> --}}
-
-                                        <td class="CFTableRowData"><input name="" type="text" value="0.00"
-                                                class=" R1Sub R1C4 CFINP CFInpValue" oninput="handleInput(this)"
-                                                onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
-                                            {{!-- <img class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td> --}}
-
-                                        <td class="CFTableRowData"><input name="" type="text" value="0.00"
-                                                class="R1Sub R1C5 CFINP CFInpValue" oninput="handleInput(this)"
-                                                onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
-                                            {{!-- <img class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td> --}}
-
-                                        <td class="CFTableRowData"><input name="" type="text" value="0.00"
-                                                class="R1Sub R1C6 CFINP CFInpValue" oninput="handleInput(this)"
-                                                onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
-                                            {{!-- <img class="AddIcon" src="/images/Icons/add.png" alt="AddIcon"></td> --}}
-                                    </tr>
-
-                                </table>
-                                {{!-- mixing Table Ends --}}
-                                {{!-- Total Calculations Starts Here --}}
-
+                        </div>
+                        <div class="CFMainContenSecondarytHeader">
+                            <div id="mattOrGloss" class="CFMainSelectionDiv ">
+                                <p class="CFmainSelection MattOrGloss"></p>
+                                <input type="text" name="mattOrGloss" id="MattOrGlossINPTag" class=" MattOrGlossINP "
+                                    min="0" value="0" onkeypress="return isNumeric(event)"
+                                    oninput="LoadTableSingleData()">
                             </div>
+                        </div>
+                        <div class="TableStarting">
+                            <table border="2" class="table table-bordered text-center CFcustom-border"
+                                id="FormulaCreateTable">
+                                <tr class="CFTableHeadRow">
+                                    <th class="CFTableHead CFslNo" rowspan="2">SL No</th>
+                                    <th class="CFTableHead CfTinders" rowspan="2">Tinters</th>
+                                    <th class="CFTableHead" colspan="2">Total Quantity</th>
+                                    <th class="CFTableHead" colspan="6" rowspan="2">QTY</th>
+                                </tr>
+                                <tr class="CFTableHeadRow">
+                                    <th class="CFTableHead ">in Grams</th>
+                                    <th class="CFTableHead ">in Volume</th>
+                                </tr>
+                                {{!-- Add Loop from here --}}
+                                {{!-- Add Loop from here --}}
+                                <tr class="row-template">
+                                    <td class="CFTableRowData">1</td>
+                                    <td class="CFTableRowData">
+                                        <select name="TintersR1" class="TintersR1 CFTinters" id="CFTintersR1"
+                                            onchange="disableSelectedOption(this)">
+                                        </select>
+                                    </td>
 
+                                    <td class="CFTableRowData"><input type="text" name="GramInputTotalR1" readonly
+                                            disabled id="GramInputTotalR1" value="0.00"
+                                            class="GramInputTotal CFINP CFInputTotal">
+                                    </td>
 
-                            {{!-- bulk  CoversionTable and  Binders  and Additives--}}
+                                    <td class="CFTableRowData"><input name="LiterInputTotalR1" type="text" min="0.00"
+                                            disabled readonly id="LiterInputTotalR1" value="0.00"
+                                            class="LiterInputTotal CFINP CFInputTotal ">
+                                    </td>
+
+                                    <td class="CFTableRowData "><input name="" type="text" value="0.00" id="R1C1"
+                                            class="R1Sub R1C1 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
+                                    </td>
+
+                                    <td class="CFTableRowData"><input name="" type="text" value="0.00"
+                                            class="R1Sub R1C2 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
+
+                                    <td class="CFTableRowData"><input name="" type="text" value="0.00"
+                                            class="R1Sub R1C3 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
+
+                                    <td class="CFTableRowData"><input name="" type="text" value="0.00"
+                                            class=" R1Sub R1C4 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
+
+                                    <td class="CFTableRowData"><input name="" type="text" value="0.00"
+                                            class="R1Sub R1C5 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
+
+                                    <td class="CFTableRowData"><input name="" type="text" value="0.00"
+                                            class="R1Sub R1C6 CFINP CFInpValue" oninput="handleInput(this)"
+                                            onkeyup="handleDelete(this)" onkeydown="handleBackspace(this)">
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="CFBelowTable">
+                            {{!-- bulk CoversionTable and Binders and Additives --}}
                             <div class="CFBulkConverstedTableandBindersAndAdditives">
                                 {{!-- total without additives --}}
                                 <div class="CFBindersAndAdditives">
@@ -193,34 +209,37 @@
                                         </div>
                                     </div>
                                     <div id="mattOrGloss" class="CFBinder1Div">
-                                        <p class="CFBinderName MattOrGloss"></p>
+                                        {{!-- <p class="CFBinderName MattOrGloss">Matt or Gloss</p> --}}
                                         <div class="CFTotalCalcDiv ">
-                                            <input type="text" name="mattOrGloss" id="MattOrGlossINPTag"
+                                            {{!-- <input type="text" name="mattOrGloss" id="MattOrGlossINPTag"
                                                 class="CFTotalInputElementsGrams MattOrGlossINP " min="0" value="0"
                                                 onkeypress="return isNumeric(event)" oninput="LoadTableSingleData()">
-                                            {{!-- oninput="LoadTableSingleData()"   --}}
+                                            --}}
+                                            {{!-- oninput="LoadTableSingleData()" --}}
                                         </div>
                                     </div>
                                     <hr>
-                                    {{!-- Binders  and Additives starts Here --}}
+                                    {{!-- Binders and Additives starts Here --}}
                                     <div class="CFBinderHead">
                                         <p class="CFBindersHeading">Binder</p>
                                         {{!-- <div class="CFBindersAndAdditivesUnits">
-                                        <div class="CFeachUnit CFGram">
-                                            <p class="CFUnitsTotal">QTY (Grams)</p>
-                                        </div>
-                                        <div class="CFeachUnit CFLiter">
-                                            <p class="CFUnitsTotal">Volume (ml)</p>
-                                        </div>
-                                    </div> --}}
+                                            <div class="CFeachUnit CFGram">
+                                                <p class="CFUnitsTotal">QTY (Grams)</p>
+                                            </div>
+                                            <div class="CFeachUnit CFLiter">
+                                                <p class="CFUnitsTotal">Volume (ml)</p>
+                                            </div>
+                                        </div> --}}
                                     </div>
-                                    {{!-- <hr> --}}
+                                    {{!--
+                                    <hr> --}}
                                     <div class="CFBinder1Div Binder1DIV">
                                         <p class="CFBinderName Binder1" id="Binder1"></p>
                                         <div class="CFTotalCalcDiv">
                                             <input name="Binder1" type="text" class="CFTotalInputElements "
                                                 id="Binder1INP" readonly value="" min="0">
-                                            {{!-- <input type="text" class="CFTotalInputElements " readonly value="43"> --}}
+                                            {{!-- <input type="text" class="CFTotalInputElements " readonly value="43">
+                                            --}}
                                         </div>
                                     </div>
                                     <div class="CFBinder2Div Binder2DIV">
@@ -228,7 +247,8 @@
                                         <div class="CFTotalCalcDiv">
                                             <input type="text" name="Binder2" class="CFTotalInputElements "
                                                 id="Binder2INP" readonly value="" min="0">
-                                            {{!-- <input type="text" class="CFTotalInputElements " readonly value="43"> --}}
+                                            {{!-- <input type="text" class="CFTotalInputElements " readonly value="43">
+                                            --}}
                                         </div>
                                     </div>
                                     <hr>
@@ -284,75 +304,51 @@
 
                                 {{!-- total without additives Ends --}}
 
-                                {{!-- bulk convertion table Starts Here --}}
-                                {{!-- <div class="CFBulkConvertionTable">
-                                <table border="1" style="width:100%">
-                                    <tr class="CFTableHeadRow">
-                                        <th class="CFTableHead" rowspan="2"></th>
-                                        <th class="CFTableHead" rowspan="2">Tinters</th>
-                                    </tr>
-                                    <tr class="CFTableHeadRow">
-                                        <th class="CFTableHead">in Grams</th>
-                                        <th class="CFTableHead">in Volume</th>
-                                    </tr>
-                                </table>
-                            </div> --}}
-                                {{!-- bulk convertion table Ends Here --}}
-                                {{!-- Solid Content start here --}}
-                                <div class="CFsolidContentCalcDivArea">
-                                    <div class="CFsolidContentCalcDiv">
-                                        <p class="CFBinderName">Solid Content(%): </p>
-                                        <input class="CFSolidContentInput" type="text" name="SolidContent" value="0"
-                                            id="CFFormulaSolidContent" readonly>
-                                    </div>
-                                    <div class="CFsolidContentCalcDiv">
-                                        <p class="CFBinderName">VOC (g/Ltr): </p>
-                                        <input class="CFSolidContentInput" type="text" name="VOC" value="0"
-                                            id="CFFormulaVOC" readonly>
-                                    </div>
-                                    <div class="CFsolidContentCalcDiv">
-                                        <p class="CFBinderName">Density (g/Ltr): </p>
-                                        <input class="CFSolidContentInput" type="text" name="Density"
-                                            id="CFFormulaDensity" value="0" readonly>
-                                    </div>
-                                   
-                                    <div class="CFsolidContentCalcDiv">
-                                        <p class="CFBinderName">Sampled QTY: </p>
-                                        <input class="CFSolidContentInput" name="SampleQty" id="SampleQty" type="text"
-                                            value="0" readonly>
-                                    </div>
-                                </div>
-                                {{!-- Solid Content ends here --}}
                             </div>
+                            <div class="CFRemarksDiv">
+                                {{!-- remark Start Here --}}
+                                <div class="CFRemark">
+                                    <div class="CFRemarkHeading">
+                                        <p>Remarks</p>
+                                    </div>
+                                    <div class="CFRemarksDIv">
+                                        <textarea readonly id="CFRemarks" name="Remark"></textarea>
 
-
-                            {{!-- remark Start Here --}}
-                            <div class="CFRemark">
-                                <div class="CFRemarkHeading">
-                                    <p>Remarks</p>
+                                        {{!-- <p>Mixing with MS Hardener in 2:1 ratio by volume and 10 - 20 % Mipa 2K
+                                            Thinner</p> --}}
+                                    </div>
                                 </div>
-                                <div class="CFRemarksDIv">
-                                    <textarea readonly id="CFRemarks" name="Remark"></textarea>
-
-                                    {{!-- <p>Mixing with MS Hardener in 2:1 ratio by volume and 10 - 20 % Mipa 2K Thinner</p> --}}
-                                </div>
+                                {{!-- remark Ends Here --}}
                             </div>
-                            {{!-- remark Ends Here --}}
-
-
-
-
                         </div>
                     </div>
                 </div>
+
             </div>
-            {{!-- <input type="submit" value="SaveBTN"> --}}
-        </form>
-    </div>
+        </div>
+
+    </form>
 </section>
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).ready(function () {
+        // Handle file input change event
+        $('#imageInput').on('change', function () {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#CFselectedImage').attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
 
     var total_PP = 0;
 
@@ -466,10 +462,10 @@
         const literTotalInput = row.getElementsByClassName('LiterInputTotal')[0];
         /* const Product = row.getElementsByClassName('CFTinters');
          //console.log("Product: ",Product.options[Product.selectedIndex]);*/
-        
+
         var firstTd = row.querySelector(".CFTableRowData:first-child");
         var firstTdText = firstTd.textContent;
-      //  console.log("Row Count: ",firstTdText );
+        //  console.log("Row Count: ",firstTdText );
 
         var selectElement = document.getElementById(`CFTintersR${firstTdText}`);
         var selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -477,10 +473,10 @@
         // Get the value and text content of the selected option
         var selectedValue = selectedOption.value;
         var selectedProduct = selectedOption.textContent;
-      //  console.log("Selected Option: ", selectedOption)
+        //  console.log("Selected Option: ", selectedOption)
 
 
-      //  console.log('selected Product', selectedProduct);
+        //  console.log('selected Product', selectedProduct);
 
 
 
@@ -514,7 +510,7 @@
                 var totalGrams = 0.0;
                 var totalLiters = 0.0;
 
-            //    console.log("Handle Input!");
+                //    console.log("Handle Input!");
 
                 for (let i = 0; i < rSubInputs.length; i++) {
                     var inputValue = parseFloat(rSubInputs[i].value);
@@ -535,7 +531,7 @@
                         //console.log("Total Grams", totalGrams)
                         //totalLiters = (totalGrams * 1000) / Product_Density;
                         totalLiters = (totalGrams * Product_Density) / 1000;
-                     //   console.log("Total Grams : ", totalGrams, " Product_Density: ", Product_Density, " totalLiters: ", totalLiters)
+                        //   console.log("Total Grams : ", totalGrams, " Product_Density: ", Product_Density, " totalLiters: ", totalLiters)
                     }
                 }
 
@@ -568,8 +564,8 @@
         const tableBody = document.getElementById('FormulaCreateTable').lastElementChild;
         const lastRow = tableBody.lastElementChild;
         const lastRowColumns = lastRow.getElementsByTagName('td');
-        
-      //  console.log("Add Row Is now going to Calling!");
+
+        //  console.log("Add Row Is now going to Calling!");
 
         if (input.value !== '0.00' && row === lastRow) {
             //console.log("Calling to add row");
@@ -604,7 +600,7 @@
 
 
     function addRow(button) {
-      //  console.log("Add Row Is now Calling!");
+        //  console.log("Add Row Is now Calling!");
         var SubCategoryValue = document.getElementById("SubCategorySelect").value;
         if (SubCategoryValue === "0") {
             // Do nothing if SubCategoryValue is 0
@@ -782,7 +778,8 @@
                 var Remarks = Sub_Category.Remarks
                 document.getElementById('CFRemarks').value = Remarks
                 makeChangesInBinderMattGloss()
-                handleAdditivePercentageChange()
+                // console.log("handleAdditivePercentageChange 4")
+                // handleAdditivePercentageChange()
             })
             .catch(function (error) {
                 // Handle any errors that occurred during the AJAX call
@@ -819,11 +816,12 @@
 
         // Update the total grams input value with the calculated sum
         var totalGramsInput = document.getElementsByClassName("CFTotalInputElementsGrams")[0];
+        //alert('sss')
         totalGramsInput.value = totalGrams;
 
         var totalLiterInput = document.getElementsByClassName("CFTotalInputElementsLiter")[0];
         totalLiterInput.value = totalLiter;
-
+        console.log("handleAdditivePercentageChange 3")
         handleAdditivePercentageChange()
         //disableSelectedOption(element)
     }
@@ -947,6 +945,7 @@
                     //remove Binder 1
                     Binder1DIV.style.display = "none";
                 }
+                console.log("handleAdditivePercentageChange 2")
                 handleAdditivePercentageChange()
             })
     }
@@ -1221,7 +1220,8 @@
                 err = "Binder Not Found!";
                 break;
         }
-        handleAdditivePercentageChange()
+        // console.log("handleAdditivePercentageChange 1")
+        // handleAdditivePercentageChange()
 
         function AlertBinder(Binder1_, Binder2_) {
             // alert("Binder 1: ", Binder1_);
@@ -1371,6 +1371,7 @@
 
 
                     //console.log("TotalQtyOfFormula", TotalQtyOfFormula)
+                    console.log("Calling at 1")
                     FindSolidContentOfProducts()
                 } else if (ReceivedObject.Additive) {
                     var additive = ReceivedObject.Additive
@@ -1424,6 +1425,7 @@
 
 
                     //console.log("TotalQtyOfFormula", TotalQtyOfFormula)
+                    console.log("Calling at 2")
                     FindSolidContentOfProducts()
                 } else {
 
@@ -1478,6 +1480,7 @@
 
 
                     //console.log("TotalQtyOfFormula", TotalQtyOfFormula)
+                    console.log("Calling at 3")
                     FindSolidContentOfProducts()
                 }
 
@@ -1505,6 +1508,10 @@
 
 
     function FindSolidContentOfProducts() {
+
+        //costing Function
+        CalculateCost();
+
         var Products = []; // Create an empty array to store selected option values
 
         // Get all select elements with class "CFTinters"
@@ -1554,9 +1561,9 @@
                 for (var i = 0; i < products.length; i++) {
                     var j = i + 1;
                     var GramInputTotalID = `GramInputTotalR${j}`;
-               //     console.log('GramInputTotalID:', GramInputTotalID)
+                    //     console.log('GramInputTotalID:', GramInputTotalID)
                     var GramInputTotal = parseFloat(document.getElementById(GramInputTotalID).value);
-             //       console.log("SumOfSolidContentOfProducts",GramInputTotal)
+                    //       console.log("SumOfSolidContentOfProducts",GramInputTotal)
                     var OneProduct = products[i]
                     var SolidContentOfProduct = parseFloat(OneProduct.SolidContent);
                     var VocOfProduct = parseFloat(OneProduct.VOC);
@@ -1637,5 +1644,614 @@
     }
 
 
+    function CalculateCost() {
+        // Function to get selected values from select elements with class "CFTinters"
+ /*       function getSelectedValues() {
+            const selectedValues = [];
+            const selectElements = document.querySelectorAll('.CFTinters');
+
+            // Iterate through each select element
+            for (const selectElement of selectElements) {
+                // Get the selected value of the current select element
+                const selectedValue = selectElement.value;
+
+                // Add the selected value to the array
+                selectedValues.push(selectedValue);
+            }
+
+            return selectedValues;
+        }
+
+        // Call the function and store the result in a variable
+        const selectedProductsArray = getSelectedValues();
+        // Use the filter() method to remove null and empty string values
+        const filteredProductArray = selectedProductsArray
+
+        console.log("Selected Products: ", filteredProductArray); // Output the array of selected values
+
+        //Binder1 ID = Binder1
+        //Binder2 ID = Binder2
+        var Binder1 = false;
+        var Binder2 = false;
+
+        if (document.getElementById("Binder1").textContent) {
+            Binder1 = document.getElementById("Binder1").textContent;
+        }
+        if (document.getElementById("Binder2").textContent) {
+            Binder2 = document.getElementById("Binder2").textContent;
+        }
+
+        // id of Additives : CFSelectAdditivess
+        var Additives = false
+        if (document.getElementById("CFSelectAdditivess").value) {
+            Additives = document.getElementById("CFSelectAdditivess").value;
+        }
+
+        const dataToSend = {
+            ProductsIdsArray: filteredProductArray,
+            Binder1: Binder1,
+            Binder2: Binder2,
+            Additives: Additives
+        };
+
+        fetch("/getCostingWithData/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataToSend)
+        })
+            .then(response => response.json())
+            .then(responseData => {
+                //console.log("Response:", responseData);
+                CostingFunction(responseData)
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+
+
+
+
+        function CostingFunction(responseData) {
+            //console.log(responseData);
+
+            var ProductsArray = responseData.Products;
+            //console.log("ProductsArray: ",ProductsArray);
+
+            var Binder1 = responseData.Binder1
+            //console.log("Binder1: ",Binder1);
+
+            var Binder2 = responseData.Binder2
+            //console.log("Binder2: ",Binder2);
+
+            var Additive = responseData.Additive
+            //console.log("Additive: ",Additive);
+
+
+            // Gram total id GramInputTotalR1
+            // ml total id LiterInputTotalR1
+
+            var ProductCount = ProductsArray.length;
+
+
+        }
+
+*/
+
+    }
+
+
 
 </script>
+
+
+
+<style>
+    .CreateFormulaMainDivArea {
+        background-color: #eef0fd;
+        margin-top: -5rem;
+        padding-bottom: 10rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 1rem;
+
+    }
+
+    .containers {
+        width: 100%;
+        border: 2px gray solid;
+        border-radius: 25px;
+    }
+
+    .CFMainHeader {
+        width: 100%;
+        height: 5rem;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 3rem;
+        align-items: center;
+    }
+
+    .CFheader {
+        margin-top: 25px;
+        font-weight: 600;
+    }
+
+
+    .CFclearAllBTN,
+    .CFSaveBTN {
+        background-color: gray;
+        padding: 1rem 2rem;
+        margin: 0 1rem;
+        margin-top: 16px;
+        color: #eef0fd;
+        font-weight: 700;
+        letter-spacing: 3px;
+    }
+
+    .CFSaveBTN {
+        background-color: #3b3be1;
+    }
+
+    .MainArea {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1rem;
+    }
+
+    .CFAside {
+        width: 25%;
+        padding: 0rem 1rem;
+    }
+
+    .CFBasicDetails,
+    .CFBasicDetailsImg {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 1rem 0;
+    }
+
+    .CFBasicDetailsImg {
+        align-items: center;
+    }
+
+    .CFBasicPtag {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .CFBasicInp {
+        margin-top: 5px;
+        border: 1px solid rgb(92, 92, 92);
+        border-left-color: blue;
+        border-left-width: 3px;
+        padding: 5px;
+        font-size: 15px;
+        width: 100%;
+        border-radius: 5px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    #CFselectedImage {
+        text-align: center;
+        width: fit-content;
+        height: 10rem;
+    }
+
+    .CFMainContent {
+        width: 74%;
+    }
+
+    .CFMainContentHeader {
+        display: flex;
+        width: 100%;
+        margin: 25px 0;
+        padding: 0 8rem;
+        justify-content: space-between;
+    }
+
+    .CFMainContenSecondarytHeader {
+        display: flex;
+        width: 100%;
+        margin: 45px 0;
+        padding: 0 8rem;
+        justify-content: end;
+    }
+
+    .CFMainSelectionDiv {
+        display: flex;
+
+    }
+
+    .CFmainSelection {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .CFMainSelectionDiv select {
+        width: 200px;
+        padding: .5rem;
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: -8px;
+        margin-left: 20px;
+    }
+
+    .CFMainSelectionDiv input {
+        margin-left: 20px;
+        width: 200px;
+        padding: .5rem;
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: -8px;
+    }
+
+    .TableStarting {
+        width: 100%;
+    }
+
+
+    /* Override the default border color for the table-bordered class */
+    .CFcustom-border {
+        border-color: black;
+    }
+
+    /* Optional: To style the table head cells (optional) */
+    .table thead th {
+        background-color: #f0f0f0;
+    }
+
+
+    /* Center content horizontally and vertically in <th> elements */
+    .table th {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .CFTinters {
+        font-size: 18px;
+        font-weight: 600;
+        padding: .5rem;
+        background-color: none;
+        background: none;
+    }
+
+    .GramInputTotal,
+    .LiterInputTotal {
+        width: 5rem;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        background-color: none;
+        background: none;
+        text-align: center;
+        padding: .5rem;
+    }
+
+    .CFInpValue {
+        width: 4rem;
+        padding: .5rem;
+        text-align: center;
+        background-color: none;
+        background: none;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .CFBelowTable {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .CFBulkConverstedTableandBindersAndAdditives {
+        width: 50%;
+        /*border: 1px solid gray;
+        border-radius: 25px;
+        padding: 1rem;*/
+    }
+
+    .CFBindersAndAdditivesUnits {
+        display: flex;
+        width: 100%;
+        justify-content: end;
+    }
+
+    .CFeachUnit {
+        width: 118px;
+        margin-left: 0rem;
+    }
+
+    .CFUnitsTotal {
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+
+    .CFTotalInputElements {
+        margin-left: 2rem;
+    }
+
+    .CFTotalWithoutAdditives {
+        /* border: 1px solid rgba(0, 0, 0, 0.529); */
+        border-top: transparent;
+        width: 48%;
+        display: flex;
+        align-items: center;
+        height: 68px;
+    }
+
+    .CFTotalWithoutAdditivesLabel {
+        height: 100%;
+        border-top: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 42%;
+        /* border: 1px solid rgba(0, 0, 0, 0.319); */
+    }
+
+    .CFTotalWithoutAdditivesinGrams,
+    .CFTotalWithoutAdditivesinVolume {
+        height: 100%;
+        width: 29%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .CFBinderHead {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .CFBindersAndAdditives {
+        width: 100%;
+        border: 1px solid rgba(0, 0, 0, 0.319);
+        padding: 1rem;
+    }
+
+    .CFBinder1Div,
+    .CFBinder2Div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .CFBindersHeading {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .CFBinderName {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .CFBinder1Div input[type="text"],
+    .CFBinder2Div input[type="text"] {
+        width: 125px;
+        text-align: center;
+    }
+
+    .CFTotalCalcDiv {
+        margin-left: 2rem;
+    }
+
+
+    .CFSelectAdditives {
+        width: 200px;
+        padding: 1rem;
+        margin-top: -1rem;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .CFSelectAdditivesDiv {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .CFSelectAdditivesDiv p {
+        margin-top: 1rem;
+    }
+
+    .CFTotalWithAdditives {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .CFTotalWithAddUnit {
+        display: flex;
+        justify-content: end;
+    }
+
+    .CFTotalWithAddAndBinder {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .CFtotalwithAddValuesDiv {
+        display: flex;
+    }
+
+    .CFtotalwithAddValues {
+        width: 200px;
+        text-align: center;
+        margin-left: 2rem;
+    }
+
+    .CFBulkConvertionTable {
+        width: 50%;
+    }
+
+    .CFsolidContentCalcDivArea {
+        margin-top: 0rem;
+        width: 100%;
+
+
+    }
+
+    .CFsolidContentCalcDiv {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 0;
+        flex-direction: column;
+    }
+
+    .CFSolidContentInput {
+        width: 300px;
+        text-align: center;
+        padding: 0.5rem;
+        background: transparent;
+        border: 1px solid gray;
+    }
+
+    .CFSolidContentInputNoLabel {
+        width: 350px;
+        text-align: center;
+        margin-top: -10px;
+        height: 45px;
+    }
+
+    .CFsolidContentCalcDivNoLabel {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        padding: 1rem 0;
+    }
+
+    .CFRemark {
+        margin-top: 0rem;
+        width: 100%;
+        border: 1px solid rgba(0, 0, 0, 0.319);
+        background-color: #6b6b6b;
+        border-radius: 5px;
+        margin-bottom: 5rem;
+    }
+
+    .CFRemarkHeading {
+        display: flex;
+        align-items: center;
+        padding: .5rem 1rem;
+        background-color: #414141;
+        width: 100%;
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .CFRemarkHeading p {
+        margin-top: 1rem;
+    }
+
+    .CFRemarksDIv {
+        height: 10rem;
+        padding: 1rem;
+        color: whitesmoke;
+        width: 100%;
+    }
+
+    .CFslNo {
+        width: 1rem;
+    }
+
+    .CfTinders {
+        width: 10rem;
+    }
+
+    .GramInputTotal,
+    .LiterInputTotal,
+    .R1C1,
+    .R1C2,
+    .R1C3,
+    .R1C4,
+    .R1C5,
+    .R1C6 {
+        border: none;
+        background-color: transparent;
+        /*transparent;*/
+        outline: none;
+        width: 4rem;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .GramInputTotal,
+    .LiterInputTotal {
+        width: 7rem;
+    }
+
+    .CFTinters {
+        background-color: transparent;
+        font: 30px;
+        font-weight: 600;
+        width: 10rem;
+        padding: 1rem 1rem;
+        border: none;
+    }
+
+    .CFInputTotal {
+        font-size: 1.4rem;
+    }
+
+    .CFInpValue {
+        font-size: 1.2rem;
+        border-bottom: 1px solid black;
+    }
+
+    .CFTotalInputElementsGrams,
+    .CFTotalInputElementsLiter {
+        width: auto;
+    }
+
+    #TotalQtyInGram,
+    #TotalQtyInLiter {
+        width: 180px;
+        background-color: transparent;
+        text-align: center;
+    }
+
+    #TotalAdditives {
+        width: 50%;
+    }
+
+    .CFRemarksDiv {
+        width: 50%;
+        padding: 0 1rem;
+    }
+
+
+    #CFRemarks {
+        background-color: transparent;
+        width: 100%;
+        border: none;
+        color: whitesmoke;
+        font-size: 20px;
+        height: 5rem;
+    }
+
+
+    .readonly-input {
+        outline: none;
+        border: none;
+        background-color: rgba(224, 224, 224, 0.255);
+        padding: 1rem 0;
+        text-align: center;
+        /* Add more styles as needed */
+    }
+
+    .CFAllDiv {
+        margin-bottom: 10rem;
+    }
+</style>

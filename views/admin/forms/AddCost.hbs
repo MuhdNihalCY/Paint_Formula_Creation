@@ -1,0 +1,14 @@
+<section>
+    <div class="container">
+        <form action="/admin/addCost" method="post">
+            <h1>{{Additive.Binder_Name}}</h1>
+            <input type="text" name="Item" value="{{Additive.Binder_Id}}" id="">
+            cost<input type="text" name="Cost" placeholder="EnterCost" value="{{Additive.cost}}">
+            <select name="PriceUnit" id="" class="ADAddCategoryTextInput" required>
+                <option value="Ltr">Liter</option>
+                <option value="kg">Kilogram</option>
+            </select>
+            <button>Submit</button>
+        </form>
+    </div>
+</section>

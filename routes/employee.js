@@ -11,8 +11,8 @@ const verifyLogin = (req, res, next) => {
   if (req.session.EmployeeLogged) {
     next()
   } else {
-    //next()
-    res.redirect('/login');
+    next()
+    // res.redirect('/login');
   }
 }
 
@@ -59,8 +59,8 @@ router.get('/', verifyLogin, function (req, res, next) {
   })
 });
 
-router.get('/getAllFormula/api',verifyLogin,(req,res)=>{
-  employeeHelpers.GetAllFormulations().then((Formula)=>{
+router.get('/getAllFormula/api', verifyLogin, (req, res) => {
+  employeeHelpers.GetAllFormulations().then((Formula) => {
     // console.log(Formula);
     res.json(Formula);
   })
@@ -154,6 +154,18 @@ router.get('/CreateFormula', verifyLogin, (req, res) => {
       employeeHelpers.getThisFormulaFileNo().then((FileNo) => {
         var MixerName = req.session.EmployeeName;
         res.render('employee/CreateFormula', { AllCategory, Additives, FileNo, MixerName });
+      })
+    })
+  })
+})
+
+router.get('/CreateFormulas', verifyLogin, (req, res) => {
+  employeeHelpers.getAllCollections().then((AllCategory) => {
+    employeeHelpers.GetAllAdditives().then((Additives) => {
+      // console.log(AllCategory);
+      employeeHelpers.getThisFormulaFileNo().then((FileNo) => {
+        var MixerName = req.session.EmployeeName;
+        res.render('employee/CreateFormulas', { AllCategory, Additives, FileNo, MixerName });
       })
     })
   })
@@ -283,124 +295,202 @@ router.post('/CreateFormula', (req, res) => {
     return ratios;
   }
 
-  var Datas = req.body;
+  const imageData = req.body.Image;
+  console.log('Image data:', imageData);
+
+  // var Datas = req.body;
 
 
-  // Usage
-  const data = {
-    TotalQtyInGram: Datas.TotalQtyInGram,
-    TotalAdditives: Datas.TotalAdditives,
-    Binder1: Datas.Binder1,
-    Binder2: Datas.Binder2,
-    GramInputTotalR1: Datas.GramInputTotalR1,
-    GramInputTotalR2: Datas.GramInputTotalR2,
-    GramInputTotalR3: Datas.GramInputTotalR3
-  };
+  // // Usage
+  // const data = {
+  //   TotalQtyInGram: Datas.TotalQtyInGram,
+  //   TotalAdditives: Datas.TotalAdditives,
+  //   Binder1: Datas.Binder1,
+  //   Binder2: Datas.Binder2,
+  //   GramInputTotalR1: Datas.GramInputTotalR1,
+  //   GramInputTotalR2: Datas.GramInputTotalR2,
+  //   GramInputTotalR3: Datas.GramInputTotalR3
+  // };
 
-  const result = calculateRatios(data);
-  // console.log('Total Quantity:', result.totalQty);
-  // console.log('Additive Ratio:', result.additive);
-  // console.log('Binder1 Ratio:', result.binder1);
-  // console.log('Binder2 Ratio:', result.binder2);
-  // console.log('Tinters Ratios:', result.tinters);
-  Datas.AdditiveRatio = result.additive;
-  Datas.Binder1Ratio = result.binder1;
-  Datas.Binder2Ratio = result.binder2;
-  Datas.TintersRatioObject = result.tinters;
-  console.log("Tinters Ratio: ", result.tinters);
-  for (var key in result.tinters) {
-    if (result.tinters[key] === 0) {
-      delete result.tinters[key];
-    }
+  // const result = calculateRatios(data);
+  // // console.log('Total Quantity:', result.totalQty);
+  // // console.log('Additive Ratio:', result.additive);
+  // // console.log('Binder1 Ratio:', result.binder1);
+  // // console.log('Binder2 Ratio:', result.binder2);
+  // // console.log('Tinters Ratios:', result.tinters);
+  // Datas.AdditiveRatio = result.additive;
+  // Datas.Binder1Ratio = result.binder1;
+  // Datas.Binder2Ratio = result.binder2;
+  // Datas.TintersRatioObject = result.tinters;
+  // console.log("Tinters Ratio: ", result.tinters);
+  // for (var key in result.tinters) {
+  //   if (result.tinters[key] === 0) {
+  //     delete result.tinters[key];
+  //   }
+  // }
+  // console.log("Tinters Ratio: ", result.tinters);
+  // Datas.TintersRatioArray = Object.values(result.tinters);
+
+  // Datas.TintersCount = Datas.TintersRatioArray.length;
+  // Datas.InsertedTime = Date.now()
+
+  // employeeHelpers.getAllCategories().then((AllCategory) => {
+  //   employeeHelpers.GetAllSubCategories().then((AllSubCategory) => {
+
+  //     // Mapping CategoryName
+  //     const CategoryMap = {};
+  //     AllCategory.forEach(category => {
+  //       CategoryMap[category.Category_Id] = category.Category;
+  //     });
+
+  //     Datas.CategoryName = CategoryMap[Datas.Category];
+
+  //     // Mapping SubCategoryName
+  //     const SubCategoryMap = {};
+  //     AllSubCategory.forEach(subCategory => {
+  //       SubCategoryMap[subCategory.SubCategory_Id] = subCategory.SubCategory;
+  //     });
+
+  //     Datas.SubCategoryName = SubCategoryMap[Datas.SubCategory];
+
+  //     employeeHelpers.GetAllProducts().then((Tinters) => {
+  //       //console.log(Tinters)
+  //       // Create a map of Tinter IDs to Tinter names
+  //       const tinterMap = Tinters.reduce((map, tinter) => {
+  //         map[tinter.Product_Id] = tinter.Product_Name;
+  //         return map;
+  //       }, {});
+
+  //       // Iterate over each TinterR1, TinterR2, TinterR3 property in Datas
+  //       for (let i = 1; i <= Datas.TintersCount; i++) {
+  //         const tinterId = Datas[`TintersR${i}`];
+  //         if (tinterId && tinterMap.hasOwnProperty(tinterId)) {
+  //           Datas[`TinterNameR${i}`] = tinterMap[tinterId];
+  //         }
+  //       }
+
+
+  //       employeeHelpers.FindAdditiveById(Datas.additives).then((Additive) => {
+  //         //console.log(Additive);
+  //         if (Additive) {
+  //           Datas.AdditiveName = Additive.Additive_Name;
+  //         }
+
+  //         employeeHelpers.GetSubCategoriesById(Datas.SubCategory).then((SubCategory) => {
+  //           //console.log(SubCategory)
+  //           if (SubCategory.Binder1) {
+  //             employeeHelpers.getBinderById(SubCategory.Binder1).then((Binder1) => {
+  //               //console.log("Binder1: ", Binder1)
+  //               if (SubCategory.Binder2) {
+  //                 employeeHelpers.getBinderById(SubCategory.Binder2).then((Binder2) => {
+  //                   // console.log("Binder2: ", Binder2)
+  //                   Datas.Binder1Name = Binder1.Binder_Name;
+  //                   Datas.Binder2Name = Binder2.Binder_Name;
+  //                   // res .send data
+  //                   employeeHelpers.SaveFormulaData(Datas).then((State) => {
+  //                     //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
+  //                     res.redirect(`/BulkOrder/${Datas.FileNo}`)
+  //                     // res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
+  //                   })
+  //                 })
+  //               } else {
+  //                 Datas.Binder1Name = Binder1.Binder_Name;
+  //                 // res .send data
+  //                 employeeHelpers.SaveFormulaData(Datas).then((State) => {
+  //                   //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
+  //                   res.redirect(`/BulkOrder/${Datas.FileNo}`)
+  //                   //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
+  //                 })
+  //               }
+  //             })
+  //           } else {
+  //             // res .send data
+  //             employeeHelpers.SaveFormulaData(Datas).then((State) => {
+  //               //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
+  //               res.redirect(`/BulkOrder/${Datas.FileNo}`)
+  //               //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
+  //             })
+  //           }
+  //         })
+  //         //console.log(Datas);
+  //       })
+  //     })
+
+  //   })
+  // })
+})
+
+router.post('/getCostingWithData', verifyLogin, (req, res) => {
+  // console.log(req.body);
+  // {
+  //   ProductsIdsArray: [ '10002', '10003' ],
+  //   Binder1: 'PU 240-90',
+  //   Binder2: 'PU 240-05',
+  //   Additives: '1000'
+  // }
+
+  // Assuming you have required the necessary modules and set up the server
+
+  // Extract data from the request body
+  var ProductIdsArray = req.body.ProductsIdsArray;
+  var Binder1 = req.body.Binder1;
+  var Binder2 = req.body.Binder2;
+  var Additive = req.body.Additives;
+
+  // An object to store the response data that will be sent back to the client
+  var ResponseToApi = {};
+
+  // An array to store all the promises
+  var promises = [];
+
+  // Fetch products by their IDs and add them to the response object
+  var promise4 = employeeHelpers.GetProductByArrayOfProductById(ProductIdsArray).then((Products) => {
+    // console.log("Products: ", Products);
+    ResponseToApi.Products = Products;
+  });
+  promises.push(promise4);
+
+  // Check if Binder1 is provided and fetch the binder by its name
+  if (Binder1) {
+    var promise1 = employeeHelpers.getBinderByName(Binder1).then((Binder1s) => {
+      // console.log("Binder1s: ", Binder1s);
+      ResponseToApi.Binder1 = Binder1s;
+    });
+    promises.push(promise1);
   }
-  console.log("Tinters Ratio: ", result.tinters);
-  Datas.TintersRatioArray = Object.values(result.tinters);
 
-  Datas.TintersCount = Datas.TintersRatioArray.length;
-  Datas.InsertedTime = Date.now()
+  // Check if Binder2 is provided and fetch the binder by its name
+  if (Binder2) {
+    var promise2 = employeeHelpers.getBinderByName(Binder2).then((Binder2s) => {
+      // console.log("Binder2s: ", Binder2s);
+      ResponseToApi.Binder2 = Binder2s;
+    });
+    promises.push(promise2);
+  }
 
-  employeeHelpers.getAllCategories().then((AllCategory) => {
-    employeeHelpers.GetAllSubCategories().then((AllSubCategory) => {
+  // Check if Additive is provided and fetch the additives by their ID
+  if (Additive) {
+    var promise3 = employeeHelpers.getAdditivesById(Additive).then((Additives) => {
+      // console.log("Additives: ", Additives);
+      ResponseToApi.Additive = Additives;
+    });
+    promises.push(promise3);
+  }
 
-      // Mapping CategoryName
-      const CategoryMap = {};
-      AllCategory.forEach(category => {
-        CategoryMap[category.Category_Id] = category.Category;
-      });
-
-      Datas.CategoryName = CategoryMap[Datas.Category];
-
-      // Mapping SubCategoryName
-      const SubCategoryMap = {};
-      AllSubCategory.forEach(subCategory => {
-        SubCategoryMap[subCategory.SubCategory_Id] = subCategory.SubCategory;
-      });
-
-      Datas.SubCategoryName = SubCategoryMap[Datas.SubCategory];
-
-      employeeHelpers.GetAllProducts().then((Tinters) => {
-        //console.log(Tinters)
-        // Create a map of Tinter IDs to Tinter names
-        const tinterMap = Tinters.reduce((map, tinter) => {
-          map[tinter.Product_Id] = tinter.Product_Name;
-          return map;
-        }, {});
-
-        // Iterate over each TinterR1, TinterR2, TinterR3 property in Datas
-        for (let i = 1; i <= Datas.TintersCount; i++) {
-          const tinterId = Datas[`TintersR${i}`];
-          if (tinterId && tinterMap.hasOwnProperty(tinterId)) {
-            Datas[`TinterNameR${i}`] = tinterMap[tinterId];
-          }
-        }
-        employeeHelpers.FindAdditiveById(Datas.additives).then((Additive) => {
-          //console.log(Additive);
-          if (Additive) {
-            Datas.AdditiveName = Additive.Additive_Name;
-          }
-
-          employeeHelpers.GetSubCategoriesById(Datas.SubCategory).then((SubCategory) => {
-            //console.log(SubCategory)
-            if (SubCategory.Binder1) {
-              employeeHelpers.getBinderById(SubCategory.Binder1).then((Binder1) => {
-                //console.log("Binder1: ", Binder1)
-                if (SubCategory.Binder2) {
-                  employeeHelpers.getBinderById(SubCategory.Binder2).then((Binder2) => {
-                    // console.log("Binder2: ", Binder2)
-                    Datas.Binder1Name = Binder1.Binder_Name;
-                    Datas.Binder2Name = Binder2.Binder_Name;
-                    // res .send data
-                    employeeHelpers.SaveFormulaData(Datas).then((State) => {
-                      //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
-                      res.redirect(`/BulkOrder/${Datas.FileNo}`)
-                      // res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
-                    })
-                  })
-                } else {
-                  Datas.Binder1Name = Binder1.Binder_Name;
-                  // res .send data
-                  employeeHelpers.SaveFormulaData(Datas).then((State) => {
-                    //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
-                    res.redirect(`/BulkOrder/${Datas.FileNo}`)
-                    //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
-                  })
-                }
-              })
-            } else {
-              // res .send data
-              employeeHelpers.SaveFormulaData(Datas).then((State) => {
-                //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
-                res.redirect(`/BulkOrder/${Datas.FileNo}`)
-                //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
-              })
-            }
-          })
-          //console.log(Datas);
-        })
-      })
-
+  // Wait for all promises to resolve using Promise.all()
+  Promise.all(promises)
+    .then(() => {
+      // All promises have resolved
+      // Send the complete response object back to the client
+      res.json(ResponseToApi);
     })
-  })
+    .catch((error) => {
+      // Handle any errors that occurred during the promise executions
+      console.error("Error:", error);
+      // Send a 500 status with an error response
+      res.status(500).json({ error: "An error occurred" });
+    });
+
 })
 
 router.get('/FormulaList', verifyLogin, (req, res) => {
@@ -757,7 +847,7 @@ router.get('/Printsmlabel/:fileNo', verifyLogin, (req, res) => {
       if (SubCategory.Mipa) {
         Mipa = true;
       }
-      res.render('employee/SmallLabel',{Formula,Print,Mipa});
+      res.render('employee/SmallLabel', { Formula, Print, Mipa });
       //res.redirect(`/BulkOrder/${FileNo}`)
     })
   })

@@ -721,5 +721,23 @@ module.exports = {
                 }
             }
         })
+    },
+
+    // cost Update
+    getAdditiveById:(id)=>{
+        return new Promise(async(resolve,reject)=>{
+            var Additive = await db.get().collection(collection.BINDER_COLLECTION).findOne({Binder_Id:parseInt(id)})
+            resolve(Additive);
+        })
+    },
+    PutCostByID:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.BINDER_COLLECTION).updateOne({Binder_Id:parseInt(data.Item)},{$set:{
+                cost:data.Cost,
+                PriceUnit:data.PriceUnit
+            }}).then(()=>{
+                resolve();
+            })
+        })
     }
 }  

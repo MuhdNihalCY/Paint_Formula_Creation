@@ -81,12 +81,13 @@
                 </div>
             </div>
             <div class="ADMainTableDiv">
-                <table class="ADMainTable">
+                <table class="ADMainTable  table table-bordered text-center ADcustom-border">
                     <thead class="ADTableHead">
                         <tr class="ADTableHeadTR">
                             <th>ID</th>
                             <th>Binder Name</th>
                             <th>Density (ml/1000g)</th>
+                            <th>Cost</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -96,8 +97,12 @@
                             <td>{{this.Binder_Id}}</td>
                             <td>{{this.Binder_Name}}</td>
                             <td>{{this.Binder_Density}}</td>
-                            <td><a onclick="return confirmProductDelete()" href="/admin/deleteBinder/{{this.Binder_Id}}"
-                                    class="btn btn-danger">Delete</a></td>
+                            <td>{{this.cost}} / {{this.PriceUnit}}</td>
+                            <td>
+                                <a href="/admin/AddCost/Dev/{{this.Binder_Id}}" class="btn btn-primary">Edit</a>
+                                <a onclick="return confirmProductDelete()" href="/admin/deleteBinder/{{this.Binder_Id}}"
+                                    class="btn btn-danger">Delete</a>
+                            </td>
                         </tr>
                         {{/each}}
                     </tbody>
@@ -125,6 +130,16 @@
                         <p class="ADAddCategoryLabel">Density (ml/1000g)</p>
                         <input required class="ADAddCategoryTextInput" type="text" name="Binder_Density"
                             placeholder="Enter Density of Binder">
+
+                        <p class="ADAddCategoryLabel">Price</p>
+                        <input required class="ADAddCategoryTextInput" type="text" name="Binder_Price"
+                            placeholder="Enter Price of Binder">
+
+                        <p class="ADAddCategoryLabel">Price</p>
+                        <select name="PriceUnit" id="" class="ADAddCategoryTextInput" required>
+                            <option value="Ltr">Liter</option>
+                            <option value="kg">Kilogram</option>
+                        </select>
 
                         <p class="ADAddCategoryLabel">Stock</p>
                         <input required class="ADAddCategoryTextInput" type="text" name="Stock"

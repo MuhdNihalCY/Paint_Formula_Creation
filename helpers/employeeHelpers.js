@@ -48,9 +48,12 @@ module.exports = {
     },
     GetProductBySubId: (SubId) => {
         return new Promise(async (resolve, reject) => {
-            SubId = SubId + '';
-            var Products = await db.get().collection(collection.PRODUCT_COLLECTION).find({ SubCategory: SubId }).toArray();
-            resolve(Products)
+            const subCategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ SubCategory_Id: parseInt(SubId) });
+            const productIds = subCategory.Products.map(productId => parseInt(productId));
+            const promises = productIds.map(productId => db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: productId }));
+            const products = await Promise.all(promises);
+
+            resolve(products);
         })
     },
     GetSubcategotyById: (SubId) => {
@@ -195,12 +198,12 @@ module.exports = {
         }
 
         return new Promise(async (resolve, reject) => {
-            console.log("TinterName: ",TinterName)
-            console.log("TinterQTY: ",TinterQty)
+            console.log("TinterName: ", TinterName)
+            console.log("TinterQTY: ", TinterQty)
             var Tinter = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": TinterName });
             TinterQty = parseFloat(TinterQty);
-            console.log("Tinter: ",Tinter);
-            console.log("parseFloat(Tinter.Stock): ",parseFloat(Tinter.Stock));
+            console.log("Tinter: ", Tinter);
+            console.log("parseFloat(Tinter.Stock): ", parseFloat(Tinter.Stock));
             if (parseFloat(Tinter.Stock) > TinterQty) {
                 // have Stock for this formula
                 State.HaveStock = true;
@@ -332,43 +335,55 @@ module.exports = {
             resolve();
         })
     },
-    getProductsWithLowStocks:()=>{
-        return new Promise(async(resolve,reject)=>{
+    getProductsWithLowStocks: () => {
+        return new Promise(async (resolve, reject) => {
             var Products = await db.get().collection(collection.PRODUCT_COLLECTION).find({ Stock: { $lt: 200 } }).toArray()
             // console.log("Products:",Products);
             resolve(Products);
         })
     },
-    getAllBinderWithLowStocks:()=>{
-        return new Promise(async(resolve,reject)=>{
+    getAllBinderWithLowStocks: () => {
+        return new Promise(async (resolve, reject) => {
             var Binders = await db.get().collection(collection.BINDER_COLLECTION).find({ Stock: { $lt: 100 } }).toArray()
             // console.log('Binders : ',Binders)
             resolve(Binders);
         })
     },
-    getAllAdditivesWithLowStocks:()=>{
-        return new Promise(async(resolve,reject)=>{
+    getAllAdditivesWithLowStocks: () => {
+        return new Promise(async (resolve, reject) => {
             var Additives = await db.get().collection(collection.ADDITIVE_COLLECTION).find({ Stock: { $lt: 100 } }).toArray()
             // console.log('Additives:', Additives)
             resolve(Additives)
         })
     },
-    GetAllOrderList:()=>{
-        return new Promise(async(resolve,reject)=>{
+    GetAllOrderList: () => {
+        return new Promise(async (resolve, reject) => {
             var Orders = await db.get().collection(collection.BULK_ORDER_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
             resolve(Orders);
         })
     },
-    getOrderByInsertedTime:(time)=>{
-        return new Promise(async(resolve,reject)=>{
-            var Order = await db.get().collection(collection.BULK_ORDER_COLLECTION).findOne({InsertedTime: parseInt(time)});
+    getOrderByInsertedTime: (time) => {
+        return new Promise(async (resolve, reject) => {
+            var Order = await db.get().collection(collection.BULK_ORDER_COLLECTION).findOne({ InsertedTime: parseInt(time) });
             resolve(Order);
         })
     },
-    GetSubCategoriesByName:(name)=>{
-        return new Promise(async(resolve,reject)=>{
-            var Sub_Category = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({SubCategory:name});
+    GetSubCategoriesByName: (name) => {
+        return new Promise(async (resolve, reject) => {
+            var Sub_Category = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ SubCategory: name });
             resolve(Sub_Category)
+        })
+    },
+    getBinderByName: (BinderName) => {
+        return new Promise(async (resolve, reject) => {
+            var Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Name: BinderName });
+            resolve(Binder);
+        })
+    },
+    getAdditivesById: (id) => {
+        return new Promise(async (resolve, reject) => {
+            var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ Additive_Id: parseInt(id) });
+            resolve(Additive);
         })
     }
 

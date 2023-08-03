@@ -81,7 +81,7 @@
                 </div>
             </div>
             <div class="ADMainTableDiv">
-                <table class="ADMainTable">
+                <table class="ADMainTable  table table-bordered text-center ADcustom-border">
                     <thead class="ADTableHead">
                         <tr class="ADTableHeadTR">
                             <th>ID</th>
@@ -96,7 +96,8 @@
                             <td>{{this.Additive_Id}}</td>
                             <td>{{this.Additive_Name}}</td>
                             <td>{{this.Additive_Density}}</td>
-                            <td><a onclick="return confirmProductDelete()"
+                            <td>
+                                <a onclick="return confirmProductDelete()"
                                     href="/admin/deleteAdditive/{{this.Additive_Id}}" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
@@ -107,8 +108,8 @@
         </div>
         {{!-- Addcategory form --}}
 
-        <div id="ADpopupContainer">
-            <div id="ADpopupContentAdditive">
+        <div id="ADpopupContainer" class="scrollable-content_Additive">
+            <div id="ADpopupContentAdditive" class="scrollable-content_Additive">
                 <!-- Add your popup content here -->
                 <div class="ADAddCategoryFromHeaderDiv">
                     <p class="ADAddCategoryFromHeader">Add Additives</p>
@@ -125,6 +126,16 @@
                         <p class="ADAddCategoryLabel">Density (ml/1000g)</p>
                         <input required class="ADAddCategoryTextInput" type="text" name="Additive_Density"
                             placeholder="Enter Density of Additive">
+
+                        <p class="ADAddCategoryLabel">Price</p>
+                        <input required class="ADAddCategoryTextInput" type="text" name="Additive_Price"
+                            placeholder="Enter Price of Additive">
+
+                        <p class="ADAddCategoryLabel">Price</p>
+                        <select name="PriceUnit" id="" class="ADAddCategoryTextInput" required>
+                            <option value="Ltr">Liter</option>
+                            <option value="kg">Kilogram</option>
+                        </select>
 
                         <p class="ADAddCategoryLabel">Stock</p>
                         <input required class="ADAddCategoryTextInput" type="text" name="Stock"
