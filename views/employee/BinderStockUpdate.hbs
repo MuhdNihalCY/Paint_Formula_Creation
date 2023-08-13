@@ -25,7 +25,7 @@
             <div class="USMainContentDiv">
                 <table id="myTable" class="display">
                     <thead>
-                        <tr>
+                        <tr class="text-center">
                             <th class="text-center" style="font-size: 20px;">Item</th>
                             <th class="text-center" style="font-size: 20px;">Old Stock</th>
                             <th class="text-center" style="font-size: 20px;">New Stock & Action</th>
@@ -33,7 +33,7 @@
                     </thead>
                     <tbody>
                         {{#each Binders}}
-                        <tr>
+                        <tr class="text-center">
                             <td class="USFormReadOnly">{{this.Binder_Name}}</td>
                             <td class="USFormReadOnly">{{this.Stock}}</td>
                             <td>

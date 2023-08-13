@@ -1,11 +1,11 @@
 <section>
-    <form action="/CreateFormula" method="post"  enctype="multipart/form-data">
+    <form id="uploadForm" action="/CreateFormula" method="post" enctype="multipart/form-data">
         <div class="CreateFormulaMainDivArea">
             <div class="containers">
                 <div class="CFMainHeader">
                     <h2 class="CFheader">Create Formula</h2>
                     <div class="CFMinHeaderBTNs">
-                        <a class="CFclearAllBTN btn" href="#">Clear All</a>
+                        <a class="CFclearAllBTN btn" href="">Clear All</a>
                         <input type="submit" value="Save" class="CFSaveBTN btn" id="">
                     </div>
                 </div>
@@ -59,6 +59,8 @@
                         <div class="CFBasicDetailsImg">
                             {{!-- Display referance image that is selected --}}
                             <img src="" alt="" id="CFselectedImage">
+                            <!-- Loading Indicator -->
+                            <div id="loadingIndicator">Uploading... (Add your animation here)</div>
                         </div>
 
                         {{!-- Solid Content start here --}}
@@ -150,12 +152,12 @@
                                     </td>
 
                                     <td class="CFTableRowData"><input type="text" name="GramInputTotalR1" readonly
-                                            disabled id="GramInputTotalR1" value="0.00"
+                                             id="GramInputTotalR1" value="0.00"
                                             class="GramInputTotal CFINP CFInputTotal">
                                     </td>
 
                                     <td class="CFTableRowData"><input name="LiterInputTotalR1" type="text" min="0.00"
-                                            disabled readonly id="LiterInputTotalR1" value="0.00"
+                                             readonly id="LiterInputTotalR1" value="0.00"
                                             class="LiterInputTotal CFINP CFInputTotal ">
                                     </td>
 
@@ -333,6 +335,13 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+    document.getElementById('uploadForm').addEventListener('submit', function (event) {
+        // Show the loading indicator when the form is submitted
+        document.getElementById('loadingIndicator').style.display = 'block';
+    });
+
+
     $(document).ready(function () {
         // Handle file input change event
         $('#imageInput').on('change', function () {
@@ -1646,98 +1655,98 @@
 
     function CalculateCost() {
         // Function to get selected values from select elements with class "CFTinters"
- /*       function getSelectedValues() {
-            const selectedValues = [];
-            const selectElements = document.querySelectorAll('.CFTinters');
-
-            // Iterate through each select element
-            for (const selectElement of selectElements) {
-                // Get the selected value of the current select element
-                const selectedValue = selectElement.value;
-
-                // Add the selected value to the array
-                selectedValues.push(selectedValue);
-            }
-
-            return selectedValues;
-        }
-
-        // Call the function and store the result in a variable
-        const selectedProductsArray = getSelectedValues();
-        // Use the filter() method to remove null and empty string values
-        const filteredProductArray = selectedProductsArray
-
-        console.log("Selected Products: ", filteredProductArray); // Output the array of selected values
-
-        //Binder1 ID = Binder1
-        //Binder2 ID = Binder2
-        var Binder1 = false;
-        var Binder2 = false;
-
-        if (document.getElementById("Binder1").textContent) {
-            Binder1 = document.getElementById("Binder1").textContent;
-        }
-        if (document.getElementById("Binder2").textContent) {
-            Binder2 = document.getElementById("Binder2").textContent;
-        }
-
-        // id of Additives : CFSelectAdditivess
-        var Additives = false
-        if (document.getElementById("CFSelectAdditivess").value) {
-            Additives = document.getElementById("CFSelectAdditivess").value;
-        }
-
-        const dataToSend = {
-            ProductsIdsArray: filteredProductArray,
-            Binder1: Binder1,
-            Binder2: Binder2,
-            Additives: Additives
-        };
-
-        fetch("/getCostingWithData/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataToSend)
-        })
-            .then(response => response.json())
-            .then(responseData => {
-                //console.log("Response:", responseData);
-                CostingFunction(responseData)
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-
-
-
-
-        function CostingFunction(responseData) {
-            //console.log(responseData);
-
-            var ProductsArray = responseData.Products;
-            //console.log("ProductsArray: ",ProductsArray);
-
-            var Binder1 = responseData.Binder1
-            //console.log("Binder1: ",Binder1);
-
-            var Binder2 = responseData.Binder2
-            //console.log("Binder2: ",Binder2);
-
-            var Additive = responseData.Additive
-            //console.log("Additive: ",Additive);
-
-
-            // Gram total id GramInputTotalR1
-            // ml total id LiterInputTotalR1
-
-            var ProductCount = ProductsArray.length;
-
-
-        }
-
-*/
+        /*       function getSelectedValues() {
+                   const selectedValues = [];
+                   const selectElements = document.querySelectorAll('.CFTinters');
+       
+                   // Iterate through each select element
+                   for (const selectElement of selectElements) {
+                       // Get the selected value of the current select element
+                       const selectedValue = selectElement.value;
+       
+                       // Add the selected value to the array
+                       selectedValues.push(selectedValue);
+                   }
+       
+                   return selectedValues;
+               }
+       
+               // Call the function and store the result in a variable
+               const selectedProductsArray = getSelectedValues();
+               // Use the filter() method to remove null and empty string values
+               const filteredProductArray = selectedProductsArray
+       
+               console.log("Selected Products: ", filteredProductArray); // Output the array of selected values
+       
+               //Binder1 ID = Binder1
+               //Binder2 ID = Binder2
+               var Binder1 = false;
+               var Binder2 = false;
+       
+               if (document.getElementById("Binder1").textContent) {
+                   Binder1 = document.getElementById("Binder1").textContent;
+               }
+               if (document.getElementById("Binder2").textContent) {
+                   Binder2 = document.getElementById("Binder2").textContent;
+               }
+       
+               // id of Additives : CFSelectAdditivess
+               var Additives = false
+               if (document.getElementById("CFSelectAdditivess").value) {
+                   Additives = document.getElementById("CFSelectAdditivess").value;
+               }
+       
+               const dataToSend = {
+                   ProductsIdsArray: filteredProductArray,
+                   Binder1: Binder1,
+                   Binder2: Binder2,
+                   Additives: Additives
+               };
+       
+               fetch("/getCostingWithData/", {
+                   method: "POST",
+                   headers: {
+                       "Content-Type": "application/json"
+                   },
+                   body: JSON.stringify(dataToSend)
+               })
+                   .then(response => response.json())
+                   .then(responseData => {
+                       //console.log("Response:", responseData);
+                       CostingFunction(responseData)
+                   })
+                   .catch(error => {
+                       console.error("Error:", error);
+                   });
+       
+       
+       
+       
+               function CostingFunction(responseData) {
+                   //console.log(responseData);
+       
+                   var ProductsArray = responseData.Products;
+                   //console.log("ProductsArray: ",ProductsArray);
+       
+                   var Binder1 = responseData.Binder1
+                   //console.log("Binder1: ",Binder1);
+       
+                   var Binder2 = responseData.Binder2
+                   //console.log("Binder2: ",Binder2);
+       
+                   var Additive = responseData.Additive
+                   //console.log("Additive: ",Additive);
+       
+       
+                   // Gram total id GramInputTotalR1
+                   // ml total id LiterInputTotalR1
+       
+                   var ProductCount = ProductsArray.length;
+       
+       
+               }
+       
+       */
 
     }
 
@@ -1801,6 +1810,7 @@
         display: flex;
         justify-content: space-between;
         padding: 0 1rem;
+        padding-bottom: 5rem;
     }
 
     .CFAside {
@@ -2253,5 +2263,10 @@
 
     .CFAllDiv {
         margin-bottom: 10rem;
+    }
+
+    #loadingIndicator {
+        display: none;
+        /* Add your custom CSS styles for the loading indicator here */
     }
 </style>

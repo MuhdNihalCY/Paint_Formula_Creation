@@ -3,6 +3,7 @@ var collection = require('../config/collection');
 const { ObjectId } = require('mongodb');
 const { use } = require('../routes/employee');
 const { reset } = require('nodemon');
+const res = require('express/lib/response');
 
 module.exports = {
     DoLogin: (Data) => {
@@ -312,7 +313,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Id": parseInt(Data.ProductId) })
             var OldStock = parseFloat(Product.Stock);
-            var NewStock = OldStock + (parseFloat(Data.NewStock));
+            var NewStock = OldStock +(parseFloat(Product.StandardQuatity) * (parseFloat(Data.NewStock)));
             await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
             resolve();
         })
@@ -384,6 +385,24 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ Additive_Id: parseInt(id) });
             resolve(Additive);
+        })
+    },
+    getProductByName: (P_name) => {
+        return new Promise(async (resolve, reject) => {
+            var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Name: P_name });
+            resolve(Product);
+        })
+    },
+    GetSubcategotyByName: (S_Name) => {
+        return new Promise(async (resolve, reject) => {
+            var Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ SubCategory: S_Name });
+            resolve(Subcategory)
+        })
+    },
+    GetBinderById: (B_ID) => {
+        return new Promise(async (resolve, reject) => {
+            var binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({Binder_Id : parseInt(B_ID)});
+            resolve(binder)
         })
     }
 

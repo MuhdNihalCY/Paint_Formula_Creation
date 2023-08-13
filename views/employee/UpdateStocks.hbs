@@ -25,17 +25,19 @@
             <div class="USMainContentDiv">
                 <table id="myTable" class="display">
                     <thead>
-                        <tr>
+                        <tr class="text-center">
                             <th class="text-center" style="font-size: 20px;">Item</th>
                             <th class="text-center" style="font-size: 20px;">Old Stock</th>
+                            <th class="text-center" style="font-size: 20px;">Standard Unit</th>
                             <th class="text-center" style="font-size: 20px;">New Stock & Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#each Products}}
-                        <tr>
+                        <tr class="text-center">
                             <td class="USFormReadOnly">{{this.Product_Name}}</td>
                             <td class="USFormReadOnly">{{this.Stock}}</td>
+                            <td class="USFormReadOnly">{{this.StandardQuatity}} {{this.StandardQuantityUnit}}</td>
                             <td>
                                 <form action='/UpdateProductStock/{{this.Product_Id}}' method="post">
                                     <input type="text" class="USFormWriteOnly" name="NewStock"

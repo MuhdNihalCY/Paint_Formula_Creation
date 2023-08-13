@@ -6,6 +6,7 @@ var logger = require('morgan');
 var hbs = require('express-handlebars');
 var db = require('./config/connection');
 var session = require('express-session');
+const fileUpload = require('express-fileupload');
 
 
 var EmployeeRouter = require('./routes/employee');
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileUpload()); // Enable file uploads
 app.use(session({
   secret: 'secret',
   resave: false,

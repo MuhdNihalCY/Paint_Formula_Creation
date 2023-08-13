@@ -39,7 +39,7 @@
                                 <p>Print Label</p>
                             </div>
                         </a>
-                        <a target="_blank" href="/BulkOrder/{{this.FileName}}/{{this.Quantity}}">
+                        <a target="_blank" href="/BulkOrders/{{this.FileName}}/{{this.Quantity}}">
                             <div class="OPrintLabelDiv">
                                 <p>Repeat Order</p>
                             </div>
@@ -48,91 +48,7 @@
                 <hr>
                 </div>
                 {{/each}}
-                {{!-- Sample Start --}}
-                {{#each Orders}}
-                <div class="OOrderEachItemDiv">
-                    <div class="OTopLevel">
-                        <p>Order No: {{this.InsertedTime}} </p>
-                        <p>ProjectNo: {{this.ProjectNo}} </p>
-                        <p>Date: {{this.order_date}}</p>
-                    </div>
-                    <div class="OSecondLevel">
-                        <p>Formula No: {{this.FileName}}</p>
-                        <p>Quantity: {{this.Quantity}}</p>
-                        <p>Mixer: {{this.Mixer}}</p>
-                    </div>
-                    <div class="OThirdLevel">
-                        <p>Customer Name: {{this.CustomerName}}</p>
-                        <p>Color Name: {{this.ColorName}}</p>
-                    </div>
-                    <div class="OforthLevel">
-                        <p>Customer Ref: {{this.CustomerRef}}</p>
-                        <p>Color Code: {{this.ColorCde}}</p>
-                    </div>
-                    <div class="OfifthLevel">
-                        <p>Category: {{this.Category}}</p>
-                        <p>Sub Category: {{this.SubCategory}}</p>
-                    </div>
-                    <div class="OSixthLevel">
-                        <p>Remarks: {{this.remarks}}</p>
-                    </div>
-                    <div class="OSeventhLevel">
-                        <a href="/PrintLabel">
-                            <div class="OPrintLabelDiv">
-                                <p>Print Label</p>
-                            </div>
-                        </a>
-                        <a href="/Order/{{this.FileName}}/{{this.Quantity}}">
-                            <div class="OPrintLabelDiv">
-                                <p>Repeat Order</p>
-                            </div>
-                        </a>
-                    </div>
-                <hr>
-                </div>
-                {{/each}} {{#each Orders}}
-                <div class="OOrderEachItemDiv">
-                    <div class="OTopLevel">
-                        <p>Order No: {{this.InsertedTime}} </p>
-                        <p>ProjectNo: {{this.ProjectNo}} </p>
-                        <p>Date: {{this.order_date}}</p>
-                    </div>
-                    <div class="OSecondLevel">
-                        <p>Formula No: {{this.FileName}}</p>
-                        <p>Quantity: {{this.Quantity}}</p>
-                        <p>Mixer: {{this.Mixer}}</p>
-                    </div>
-                    <div class="OThirdLevel">
-                        <p>Customer Name: {{this.CustomerName}}</p>
-                        <p>Color Name: {{this.ColorName}}</p>
-                    </div>
-                    <div class="OforthLevel">
-                        <p>Customer Ref: {{this.CustomerRef}}</p>
-                        <p>Color Code: {{this.ColorCde}}</p>
-                    </div>
-                    <div class="OfifthLevel">
-                        <p>Category: {{this.Category}}</p>
-                        <p>Sub Category: {{this.SubCategory}}</p>
-                    </div>
-                    <div class="OSixthLevel">
-                        <p>Remarks: {{this.remarks}}</p>
-                    </div>
-                    <div class="OSeventhLevel">
-                        <a href="/PrintLabel">
-                            <div class="OPrintLabelDiv">
-                                <p>Print Label</p>
-                            </div>
-                        </a>
-                        <a href="/Order/{{this.FileName}}/{{this.Quantity}}">
-                            <div class="OPrintLabelDiv">
-                                <p>Repeat Order</p>
-                            </div>
-                        </a>
-                    </div>
-                <hr>
-                </div>
-                {{/each}}
-                {{!-- Sample ends --}}
+               
                 {{else}}
                 {{/if}}
             </div>
