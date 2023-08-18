@@ -1,4 +1,76 @@
 <section>
+    <div class="ADCustomerEditAside">
+        <aside class="ADSidebar">
+            <div class="ADSidebarLogoDiv">
+                <img class="AdLogo" src="/images/Logo/MegaPaintsLogo.png" alt="">
+            </div>
+            <div class="ADSelectioSideBarDIv">
+                <a href="/admin">
+                    <div class="Category ">
+                        <p class="ADDelectionSideBarLabel">Category</p>
+                        <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                    </div>
+                </a>
+                <a href="/admin/Sub-Category">
+                    <div class="Category">
+                        <p class="ADDelectionSideBarLabel">Sub-Category</p>
+                        <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                    </div>
+                </a>
+                <a href="/admin/Product">
+                    <div class="Category">
+                        <p class="ADDelectionSideBarLabel">Product</p>
+                        <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                    </div>
+                </a>
+                <a href="/admin/Additives">
+                    <div class="Category">
+                        <p class="ADDelectionSideBarLabel">Additives</p>
+                        <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                    </div>
+                </a>
+                <a href="/admin/Binders">
+                    <div class="Category">
+                        <p class="ADDelectionSideBarLabel">Binders</p>
+                        <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                    </div>
+                </a>
+                <a href="/admin/Employees ">
+                    <div class="Category ADactiveButton">
+                        <p class="ADDelectionSideBarLabel">Employees</p>
+                        <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                    </div>
+                </a>
+                <a href="/admin/Customers">
+                    <div class="Category">
+                        <p class="ADDelectionSideBarLabel">Customers</p>
+                        <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                    </div>
+                </a>
+
+                <div class="ADAccount">
+                    <p class="ADDelectionSideBarLabel">Account</p>
+                    <img src="/images/Icons/MoreSelect.png" alt="" class="ADAccountIcon">
+                </div>
+
+                <div class="ADAccountExpandDiv">
+                    <a href="/admin/change-password">
+                        <div class="ADlogoutDiv">
+                            <p>Change Password</p>
+                            {{!-- <img src="/images/Icons/logout.png" alt="" class="ADLogoutIcon"> --}}
+                        </div>
+                    </a>
+                    <a href="/admin/logout">
+                        <div class="ADlogoutDiv">
+                            <p>Logout</p>
+                            <img src="/images/Icons/logout.png" alt="" class="ADLogoutIcon">
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </aside>
+    </div>
     {{!-- Addcategory form --}}
 
     <div id="AdEditEmployee">
@@ -22,8 +94,8 @@
                         <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="email" name="Email"
                             placeholder="Enter Email" value="{{Employee.Email}}">
                         <p class="ADAddCategoryLabel">Password</p>
-                        {{!-- <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="password" name="Password" id="password"
-                            placeholder="Enter Password">
+                        {{!-- <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="password"
+                            name="Password" id="password" placeholder="Enter Password">
                         <i id="password-icon" class="fas fa-eye password-icon" onclick="togglePassword()"></i> --}}
 
                         <input required class="ADAddCategoryTextInput ADemployeeAddforminput ADEmployeePass"
@@ -36,7 +108,8 @@
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN mx-4 ">Update
                                 Employee</button>
-                            <a href="/admin/deleteEmployee/{{Employee.Employee_Id}}" class="btn btn-danger mx-4" onclick="return confirm('Are you sure you want to delete this employee?')">Delete
+                            <a href="/admin/deleteEmployee/{{Employee.Employee_Id}}" class="btn btn-danger mx-4"
+                                onclick="return confirm('Are you sure you want to delete this employee?')">Delete
                                 Employee</a>
                         </div>
                     </div>

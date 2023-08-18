@@ -1,3 +1,67 @@
+<div id="loadingIndicator" class="popup">
+    <div class="popup-content">
+        <div class="loader"></div>
+        <p>Saving Formula...</p>
+    </div>
+    <style>
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .popup-content p {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .page-content {
+            padding: 20px;
+        }
+    </style>
+</div>
+
 <section>
     <form id="uploadForm" action="/CreateFormula" method="post" enctype="multipart/form-data">
         <div class="CreateFormulaMainDivArea">
@@ -60,7 +124,7 @@
                             {{!-- Display referance image that is selected --}}
                             <img src="" alt="" id="CFselectedImage">
                             <!-- Loading Indicator -->
-                            <div id="loadingIndicator">Uploading... (Add your animation here)</div>
+                            {{!-- <div id="loadingIndicator">Uploading... (Add your animation here)</div> --}}
                         </div>
 
                         {{!-- Solid Content start here --}}
@@ -152,12 +216,12 @@
                                     </td>
 
                                     <td class="CFTableRowData"><input type="text" name="GramInputTotalR1" readonly
-                                             id="GramInputTotalR1" value="0.00"
+                                            id="GramInputTotalR1" value="0.00"
                                             class="GramInputTotal CFINP CFInputTotal">
                                     </td>
 
                                     <td class="CFTableRowData"><input name="LiterInputTotalR1" type="text" min="0.00"
-                                             readonly id="LiterInputTotalR1" value="0.00"
+                                            readonly id="LiterInputTotalR1" value="0.00"
                                             class="LiterInputTotal CFINP CFInputTotal ">
                                     </td>
 

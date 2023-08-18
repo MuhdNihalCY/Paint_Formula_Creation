@@ -80,6 +80,43 @@
                     <img src="/images/Icons/add.png" alt="" class="ADAddNewIcon">
                 </div>
             </div>
+            <div class="ADCustomerCatDiv">
+                <div class="ADCustomerCatHeader">
+                    <p class="ADCustomerCatHead">Customer Category</p>
+                    <button id="ADAddCusCategoryBTN" class="ADAddCusCategoryBTN">Add New Customer Category</button>
+                    <img class="AdCustomerMoreIcon" onclick="toggleCategoryList()" src="/images/Icons/MoreSelect.png"
+                        id="rotateIcon" alt="">
+                </div>
+                <div class="CategoryList" id="categoryList">
+                    <hr>
+                    <!-- Your list of categories goes here -->
+                    {{#each CustomerCategory}}
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">{{this.Category}}</p>
+                        <a href="/admin/removecustomerCategory/{{this.Category}}" class="btn ADCusotmerdelete-button"><i
+                                class="fas fa-trash"></i> Delete</a>
+                    </div>
+                    {{/each}}
+                    <!-- Add more categories as needed -->
+                </div>
+            </div>
+
+            {{!-- Pop up for add Category of customers --}}
+            <div id="ADCUSpopup">
+                <div class="ADCUSpopup">
+                    <form method="post" action="/admin/AddCustomerCategory">
+                        <div class="ADCusPopHeader">
+                            <p class="ADCUSpopup-header">Add Customer Category</p>
+                            <button type="button" class="closeBtn" onclick="closePopup()">X</button>
+                        </div>
+                        <input type="text" name="Category" id="categoryInput" placeholder="Enter category name">
+                        <button type="submit" id="submitBtn">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+
+
             <div class="ADMainTableDiv">
                 <table class="ADMainTable  table table-bordered text-center ADcustom-border">
                     <thead class="ADTableHead">
@@ -112,7 +149,7 @@
         {{!-- Addcategory form --}}
 
         <div id="ADpopupContainer">
-            <div id="ADpopupContentEmployee">
+            <div id="ADpopupContentEmployeeCustomer">
                 <!-- Add your popup content here -->
                 <div class="ADAddCategoryFromHeaderDiv">
                     <p class="ADAddCategoryFromHeader">Add Customer</p>
@@ -132,6 +169,13 @@
                         <p class="ADAddCategoryLabel">Email</p>
                         <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="email" name="Email"
                             placeholder="Enter Email">
+                        <p class="ADAddCategoryLabel">Customer Category</p>
+                        <select name="CustomerCategory" class="ADAddCategoryTextInput ADemployeeAddforminput" id="">
+                            {{#each CustomerCategory}}
+                            <option value="{{this.Category}}">{{this.Category}}</option>
+                            {{/each}}
+                        </select>
+
                         <p class="ADAddCategoryLabel">Password</p>
                         <input required class="ADAddCategoryTextInput ADemployeeAddforminput ADEmployeePass"
                             type="password" name="Password" id="password" placeholder="Enter Password">
@@ -146,3 +190,62 @@
         </div>
     </section>
 </section>
+
+<script>
+
+
+    var addButton = document.getElementById('ADAddCusCategoryBTN');
+    var popup = document.getElementById('ADCUSpopup');
+    var categoryInput = document.getElementById('categoryInput');
+    var submitBtn = document.getElementById('submitBtn');
+
+    addButton.addEventListener('click', function () {
+        popup.style.display = 'flex';
+        // Disable scrolling
+        document.body.style.overflow = 'hidden';
+    });
+
+    submitBtn.addEventListener('click', function () {
+        var categoryName = categoryInput.value;
+        if (categoryName) {
+            // You can perform further actions, such as adding the category to the list.
+            console.log('New category:', categoryName);
+            // Close the popup
+            popup.style.display = 'none';
+        } else {
+            alert('Please enter a category name');
+        }
+    });
+
+    function closePopup() {
+        popup.style.display = 'none';
+        // Enable scrolling
+        document.body.style.overflow = 'auto';
+
+    }
+
+
+
+    function toggleCategoryList() {
+
+        var categoryList = document.getElementById('categoryList');
+        var icon = document.getElementById('rotateIcon');
+        var BTN = document.getElementById('ADAddCusCategoryBTN');
+
+        if (categoryList.style.maxHeight === '0px') {
+
+            categoryList.style.maxHeight = categoryList.scrollHeight + 'px';
+            icon.style.transform = 'rotate(-90deg)';
+            BTN.style.display = 'block';
+        } else {
+            closePopup()
+            categoryList.style.maxHeight = '0px';
+            icon.style.transform = 'rotate(90deg)';
+            BTN.style.display = 'none';
+
+        }
+    }
+
+
+
+</script>

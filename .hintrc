@@ -9,7 +9,8 @@
         "ignore": [
           "user-select",
           "backdrop-filter",
-          "width: fit-content"
+          "width: fit-content",
+          "-webkit-filter"
         ]
       }
     ]

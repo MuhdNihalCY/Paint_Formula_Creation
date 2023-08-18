@@ -722,20 +722,64 @@ module.exports = {
             }
         })
     },
+    addCustomerCategory: (data) => {
+        return new Promise(async (resolve, reject) => {
+            var latestCategory = await db.get().collection(collection.CUSTOMER_CATETGORY_COLLECTION).find().sort({ InsertedTime: -1 }).toArray();
+            console.log(latestCategory);
+            latestCategory = latestCategory[0];
+
+            var SameCategory = await db.get().collection(collection.CUSTOMER_CATETGORY_COLLECTION).find({ Category: data.Category }).toArray();
+            if (SameCategory.length > 0) {
+                //Category with same name already avalible.
+                resolve({ status: false, message: `Category ${latestCategory.Category} is Already Avaliable`, Error: 'Already Added!' });
+            } else {
+                //store the category
+                if (latestCategory) {
+                    var Id = parseInt(latestCategory.Id) + 1;
+                    data.Id = Id;
+                    await db.get().collection(collection.CUSTOMER_CATETGORY_COLLECTION).insertOne(data).then((Response) => {
+                        resolve({ status: true, message: `Category is Added` });
+                    })
+                } else {
+                    data.Id = 1000;
+                    await db.get().collection(collection.CUSTOMER_CATETGORY_COLLECTION).insertOne(data).then((Response) => {
+                        resolve({ status: true, message: `Category is Added` });
+                    })
+                }
+            }
+        })
+    },
+    getAllCustomerCategory: () => {
+        return new Promise(async (resolve, reject) => {
+            var CustomerCategories = await db.get().collection(collection.CUSTOMER_CATETGORY_COLLECTION).find().toArray();
+            resolve(CustomerCategories);
+        })
+    },
+    RemoveCustomerCategoryByName:(Category)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.CUSTOMER_CATETGORY_COLLECTION).deleteOne({Category:Category}).then((Response)=>{
+                resolve(Response);
+            })
+        })
+    },
+
+
 
     // cost Update
-    getAdditiveById:(id)=>{
-        return new Promise(async(resolve,reject)=>{
-            var Additive = await db.get().collection(collection.BINDER_COLLECTION).findOne({Binder_Id:parseInt(id)})
+    getAdditiveById: (id) => {
+        return new Promise(async (resolve, reject) => {
+            var Additive = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Id: parseInt(id) })
             resolve(Additive);
         })
     },
-    PutCostByID:(data)=>{
-        return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.BINDER_COLLECTION).updateOne({Binder_Id:parseInt(data.Item)},{$set:{
-                cost:data.Cost,
-                PriceUnit:data.PriceUnit
-            }}).then(()=>{
+    PutCostByID: (data) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.BINDER_COLLECTION).updateOne({ Binder_Id: parseInt(data.Item) }, {
+                $set: {
+                    cost: data.Cost,
+                    PriceUnit: data.PriceUnit
+                }
+            }).then(() => {
                 resolve();
             })
         })
