@@ -3,111 +3,57 @@
         <div class="container">
             <div class="ADProductsAddingMainDiv">
                 <div class="ADProductsAddingFormDiv__title">
-                    {{#if editProduct}}
-                    <p>Edit product</p>
+                    {{#if editBinder}}
+                    <p>Edit Binder</p>
                     {{else}}
-                    <p>Add product</p>
+                    <p>Add Binder</p>
                     {{/if}}
                     <hr>
                 </div>
-                {{#if editProduct}}
-                <form action="/admin/UpdateProducts" method="post">
+                {{#if editBinder}}
+                <form action="/admin/UpdateBinder" method="post">
                     {{else}}
-                    <form action="/admin/addProducts" method="post">
+                    <form action="/admin/AddBinder" method="post">
                         {{/if}}
                         <div class="ADFormAdding">
+
                             <div class="ADFormAddingCatgorySelection">
                                 <div class="ADFromAddingSingleRow">
-
-                                    {{#if editProduct}}
-                                    {{!-- <select required class="ADSubCategorySelectionSelectBox" name="Category"
-                                        id="CategorySelect" disabled>
-                                        <option class="ADSelectCategoryOptions"
-                                            value="{{matchingCategory.Category_Id}}">
-                                            {{matchingCategory.Category_Id}} - {{matchingCategory.Category}}</option>
-                                        {{#each NotMatchingCategories}}
-                                        <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
-                                            {{this.Category_Id}} -
-                                            {{this.Category}}</option>
-                                        {{/each}}
-                                    </select> --}}
+                                    <p class="ADSubCategorySelectionLabel">Binder Name</p>
+                                    {{#if editBinder}}
+                                    <input type="text" id="Product_Namr" name="Binder_Name" class="ADProductInputBox"
+                                        value="{{Binder.Binder_Name}}" required>
+                                    <input type="text" name="Binder_Id" class="ADProductInputBox"
+                                        value="{{Binder.Binder_Id}}" hidden required>
                                     {{else}}
-                                    <p class="ADSubCategorySelectionLabel">Select Category</p>
-                                    <select required class="ADSubCategorySelectionSelectBox" name="Category"
-                                        id="CategorySelect">
-                                        {{#each AllCategory}}
-                                        <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
-                                            {{this.Category_Id}} -
-                                            {{this.Category}}</option>
-                                        {{/each}}
-                                    </select>
-                                    {{/if}}
-
-                                </div>
-                                <div class="ADFromAddingSingleRow">
-
-                                    {{#if editProduct}}
-                                    {{!-- <select required class="ADSubCategorySelectionSelectBox" name="SubCategory"
-                                        id="SubCategorySelect" disabled>
-                                        <option class="ADSelectCategoryOptions"
-                                            value="{{matchingSubCategory.SubCategory_Id}}">
-                                            {{matchingSubCategory.SubCategory_Id}} - {{matchingSubCategory.SubCategory}}
-                                        </option>
-                                        {{#each NotMatchingSubCategory}}
-                                        <option class="ADSelectCategoryOptions" value="{{this.SubCategory_Id}}">
-                                            {{this.SubCategory_Id}} - {{this.SubCategory}}</option>
-                                        {{/each}}
-                                    </select> --}}
-                                    {{else}}
-                                    <p class="ADSubCategorySelectionLabel">Select Sub Category</p>
-                                    <select required class="ADSubCategorySelectionSelectBox" name="SubCategory"
-                                        id="SubCategorySelect">
-                                        {{#each AllSubCategory}}
-                                        <option class="ADSelectCategoryOptions" value="{{this.SubCategory_Id}}">
-                                            {{this.SubCategory_Id}} - {{this.SubCategory}}</option>
-                                        {{/each}}
-                                    </select>
-                                    {{/if}}
-
-                                </div>
-                            </div>
-                            <div class="ADFormAddingCatgorySelection">
-                                <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">Product Name</p>
-                                    {{#if editProduct}}
-                                    <input type="text" id="Product_Namr" name="Product_Name" class="ADProductInputBox"
-                                        value="{{product.Product_Name}}" required>
-                                    <input type="text" name="Product_Id" class="ADProductInputBox"
-                                        value="{{product.Product_Id}}" hidden required>
-                                    {{else}}
-                                    <input type="text" id="Product_Namr" name="Product_Name" class="ADProductInputBox"
+                                    <input type="text" id="Product_Namr" name="Binder_Name" class="ADProductInputBox"
                                         required>
                                     {{/if}}
                                 </div>
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Density (ml/1000g)</p>
-                                    {{#if editProduct}}
-                                    <input type="number" name="Product_Density" class="ADProductInputBox"
-                                        value="{{product.Product_Density}}" required>
+                                    {{#if editBinder}}
+                                    <input type="number" name="Binder_Density" class="ADProductInputBox"
+                                        value="{{Binder.Binder_Density}}" required>
                                     {{else}}
-                                    <input type="number" name="Product_Density" class="ADProductInputBox" required>
+                                    <input type="number" name="Binder_Density" class="ADProductInputBox" required>
                                     {{/if}}
                                 </div>
                             </div>
                             <div class="ADFormAddingCatgorySelection">
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Price</p>
-                                    {{#if editProduct}}
-                                    <input type="number" step="any" name="Price" class="ADProductInputBox"
-                                        value="{{product.Price}}" required>
+                                    {{#if editBinder}}
+                                    <input type="number" step="any" name="cost" class="ADProductInputBox"
+                                        value="{{Binder.cost}}" required>
                                     {{else}}
-                                    <input type="number" step="any" name="Price" class="ADProductInputBox" required>
+                                    <input type="number" step="any" name="cost" class="ADProductInputBox" required>
                                     {{/if}}
                                 </div>
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Unit</p>
                                     <select name="PriceUnit" id="" class="ADProductInputBox" required>
-                                        {{#if editProduct}}
+                                        {{#if editBinder}}
                                         {{#if PriceUnitLtr}}
                                         <option value="Ltr">Liter</option>
                                         <option value="kg">Kilogram</option>
@@ -137,12 +83,12 @@
 
                             {{!-- Price for customers Ends Here --}}
 
-                            <div class="ADFormAddingCatgorySelection">
+                            {{!-- <div class="ADFormAddingCatgorySelection">
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Standard Quantity</p>
-                                    {{#if editProduct}}
+                                    {{#if editBinder}}
                                     <input type="number" step="any" name="StandardQuatity" class="ADProductInputBox"
-                                        value="{{product.StandardQuatity}}" required>
+                                        value="{{Additive.StandardQuatity}}" required>
                                     {{else}}
                                     <input type="number" step="any" name="StandardQuatity" class="ADProductInputBox"
                                         required>
@@ -151,7 +97,7 @@
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Unit</p>
                                     <select name="StandardQuantityUnit" id="" class="ADProductInputBox">
-                                        {{#if editProduct}}
+                                        {{#if editBinder}}
                                         {{#if STDUnitLtr}}
                                         <option value="Ltr">Liter</option>
                                         <option value="kg">Kilogram</option>
@@ -167,57 +113,56 @@
 
                                     </select>
                                 </div>
-                            </div>
-                            <div class="ADFormAddingCatgorySelection">
+                            </div> --}}
+                            {{!-- <div class="ADFormAddingCatgorySelection">
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">VOC</p>
-                                    {{#if editProduct}}
+                                    {{#if editBinder}}
                                     <input type="number" step="any" name="VOC" class="ADProductInputBox"
-                                        value="{{product.VOC}}" required>
+                                        value="{{Additive.VOC}}" required>
                                     {{else}}
                                     <input type="number" step="any" name="VOC" class="ADProductInputBox" required>
                                     {{/if}}
                                 </div>
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Solid Content</p>
-                                    {{#if editProduct}}
+                                    {{#if editBinder}}
                                     <input type="number" step="any" name="SolidContent" class="ADProductInputBox"
-                                        value="{{product.SolidContent}}" required>
+                                        value="{{Additive.SolidContent}}" required>
                                     {{else}}
                                     <input type="number" step="any" name="SolidContent" class="ADProductInputBox"
                                         required>
                                     {{/if}}
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="ADFormAddingCatgorySelection">
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Stock</p>
-                                    {{#if editProduct}}
-                                    {{#if RealStock}}
+                                    {{#if editBinder}}
+                                    {{!-- {{#if RealStock}}
                                     <input type="number" name="Stock" class="ADProductInputBox" value="{{RealStock}}"
                                         required>
-                                    {{else}}
+                                    {{else}} --}}
                                     <input type="number" name="Stock" class="ADProductInputBox"
-                                        value="{{product.Stock}}" required>
-                                    {{/if}}
+                                        value="{{Binder.Stock}}" required>
+                                    {{!-- {{/if}} --}}
                                     {{else}}
                                     <input type="number" name="Stock" class="ADProductInputBox" required>
                                     {{/if}}
                                 </div>
                             </div>
                             <button class="ADPRoductSubmitBTN" type="submit"> Submit </button>
-                            {{#if editProduct}}
+                            {{#if editBinder}}
                             <script>
                                 function confirmProductDelete() {
-                                    return confirm('Are you sure you want to delete this product?');
+                                    return confirm('Are you sure you want to delete this Binder?');
                                 }
                             </script>
-                            <a href="/admin/copyproduct/{{product.Product_Id}}"
+                            {{!-- <a href="/admin/copyproduct/{{product.Product_Id}}"
                                 class="btn btn-primary PCopyBtn ADPRoductSubmitBTN">Copy
-                                This Product to other SubCategory</a>
-                            <a class="btn btn-danger productDeleteBTN"
-                                href="/admin/DeleteProduct/{{product.Product_Id}}"
-                                onclick="return confirmProductDelete()">Delete Product</a>
+                                This Product to other SubCategory</a> --}}
+                            <a class="btn btn-danger productDeleteBTN" onclick="return confirmProductDelete()"
+                               href="/admin/deleteBinder/{{this.Binder_Id}}">Delete Binder</a>
                             {{/if}}
                         </div>
 
@@ -240,7 +185,7 @@
 
     function fetchProductDetails() {
         var Product = document.getElementById('Product_Namr').value;
-        return fetch(`/admin/getallcustmercategories/${Product}`)
+        return fetch(`/admin/getallcustmercategoriesybyBinder/${Product}`)
             .then(response => response.json())
             .catch(error => {
                 console.log('Error:', error);
@@ -345,77 +290,5 @@
 
 
 
-    //ajax
-    function ADgetAllSubCategories() {
-        return fetch('/admin/Subcategories/api')
-            .then(response => response.json())
-            .catch(error => {
-                console.log('Error:', error);
-            });
-    }
-
-    function ADgetAllCategories() {
-        return fetch('/admin/Categories/api')
-            .then(response => response.json())
-            .catch(error => {
-                console.log('Error:', error);
-            });
-    }
-
-    Promise.all([ADgetAllSubCategories(), ADgetAllCategories()])
-        .then(([subCategories, categories]) => {
-            // Process the retrieved subcategories and categories
-            console.log(subCategories);
-            console.log(categories);
-
-            // Assign the values to the variables
-            var subCategories = subCategories;
-            var categories = categories;
-
-            // Continue with your code here...
-
-
-
-            // Get the category select element
-            const categorySelect = document.getElementById('CategorySelect');
-
-            // Get the subcategory select element
-            const subCategorySelect = document.getElementById('SubCategorySelect');
-
-            // Add an event listener to the category select element
-            if(categorySelect){
-            categorySelect.addEventListener('change', () => {
-                // Get the selected category ID
-                const categoryId = categorySelect.value;
-
-                // Filter the subcategories based on the selected category ID
-                const filteredSubCategories = subCategories.filter(subCategory => subCategory.Category_Id === categoryId);
-
-                // Clear the subcategory select box
-                subCategorySelect.innerHTML = '';
-
-                // Create and append the option elements for the filtered subcategories
-
-                if (filteredSubCategories.length > 0) {
-                    filteredSubCategories.forEach(subCategory => {
-                        const option = document.createElement('option');
-                        option.value = subCategory.SubCategory_Id;
-                        option.textContent = subCategory.SubCategory;
-                        subCategorySelect.appendChild(option);
-                    });
-                    // Enable the subcategory select box
-                    subCategorySelect.disabled = false;
-                } else {
-                    // Add a "No Subcategory" option
-                    const option = document.createElement('option');
-                    option.textContent = 'No SubCategory available';
-                    subCategorySelect.appendChild(option);
-
-                    // Disable the subcategory select box
-                    subCategorySelect.disabled = true;
-                }
-            });
-       }
-        });
 
 </script>

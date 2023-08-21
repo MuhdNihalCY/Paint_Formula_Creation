@@ -97,8 +97,8 @@
                             <td>{{this.Additive_Name}}</td>
                             <td>{{this.Additive_Density}}</td>
                             <td>
-                                <a onclick="return confirmProductDelete()"
-                                    href="/admin/deleteAdditive/{{this.Additive_Id}}" class="btn btn-danger">Delete</a>
+                                {{!-- onclick="return confirmProductDelete()"  href="/admin/deleteAdditive/{{this.Additive_Id}}" class="btn btn-danger" --}}
+                                <a  href="/admin/editAdditive/{{this.Additive_Id}}" class="btn btn-primary" >Edit</a>
                             </td>
                         </tr>
                         {{/each}}
@@ -119,27 +119,33 @@
                 </div>
                 <form action="/admin/AddAdditives" method="post">
                     <div class="ADAddCategoryFromDiv">
-                        <p class="ADAddCategoryLabel">Additive Name:</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="Additive_Name"
-                            placeholder="Enter the Name Additive">
-
-                        <p class="ADAddCategoryLabel">Density (ml/1000g)</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="Additive_Density"
-                            placeholder="Enter Density of Additive">
-
-                        <p class="ADAddCategoryLabel">Price</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="Additive_Price"
-                            placeholder="Enter Price of Additive">
-
-                        <p class="ADAddCategoryLabel">Price</p>
-                        <select name="PriceUnit" id="" class="ADAddCategoryTextInput" required>
-                            <option value="Ltr">Liter</option>
-                            <option value="kg">Kilogram</option>
-                        </select>
-
-                        <p class="ADAddCategoryLabel">Stock</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="Stock"
-                            placeholder="Enter Stock">
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Additive Name:</p>
+                            <input required class="ADAddCategoryTextInput" type="text" name="Additive_Name"
+                                placeholder="Enter the Name Additive">
+                        </div>
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Density (ml/1000g)</p>
+                            <input required class="ADAddCategoryTextInput" type="text" name="Additive_Density"
+                                placeholder="Enter Density of Additive">
+                        </div>
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Price</p>
+                            <input required class="ADAddCategoryTextInput" type="text" name="Additive_Price"
+                                placeholder="Enter Price of Additive">
+                        </div>
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Price Unit</p>
+                            <select name="PriceUnit" id="" class="ADAddCategoryTextInput" required>
+                                <option value="Ltr">Liter</option>
+                                <option value="kg">Kilogram</option>
+                            </select>
+                        </div>
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Stock</p>
+                            <input required class="ADAddCategoryTextInput" type="text" name="Stock"
+                                placeholder="Enter Stock">
+                        </div>
                         <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Additives</button>
                     </div>
                 </form>

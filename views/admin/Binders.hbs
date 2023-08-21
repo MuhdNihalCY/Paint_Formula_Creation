@@ -99,9 +99,9 @@
                             <td>{{this.Binder_Density}}</td>
                             <td>{{this.cost}} / {{this.PriceUnit}}</td>
                             <td>
-                                <a href="/admin/AddCost/Dev/{{this.Binder_Id}}" class="btn btn-primary">Edit</a>
-                                <a onclick="return confirmProductDelete()" href="/admin/deleteBinder/{{this.Binder_Id}}"
-                                    class="btn btn-danger">Delete</a>
+                                <a href="/admin/editBinder/{{this.Binder_Id}}" class="btn btn-primary">Edit</a>
+                                {{!-- <a onclick="return confirmProductDelete()" href="/admin/deleteBinder/{{this.Binder_Id}}"
+                                    class="btn btn-danger">Delete</a> --}}
                             </td>
                         </tr>
                         {{/each}}
@@ -123,27 +123,33 @@
                 </div>
                 <form action="/admin/AddBinders" method="post">
                     <div class="ADAddCategoryFromDiv">
-                        <p class="ADAddCategoryLabel">Binder Name:</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="Binder_Name"
-                            placeholder="Enter the Name Binder">
-
-                        <p class="ADAddCategoryLabel">Density (ml/1000g)</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="Binder_Density"
-                            placeholder="Enter Density of Binder">
-
-                        <p class="ADAddCategoryLabel">Price</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="Binder_Price"
-                            placeholder="Enter Price of Binder">
-
-                        <p class="ADAddCategoryLabel">Price</p>
-                        <select name="PriceUnit" id="" class="ADAddCategoryTextInput" required>
-                            <option value="Ltr">Liter</option>
-                            <option value="kg">Kilogram</option>
-                        </select>
-
-                        <p class="ADAddCategoryLabel">Stock</p>
-                        <input required class="ADAddCategoryTextInput" type="text" name="Stock"
-                            placeholder="Enter Stock">
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Binder Name:</p>
+                            <input required class="ADAddCategoryTextInput" type="text" name="Binder_Name"
+                                placeholder="Enter the Name Binder">
+                        </div>
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Density (ml/1000g)</p>
+                            <input required class="ADAddCategoryTextInput" type="text" name="Binder_Density"
+                                placeholder="Enter Density of Binder">
+                        </div>
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Price</p>
+                            <input required class="ADAddCategoryTextInput" type="text" name="Binder_Price"
+                                placeholder="Enter Price of Binder">
+                        </div>
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Price</p>
+                            <select name="PriceUnit" id="" class="ADAddCategoryTextInput" required>
+                                <option value="Ltr">Liter</option>
+                                <option value="kg">Kilogram</option>
+                            </select>
+                        </div>
+                        <div class="ADadditivePopUpSub">
+                            <p class="ADAddCategoryLabel">Stock</p>
+                            <input required class="ADAddCategoryTextInput" type="text" name="Stock"
+                                placeholder="Enter Stock">
+                        </div>
                         <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Binders</button>
                     </div>
                 </form>

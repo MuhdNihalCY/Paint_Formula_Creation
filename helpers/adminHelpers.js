@@ -274,6 +274,12 @@ module.exports = {
             resolve(product);
         })
     },
+    GetProductByName: (ProductName) => {
+        return new Promise(async (resolve, reject) => {
+            var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Name: ProductName });
+            resolve(Product);
+        })
+    },
     UpdateProduct: (data) => {
         return new Promise(async (resolve, reject) => {
             // console.log(data);
@@ -286,20 +292,14 @@ module.exports = {
             // console.log(SameProduct);
             if (SameProduct) {
 
+                // Stock: parseFloat(data.Stock) * parseFloat(data.StandardQuatity)
+                data.Stock = parseFloat(data.Stock) * parseFloat(data.StandardQuatity)
+                data.Product_Id = parseInt(data.Product_Id);
+
                 await db.get().collection(collection.PRODUCT_COLLECTION).updateOne(
                     { _id: SameProduct._id },
                     {
-                        $set: {
-                            Product_Name: data.Product_Name,
-                            Product_Density: data.Product_Density,
-                            Price: data.Price,
-                            PriceUnit: data.PriceUnit,
-                            StandardQuatity: data.StandardQuatity,
-                            StandardQuantityUnit: data.StandardQuantityUnit,
-                            VOC: data.VOC,
-                            SolidContent: data.SolidContent,
-                            Stock: parseFloat(data.Stock) * parseFloat(data.StandardQuatity)
-                        }
+                        $set: data
                     }
                 ).then((response) => {
                     // console.log(response);
@@ -439,6 +439,33 @@ module.exports = {
             })
         })
     },
+    getAdditiveById: (id) => {
+        return new Promise(async (resolve, reject) => {
+            var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ Additive_Id: parseInt(id) })
+            resolve(Additive);
+        })
+    },
+    getAdditiveByName: (Additive_name) => {
+        return new Promise(async (resolve, reject) => {
+            var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ Additive_Name: Additive_name });
+            resolve(Additive);
+        })
+    },
+    UpdateAdditive: (data) => {
+        // Product_Id: '1000',
+        return new Promise(async (resolve, reject) => {
+            console.log(data);
+            data.Additive_Id = parseInt(data.Additive_Id);
+            // delete data.Product_Id
+
+            await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ Additive_Id: data.Additive_Id }, {
+                $set: data
+            }).then(Response => {
+                console.log(Response);
+                resolve(Response);
+            })
+        })
+    },
     AddBinders: (data) => {
         return new Promise(async (resolve, reject) => {
             // console.log(data);
@@ -489,6 +516,25 @@ module.exports = {
                     State.error = "Binder Not Deleted!"
                 }
                 resolve(State)
+            })
+        })
+    },
+    GetBinderByname: (BinderName) => {
+        return new Promise(async (resolve, reject) => {
+            var Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Name: BinderName });
+            resolve(Binder);
+        })
+    },
+    UpdateBinder: (data) => {
+        return new Promise(async (resolve, reject) => {
+            console.log(data);
+            data.Binder_Id = parseInt(data.Binder_Id);
+
+            await db.get().collection(collection.BINDER_COLLECTION).updateOne({ Binder_Id: data.Binder_Id }, {
+                $set: data
+            }).then(Response => {
+                console.log(Response);
+                resolve(Response);
             })
         })
     },
@@ -755,9 +801,9 @@ module.exports = {
             resolve(CustomerCategories);
         })
     },
-    RemoveCustomerCategoryByName:(Category)=>{
-        return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.CUSTOMER_CATETGORY_COLLECTION).deleteOne({Category:Category}).then((Response)=>{
+    RemoveCustomerCategoryByName: (Category) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CUSTOMER_CATETGORY_COLLECTION).deleteOne({ Category: Category }).then((Response) => {
                 resolve(Response);
             })
         })
@@ -766,7 +812,7 @@ module.exports = {
 
 
     // cost Update
-    getAdditiveById: (id) => {
+    getBinderById: (id) => {
         return new Promise(async (resolve, reject) => {
             var Additive = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Id: parseInt(id) })
             resolve(Additive);

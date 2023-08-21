@@ -6,7 +6,7 @@
                 <p class="form-title">Sign in to Employee account</p>
                 {{#if Err}}
                 <div class="container">
-                    <p style="color: red;" >{{Err}}</p>
+                    <p style="color: red;">{{Err}}</p>
                 </div>
                 {{/if}}
                 <div class="input-container">
@@ -33,12 +33,99 @@
 </section>
 
 
+<section class="dual-login-container">
+    <div class="login-form">
+        <form action="/CustomerLogin" method="post" class="form">
+            <p class="form-title">Customer Login</p>
+            {{!-- Your existing form code here --}}
+            <form action="/Login" method="post" class="form">
+                <p class="form-title">Sign in to Employee account</p>
+                {{#if Err}}
+                <div class="container">
+                    <p style="color: red;">{{Err}}</p>
+                </div>
+                {{/if}}
+                <div class="input-container">
+                    <input type="text" placeholder="Enter User Name " name="userName" required>
+                    <span>
+                    </span>
+                </div>
+                <div class="input-container">
+                    <input id="passwordInput" type="password" placeholder="Enter password " name="password" required>
+                    <span id="togglePassword" class="eye-icon" onclick="togglePasswordVisibility()"></span>
+                </div>
+                <button type="submit" class="submit">
+                    Sign in
+                </button>
+
+                {{!-- <p class="signup-link">
+                    No account?
+                    <a href="">Sign up</a>
+                </p> --}}
+            </form>
+        </form>
+    </div>
+    <div class="login-form">
+        <form action="/EmployeeLogin" method="post" class="form">
+            <p class="form-title">Employee Login</p>
+            {{!-- Your existing form code here --}}
+            <form action="/Login" method="post" class="form">
+                <p class="form-title">Sign in to Employee account</p>
+                {{#if Err}}
+                <div class="container">
+                    <p style="color: red;">{{Err}}</p>
+                </div>
+                {{/if}}
+                <div class="input-container">
+                    <input type="text" placeholder="Enter User Name " name="userName" required>
+                    <span>
+                    </span>
+                </div>
+                <div class="input-container">
+                    <input id="passwordInput" type="password" placeholder="Enter password " name="password" required>
+                    <span id="togglePassword" class="eye-icon" onclick="togglePasswordVisibility()"></span>
+                </div>
+                <button type="submit" class="submit">
+                    Sign in
+                </button>
+
+                {{!-- <p class="signup-link">
+                    No account?
+                    <a href="">Sign up</a>
+                </p> --}}
+            </form>
+        </form>
+    </div>
+</section>
+
+
+
+
 <style>
     section {
         width: 100vw;
         height: 100vh;
         background-color: #6B7280;
     }
+
+    .dual-login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #6B7280;
+    }
+
+    .login-form {
+        margin: 0 1rem;
+        max-width: 350px;
+    }
+
+
+
+
+
+
 
     .LoginMainPage {
         display: flex;

@@ -663,6 +663,7 @@ a {
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
+  /* width: 75%; */
 }
 
 /* Add this CSS to make the container scrollable */
@@ -678,7 +679,7 @@ a {
   height: 645px;
 }
 
-#ADpopupContentEmployeeCustomer{
+#ADpopupContentEmployeeCustomer {
   height: 746px;
 }
 
@@ -690,7 +691,7 @@ a {
 .ADAddCategoryFromHeader {
   font-size: 2rem;
   font-weight: 600;
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
 }
 
 .ADaddCloseBTNIcon {
@@ -705,13 +706,34 @@ a {
   margin-top: 1rem;
 }
 
+.ADadditivePopUpSub {
+  /* width: 45%; */
+  /* margin: 0 2.5rem; */
+  display: flex;
+  justify-content: space-between;
+  /* background-color: red; */
+  /* float: left; */
+
+  /* flex: 0 0 auto; */
+  /* width: calc(33.33% - 30px); */
+  /* Adjust the width as needed */
+  padding: 15px;
+}
+
+.ADadditivePopUpSub input,
+.ADadditivePopUpSub select {
+  /* width: 100px; */
+  margin: 0 2rem;
+}
+
+
 .ADAddCategoryLabel {
   font-size: 1.2rem;
   font-weight: 600;
 }
 
 .ADAddCategoryTextInput {
-  width: 100%;
+  /* width: 100%; */
   padding: .5rem .5rem .5rem 1rem;
   margin-bottom: 2rem;
 }
@@ -826,9 +848,52 @@ a {
   padding: 2rem 0;
 }
 
+.ADFormCustomerPrice {
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+}
+
+.ADFromPriceForCust {
+  font-size: 25px;
+  margin: 0 0 0 2rem;
+}
+
+.AFroemCustPriceHead {
+  width: 100%;
+}
+
+.ADFormCustPriceBody {
+  width: 100%;
+  padding: 2rem;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  /* flex-wrap: wrap; */
+
+}
+
+.ADFormCustPriceRow {
+  /* width: 45%; */
+  margin: 0 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  /* background-color: red; */
+  float: left;
+
+  flex: 0 0 auto;
+  /* width: calc(33.33% - 30px); */
+  /* Adjust the width as needed */
+  padding: 15px;
+}
+
+.ADFormCustInp {
+  margin-left: 2rem;
+}
+
 .ADFromAddingSingleRow {
   margin: 0 2.5rem;
-  width: 50%;
+  width: 43%;
   display: flex;
   justify-content: space-between;
 }
@@ -837,6 +902,7 @@ a {
   font-size: 20px;
   font-weight: 700;
   padding-left: 1rem;
+  width: 40%;
 }
 
 .ADPRoductSubmitBTN {
@@ -896,11 +962,11 @@ a {
   cursor: pointer;
 }
 
-.ADCustomerEditDiv{
+.ADCustomerEditDiv {
   margin-top: -3rem;
 }
 
-.ADCustomerEditAside{
+.ADCustomerEditAside {
   margin-top: -6rem;
 }
 
