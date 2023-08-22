@@ -706,22 +706,17 @@ a {
   margin-top: 1rem;
 }
 
-.ADadditivePopUpSub {
-  /* width: 45%; */
-  /* margin: 0 2.5rem; */
+.ADadditivePopUpSub,
+.ADCustomerEditDivIO {
   display: flex;
   justify-content: space-between;
-  /* background-color: red; */
-  /* float: left; */
-
-  /* flex: 0 0 auto; */
-  /* width: calc(33.33% - 30px); */
-  /* Adjust the width as needed */
   padding: 15px;
 }
 
 .ADadditivePopUpSub input,
-.ADadditivePopUpSub select {
+.ADadditivePopUpSub select,
+.ADCustomerEditDivIO input,
+.ADCustomerEditDivIO select {
   /* width: 100px; */
   margin: 0 2rem;
 }
@@ -736,6 +731,17 @@ a {
   /* width: 100%; */
   padding: .5rem .5rem .5rem 1rem;
   margin-bottom: 2rem;
+  width: 325px;
+}
+
+.ADCustpassDiv {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 32px;
+}
+
+.ADCustpassDiv input{
+  width: 250px;
 }
 
 .ADaddCategorySubmitBTN {
@@ -963,23 +969,39 @@ a {
 }
 
 .ADCustomerEditDiv {
-  margin-top: -3rem;
+  /* margin-top: 3rem; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
+.ADCustomerEditBody {
+  width: 70%;
+}
+
+
+
+
 .ADCustomerEditAside {
-  margin-top: -6rem;
+  margin-top: 0rem;
+
+}
+
+#AdEditEmployee {
+  width: 80%;
+  margin-left: 5rem;
 }
 
 #ADEditEmployeeSubDiv {
-  width: 50%;
+  width: 80%;
   margin: 5rem auto;
   padding-bottom: 5rem;
 }
 
 .ADpassword-icons {
   position: relative;
-  top: -62px;
-  left: 95%;
+  top: 0px;
+  left: -5%;
   cursor: pointer;
 }
 

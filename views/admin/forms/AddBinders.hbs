@@ -83,69 +83,13 @@
 
                             {{!-- Price for customers Ends Here --}}
 
-                            {{!-- <div class="ADFormAddingCatgorySelection">
-                                <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">Standard Quantity</p>
-                                    {{#if editBinder}}
-                                    <input type="number" step="any" name="StandardQuatity" class="ADProductInputBox"
-                                        value="{{Additive.StandardQuatity}}" required>
-                                    {{else}}
-                                    <input type="number" step="any" name="StandardQuatity" class="ADProductInputBox"
-                                        required>
-                                    {{/if}}
-                                </div>
-                                <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">Unit</p>
-                                    <select name="StandardQuantityUnit" id="" class="ADProductInputBox">
-                                        {{#if editBinder}}
-                                        {{#if STDUnitLtr}}
-                                        <option value="Ltr">Liter</option>
-                                        <option value="kg">Kilogram</option>
-                                        {{else}}
-                                        <option value="kg">Kilogram</option>
-                                        <option value="Ltr">Liter</option>
-                                        {{/if}}
-                                        {{else}}
-                                        <option selected disabled hidden>Select Unit For StandardQuatity</option>
-                                        <option value="kg">Kilogram</option>
-                                        <option value="Ltr">Liter</option>
-                                        {{/if}}
 
-                                    </select>
-                                </div>
-                            </div> --}}
-                            {{!-- <div class="ADFormAddingCatgorySelection">
-                                <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">VOC</p>
-                                    {{#if editBinder}}
-                                    <input type="number" step="any" name="VOC" class="ADProductInputBox"
-                                        value="{{Additive.VOC}}" required>
-                                    {{else}}
-                                    <input type="number" step="any" name="VOC" class="ADProductInputBox" required>
-                                    {{/if}}
-                                </div>
-                                <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">Solid Content</p>
-                                    {{#if editBinder}}
-                                    <input type="number" step="any" name="SolidContent" class="ADProductInputBox"
-                                        value="{{Additive.SolidContent}}" required>
-                                    {{else}}
-                                    <input type="number" step="any" name="SolidContent" class="ADProductInputBox"
-                                        required>
-                                    {{/if}}
-                                </div>
-                            </div> --}}
                             <div class="ADFormAddingCatgorySelection">
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Stock</p>
                                     {{#if editBinder}}
-                                    {{!-- {{#if RealStock}}
-                                    <input type="number" name="Stock" class="ADProductInputBox" value="{{RealStock}}"
+                                    <input type="number" name="Stock" class="ADProductInputBox" value="{{Binder.Stock}}"
                                         required>
-                                    {{else}} --}}
-                                    <input type="number" name="Stock" class="ADProductInputBox"
-                                        value="{{Binder.Stock}}" required>
-                                    {{!-- {{/if}} --}}
                                     {{else}}
                                     <input type="number" name="Stock" class="ADProductInputBox" required>
                                     {{/if}}
@@ -158,11 +102,9 @@
                                     return confirm('Are you sure you want to delete this Binder?');
                                 }
                             </script>
-                            {{!-- <a href="/admin/copyproduct/{{product.Product_Id}}"
-                                class="btn btn-primary PCopyBtn ADPRoductSubmitBTN">Copy
-                                This Product to other SubCategory</a> --}}
+
                             <a class="btn btn-danger productDeleteBTN" onclick="return confirmProductDelete()"
-                               href="/admin/deleteBinder/{{this.Binder_Id}}">Delete Binder</a>
+                                href="/admin/deleteBinder/{{this.Binder_Id}}">Delete Binder</a>
                             {{/if}}
                         </div>
 
