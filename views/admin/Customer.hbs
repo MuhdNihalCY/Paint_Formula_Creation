@@ -89,16 +89,47 @@
                 </div>
                 <div class="CategoryList" id="categoryList">
                     <hr>
-                    <!-- Your list of categories goes here -->
-                    {{#each CustomerCategory}}
+                  
+                     {{#each CustomerCategory}}
                     <div class="ADCustomerCategoryRow">
                         <p class="ADCustomerCategory">{{this.Category}}</p>
                         <a href="/admin/removecustomerCategory/{{this.Category}}" class="btn ADCusotmerdelete-button"
                             onclick="return confirm('Are you sure you want to delete this Customer category?')"><i
                                 class="fas fa-trash"></i> Delete</a>
                     </div>
-                    {{/each}}
-                    <!-- Add more categories as needed -->
+
+                    {{/each}} 
+                    {{!-- <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 1</p>
+                    </div>
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 2</p>
+                    </div>
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 3</p>
+                    </div>
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 4</p>
+                    </div>
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 5</p>
+                    </div>
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 6</p>
+                    </div>
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 7</p>
+                    </div>
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 8</p>
+                    </div>
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 9</p>
+                    </div>
+                    <div class="ADCustomerCategoryRow">
+                        <p class="ADCustomerCategory">Category 10</p>
+                    </div> --}}
+                    
                 </div>
             </div>
 

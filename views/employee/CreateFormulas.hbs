@@ -63,7 +63,11 @@
 </div>
 
 <section>
+    {{#if CustomerName}}
+    <form id="uploadForm" action="/Customer/CreateFormula" method="post" enctype="multipart/form-data">
+    {{else}}
     <form id="uploadForm" action="/CreateFormula" method="post" enctype="multipart/form-data">
+        {{/if}}
         <div class="CreateFormulaMainDivArea">
             <div class="containers">
                 <div class="CFMainHeader">
@@ -78,7 +82,7 @@
                     <aside class="CFAside">
                         <div class="MixerDetails" hidden>
                             <p class="MixerNameLabel">Mixer Name</p>
-                            <input type="text" name="MixerName" value="{{MixerName}}" id="">
+                            <input type="text" name="MixerName" value="{{CustomerName}} - ({{Customer.CustomerCategory}} customer)" id="">
                             {{!-- Enter Mixer Name Here By Dynamic Process --}}
                         </div>
                         <div class="CFBasicDetails">
@@ -94,7 +98,7 @@
                         <div class="CFBasicDetails">
                             <p class="CFBasicPtag">Customer Name</p>
                             <input type="text" class="CFBasicInp" name="CustomerName" placeholder="Enter Customer Name"
-                                required>
+                                value="{{CustomerName}}" required readonly>
                         </div>
                         <div class="CFBasicDetails">
                             <p class="CFBasicPtag">Color Code</p>

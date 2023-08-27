@@ -418,12 +418,14 @@ a {
 }
 
 .ADCustomerCatDiv {
-  margin: 2rem 3rem;
-  margin-right: 8rem;
+  margin: 2rem  3rem;
+  /* margin-left: auto;  */
   width: auto;
   background-color: rgb(223, 223, 223);
   border: 1px solid gray;
+  /* z-index: 50; */
 }
+
 
 .ADAddError {
   color: red;
@@ -435,6 +437,7 @@ a {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
+  /* width: 40%; */
 }
 
 .ADCustomerCatHead {

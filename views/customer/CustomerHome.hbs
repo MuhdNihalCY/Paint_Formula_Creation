@@ -23,10 +23,11 @@
 
 
     <div class="mainInner">
-        <div>Welcome {{EmployeeName}}</div>
+        <div>Welcome {{CustomerName}}</div>
+        <input type="text" value="{{CustomerName}}" id="CustomerName" hidden>
         <br>
         <div class="MainInnerDiv">
-            <a href="/CreateFormulas" class="btn newFromulaBTN">New Formula</a>
+            <a href="/Customer/CreateFormulas" class="btn newFromulaBTN">New Formula</a>
         </div>
         <div class="EMSearchFormDiv">
             <div class="input-container">
@@ -100,13 +101,16 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Perform the AJAX call
         console.log("Calling Api")
-        fetch('/getAllFormula/api') // Replace with your API URL
+
+        var CustomerName = document.getElementById('CustomerName').value;
+
+        fetch(`/getAllFormula/api/${CustomerName}`) // Replace with your API URL
             .then(response => response.json())
             .then(data => {
                 // Handle the successful response here
                 //console.log(data);
                 Formulations = data;
-                //console.log(Formulations);
+                console.log(Formulations);
                 // Call the function to populate the table
                 populateTable(Formulations);
 
@@ -325,7 +329,7 @@
             // Create a new cell for the button
             var buttonCell = newRow.insertCell(8);
             var viewButton = document.createElement('a');
-            viewButton.href = `/BulkOrders/${formulation.FileNo}`;
+            viewButton.href = `/customer/BulkOrders/${formulation.FileNo}`;
             viewButton.className = 'btn btn-primary';
             viewButton.textContent = 'View Bulk Order';
             buttonCell.appendChild(viewButton);
