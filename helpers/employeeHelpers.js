@@ -110,15 +110,35 @@ module.exports = {
     },
     SaveFormulaData: (Data) => {
         return new Promise(async (resolve, reject) => {
-            await db.get().collection(collection.FORMULA_COLLECTION).insertOne(Data).then((Response) => {
-                if (!Response) {
-                    throw "Error";
+
+            checkFileNoDuplicates()
+
+            // check the file no for duplicates
+            async function checkFileNoDuplicates() {
+                // console.log("Checking for duplicates: ", Data.FileNo);
+
+                var fileNo = Data.FileNo;
+                var SameFileNoFormula = await db.get().collection(collection.FORMULA_COLLECTION).findOne({ FileNo: fileNo });
+                // console.log("SameFileNoFormula: ", SameFileNoFormula);
+                if (SameFileNoFormula) {
+                    Data.FileNo = (parseInt(Data.FileNo) + 1).toString();
+                    checkFileNoDuplicates();
                 } else {
-                    resolve({
-                        Status: true
-                    })
+                    SaveFormulaData();
                 }
-            })
+            }
+
+            async function SaveFormulaData() {
+                await db.get().collection(collection.FORMULA_COLLECTION).insertOne(Data).then((Response) => {
+                    if (!Response) {
+                        throw "Error";
+                    } else {
+                        resolve({
+                            Status: true
+                        })
+                    }
+                })
+            }
         })
     },
     GetAllFormulations: () => {
@@ -205,11 +225,17 @@ module.exports = {
             TinterQty = parseFloat(TinterQty);
             // console.log("Tinter: ", Tinter);
             // console.log("parseFloat(Tinter.Stock): ", parseFloat(Tinter.Stock));
-            if (parseFloat(Tinter.Stock) > TinterQty) {
-                // have Stock for this formula
-                State.HaveStock = true;
-                State.AvailableStock = parseFloat(Tinter.Stock);
-            } else {
+            if(Tinter){
+                if (parseFloat(Tinter.Stock) > TinterQty) {
+                    // have Stock for this formula
+                    State.HaveStock = true;
+                    State.AvailableStock = parseFloat(Tinter.Stock);
+                } else {
+                    // TinterQty is more than avalialable Stock
+                    State.HaveStock = false;
+                    State.AvailableStock = parseFloat(Tinter.Stock);
+                }
+            }else {
                 // TinterQty is more than avalialable Stock
                 State.HaveStock = false;
                 State.AvailableStock = parseFloat(Tinter.Stock);
@@ -314,7 +340,9 @@ module.exports = {
             var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Id": parseInt(Data.ProductId) })
             var OldStock = parseFloat(Product.Stock);
             var NewStock = OldStock + (parseFloat(Product.StandardQuatity) * (parseFloat(Data.NewStock)));
-            await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            if (NewStock >= 0) {
+                await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            }
             resolve();
         })
     },
@@ -323,7 +351,9 @@ module.exports = {
             var Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Id": parseInt(Data.ProductId) })
             var OldStock = parseFloat(Binder.Stock);
             var NewStock = OldStock + (parseFloat(Data.NewStock));
-            await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            if (NewStock >= 0) {
+                await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            }
             resolve();
         })
     },
@@ -332,8 +362,14 @@ module.exports = {
             var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Id": parseInt(Data.ProductId) })
             var OldStock = parseFloat(Additive.Stock);
             var NewStock = OldStock + (parseFloat(Data.NewStock));
-            await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
-            resolve();
+            // console.log(NewStock);
+            if (NewStock >= 0) {
+                await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+                resolve();
+            } else {
+                resolve()
+            }
+
         })
     },
     getProductsWithLowStocks: () => {
@@ -421,7 +457,7 @@ module.exports = {
                     delete isCustomer.Employee_Name;
                     isCustomer.Status = true;
 
-                    console.log(isCustomer);
+                    // console.log(isCustomer);
 
                     resolve(isCustomer);
                 } else {
@@ -436,7 +472,7 @@ module.exports = {
     },
     GetAllFormulaByCustomerName: (Customer_Name) => {
         return new Promise(async (resolve, reject) => {
-            var Formula = await db.get().collection(collection.FORMULA_COLLECTION).find({ CustomerName: Customer_Name }).toArray();
+            var Formula = await db.get().collection(collection.FORMULA_COLLECTION).find({ CustomerName: Customer_Name }).sort({ "InsertedTime": -1 }).toArray();
             resolve(Formula);
         })
     },
@@ -476,9 +512,9 @@ module.exports = {
                 const customerPrice = getPriceForCategory(customerCategory, Tinter);
 
                 if (customerPrice !== null) {
-                    console.log(`Price for ${customerCategory}: ${customerPrice}`);
+                    // console.log(`Price for ${customerCategory}: ${customerPrice}`);
                 } else {
-                    console.log(`Price for ${customerCategory} not found.`);
+                    // console.log(`Price for ${customerCategory} not found.`);
                 }
 
 
@@ -522,12 +558,12 @@ module.exports = {
                 const customerBinder1Price = getPriceForCategory(customerCategory, Binder1);
 
                 if (customerBinder1Price !== null) {
-                    console.log(`Price for ${customerCategory}: ${customerBinder1Price}`);
+                    // console.log(`Price for ${customerCategory}: ${customerBinder1Price}`);
                 } else {
-                    console.log(`Price for ${customerCategory} not found.`);
+                    // console.log(`Price for ${customerCategory} not found.`);
                 }
 
-                
+
 
                 if (customerBinder1Price) {
                     Formula.Binder1Price = customerBinder1Price;
@@ -604,6 +640,18 @@ module.exports = {
 
             resolve(Formula);
 
+        })
+    },
+    GetAllOrderListByCustomer: (CustomerName) => {
+        return new Promise(async (resolve, reject) => {
+            var Orders = await db.get().collection(collection.BULK_ORDER_COLLECTION).find({ Mixer: CustomerName }).toArray();
+            resolve(Orders);
+        })
+    },
+    GetAllFormulationsByCustomer: (CustomerName) => {
+        return new Promise(async (resolve, reject) => {
+            var Formulations = await db.get().collection(collection.FORMULA_COLLECTION).find({ MixerName: CustomerName }).sort({ "InsertedTime": -1 }).toArray();
+            resolve(Formulations)
         })
     }
 

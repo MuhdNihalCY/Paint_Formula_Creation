@@ -1,0 +1,71 @@
+<section>
+    <div class="USMainDiv">
+        <div class="container">
+            <div class="USHeader">
+                <p>Update Stocks</p>
+            </div>
+            <div class="USMainHeaderDiv">
+                <a class="USAtag" href="/customer/UpdateStocks">
+                    <div class="USHeaderEachItemDiv  ">
+                        <p>Products</p>
+                    </div>
+                </a>
+                <a class="USAtag" href="/customer/BinderStockUpdate">
+                    <div class="USHeaderEachItemDiv ">
+                        <p>Binders</p>
+                    </div>
+                </a>
+                <a class="USAtag" href="/customer/AdditiveStockUpdate">
+                    <div class="USHeaderEachItemDiv USHeaderEachItemDivActive">
+                        <p>Additives</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="USMainContentDiv">
+                <table id="myTable" class="display">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="text-center" style="font-size: 20px;">Item</th>
+                            <th class="text-center" style="font-size: 20px;">Old Stock</th>
+                            <th class="text-center" style="font-size: 20px;">New Stock & Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each Additives}}
+                        <tr class="text-center">
+                            <td class="USFormReadOnly">{{this.Additive_Name}}</td>
+                            <td class="USFormReadOnly">{{this.Stock}}</td>
+                            <td>
+                                <form action='/customer/UpdateAdditiveStock/{{this.Additive_Id}}' method="post">
+                                    <input type="text" class="USFormWriteOnly" name="NewStock"
+                                        onkeypress="return isNumeric(event)" id="" required>
+                                    <button class="btn btn-primary">Update</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script>
+    $("#myTable").DataTable();
+
+    function isNumeric(event) {
+        var key = event.keyCode || event.which;
+        var keyChar = String.fromCharCode(key);
+
+        // Allow only numeric characters and special keys like Backspace, Delete, etc.
+        if (!/[\d.-]/.test(keyChar) && key !== 8 && key !== 9 && key !== 13 && key !== 27 && key !== 46) {
+            event.preventDefault();
+            return false;
+        }
+    }
+</script>

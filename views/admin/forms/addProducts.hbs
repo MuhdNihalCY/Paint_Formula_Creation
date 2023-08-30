@@ -309,7 +309,7 @@
         fetchCustomerCategories().then(categories => {
 
             var Product = document.getElementById('Product_Namr').value;
-            console.log(Product);
+            // console.log(Product);
 
             if (Product) {
                 EditCategoryInputs(categories);
@@ -343,8 +343,8 @@
     Promise.all([ADgetAllSubCategories(), ADgetAllCategories()])
         .then(([subCategories, categories]) => {
             // Process the retrieved subcategories and categories
-            console.log(subCategories);
-            console.log(categories);
+            // console.log(subCategories);
+            // console.log(categories);
 
             // Assign the values to the variables
             var subCategories = subCategories;

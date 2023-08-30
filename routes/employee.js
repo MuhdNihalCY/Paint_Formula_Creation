@@ -3,13 +3,6 @@ var router = express.Router();
 var EmployeeHeplers = require('../helpers/employeeHelpers');
 const employeeHelpers = require('../helpers/employeeHelpers');
 const { json } = require('express/lib/response');
-// const multer = require('multer');
-
-
-// Set up Multer middleware with desired storage options
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage });
-
 
 
 // verify login 
@@ -298,21 +291,23 @@ router.post('/FindAdditiveBinderDensityById/api', async (req, res) => {  // Empl
 router.post('/CreateFormula', (req, res) => {
 
   function StoreRefImage() {
-    const imageData = req.files.Image;
-    console.log('Image data:', imageData);
+    if (req.files) {
+      const imageData = req.files.Image;
+      // console.log('Image data:', imageData);
 
-    imageData.mv('./public/images/RefImages/' + req.body.FileNo + ".jpg", (err) => {
-      if (!err) {
-      } else {
-        console.log("Error at img1 " + err)
-      }
-    })
+      imageData.mv('./public/images/RefImages/' + req.body.FileNo + ".jpg", (err) => {
+        if (!err) {
+        } else {
+          console.log("Error at img1 " + err)
+        }
+      })
+    }
   }
 
 
   // console.log(req.body);
   function calculateRatios(data) {
-    console.log("Calculating Data: ", data);
+    // console.log("Calculating Data: ", data);
     const ratios = {};
 
     // Get the Total Quantity
@@ -406,7 +401,7 @@ router.post('/CreateFormula', (req, res) => {
 
   var Datas = req.body;
 
-  console.log("Req.body datas: ", Datas)
+  // console.log("Req.body datas: ", Datas)
 
 
   // Usage
@@ -430,13 +425,13 @@ router.post('/CreateFormula', (req, res) => {
   Datas.Binder1Ratio = result.binder1;
   Datas.Binder2Ratio = result.binder2;
   Datas.TintersRatioObject = result.tinters;
-  console.log("Tinters Ratio: ", result.tinters);
+  // console.log("Tinters Ratio: ", result.tinters);
   for (var key in result.tinters) {
     if (result.tinters[key] === 0) {
       delete result.tinters[key];
     }
   }
-  console.log("Tinters Ratio: ", result.tinters);
+  // console.log("Tinters Ratio: ", result.tinters);
   Datas.TintersRatioArray = Object.values(result.tinters);
 
   Datas.TintersCount = Datas.TintersRatioArray.length;
@@ -480,7 +475,7 @@ router.post('/CreateFormula', (req, res) => {
         // console.log(Datas);
         async function CostFindingAndRemainigTasks(Datas) {
           Datas = await CalculateCostOfAll(Datas);
-          console.log("REERE", Datas);
+          // console.log("REERE", Datas);
 
 
           employeeHelpers.FindAdditiveById(Datas.additives).then((Additive) => {
@@ -669,7 +664,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
   if (Stock) {
     // low stocks
     employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
-      console.log(Formulation);
+      // console.log(Formulation);
 
       var Binder1 = false;
       var Binder2 = false;
@@ -691,7 +686,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
         MattOrGlossValue = Formulation.matt
       }
 
-      console.log("MattOrGloss: ", MattOrGloss);
+      // console.log("MattOrGloss: ", MattOrGloss);
 
 
       var Liter = false;
@@ -707,7 +702,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
   } else {
     // no query , 
     employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
-      console.log(Formulation);
+      // console.log(Formulation);
 
       var Binder1 = false;
       var Binder2 = false;
@@ -755,8 +750,8 @@ router.get('/api/BulkOrder/:FileNo', (req, res) => {
     if (Formulation.Binder2) {
       Binder2 = true;
     }
-    
-   
+
+
     employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
       var Data = {
         Formulation: Formulation,
@@ -764,7 +759,7 @@ router.get('/api/BulkOrder/:FileNo', (req, res) => {
         Binder2: Binder2,
         Sub_Category: Sub_Category
       }
-      
+
       if (req.session.CustomerLogged) {
         Data.Customer = req.session.CustomerLogged
       }
@@ -892,7 +887,7 @@ router.get('/UpdateStocks', EmployeeVerifyLogin, (req, res) => {
         // console.log("Categories:", Categories);
         // console.log("Sub_Categories:", Sub_Categories);
 
-
+        
         // Function to modify the Products array
         function modifyProductsArray() {
           // Loop through each product
@@ -1005,12 +1000,9 @@ router.get('/Printsmlabel/:fileNo', EmployeeVerifyLogin, (req, res) => {
 })
 
 
-
-
-
 // Customers
 router.post('/Customer/Login', (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   //{ userName: 'nihal', password: 'sadfdsf' }
   employeeHelpers.CheckCustomerLogin(req.body).then((Customer) => {
 
@@ -1054,21 +1046,24 @@ router.get('/Customer/CreateFormulas', CustomerVerifyLogin, (req, res) => {
 router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
 
   function StoreRefImage() {
-    const imageData = req.files.Image;
-    console.log('Image data:', imageData);
+    if (req.files) {
 
-    imageData.mv('./public/images/RefImages/' + req.body.FileNo + ".jpg", (err) => {
-      if (!err) {
-      } else {
-        console.log("Error at img1 " + err)
-      }
-    })
+      const imageData = req.files.Image;
+      // console.log('Image data:', imageData);
+
+      imageData.mv('./public/images/RefImages/' + req.body.FileNo + ".jpg", (err) => {
+        if (!err) {
+        } else {
+          // console.log("Error at img1 " + err)
+        }
+      })
+    }
   }
 
 
   // console.log(req.body);
   function calculateRatios(data) {
-    console.log("Calculating Data: ", data);
+    // console.log("Calculating Data: ", data);
     const ratios = {};
 
     // Get the Total Quantity
@@ -1162,7 +1157,7 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
 
   var Datas = req.body;
 
-  console.log("Req.body datas: ", Datas)
+  // console.log("Req.body datas: ", Datas)
 
 
   // Usage
@@ -1186,13 +1181,13 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
   Datas.Binder1Ratio = result.binder1;
   Datas.Binder2Ratio = result.binder2;
   Datas.TintersRatioObject = result.tinters;
-  console.log("Tinters Ratio: ", result.tinters);
+  // console.log("Tinters Ratio: ", result.tinters);
   for (var key in result.tinters) {
     if (result.tinters[key] === 0) {
       delete result.tinters[key];
     }
   }
-  console.log("Tinters Ratio: ", result.tinters);
+  // console.log("Tinters Ratio: ", result.tinters);
   Datas.TintersRatioArray = Object.values(result.tinters);
 
   Datas.TintersCount = Datas.TintersRatioArray.length;
@@ -1236,7 +1231,7 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
         // console.log(Datas);
         async function CostFindingAndRemainigTasks(Datas) {
           Datas = await CalculateCostOfAll(Datas);
-          console.log("REERE", Datas);
+          // console.log("REERE", Datas);
 
 
           employeeHelpers.FindAdditiveById(Datas.additives).then((Additive) => {
@@ -1259,7 +1254,7 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
                       employeeHelpers.SaveFormulaData(Datas).then((State) => {
                         //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
                         StoreRefImage()
-                        res.redirect(`/BulkOrders/${Datas.FileNo}`)
+                        res.redirect(`/Customer/BulkOrders/${Datas.FileNo}`)
                         // res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                       })
                     })
@@ -1269,7 +1264,7 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
                     employeeHelpers.SaveFormulaData(Datas).then((State) => {
                       //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
                       StoreRefImage()
-                      res.redirect(`/BulkOrders/${Datas.FileNo}`)
+                      res.redirect(`/Customer/BulkOrders/${Datas.FileNo}`)
                       //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                     })
                   }
@@ -1279,7 +1274,7 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
                 employeeHelpers.SaveFormulaData(Datas).then((State) => {
                   //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
                   StoreRefImage()
-                  res.redirect(`/BulkOrder/${Datas.FileNo}`)
+                  res.redirect(`/Customer/BulkOrders/${Datas.FileNo}`)
                   //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                 })
               }
@@ -1299,6 +1294,8 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
 router.get('/customer/BulkOrders/:FileNo', CustomerVerifyLogin, (req, res) => {
   var FileNo = req.params.FileNo;
 
+  const errorMessage = req.query.error || null;
+
   //employeeHelpers.AddStocksToBinders()
 
   // Extract the query parameters
@@ -1309,7 +1306,7 @@ router.get('/customer/BulkOrders/:FileNo', CustomerVerifyLogin, (req, res) => {
   if (Stock) {
     // low stocks
     employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
-      console.log(Formulation);
+      // console.log(Formulation);
 
       var Binder1 = false;
       var Binder2 = false;
@@ -1331,7 +1328,7 @@ router.get('/customer/BulkOrders/:FileNo', CustomerVerifyLogin, (req, res) => {
         MattOrGlossValue = Formulation.matt
       }
 
-      console.log("MattOrGloss: ", MattOrGloss);
+      // console.log("MattOrGloss: ", MattOrGloss);
 
 
       var Liter = false;
@@ -1339,15 +1336,15 @@ router.get('/customer/BulkOrders/:FileNo', CustomerVerifyLogin, (req, res) => {
         if (Sub_Category.Liter) {
           Liter = true
         }
-
-        res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss });
+        var Customer = req.session.CustomerLogged
+        res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss, errorMessage, CustomerName: Customer.Customer_Name, Customer });
       })
     })
 
   } else {
     // no query , 
     employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
-      console.log(Formulation);
+      // console.log(Formulation);
 
       var Binder1 = false;
       var Binder2 = false;
@@ -1375,7 +1372,8 @@ router.get('/customer/BulkOrders/:FileNo', CustomerVerifyLogin, (req, res) => {
         if (Sub_Category.Liter) {
           Liter = true
         }
-        res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss });
+        var Customer = req.session.CustomerLogged
+        res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, errorMessage, CustomerName: Customer.Customer_Name, Customer });
       })
     })
   }
@@ -1386,13 +1384,367 @@ router.get('/getAllToCalCostCustomer/api/:formulaID/:customerCategory', (req, re
   var formulaID = req.params.formulaID;
   var customerCategory = req.params.customerCategory;
   employeeHelpers.GetAllToCalCostCustomerById(formulaID, customerCategory).then((ModifiedFormula) => {
-    console.log("ModifiedFormula: ",ModifiedFormula);
+    // console.log("ModifiedFormula: ", ModifiedFormula);
 
     res.json(ModifiedFormula);
   })
 })
 
 
+router.post('/customer/BulkOrder/:FileNo', CustomerVerifyLogin, async (req, res) => {
+  // console.log(req.body);
+  var BodyData = req.body;
+  if (BodyData.PriceErr) {
+    //return to bulk order due to no Proper Pricing
+    const errorMessage = 'Price_for_some_products_Not_Found';
+    const redirectUrl = `/customer/BulkOrders/${req.params.FileNo}?error=${errorMessage}`;
+    res.redirect(redirectUrl);
+
+  } else {
+    // check for stocks and do order
+    var OrderFile = req.body;
+    let id = req.params.FileNo;
+    var TotalQty = OrderFile.Quantity;
+    var LowStockFlag = {
+      Status: false
+    };
+
+    try {
+      let FormulaFile = await employeeHelpers.GetFormulaByFileNo(id);
+      let TinterCount = parseInt(FormulaFile.TintersCount);
+
+      OrderFile.TinterCount = TinterCount;
+
+      let promises = [];
+
+      for (let i = 1; i <= TinterCount; i++) {
+        var TinterName = OrderFile["TineterName" + i];
+        var TinterQty = OrderFile["TinterGram" + i];
+        //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
+
+        promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
+      }
+
+      let states = await Promise.all(promises);
+
+      for (let i = 0; i < states.length; i++) {
+        let State = states[i];
+        //  console.log(State);
+        if (!State.HaveStock) {
+          LowStocks(OrderFile["TineterName" + (i + 1)], TotalQty);
+          LowStockFlag.Status = true;
+          return; // Exit the loop when there is low stock
+        }
+      }
+
+      // All stocks are available, continue processing
+
+      //check Binder Stocks and Additives Stock.
+
+      if (OrderFile.Binder1) {
+        var Binder1Qty = OrderFile.Binder1QTY;
+        let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
+        if (!binder1State.HaveStock) {
+          LowStocks(OrderFile.Binder1, TotalQty);
+          // console.log(" Binder1 Stocks are not available. ");
+          LowStockFlag.Status = true;
+          return; // Exit the loop when there is low stock
+        }
+        if (OrderFile.Binder2) {
+          var Binder2Qty = OrderFile.Binder2QTY;
+          let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
+          if (!binder2State.HaveStock) {
+            LowStocks(OrderFile.Binder2, TotalQty);
+            //  console.log(" Binder2 Stocks are not available. ");
+            LowStockFlag.Status = true;
+            return; // Exit the loop when there is low stock
+          }
+        }
+      }
+
+      if (OrderFile.Additive) {
+        var AdditiveQTY = OrderFile.AdditiveQTY;
+        let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
+        if (!additiveState.HaveStock) {
+          LowStocks(OrderFile.Additive, TotalQty);
+          // console.log(" Additive Stocks are not available. ");
+          LowStockFlag.Status = true;
+          return; // Exit the loop when there is low stock
+        }
+      }
+
+      // console.log(" Tinter Stocks are available. ");
+
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (!LowStockFlag.Status) {
+      BulkOrderNow(OrderFile);
+    }
+
+    function BulkOrderNow(orderFile) {
+      employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
+        // Rest of the code...
+        //  console.log("Bulk Updated!");
+        res.redirect('/Customer/Orders');
+      });
+    }
+
+    function LowStocks(tinterName, TotalQty) {
+      var FileNo = id;
+      var stockQuery = "low";
+      var itemQuery = tinterName;
+      var TotalQTY = TotalQty;
+
+      var url = `/customer/BulkOrders/${FileNo}?Stock=${stockQuery}&Item=${itemQuery}&TotalQTY=${TotalQTY}`;
+      res.redirect(url);
+    }
+
+  }
+})
+
+
+router.get('/Customer/Orders', CustomerVerifyLogin, (req, res) => {
+  var Customer = req.session.CustomerLogged
+  // console.log(Customer);
+  employeeHelpers.GetAllOrderListByCustomer(Customer.Customer_Name).then((Orders) => {
+    res.render('customer/CustomerOrders', { Orders, CustomerName: Customer.Customer_Name, Customer })
+  })
+})
+
+router.get('/Customer/FormulaList', CustomerVerifyLogin, (req, res) => {
+  var Customer = req.session.CustomerLogged
+
+  employeeHelpers.GetAllFormulationsByCustomer(Customer.Customer_Name).then((Formulation) => {
+    employeeHelpers.getAllCategories().then((AllCategory) => {
+      //console.log(AllCategory);
+
+      // Mapping the Category names to the Formulation array
+      const updatedFormulation = Formulation.map((item) => {
+        const category = AllCategory.find((cat) => cat.Category_Id === parseInt(item.Category));
+        const categoryName = category ? category.Category : '';
+        return { ...item, CategoryName: categoryName };
+      });
+
+      //console.log(updatedFormulation);
+
+      Formulation = updatedFormulation;
+
+      res.render('employee/FormulaList', { Formulation, CustomerName: Customer.Customer_Name, Customer });
+    })
+  })
+})
+
+
+
+router.get('/Customer/Printsmlabel/:fileNo', CustomerVerifyLogin, (req, res) => {
+  //console.log(req.params.fileNo);
+  var FileNo = req.params.fileNo;
+  employeeHelpers.GetFormulaByFileNo(FileNo).then((Formula) => {
+    var Print = true;
+    employeeHelpers.GetSubCategoriesByName(Formula.SubCategoryName).then((SubCategory) => {
+
+      var SC = Formula;
+      SC.SolidContent = parseFloat(SC.SolidContent).toFixed(2)
+
+      SC.Density = parseFloat(SC.Density).toFixed(2)
+
+      SC.VOC = parseFloat(SC.VOC).toFixed(2)
+
+      var Mipa = false;
+      if (SubCategory.Mipa) {
+        Mipa = true;
+      }
+      res.render('employee/SmallLabel', { Formula, Print, Mipa });
+      //res.redirect(`/BulkOrder/${FileNo}`)
+    })
+  })
+})
+
+
+router.get('/customer/BulkOrders/:FileNo/:Qty', CustomerVerifyLogin, (req, res) => {
+  var FileNo = req.params.FileNo;
+  var QTY = req.params.Qty;
+  //employeeHelpers.AddStocksToBinders()
+
+
+  // no query , 
+  employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
+    //console.log(Formulation);
+    var Binder1 = false;
+    var Binder2 = false;
+    if (Formulation.Binder1) {
+      Binder1 = true;
+    }
+    if (Formulation.Binder2) {
+      Binder2 = true;
+    }
+
+    var Liter = false;
+    employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+      if (Sub_Category.Liter) {
+        Liter = true
+      }
+      res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, QTY });
+    })
+  })
+})
+
+
+router.get('/customer/printlabel/:orderNo', CustomerVerifyLogin, (req, res) => {
+  var OrderNo = req.params.orderNo;
+  employeeHelpers.getOrderByInsertedTime(OrderNo).then((Order) => {
+    var Print = true;
+    //console.log("Order",Order)
+    employeeHelpers.GetSubCategoriesByName(Order.SubCategory).then((SubCategory) => {
+      var Liter = false
+      if (SubCategory.Liter) {
+        Liter = true;
+      }
+
+      var SC = Order;
+      SC.SolidContent = parseFloat(SC.SolidContent).toFixed(2)
+
+      SC.Density = parseFloat(SC.Density).toFixed(2)
+
+      SC.VOC = parseFloat(SC.VOC).toFixed(2)
+
+      var Mipa = false;
+      if (SubCategory.Mipa) {
+        Mipa = true;
+      }
+
+      //date Formate
+      // Timestamp value
+      const timestamp = parseInt(Order.InsertedTime);
+
+      // Create a new Date object using the timestamp
+      const date = new Date(timestamp);
+
+      // Define the month names
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      // Get the day, month, year, hours, and minutes from the Date object
+      const day = date.getDate();
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+
+      // Format the date and time string
+      const formattedDate = `${day}-${month}-${year}`;
+      const formattedTime = `${hours.toString().padStart(2, '0')}.${minutes.toString().padStart(2, '0')}`;
+      const DateTime = `${formattedDate} ${formattedTime}`;
+
+      //console.log(DateTime);
+
+      res.render('employee/Invoice', { Order, Print, Liter, DateTime, Mipa })
+
+    })
+  })
+})
+
+router.get('/customer/UpdateStocks', CustomerVerifyLogin, (req, res) => {
+  employeeHelpers.GetAllProducts().then((products) => {
+    // console.log(Products);
+    employeeHelpers.getAllCategories().then((AllCategory) => {
+      employeeHelpers.GetAllSubCategories().then((AllSubCategory) => {
+        var Products = products
+        var Categories = AllCategory;
+        var Sub_Categories = AllSubCategory;
+
+        // console.log("Products:", Products);
+        // console.log("Categories:", Categories);
+        // console.log("Sub_Categories:", Sub_Categories);
+
+
+        // Function to modify the Products array
+        function modifyProductsArray() {
+          // Loop through each product
+          for (var i = 0; i < Products.length; i++) {
+            var product = Products[i];
+
+            // Find the matching category
+            var category = Categories.find(function (category) {
+              return category.Category_Id === parseInt(product.Category);
+            });
+
+            // Find the matching subcategory
+            var subcategory = Sub_Categories.find(function (subcategory) {
+              return subcategory.SubCategory_Id === parseInt(product.SubCategory);
+            });
+
+            // Add category name and subcategory name to the product object
+            if (category) {
+              product.Category_Name = category.Category;
+            }
+            if (subcategory) {
+              product.SubCategory_Name = subcategory.SubCategory;
+            }
+          }
+
+          // Print the modified Products array
+          // console.log("Modified Products:", Products);
+        }
+
+        // Call the function to modify the Products array
+        modifyProductsArray();
+        var Customer = req.session.CustomerLogged
+
+        res.render('customer/CustomerUpdateStocks', { Products, CustomerName: Customer.Customer_Name, Customer });
+        // res.json(Products)
+      })
+    })
+  })
+})
+
+
+router.post('/customer/UpdateProductStock/:id', CustomerVerifyLogin, (req, res) => {
+  var Data = req.body;
+  Data.ProductId = req.params.id;
+  //console.log(Data);
+  employeeHelpers.UpdateProductStockById(Data).then(() => {
+    res.redirect('/customer/UpdateStocks');
+  })
+})
+
+
+router.get('/Customer/BinderStockUpdate', CustomerVerifyLogin, (req, res) => {
+  employeeHelpers.GetAllBinders().then((Binders) => {
+    var Customer = req.session.CustomerLogged
+
+    res.render('Customer/CustomerBinderStockUpdate', { Binders, CustomerName: Customer.Customer_Name, Customer });
+  })
+})
+
+router.post('/Customer/UpdateBinderStock/:id', CustomerVerifyLogin, (req, res) => {
+  var Data = req.body;
+  Data.ProductId = req.params.id;
+  // console.log(Data);
+  employeeHelpers.UpdateBinderStockById(Data).then(() => {
+    res.redirect('/Customer/BinderStockUpdate');
+  })
+})
+
+
+router.get('/customer/AdditiveStockUpdate', CustomerVerifyLogin, (req, res) => {
+  employeeHelpers.GetAllAdditives().then((Additives) => {
+    var Customer = req.session.CustomerLogged
+
+    res.render('customer/CustomerAdditiveStockUpdate', { Additives, CustomerName: Customer.Customer_Name, Customer });
+  })
+})
+
+
+router.post('/customer/UpdateAdditiveStock/:id', CustomerVerifyLogin, (req, res) => {
+  var Data = req.body;
+  Data.ProductId = req.params.id;
+  // console.log(Data);
+  employeeHelpers.UpdateAdditiveStockById(Data).then(() => {
+    res.redirect('/customer/AdditiveStockUpdate');
+  })
+})
 
 
 module.exports = router;

@@ -50,7 +50,7 @@
             <div class="input-container">
                 <label for="Date">Date</label>
                 <div id="dateRangeContainer">
-                    <input disabled type="text" id="DateRange" placeholder="Select Date Range"
+                    <input readonly type="text" id="DateRange" placeholder="Select Date Range"
                         class="autocomplete-input DateInputS" />
                 </div>
             </div>
@@ -99,7 +99,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Perform the AJAX call
-        console.log("Calling Api")
+        // ("Calling Api")
         fetch('/getAllFormula/api') // Replace with your API URL
             .then(response => response.json())
             .then(data => {

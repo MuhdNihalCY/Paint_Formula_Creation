@@ -51,7 +51,7 @@
             <div class="input-container">
                 <label for="Date">Date</label>
                 <div id="dateRangeContainer">
-                    <input disabled type="text" id="DateRange" placeholder="Select Date Range"
+                    <input readonly type="text" id="DateRange" placeholder="Select Date Range"
                         class="autocomplete-input DateInputS" />
                 </div>
             </div>
@@ -100,7 +100,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         // Perform the AJAX call
-        console.log("Calling Api")
+        // console.log("Calling Api")
 
         var CustomerName = document.getElementById('CustomerName').value;
 
@@ -108,16 +108,16 @@
             .then(response => response.json())
             .then(data => {
                 // Handle the successful response here
-                //console.log(data);
+                // console.log(data);
                 Formulations = data;
-                console.log(Formulations);
+                // console.log(Formulations);
                 // Call the function to populate the table
                 populateTable(Formulations);
 
             })
             .catch(error => {
                 // Handle errors here
-                console.log('Error:', error);
+                 console.log('Error:', error);
             });
     });
 
@@ -162,7 +162,7 @@
             matchingData.length = 0; // Clear the original array
             matchingData.push(...uniqueMatchingData);
 
-            //console.log(matchingData);
+            // console.log(matchingData);
 
             if (matchingData.length > 0) {
                 matchingData.forEach((data) => {
@@ -209,7 +209,18 @@
 
     const dateRangeContainer = document.getElementById("dateRangeContainer");
 
-    dateRangeContainer.addEventListener("click", openFullScreenPopup);
+    /* dateRangeContainer.addEventListener("click", openFullScreenPopup);
+ 
+     // add alternative to date popup
+     const DateRange = document.getElementById("DateRange");
+     DateRange.addEventListener("click", openFullScreenPopup);*/
+
+    dateRangeContainer.addEventListener("click", function (event) {
+        if (event.target.id === "DateRange") {
+            openFullScreenPopup();
+        }
+    });
+
 
     function openFullScreenPopup() {
         var element = document.getElementById('fullscreen-popup');
@@ -283,7 +294,7 @@
             const formattedEndDate = formatDate(endDate);
 
             // Output
-            //console.log("Formatted Date:", formattedStartDate, " to ", formattedEndDate);
+            // console.log("Formatted Date:", formattedStartDate, " to ", formattedEndDate);
 
             var FormattedDate = formattedStartDate + " to " + formattedEndDate;
 
@@ -325,7 +336,7 @@
             newRow.insertCell(6).textContent = formulation.SubCategoryName;
             newRow.insertCell(7).textContent = formulation.MixerName;
             //newRow.insertCell(8).textContent = `<a href="/BulkOrders/${formulation.FileNo }" class="btn btn-primary">View Bulk Order</a>`
-            
+
             // Create a new cell for the button
             var buttonCell = newRow.insertCell(8);
             var viewButton = document.createElement('a');

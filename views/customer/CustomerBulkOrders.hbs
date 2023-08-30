@@ -7,7 +7,7 @@
                         <p>Order</p>
                         <div class="BoHeaderBTNS">
                             <a class="btn BoClearBTN" href="">Clear All</a>
-                            <input class="btn BoSaveBTN" type="submit" value="Stock Out">
+                            <input id="BoSaveBTN" class="btn BoSaveBTN" type="submit" value="Stock Out">
                         </div>
                     </div>
                     <hr>
@@ -157,9 +157,11 @@
                                         {{/if}}
                                     </div>
                                 </div>
+                                <p class="text-center text-danger">{{errorMessage}}</p>
                                 <div class="BOPriceApiError">
-                                    <p id="BOPriceApiErrorText" class="text-red">sdfdsfdfdsfsdfdsfdsfdsfsdfsdfdsfsdasfd
-                                    </p>
+                                    <p id="BOPriceApiErrorText" class=""></p>
+                                    <br>
+                                    <input type="text" id="BOPriceApiErrorINP" name="PriceErr" hidden>
                                 </div>
                                 <hr>
                                 <div class="BoTableDiv">
@@ -285,7 +287,7 @@
 
         function calculateAll(Responses) {
 
-            console.log(Responses);
+            // console.log(Responses);
 
             var TotalQTY = 0;
             var TotalVolume = 0;
@@ -331,7 +333,7 @@
                     //var ProductQty = Formula.
                     var FromulaVolume = parseFloat(Formula.TotalQtyInLiter)
                     var ProductQTY = parseFloat(Formula[TinterQtyNameKey]);
-                    //console.log("Tinter Qty:",TineterQTY);
+                    // console.log("Tinter Qty:",TineterQTY);
                     InputedQTY = parseFloat(InputedQTY);
                     var TineterQTY = ((ProductQTY * InputedQTY * 1000) / FromulaVolume).toFixed(3);
                     // Test
@@ -349,9 +351,9 @@
                     var tinterNameKey = 'TinterNameR' + i;
                     var tinterName = Formula[tinterNameKey];
 
-                    console.log(`Tinter name: ${tinterName}`);
+                    // console.log(`Tinter name: ${tinterName}`);
 
-                    //console.log("TinterNameR + i",TineterName )
+                    // console.log("TinterNameR + i",TineterName )
 
 
 
@@ -426,7 +428,7 @@
                     //Calculation of Tineters
                     var TinCount = i - 1;
                     var TinterRatio = parseFloat(Formula.TintersRatioArray[TinCount]);
-                    console.log("TinterRatio * InputedQTY: ", TinterRatio + " * " + InputedQTY);
+                    // console.log("TinterRatio * InputedQTY: ", TinterRatio + " * " + InputedQTY);
                     var TineterQTY = (TinterRatio * InputedQTY * 1000).toFixed(3);;
 
                     TineterQTY = TineterQTY.toString();
@@ -442,9 +444,9 @@
                     var tinterNameKey = 'TinterNameR' + i;
                     var tinterName = Formula[tinterNameKey];
 
-                    console.log(`Tinter name: ${tinterName}`);
+                    // console.log(`Tinter name: ${tinterName}`);
 
-                    //console.log("TinterNameR + i",TineterName )
+                    // console.log("TinterNameR + i",TineterName )
 
 
                     // Customize cell elements by adding attributes
@@ -509,7 +511,7 @@
         var Customer = Responses.Customer;
         var CustomerCategory = Customer.CustomerCategory
 
-        alert("sdf");
+        //  alert("sdf");
 
         // alert("Calculating Cost");
         getAlltoCalCostCustomer()
@@ -528,7 +530,7 @@
                 })
                 .then(data => {
                     // Process the data returned from the API
-                    console.log("API Data:", data);
+                    // console.log("API Data:", data);
 
                     if (data.errMsg) {
                         // display error  class BOPriceApiError id BOPriceApiErrorText
@@ -540,10 +542,15 @@
                         const errorTextElement = document.getElementById('BOPriceApiErrorText');
                         errorTextElement.textContent = data.errMsg;
 
+                        var BOPriceApiErrorINP = document.getElementById('BOPriceApiErrorINP');
+                        BOPriceApiErrorINP.value = data.errMsg;
+
+                        ValidateForProcced();
+
                     } else {
 
                         Responses = data;
-                        //console.log("Caliing Cost : ", Responses);
+                        // console.log("Caliing Cost : ", Responses);
 
                         var Binder1_Cost = 0;
                         var Binder2_Cost = 0;
@@ -555,14 +562,14 @@
 
                             if (Binder1 > 0) {
 
-                                console.log(Binder1);
+                                // console.log(Binder1);
 
 
 
                                 var Binder1PriceRatio = parseFloat(Responses.Binder1Price);
                                 var Binder1PriceUnit = Responses.Binder1PriceUnit;
                                 var Binder1_Density = parseFloat(Responses.Binder1_Density)
-                                //console.log("Binder1 Cost : ", Binder1);
+                                // console.log("Binder1 Cost : ", Binder1);
 
                                 if (Binder1PriceUnit === 'Ltr') {
                                     //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
@@ -579,7 +586,7 @@
                             var Binder2 = parseFloat(document.getElementById('Binder2QTY').value);
                             if (Binder2 > 0) {
 
-                                //console.log(Binder2);
+                                // console.log(Binder2);
 
                                 var Binder2PriceRatio = parseFloat(Responses.Binder2Price);
                                 var Binder2PriceUnit = Responses.Binder2PriceUnit;
@@ -625,8 +632,8 @@
                             var TinterPriceUnit = Responses[`TinterPriceUnit${i}`];
                             var TinterDensity = parseFloat(Responses[`TinterDensity${i}`]);
 
-                            //console.log("Tinter calculating");
-                            //console.log(TinterQTYRatio);
+                            // console.log("Tinter calculating");
+                            // console.log(TinterQTYRatio);
 
                             var TinterCost = 0;
 
@@ -648,6 +655,7 @@
 
                         document.getElementById('BoCosting').value = TotalCost.toFixed(2).toString();
                     }
+                    ValidateForProcced();
 
                 })
                 .catch(error => {
@@ -657,12 +665,12 @@
         }
 
 
-        /* console.log(Responses);
+        /* // console.log(Responses);
  
  
  
          Responses = Responses.Formulation;
-         //console.log("Caliing Cost : ", Responses);
+         // console.log("Caliing Cost : ", Responses);
  
          var Binder1_Cost = 0;
          var Binder2_Cost = 0;
@@ -674,14 +682,14 @@
  
              if (Binder1 > 0) {
  
-                 console.log(Binder1);
+                 // console.log(Binder1);
  
  
  
                                var Binder1PriceRatio = parseFloat(Responses.Binder1Price);
                                  var Binder1PriceUnit = Responses.Binder1PriceUnit;
                                  var Binder1_Density = parseFloat(Responses.Binder1_Density)
-                                 //console.log("Binder1 Cost : ", Binder1);
+                                 // console.log("Binder1 Cost : ", Binder1);
                  
                                  if (Binder1PriceUnit === 'Ltr') {
                                      //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
@@ -698,7 +706,7 @@
              var Binder2 = parseFloat(document.getElementById('Binder2QTY').value);
              if (Binder2 > 0) {
  
-                 //console.log(Binder2);
+                 // console.log(Binder2);
  
                  var Binder2PriceRatio = parseFloat(Responses.Binder2Price);
                  var Binder2PriceUnit = Responses.Binder2PriceUnit;
@@ -744,8 +752,8 @@
              var TinterPriceUnit = Responses[`TinterPriceUnit${i}`];
              var TinterDensity = parseFloat(Responses[`TinterDensity${i}`]);
  
-             //console.log("Tinter calculating");
-             //console.log(TinterQTYRatio);
+             // console.log("Tinter calculating");
+             // console.log(TinterQTYRatio);
  
              var TinterCost = 0;
  
@@ -776,7 +784,7 @@
     // Function to be executed when the input changes
     function QtyEnteredUser() {
         // Your code logic here
-        //console.log("QtyEnteredUser() function executed");
+        // console.log("QtyEnteredUser() function executed");
 
         // var ProductQty = document.getElementById('ProductQTY').value;
 
@@ -801,17 +809,17 @@
             if (xhr.status === 200) {
                 const response = xhr.response;
                 // Process the response data here
-                console.log(response);
+                // console.log(response);
                 MakeCalculations(response);
             } else {
                 // Handle error case
-                console.error('Error:', xhr.status);
+                 console.error('Error:', xhr.status);
             }
         };
 
         // Define the error callback function
         xhr.onerror = function () {
-            console.error('Request failed');
+             console.error('Request failed');
         };
 
         // Send the request
@@ -821,6 +829,25 @@
 
     // Add event listener to the input element
     quantityInput.addEventListener('input', QtyEnteredUser);
+
+
+    // Define a function to be executed when the page is loaded
+    function ValidateForProcced() {
+        const errorTextElement = document.getElementById('BOPriceApiErrorText').textContent;
+        if (errorTextElement) {
+            // console.log(errorTextElement+ 114);
+            var BoSaveBTN = document.getElementById('BoSaveBTN');
+            BoSaveBTN.disabled = true;
+        } else {
+            var BoSaveBTN = document.getElementById('BoSaveBTN');
+            BoSaveBTN.disabled = false;
+        }
+
+    }
+
+    // Add an event listener to the 'DOMContentLoaded' event
+    document.addEventListener('DOMContentLoaded', ValidateForProcced);
+
 
 </script>
 
@@ -970,9 +997,11 @@
     .BOPriceApiError {
         display: flex;
         justify-content: center;
+        align-items: center;
         color: red;
         font-weight: 600;
         display: none;
+        flex-direction: column;
     }
 
 

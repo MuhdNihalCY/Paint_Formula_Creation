@@ -301,7 +301,7 @@ router.get('/GetAllProduct-Cat-Sub/api/:id', (req, res) => {
 
       const foundSubCategory = SubCategory.find(subCat => subCat.SubCategory_Id === SubCategory_Id);
 
-      console.log("foundSubCategory.Products = ", foundSubCategory.Products);
+      // console.log("foundSubCategory.Products = ", foundSubCategory.Products);
 
       adminHelpers.getAllProductsByArrayOfId(foundSubCategory.Products).then((products) => {
         var data = {
@@ -352,7 +352,7 @@ router.get('/addProduct', verifyLogin, (req, res) => {
 })
 
 router.post('/addProducts', verifyLogin, (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   adminHelpers.addProduct(req.body).then((State) => {
     if (State.Status) {
       res.redirect('/admin/Product');
@@ -390,7 +390,7 @@ router.get('/editProduct/:id', verifyLogin, (req, res) => {
         // var matchingSubCategory = AllSubCategory.find((SubCategory) => SubCategory.SubCategory_Id === parseInt(SubCategoryID));
         // const NotMatchingSubCategory = AllSubCategory.filter(SubCategory => SubCategory.SubCategory_Id !== parseInt(SubCategoryID));
 
-        console.log(product);
+        // console.log(product);
 
         //  PriceUnit: 'Ltr',
         //  StandardQuantityUnit: 'Ltr',
@@ -468,8 +468,8 @@ router.post('/copyproduct/:id', verifyLogin, (req, res) => {
 router.get('/View-Product-from-subcategory/:id', verifyLogin, (req, res) => {
   var SubCategoryId = req.params.id;
   adminHelpers.getSubCategoryById(SubCategoryId).then((SubCategory) => {
-    console.log(SubCategoryId)
-    console.log(SubCategory)
+    // console.log(SubCategoryId)
+    // console.log(SubCategory)
     var ProductsIdArray = SubCategory.Products;
     // Check if SubCategory.Products is an array and initialize it if not
     if (!Array.isArray(ProductsIdArray)) {
@@ -477,7 +477,7 @@ router.get('/View-Product-from-subcategory/:id', verifyLogin, (req, res) => {
     }
 
     adminHelpers.getAllProductsByArrayOfId(ProductsIdArray).then((Products) => {
-      console.log(Products);
+      // console.log(Products);
 
       Products.forEach(obj => {
         obj.RemoveProductPath = SubCategoryId + '/' + obj.Product_Id;
@@ -527,7 +527,7 @@ router.get('/deleteAdditive/:id', verifyLogin, (req, res) => {
 
 router.get('/editAdditive/:id', verifyLogin, (req, res) => {
   adminHelpers.getAdditiveById(req.params.id).then((Additive) => {
-    console.log(Additive);
+    // console.log(Additive);
     var PriceUnitLtr
     if (Additive.PriceUnit === "Ltr") {
       PriceUnitLtr = true;
@@ -695,13 +695,13 @@ router.get('/DeleteCustomer/:id', verifyLogin, (req, res) => {
 
 router.get('/api/GetSubcategoryByCategoryId/:id', verifyLogin, (req, res) => {
   adminHelpers.getSubCategoryByCategoryId(req.params.id).then((SubCategory) => {
-    console.log("SubCategory = ", SubCategory);
+    // console.log("SubCategory = ", SubCategory);
     res.json({ subcategories: SubCategory });
   })
 })
 
 router.post('/AddCustomerCategory', verifyLogin, (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   adminHelpers.addCustomerCategory(req.body).then((State) => {
     if (State.status) {
       res.redirect('/admin/Customers');
@@ -720,7 +720,7 @@ router.get('/removecustomerCategory/:Category', verifyLogin, (req, res) => {
 
 router.get('/getallcustmercategories', verifyLogin, (req, res) => {
   adminHelpers.getAllCustomerCategory().then((CustomerCategory) => {
-    console.log(CustomerCategory)
+    // console.log(CustomerCategory)
     res.json(CustomerCategory)
   })
 })
@@ -731,7 +731,7 @@ router.get('/getallcustmercategories', verifyLogin, (req, res) => {
 // Add Cost
 router.get('/AddCost/Dev/:id', (req, res) => {
   adminHelpers.getAdditiveById(req.params.id).then((Additive) => {
-    console.log(Additive);
+    // console.log(Additive);
     res.render('admin/forms/AddCost', { Additive })
   })
 })
