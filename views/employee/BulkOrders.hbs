@@ -1,13 +1,24 @@
 <section>
+    {{!-- loading screen start here --}}
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+    {{!-- loading screen ends here --}}
+
+
     <div class="AllBoDIv">
-        <form action="/BulkOrder/{{Formulation.FileNo}}" method="post">
+        <form id="OrderForm" action="/BulkOrder/{{Formulation.FileNo}}" method="post">
             <div class="boSectionDiv">
                 <div class="BoAllArea">
                     <div class="BoHeader">
                         <p>Order</p>
                         <div class="BoHeaderBTNS">
                             <a class="btn BoClearBTN" href="">Clear All</a>
-                            <input class="btn BoSaveBTN" type="submit" value="Stock Out">
+                            <input class="btn BoSaveBTN" id="BoSaveBTN" type="submit" value="Stock Out">
                         </div>
                     </div>
                     <hr>
@@ -122,9 +133,21 @@
                                     </div>
                                 </div>
 
+                                {{#if NoQty}}
+                                <div class="BOLowStockAlert">
+                                    <p class="BoLowStocks">{{NoQty}}</p>
+                                    <input type="text" value="0" id="BoTotalQTYLOW" hidden>
+                                </div>
+                                {{/if}}
+
+
                                 {{#if TotalQTY}}
                                 <div class="BOLowStockAlert">
+                                    {{#if Item}}
                                     <p class="BoLowStocks">Stocks Not available for {{Item}}</p>
+                                    {{else}}
+                                    <p class="BoLowStocks">Stocks Not available for Products</p>
+                                    {{/if}}
                                     <input type="text" value="{{TotalQTY}}" id="BoTotalQTYLOW" hidden>
                                 </div>
                                 {{/if}}
@@ -156,6 +179,13 @@
                                             value="{{MattOrGlossValue}}" id="PrductQTY" readonly>
                                         {{/if}}
                                     </div>
+                                </div>
+
+                                <p class="text-center text-danger">{{errorMessage}}</p>
+                                <div class="BOPriceApiError">
+                                    <p id="BOPriceApiErrorText" class=""></p>
+                                    <br>
+                                    <input type="text" id="BOPriceApiErrorINP" name="PriceErr" hidden>
                                 </div>
 
                                 <hr>
@@ -346,7 +376,7 @@
                     var tinterNameKey = 'TinterNameR' + i;
                     var tinterName = Formula[tinterNameKey];
 
-                   // console.log(`Tinter name: ${tinterName}`);
+                    // console.log(`Tinter name: ${tinterName}`);
 
                     //console.log("TinterNameR + i",TineterName )
 
@@ -499,7 +529,6 @@
         calculateCost(Responses); // Call calculateCost after calculateAll is completed
     }
 
-
     function calculateCost(Responses) {
         // alert("Calculating Cost");
         Responses = Responses.Formulation;
@@ -559,7 +588,7 @@
 
             if (Additive > 0) {
 
-               // console.log(Additive);
+                // console.log(Additive);
 
                 var AdditivePriceRatio = parseFloat(Responses.AdditivePrice);
                 var AdditivePriceUnit = Responses.AdditivePriceUnit;
@@ -605,14 +634,19 @@
         var TotalCost = Binder1_Cost + Binder2_Cost + Additve_Cost + TinterTotalCost
 
         document.getElementById('BoCosting').value = TotalCost.toFixed(2).toString();
+        
+        hideLoading();
 
     }
 
 
 
 
+
     // Function to be executed when the input changes
     function QtyEnteredUser() {
+
+        showLoading();
         // Your code logic here
         //console.log("QtyEnteredUser() function executed");
 
@@ -657,8 +691,60 @@
 
     }
 
+
     // Add event listener to the input element
     quantityInput.addEventListener('input', QtyEnteredUser);
+
+
+
+    /* var loadingScreen = document.getElementById("loadingScreen");*/
+    var form = document.getElementById("OrderForm");
+
+
+    function showLoading() {
+        var loadingScreen = document.getElementById("loadingScreen");
+        var form = document.getElementById("OrderForm");
+
+        if (form) {
+            form.addEventListener("submit", preventFormSubmit);
+        }
+
+        loadingScreen.style.display = "flex";
+    }
+
+    function hideLoading() {
+        var loadingScreen = document.getElementById("loadingScreen");
+        var form = document.getElementById("OrderForm");
+
+        loadingScreen.style.display = "none";
+        form.removeEventListener("submit", preventFormSubmit);
+    }
+
+    function preventFormSubmit(event) {
+        event.preventDefault();
+    }
+
+
+    form.addEventListener("submit", showLoading);
+
+
+    // Define a function to be executed when the page is loaded
+    function ValidateForProcced() {
+        const errorTextElement = document.getElementById('BOPriceApiErrorText').textContent;
+        if (errorTextElement) {
+            // console.log(errorTextElement+ 114);
+            var BoSaveBTN = document.getElementById('BoSaveBTN');
+            BoSaveBTN.disabled = true;
+        } else {
+            var BoSaveBTN = document.getElementById('BoSaveBTN');
+            BoSaveBTN.disabled = false;
+        }
+
+    }
+
+    // Add an event listener to the 'DOMContentLoaded' event
+    document.addEventListener('DOMContentLoaded', ValidateForProcced);
+
 
 </script>
 
@@ -938,5 +1024,49 @@
         color: whitesmoke;
         font-size: 20px;
         height: 5rem;
+    }
+
+
+
+    /*Loading styles*/
+
+    .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        display: none;
+    }
+
+    .loading-spinner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        background-color: #3498db;
+        border-radius: 50%;
+        animation: loadingAnimation 1s infinite;
+    }
+
+    @keyframes loadingAnimation {
+
+        0%,
+        100% {
+            transform: scale(0.2);
+        }
+
+        50% {
+            transform: scale(1);
+        }
     }
 </style>

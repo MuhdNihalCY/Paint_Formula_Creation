@@ -659,10 +659,10 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
   // Extract the query parameters
   var { Stock, Item, TotalQTY } = req.query;
 
-  // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
+  var { NoQty } = req.query;
 
-  if (Stock) {
-    // low stocks
+  if (NoQty) {
+    // No qty
     employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
       // console.log(Formulation);
 
@@ -694,45 +694,87 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
         if (Sub_Category.Liter) {
           Liter = true
         }
-
-        res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss });
+        NoQty = "minimum Quantity is 1";
+        res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, Item, MattOrGlossValue, MattOrGloss, NoQty });
       })
     })
-
   } else {
-    // no query , 
-    employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
-      // console.log(Formulation);
 
-      var Binder1 = false;
-      var Binder2 = false;
-      var MattOrGloss = false;
-      var MattOrGlossValue = false;
+    // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
 
+    if (Stock) {
+      // low stocks
+      employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
+        // console.log(Formulation);
 
-      if (Formulation.Binder1) {
-        Binder1 = true;
-      }
-      if (Formulation.Binder2) {
-        Binder2 = true;
-      }
+        var Binder1 = false;
+        var Binder2 = false;
+        var MattOrGloss = false;
+        var MattOrGlossValue = false;
 
-      if (Formulation.gloss) {
-        MattOrGloss = "Gloss"
-        MattOrGlossValue = Formulation.gloss
-      } else if (Formulation.matt) {
-        MattOrGloss = "Matt"
-        MattOrGlossValue = Formulation.matt
-      }
-
-      var Liter = false;
-      employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
-        if (Sub_Category.Liter) {
-          Liter = true
+        if (Formulation.Binder1) {
+          Binder1 = true;
         }
-        res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss });
+        if (Formulation.Binder2) {
+          Binder2 = true;
+        }
+
+        if (Formulation.gloss) {
+          MattOrGloss = "Gloss"
+          MattOrGlossValue = Formulation.gloss
+        } else if (Formulation.matt) {
+          MattOrGloss = "Matt"
+          MattOrGlossValue = Formulation.matt
+        }
+
+        // console.log("MattOrGloss: ", MattOrGloss);
+
+
+        var Liter = false;
+        employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+          if (Sub_Category.Liter) {
+            Liter = true
+          }
+
+          res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss });
+        })
       })
-    })
+
+    } else {
+      // no query , 
+      employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
+        // console.log(Formulation);
+
+        var Binder1 = false;
+        var Binder2 = false;
+        var MattOrGloss = false;
+        var MattOrGlossValue = false;
+
+
+        if (Formulation.Binder1) {
+          Binder1 = true;
+        }
+        if (Formulation.Binder2) {
+          Binder2 = true;
+        }
+
+        if (Formulation.gloss) {
+          MattOrGloss = "Gloss"
+          MattOrGlossValue = Formulation.gloss
+        } else if (Formulation.matt) {
+          MattOrGloss = "Matt"
+          MattOrGlossValue = Formulation.matt
+        }
+
+        var Liter = false;
+        employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+          if (Sub_Category.Liter) {
+            Liter = true
+          }
+          res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss });
+        })
+      })
+    }
   }
 })
 
@@ -781,96 +823,102 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
     Status: false
   };
 
-  try {
-    let FormulaFile = await employeeHelpers.GetFormulaByFileNo(id);
-    let TinterCount = parseInt(FormulaFile.TintersCount);
+  if (parseFloat(TotalQty) <= 0) {
+    var url = `/BulkOrders/${id}?NoQty=${TotalQty}`;
+    res.redirect(url);
+  } else {
 
-    OrderFile.TinterCount = TinterCount;
+    try {
+      let FormulaFile = await employeeHelpers.GetFormulaByFileNo(id);
+      let TinterCount = parseInt(FormulaFile.TintersCount);
 
-    let promises = [];
+      OrderFile.TinterCount = TinterCount;
 
-    for (let i = 1; i <= TinterCount; i++) {
-      var TinterName = OrderFile["TineterName" + i];
-      var TinterQty = OrderFile["TinterGram" + i];
-      //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
+      let promises = [];
 
-      promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
-    }
+      for (let i = 1; i <= TinterCount; i++) {
+        var TinterName = OrderFile["TineterName" + i];
+        var TinterQty = OrderFile["TinterGram" + i];
+        //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
 
-    let states = await Promise.all(promises);
-
-    for (let i = 0; i < states.length; i++) {
-      let State = states[i];
-      //  console.log(State);
-      if (!State.HaveStock) {
-        LowStocks(OrderFile["TineterName" + (i + 1)], TotalQty);
-        LowStockFlag.Status = true;
-        return; // Exit the loop when there is low stock
+        promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
       }
-    }
 
-    // All stocks are available, continue processing
+      let states = await Promise.all(promises);
 
-    //check Binder Stocks and Additives Stock.
-
-    if (OrderFile.Binder1) {
-      var Binder1Qty = OrderFile.Binder1QTY;
-      let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
-      if (!binder1State.HaveStock) {
-        LowStocks(OrderFile.Binder1, TotalQty);
-        // console.log(" Binder1 Stocks are not available. ");
-        LowStockFlag.Status = true;
-        return; // Exit the loop when there is low stock
-      }
-      if (OrderFile.Binder2) {
-        var Binder2Qty = OrderFile.Binder2QTY;
-        let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
-        if (!binder2State.HaveStock) {
-          LowStocks(OrderFile.Binder2, TotalQty);
-          //  console.log(" Binder2 Stocks are not available. ");
+      for (let i = 0; i < states.length; i++) {
+        let State = states[i];
+        //  console.log(State);
+        if (!State.HaveStock) {
+          LowStocks(OrderFile["TineterName" + (i + 1)], TotalQty);
           LowStockFlag.Status = true;
           return; // Exit the loop when there is low stock
         }
       }
-    }
 
-    if (OrderFile.Additive) {
-      var AdditiveQTY = OrderFile.AdditiveQTY;
-      let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
-      if (!additiveState.HaveStock) {
-        LowStocks(OrderFile.Additive, TotalQty);
-        // console.log(" Additive Stocks are not available. ");
-        LowStockFlag.Status = true;
-        return; // Exit the loop when there is low stock
+      // All stocks are available, continue processing
+
+      //check Binder Stocks and Additives Stock.
+
+      if (OrderFile.Binder1) {
+        var Binder1Qty = OrderFile.Binder1QTY;
+        let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
+        if (!binder1State.HaveStock) {
+          LowStocks(OrderFile.Binder1, TotalQty);
+          // console.log(" Binder1 Stocks are not available. ");
+          LowStockFlag.Status = true;
+          return; // Exit the loop when there is low stock
+        }
+        if (OrderFile.Binder2) {
+          var Binder2Qty = OrderFile.Binder2QTY;
+          let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
+          if (!binder2State.HaveStock) {
+            LowStocks(OrderFile.Binder2, TotalQty);
+            //  console.log(" Binder2 Stocks are not available. ");
+            LowStockFlag.Status = true;
+            return; // Exit the loop when there is low stock
+          }
+        }
       }
+
+      if (OrderFile.Additive) {
+        var AdditiveQTY = OrderFile.AdditiveQTY;
+        let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
+        if (!additiveState.HaveStock) {
+          LowStocks(OrderFile.Additive, TotalQty);
+          // console.log(" Additive Stocks are not available. ");
+          LowStockFlag.Status = true;
+          return; // Exit the loop when there is low stock
+        }
+      }
+
+      // console.log(" Tinter Stocks are available. ");
+
+    } catch (error) {
+      console.error(error);
     }
 
-    // console.log(" Tinter Stocks are available. ");
+    if (!LowStockFlag.Status) {
+      BulkOrderNow(OrderFile);
+    }
 
-  } catch (error) {
-    console.error(error);
-  }
+    function BulkOrderNow(orderFile) {
+      employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
+        // Rest of the code...
+        //  console.log("Bulk Updated!");
+        res.redirect('/Orders');
+      });
+    }
 
-  if (!LowStockFlag.Status) {
-    BulkOrderNow(OrderFile);
-  }
+    function LowStocks(tinterName, TotalQty) {
+      var FileNo = id;
+      var stockQuery = "low";
+      var itemQuery = tinterName;
+      var TotalQTY = TotalQty;
 
-  function BulkOrderNow(orderFile) {
-    employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
-      // Rest of the code...
-      //  console.log("Bulk Updated!");
-      res.redirect('/Orders');
-    });
-  }
-
-  function LowStocks(tinterName, TotalQty) {
-    var FileNo = id;
-    var stockQuery = "low";
-    var itemQuery = tinterName;
-    var TotalQTY = TotalQty;
-
-    var url = `/BulkOrders/${FileNo}?Stock=${stockQuery}&Item=${itemQuery}&TotalQTY=${TotalQTY}`;
-    res.redirect(url);
+      var url = `/BulkOrders/${FileNo}?Stock=${stockQuery}&Item=${itemQuery}&TotalQTY=${TotalQTY}`;
+      res.redirect(url);
+    }
   }
 });
 
@@ -887,7 +935,7 @@ router.get('/UpdateStocks', EmployeeVerifyLogin, (req, res) => {
         // console.log("Categories:", Categories);
         // console.log("Sub_Categories:", Sub_Categories);
 
-        
+
         // Function to modify the Products array
         function modifyProductsArray() {
           // Loop through each product
@@ -1301,10 +1349,10 @@ router.get('/customer/BulkOrders/:FileNo', CustomerVerifyLogin, (req, res) => {
   // Extract the query parameters
   var { Stock, Item, TotalQTY } = req.query;
 
-  // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
+  var { NoQty } = req.query;
 
-  if (Stock) {
-    // low stocks
+  if (NoQty) {
+    // No qty
     employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
       // console.log(Formulation);
 
@@ -1336,46 +1384,88 @@ router.get('/customer/BulkOrders/:FileNo', CustomerVerifyLogin, (req, res) => {
         if (Sub_Category.Liter) {
           Liter = true
         }
-        var Customer = req.session.CustomerLogged
-        res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss, errorMessage, CustomerName: Customer.Customer_Name, Customer });
+        NoQty = "minimum Quantity is 1";
+        res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, Item, MattOrGlossValue, MattOrGloss, NoQty });
       })
     })
-
   } else {
-    // no query , 
-    employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
-      // console.log(Formulation);
 
-      var Binder1 = false;
-      var Binder2 = false;
-      var MattOrGloss = false;
-      var MattOrGlossValue = false;
+    // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
 
+    if (Stock) {
+      // low stocks
+      employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
+        // console.log(Formulation);
 
-      if (Formulation.Binder1) {
-        Binder1 = true;
-      }
-      if (Formulation.Binder2) {
-        Binder2 = true;
-      }
+        var Binder1 = false;
+        var Binder2 = false;
+        var MattOrGloss = false;
+        var MattOrGlossValue = false;
 
-      if (Formulation.gloss) {
-        MattOrGloss = "Gloss"
-        MattOrGlossValue = Formulation.gloss
-      } else if (Formulation.matt) {
-        MattOrGloss = "Matt"
-        MattOrGlossValue = Formulation.matt
-      }
-
-      var Liter = false;
-      employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
-        if (Sub_Category.Liter) {
-          Liter = true
+        if (Formulation.Binder1) {
+          Binder1 = true;
         }
-        var Customer = req.session.CustomerLogged
-        res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, errorMessage, CustomerName: Customer.Customer_Name, Customer });
+        if (Formulation.Binder2) {
+          Binder2 = true;
+        }
+
+        if (Formulation.gloss) {
+          MattOrGloss = "Gloss"
+          MattOrGlossValue = Formulation.gloss
+        } else if (Formulation.matt) {
+          MattOrGloss = "Matt"
+          MattOrGlossValue = Formulation.matt
+        }
+
+        // console.log("MattOrGloss: ", MattOrGloss);
+
+
+        var Liter = false;
+        employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+          if (Sub_Category.Liter) {
+            Liter = true
+          }
+          var Customer = req.session.CustomerLogged
+          res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss, errorMessage, CustomerName: Customer.Customer_Name, Customer });
+        })
       })
-    })
+
+    } else {
+      // no query , 
+      employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
+        // console.log(Formulation);
+
+        var Binder1 = false;
+        var Binder2 = false;
+        var MattOrGloss = false;
+        var MattOrGlossValue = false;
+
+
+        if (Formulation.Binder1) {
+          Binder1 = true;
+        }
+        if (Formulation.Binder2) {
+          Binder2 = true;
+        }
+
+        if (Formulation.gloss) {
+          MattOrGloss = "Gloss"
+          MattOrGlossValue = Formulation.gloss
+        } else if (Formulation.matt) {
+          MattOrGloss = "Matt"
+          MattOrGlossValue = Formulation.matt
+        }
+
+        var Liter = false;
+        employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+          if (Sub_Category.Liter) {
+            Liter = true
+          }
+          var Customer = req.session.CustomerLogged
+          res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, errorMessage, CustomerName: Customer.Customer_Name, Customer });
+        })
+      })
+    }
   }
 })
 
@@ -1409,98 +1499,107 @@ router.post('/customer/BulkOrder/:FileNo', CustomerVerifyLogin, async (req, res)
       Status: false
     };
 
-    try {
-      let FormulaFile = await employeeHelpers.GetFormulaByFileNo(id);
-      let TinterCount = parseInt(FormulaFile.TintersCount);
+    if (parseFloat(TotalQty) <= 0) {
+      var url = `/customer/BulkOrders/${id}?NoQty=${TotalQty}`;
+      res.redirect(url);
+    } else {
 
-      OrderFile.TinterCount = TinterCount;
+      try {
+        let FormulaFile = await employeeHelpers.GetFormulaByFileNo(id);
+        let TinterCount = parseInt(FormulaFile.TintersCount);
 
-      let promises = [];
+        OrderFile.TinterCount = TinterCount;
 
-      for (let i = 1; i <= TinterCount; i++) {
-        var TinterName = OrderFile["TineterName" + i];
-        var TinterQty = OrderFile["TinterGram" + i];
-        //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
+        let promises = [];
 
-        promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
-      }
+        for (let i = 1; i <= TinterCount; i++) {
+          var TinterName = OrderFile["TineterName" + i];
+          var TinterQty = OrderFile["TinterGram" + i];
+          //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
 
-      let states = await Promise.all(promises);
-
-      for (let i = 0; i < states.length; i++) {
-        let State = states[i];
-        //  console.log(State);
-        if (!State.HaveStock) {
-          LowStocks(OrderFile["TineterName" + (i + 1)], TotalQty);
-          LowStockFlag.Status = true;
-          return; // Exit the loop when there is low stock
+          promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
         }
-      }
 
-      // All stocks are available, continue processing
+        let states = await Promise.all(promises);
 
-      //check Binder Stocks and Additives Stock.
-
-      if (OrderFile.Binder1) {
-        var Binder1Qty = OrderFile.Binder1QTY;
-        let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
-        if (!binder1State.HaveStock) {
-          LowStocks(OrderFile.Binder1, TotalQty);
-          // console.log(" Binder1 Stocks are not available. ");
-          LowStockFlag.Status = true;
-          return; // Exit the loop when there is low stock
-        }
-        if (OrderFile.Binder2) {
-          var Binder2Qty = OrderFile.Binder2QTY;
-          let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
-          if (!binder2State.HaveStock) {
-            LowStocks(OrderFile.Binder2, TotalQty);
-            //  console.log(" Binder2 Stocks are not available. ");
+        for (let i = 0; i < states.length; i++) {
+          let State = states[i];
+          //  console.log(State);
+          if (!State.HaveStock) {
+            LowStocks(OrderFile["TineterName" + (i + 1)], TotalQty);
             LowStockFlag.Status = true;
             return; // Exit the loop when there is low stock
           }
         }
-      }
 
-      if (OrderFile.Additive) {
-        var AdditiveQTY = OrderFile.AdditiveQTY;
-        let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
-        if (!additiveState.HaveStock) {
-          LowStocks(OrderFile.Additive, TotalQty);
-          // console.log(" Additive Stocks are not available. ");
-          LowStockFlag.Status = true;
-          return; // Exit the loop when there is low stock
+        // All stocks are available, continue processing
+
+        //check Binder Stocks and Additives Stock.
+
+        if (OrderFile.Binder1) {
+          var Binder1Qty = OrderFile.Binder1QTY;
+          let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
+          if (!binder1State.HaveStock) {
+            LowStocks(OrderFile.Binder1, TotalQty);
+            // console.log(" Binder1 Stocks are not available. ");
+            LowStockFlag.Status = true;
+            return; // Exit the loop when there is low stock
+          }
+          if (OrderFile.Binder2) {
+            var Binder2Qty = OrderFile.Binder2QTY;
+            let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
+            if (!binder2State.HaveStock) {
+              LowStocks(OrderFile.Binder2, TotalQty);
+              //  console.log(" Binder2 Stocks are not available. ");
+              LowStockFlag.Status = true;
+              return; // Exit the loop when there is low stock
+            }
+          }
         }
+
+        if (OrderFile.Additive) {
+          var AdditiveQTY = OrderFile.AdditiveQTY;
+          let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
+          if (!additiveState.HaveStock) {
+            LowStocks(OrderFile.Additive, TotalQty);
+            // console.log(" Additive Stocks are not available. ");
+            LowStockFlag.Status = true;
+            return; // Exit the loop when there is low stock
+          }
+        }
+
+        // console.log(" Tinter Stocks are available. ");
+
+      } catch (error) {
+        console.error(error);
       }
 
-      // console.log(" Tinter Stocks are available. ");
+      if (!LowStockFlag.Status) {
+        BulkOrderNow(OrderFile);
+      }
 
-    } catch (error) {
-      console.error(error);
+      function BulkOrderNow(orderFile) {
+        employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
+          // Rest of the code...
+          //  console.log("Bulk Updated!");
+          res.redirect('/Customer/Orders');
+        });
+      }
+
+      function LowStocks(tinterName, TotalQty) {
+        var FileNo = id;
+        var stockQuery = "low";
+        var TotalQTY = TotalQty;
+        var itemQuery = "";
+        if (tinterName) {
+          itemQuery = tinterName;
+        }
+
+        var url = `/customer/BulkOrders/${FileNo}?Stock=${stockQuery}&Item=${itemQuery}&TotalQTY=${TotalQTY}`;
+        res.redirect(url);
+      }
+
     }
-
-    if (!LowStockFlag.Status) {
-      BulkOrderNow(OrderFile);
-    }
-
-    function BulkOrderNow(orderFile) {
-      employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
-        // Rest of the code...
-        //  console.log("Bulk Updated!");
-        res.redirect('/Customer/Orders');
-      });
-    }
-
-    function LowStocks(tinterName, TotalQty) {
-      var FileNo = id;
-      var stockQuery = "low";
-      var itemQuery = tinterName;
-      var TotalQTY = TotalQty;
-
-      var url = `/customer/BulkOrders/${FileNo}?Stock=${stockQuery}&Item=${itemQuery}&TotalQTY=${TotalQTY}`;
-      res.redirect(url);
-    }
-
   }
 })
 
@@ -1586,7 +1685,12 @@ router.get('/customer/BulkOrders/:FileNo/:Qty', CustomerVerifyLogin, (req, res) 
       if (Sub_Category.Liter) {
         Liter = true
       }
-      res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, QTY });
+      if (parseInt(QTY) > 0) {
+        res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, QTY });
+      } else {
+        var lowQTY = true
+        res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, QTY, lowQTY });
+      }
     })
   })
 })

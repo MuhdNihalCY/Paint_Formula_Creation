@@ -238,7 +238,7 @@ module.exports = {
             }else {
                 // TinterQty is more than avalialable Stock
                 State.HaveStock = false;
-                State.AvailableStock = parseFloat(Tinter.Stock);
+                // State.AvailableStock = parseFloat(Tinter.Stock);
             }
 
             resolve(State);
@@ -644,7 +644,7 @@ module.exports = {
     },
     GetAllOrderListByCustomer: (CustomerName) => {
         return new Promise(async (resolve, reject) => {
-            var Orders = await db.get().collection(collection.BULK_ORDER_COLLECTION).find({ Mixer: CustomerName }).toArray();
+            var Orders = await db.get().collection(collection.BULK_ORDER_COLLECTION).find({ Mixer: CustomerName }).sort({ "InsertedTime": -1 }).toArray();
             resolve(Orders);
         })
     },
