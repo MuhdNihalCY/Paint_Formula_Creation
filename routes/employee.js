@@ -1074,6 +1074,7 @@ router.get('/Customer', CustomerVerifyLogin, (req, res) => {
 router.get('/getAllFormula/api/:CustomerName', CustomerVerifyLogin, (req, res) => {
   const customername = req.params.CustomerName;
   employeeHelpers.GetAllFormulaByCustomerName(customername).then((Formula) => {
+    console.log(Formula);
     res.json(Formula);
   })
 })

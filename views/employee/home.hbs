@@ -28,7 +28,21 @@
         <div class="MainInnerDiv">
             <a href="/CreateFormulas" class="btn newFromulaBTN">New Formula</a>
         </div>
-        <div class="EMSearchFormDiv">
+
+        <div class="SearchFormDiv">
+            <div class="searchInput">
+                <input type="search" id="FormSearch" placeholder="Search" class="autocomplete-input SearchInP">
+                <div class="autocomplete-options" id="FormSearchList"></div>
+            </div>
+
+            <div id="dateRangeContainer">
+                <input readonly type="text" id="DateRange" placeholder="Select Date Range"
+                    class="autocomplete-input DateInputS" />
+            </div>
+
+        </div>
+
+        {{!-- <div class="EMSearchFormDiv">
             <div class="input-container">
                 <label for="customerName">Customer Name</label>
                 <input type="text" id="customerName" placeholder="Enter Customer Name" class="autocomplete-input" />
@@ -55,11 +69,13 @@
                 </div>
             </div>
 
-        </div>
-        <div class="FormSubmitDivArea">
+        </div> --}}
+
+
+        {{!-- <div class="FormSubmitDivArea">
             <button onclick="SearchFromForm()" class="FormSearchBTN">Search</button>
             <button onclick="onClearAllForm()" class="FormClearBTN">Clear Form</button>
-        </div>
+        </div> --}}
 
         <hr>
 
@@ -115,71 +131,158 @@
                 // Handle errors here
                 console.log('Error:', error);
             });
+
+        // Get search input element
+        const searchInput = document.getElementById('FormSearch');
+
+        // Get date range input element
+        const dateRangeInput = document.getElementById("DateRange");
+
+        // Add an event listener to handle search input changes
+        searchInput.addEventListener('input', function (event) {
+            handleInputChange();
+        });
     });
 
-    const customerNameInput = document.getElementById("customerName");
-    const colorCodeInput = document.getElementById("colorCode");
-    const colorNameInput = document.getElementById("colorName");
+    // Handle input changes for both search and date range
+    function handleInputChange() {
+        // Get search input element
+        const searchInput = document.getElementById('FormSearch');
 
-    customerNameInput.addEventListener("input", handleInput);
-    colorCodeInput.addEventListener("input", handleInput);
-    colorNameInput.addEventListener("input", handleInput);
+        const searchTerm = searchInput.value.toLowerCase();
 
-    document.addEventListener("click", (event) => {
-        const target = event.target;
-        if (
-            target !== customerNameInput &&
-            target !== colorCodeInput &&
-            target !== colorNameInput
-        ) {
-            hideAutocompleteOptions();
-        }
-    });
+        let results = searchInFormulations(searchTerm); // Assuming searchInFormulations is defined
+        results = seletedDates(results); // Assuming seletedDates is defined
 
-    function handleInput(event) {
-        const inputElement = event.target;
-        const inputValue = inputElement.value.trim();
-        const optionsContainerId = `${inputElement.id}Options`;
-        const optionsContainer = document.getElementById(optionsContainerId);
+        console.log('results');
+        console.log(results);
 
-        // Clear previous options
-        optionsContainer.innerHTML = "";
+        populateTable(results); // Assuming populateTable is defined
+    }
 
-        if (inputValue) {
-            const matchingData = getMatchingData(inputElement.id, inputValue);
 
-            // Convert the array to a Set to remove duplicates
-            const uniqueData = new Set(matchingData);
+    // The search function
+    function searchInFormulations(term) {
+        return Formulations.filter(item => {
+            // Convert the properties to lower case for case-insensitive search
+            const customerName = item.CustomerName ? item.CustomerName.toLowerCase() : '';
+            const colorCode = item.ColorCode ? item.ColorCode.toLowerCase() : '';
+            const colorName = item.ColorName ? item.ColorName.toLowerCase() : '';
 
-            // Convert the Set back to an array
-            const uniqueMatchingData = Array.from(uniqueData);
+            // Check if the search term is present in any of the properties
+            return customerName.includes(term) || colorCode.includes(term) || colorName.includes(term);
+        });
 
-            // Update the original array with the unique values
-            matchingData.length = 0; // Clear the original array
-            matchingData.push(...uniqueMatchingData);
+    }
 
-            //console.log(matchingData);
+    function formatDates(dateString) {
+        const [day, month, year] = dateString.split("/");
+        const formattedDate = `${year}-${month}-${day}`;
+        return formattedDate;
+    }
 
-            if (matchingData.length > 0) {
-                matchingData.forEach((data) => {
-                    const optionElement = document.createElement("p");
-                    optionElement.textContent = data;
-                    optionElement.addEventListener("click", () => {
-                        inputElement.value = data;
-                        hideAutocompleteOptions();
-                    });
-                    optionsContainer.appendChild(optionElement);
-                });
 
-                showAutocompleteOptions(optionsContainer);
-            } else {
-                hideAutocompleteOptions();
-            }
+
+    function seletedDates(results) {
+        const dateRange = document.getElementById("DateRange").value;
+        var startDateString = formatDates(document.getElementById("StartDate").value);
+        var endDateString = formatDates(document.getElementById("EndDate").value);
+
+        console.log("dateRange = ", dateRange);
+        console.log("startDate = ", startDateString);
+        console.log("endDate = ", endDateString);
+
+        // Check dateRange and filter if there's a value
+        if (dateRange !== "") {
+            var startDate = new Date(startDateString);
+            var endDate = new Date(endDateString);
+
+            // Ensure we are only comparing the date portion
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(0, 0, 0, 0);
+
+            const filteredFormulations = results.filter((formulation) => {
+                const formulationDate = new Date(formulation.Date);
+                formulationDate.setHours(0, 0, 0, 0);  // Ensure we are only comparing the date portion
+                return formulationDate >= startDate && formulationDate <= endDate;
+            });
+
+            console.log('filteredFormulations', filteredFormulations);
+            return filteredFormulations;
+
         } else {
-            hideAutocompleteOptions();
+            return results;
         }
     }
 
+
+    /*
+        const customerNameInput = document.getElementById("customerName");
+        const colorCodeInput = document.getElementById("colorCode");
+        const colorNameInput = document.getElementById("colorName");
+    
+        customerNameInput.addEventListener("input", handleInput);
+        colorCodeInput.addEventListener("input", handleInput);
+        colorNameInput.addEventListener("input", handleInput);
+    */
+    /*
+        document.addEventListener("click", (event) => {
+            const target = event.target;
+            if (
+                target !== customerNameInput &&
+                target !== colorCodeInput &&
+                target !== colorNameInput
+            ) {
+                hideAutocompleteOptions();
+            }
+        });
+        */
+
+    /*
+        function handleInput(event) {
+            const inputElement = event.target;
+            const inputValue = inputElement.value.trim();
+            const optionsContainerId = `${inputElement.id}Options`;
+            const optionsContainer = document.getElementById(optionsContainerId);
+    
+            // Clear previous options
+            optionsContainer.innerHTML = "";
+    
+            if (inputValue) {
+                const matchingData = getMatchingData(inputElement.id, inputValue);
+    
+                // Convert the array to a Set to remove duplicates
+                const uniqueData = new Set(matchingData);
+    
+                // Convert the Set back to an array
+                const uniqueMatchingData = Array.from(uniqueData);
+    
+                // Update the original array with the unique values
+                matchingData.length = 0; // Clear the original array
+                matchingData.push(...uniqueMatchingData);
+    
+                //console.log(matchingData);
+    
+                if (matchingData.length > 0) {
+                    matchingData.forEach((data) => {
+                        const optionElement = document.createElement("p");
+                        optionElement.textContent = data;
+                        optionElement.addEventListener("click", () => {
+                            inputElement.value = data;
+                            hideAutocompleteOptions();
+                        });
+                        optionsContainer.appendChild(optionElement);
+                    });
+    
+                    showAutocompleteOptions(optionsContainer);
+                } else {
+                    hideAutocompleteOptions();
+                }
+            } else {
+                hideAutocompleteOptions();
+            }
+        }
+    */
     function getMatchingData(inputId, inputValue) {
         const key = inputId === "customerName" ? "CustomerName" : inputId === "colorCode" ? "ColorCode" : "ColorName";
         const matchingData = Formulations.filter((item) =>
@@ -290,6 +393,8 @@
             document.getElementById('DateRange').value = "";
             alert("Select two Dates!")
         }
+
+        handleInputChange();
     }
 
     function onClearAllForm() {
@@ -321,7 +426,7 @@
             newRow.insertCell(6).textContent = formulation.SubCategoryName;
             newRow.insertCell(7).textContent = formulation.MixerName;
             //newRow.insertCell(8).textContent = `<a href="/BulkOrders/${formulation.FileNo }" class="btn btn-primary">View Bulk Order</a>`
-            
+
             // Create a new cell for the button
             var buttonCell = newRow.insertCell(8);
             var viewButton = document.createElement('a');
@@ -465,7 +570,6 @@
     .main {
         display: block;
         margin-top: 60px;
-        padding: 10px;
         display: flex;
         flex-direction: column;
         align-items: start;
@@ -619,16 +723,57 @@
     .autocomplete-input {
         border: 1px solid lightgray;
         border-left-color: blue;
-        border-left-width: 3px;
-        padding: 5px;
-        font-size: 15px;
-        width: 200px;
+        border-left-width: 5px;
+        padding-left: 15px;
+        font-size: 20px;
+        font-weight: 600;
         margin: 0 1rem;
-        border-radius: 5px;
+        border-radius: 14px;
+        height: 3rem;
+
     }
 
+    .SearchFormDiv {
+        margin: 2rem 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .searchInput {
+        position: relative;
+        width: 60%;
+    }
+
+    .SearchInP {
+        padding-right: 3rem;
+        /* Add padding to make room for the icon */
+        background-image: url('/images/Icons/Search_icon.svg');
+        /* Replace with the actual path to your SVG image */
+        background-position: right 0.5rem center;
+        /* Position it on the right with a little padding and center it vertically */
+        background-repeat: no-repeat;
+        /* We don't want the icon to repeat */
+        background-size: 1.5rem;
+        /* Set the size of your icon */
+        width: 100%;
+    }
+
+    .SearchInP:focus,
+    #DateRange {
+        outline: none;
+        /* Add this if you also want to remove the border */
+    }
+
+    #dateRangeContainer {
+        width: 37%;
+    }
+
+
     .DateInputS {
-        width: 300px;
+        width: 100%;
         background-color: white;
     }
 
