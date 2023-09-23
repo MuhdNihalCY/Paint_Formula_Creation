@@ -6,24 +6,22 @@
     <form action="/admin/EditEmployee/{{Employee.Employee_Id}}" method="post">
         <div class="">
             <p class="ADAddCategoryLabel">Employee Name:</p>
-            <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="text"
-                name="Employee_Name" placeholder="Enter the Name Employee Name"
-                value="{{Employee.Employee_Name}}">
+            <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="text" name="Employee_Name"
+                placeholder="Enter the Name Employee Name" value="{{Employee.Employee_Name}}">
 
             <p class="ADAddCategoryLabel">Mobile Number</p>
-            <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="number"
-                name="MOB_Number" placeholder="Enter Mobile Number" value="{{Employee.MOB_Number}}">
+            <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="number" name="MOB_Number"
+                placeholder="Enter Mobile Number" value="{{Employee.MOB_Number}}">
             <p class="ADAddCategoryLabel">Email</p>
             <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="email" name="Email"
                 placeholder="Enter Email" value="{{Employee.Email}}">
             <p class="ADAddCategoryLabel">Password</p>
-            {{!-- <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="password"
-                name="Password" id="password" placeholder="Enter Password">
+            {{!-- <input required class="ADAddCategoryTextInput ADemployeeAddforminput" type="password" name="Password"
+                id="password" placeholder="Enter Password">
             <i id="password-icon" class="fas fa-eye password-icon" onclick="togglePassword()"></i> --}}
 
-            <input required class="ADAddCategoryTextInput ADemployeeAddforminput ADEmployeePass"
-                type="password" name="Password" id="password" placeholder="Enter Password"
-                value="{{Employee.Password}}">
+            <input required class="ADAddCategoryTextInput ADemployeeAddforminput ADEmployeePass" type="password"
+                name="Password" id="password" placeholder="Enter Password" value="{{Employee.Password}}">
             <span id="password-icon" class="ADpassword-icons" onclick="togglePassword()"><i
                     class="fas fa-eye"></i></span>
 
@@ -37,4 +35,55 @@
             </div>
         </div>
     </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="CFMainContenSecondarytHeader">
+
+    {{#if Matt}}
+    <div id="mattOrGloss" class="CFMainSelectionDiv ">
+        <p class="CFmainSelection MattOrGloss">Matt value</p>
+        <input type="text" name="mattOrGloss" id="MattOrGlossINPTag" class=" MattOrGlossINP " min="0"
+            value="{{Formula.mattOrGloss}}" onkeypress="return isNumeric(event)" oninput="LoadTableSingleData()">
+    </div>
+    {{else}}
+    {{#if Gloss}}
+    <div id="mattOrGloss" class="CFMainSelectionDiv ">
+        <p class="CFmainSelection MattOrGloss">Gloss value</p>
+        <input type="text" name="mattOrGloss" id="MattOrGlossINPTag" class=" MattOrGlossINP " min="0"
+            value="{{Formula.mattOrGloss}}" onkeypress="return isNumeric(event)" oninput="LoadTableSingleData()">
+    </div>
+    {{else}}
+    <div id="mattOrGloss" class="CFMainSelectionDiv " style="display: none;">
+        <p class="CFmainSelection MattOrGloss"></p>
+        <input type="text" name="mattOrGloss" id="MattOrGlossINPTag" class=" MattOrGlossINP " min="0"
+            value="{{Formula.mattOrGloss}}" onkeypress="return isNumeric(event)" oninput="LoadTableSingleData()">
+    </div>
+    {{/if}}
+    {{/if}}
+
 </div>

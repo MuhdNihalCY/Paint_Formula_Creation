@@ -39,11 +39,19 @@
                                 <p>Print Label</p>
                             </div>
                         </a>
+                        {{#if this.isUpdated}}
+                        <a target="_blank" href="/UpdatedBulkOrders/{{this.FileName}}/{{this.Quantity}}">
+                            <div class="OPrintLabelDiv">
+                                <p>Repeat Order</p>
+                            </div>
+                        </a>
+                        {{else}}
                         <a target="_blank" href="/BulkOrders/{{this.FileName}}/{{this.Quantity}}">
                             <div class="OPrintLabelDiv">
                                 <p>Repeat Order</p>
                             </div>
                         </a>
+                        {{/if}}
                     </div>
                     <hr>
                 </div>

@@ -11,278 +11,296 @@
 
 
     <div class="AllBoDIv">
-        <form id="OrderForm" action="/BulkOrder/{{Formulation.FileNo}}" method="post">
-            <div class="boSectionDiv">
-                <div class="BoAllArea">
-                    <div class="BoHeader">
-                        <p>Order</p>
-                        <div class="BoHeaderBTNS">
-                            <a class="btn BoClearBTN" href="">Clear All</a>
-                            <input class="btn BoSaveBTN" id="BoSaveBTN" type="submit" value="Stock Out">
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="BoMainSection">
-                        <div class="BoTopsection">
-                            <div class="BoTopSection1">
-                                <div class="BoDateDiv">
-                                    <label for="">Date :</label>
-                                    <input type="text" class="BoInpReadOnly" name="order_date" id=""
-                                        value="{{Formulation.Date}}" readonly>
-                                </div>
-                                <div class="BoDateDiv">
-                                    <label for="">File No.:</label>
-                                    <input type="text" class="BoInpReadOnly" name="FileName"
-                                        value="{{Formulation.FileNo}}" id="FileNO" readonly>
-                                </div>
-                                <div class="BoDateDiv">
-                                    <label for="">Customer Name : </label>
-                                    <input type="text" class="BoInpReadAndWrite" name="CustomerName"
-                                        value="{{Formulation.CustomerName}}" id="">
-                                </div>
-
-                                {{!-- <div class="BoCategory">
-                                    <label for="">Category :</label>
-                                    <input type="text" name="Category" value="{{Formulation.CategoryName}}" id=""
-                                        readonly>
-                                </div> --}}
-                                <div class="BoDateDiv">
-                                    <label for="">Color Code :</label>
-                                    <input type="text" class="BoInpReadOnly" name="ColorCde"
-                                        value="{{Formulation.ColorCode}}" id="" readonly>
-                                </div>
-                                <div class="BoDateDiv">
-                                    <label for="">ColorName : </label>
-                                    <input type="text" class="BoInpReadOnly" name="ColorName"
-                                        value="{{Formulation.ColorName}}" id="" readonly>
-                                </div>
-                                <div class="BoDateDiv">
-                                    <label for="">Customer Ref :</label>
-                                    <input type="text" class="BoInpReadOnly" name="CustomerRef"
-                                        value="{{Formulation.CustomerRef}}" id="" readonly>
-                                </div>
-                                <div class="BoDateDiv" hidden>
-                                    <label for="">Mixer : </label>
-                                    <input type="text" class="BoInpReadOnly" name="Mixer"
-                                        value="{{Formulation.MixerName}}" id="" readonly>
-                                </div>
-                                <div class="BoDateDiv">
-                                    <label for="">Project no :</label>
-                                    <input type="text" class="BoInpReadOnly" name="ProjectNo"
-                                        value="{{Formulation.ProjectNo}}" id="" readonly>
-                                </div>
-                                {{!-- <div class="BoSubCategory">
-                                    <label for="">Sub - Category</label>
-                                    <input type="text" name="SubCategory" value="{{Formulation.SubCategoryName}}" id=""
-                                        readonly>
-                                </div> --}}
-                                <div class="BoDateDiv">
-                                    <label for="">Referance Image:</label>
-                                    <div class="BoRefImgDiv">
-                                        <img class="BoRefImg" src="/images/RefImages/{{Formulation.FileNo}}.jpg">
-                                    </div>
-                                </div>
-
-                                {{!-- Last Area --}}
-
-                                <div class="BoBottomLeftSection">
-                                    <div class="BoDateDiv">
-                                        <label for="">Solid Content (%) : </label>
-                                        <input type="text" class="BoInpReadOnly" name="SolidContent"
-                                            value="{{Formulation.SolidContent}}" id="" readonly>
-                                    </div>
-                                    <div class="BoDateDiv">
-                                        <label for="">VOC (Kg/Ltr) : </label>
-                                        <input type="text" class="BoInpReadOnly" name="VOC" value="{{Formulation.VOC}}"
-                                            id="" readonly>
-                                    </div>
-                                    <div class="BoDateDiv">
-                                        <label for="">Density (Kg/Ltr) :</label>
-                                        <input type="text" class="BoInpReadOnly" name="Density"
-                                            value="{{Formulation.Density}}" id="" readonly>
-                                    </div>
-                                    <div class="BoDateDiv">
-                                        <label for="">Costing</label>
-                                        <input type="text" class="BoInpReadOnly" name="Costing" value="0" id="BoCosting"
-                                            readonly>
-                                    </div>
-                                    <div class="BoDateDiv">
-                                        <label for="">Sampled Qty : </label>
-                                        <input type="text" class="BoInpReadOnly" name="SampledQTY"
-                                            value="{{Formulation.SampleQty}}" id="" readonly>
-                                    </div>
-                                </div>
-
-
+        {{#if UpdateOrder}}
+        <form id="OrderForm" action="/UpdatedBulkOrder/{{Formulation.FileNo}}" method="post">
+            {{else}}
+            <form id="OrderForm" action="/BulkOrder/{{Formulation.FileNo}}" method="post">
+                {{/if}}
+                <div class="boSectionDiv">
+                    <div class="BoAllArea">
+                        <div class="BoHeader">
+                            <p>Order</p>
+                            <div class="BoHeaderBTNS">
+                                <a class="btn BoClearBTN" href="">Clear All</a>
+                                {{#if UpdateOrder}}
+                                <a class="btn BoSaveBTN" href="/UpdatedEditFormula/{{Formulation.FileNo}}">Edit Formula</a>
+                                {{else}}
+                                <a class="btn BoSaveBTN" href="/EditFormula/{{Formulation.FileNo}}">Edit Formula</a>
+                                {{/if}}
+                                <input class="btn BoSaveBTN" id="BoSaveBTN" type="submit" value="Stock Out">
                             </div>
+                        </div>
+                        <hr>
+                        <div class="BoMainSection">
+                            <div class="BoTopsection">
+                                <div class="BoTopSection1">
+                                    <div class="BoDateDiv">
+                                        <label for="">Date :</label>
+                                        <input type="text" class="BoInpReadOnly" name="order_date" id=""
+                                            value="{{Formulation.Date}}" readonly>
+                                    </div>
+                                    <div class="BoDateDiv">
+                                        <label for="">File No.:</label>
+                                        <input type="text" class="BoInpReadOnly" name="FileName"
+                                            value="{{Formulation.FileNo}}" id="FileNO" readonly>
+                                    </div>
+                                    <div class="BoDateDiv">
+                                        <label for="">Customer Name : </label>
+                                        <input type="text" class="BoInpReadAndWrite" name="CustomerName"
+                                            value="{{Formulation.CustomerName}}" id="">
+                                    </div>
 
-                            <div class="BoTopSection2">
-
-                                <div class="BoTopHeaderSec">
-
-                                    <div class="BoCategory">
+                                    {{!-- <div class="BoCategory">
                                         <label for="">Category :</label>
                                         <input type="text" name="Category" value="{{Formulation.CategoryName}}" id=""
                                             readonly>
+                                    </div> --}}
+                                    <div class="BoDateDiv">
+                                        <label for="">Color Code :</label>
+                                        <input type="text" class="BoInpReadOnly" name="ColorCde"
+                                            value="{{Formulation.ColorCode}}" id="" readonly>
                                     </div>
-
-                                    <div class="BoSubCategory">
-                                        <label for="">Sub - Category :</label>
+                                    <div class="BoDateDiv">
+                                        <label for="">ColorName : </label>
+                                        <input type="text" class="BoInpReadOnly" name="ColorName"
+                                            value="{{Formulation.ColorName}}" id="" readonly>
+                                    </div>
+                                    <div class="BoDateDiv">
+                                        <label for="">Customer Ref :</label>
+                                        <input type="text" class="BoInpReadOnly" name="CustomerRef"
+                                            value="{{Formulation.CustomerRef}}" id="" readonly>
+                                    </div>
+                                    <div class="BoDateDiv" hidden>
+                                        <label for="">Mixer : </label>
+                                        <input type="text" class="BoInpReadOnly" name="Mixer"
+                                            value="{{Formulation.MixerName}}" id="" readonly>
+                                    </div>
+                                    <div class="BoDateDiv">
+                                        <label for="">Project no :</label>
+                                        <input type="text" class="BoInpReadOnly" name="ProjectNo"
+                                            value="{{Formulation.ProjectNo}}" id="" readonly>
+                                    </div>
+                                    {{!-- <div class="BoSubCategory">
+                                        <label for="">Sub - Category</label>
                                         <input type="text" name="SubCategory" value="{{Formulation.SubCategoryName}}"
                                             id="" readonly>
+                                    </div> --}}
+                                    <div class="BoDateDiv">
+                                        <label for="">Referance Image:</label>
+                                        <div class="BoRefImgDiv">
+                                            <img class="BoRefImg" src="/images/RefImages/{{Formulation.FileNo}}.jpg">
+                                        </div>
                                     </div>
+
+                                    {{!-- Last Area --}}
+
+                                    <div class="BoBottomLeftSection">
+                                        <div class="BoDateDiv">
+                                            <label for="">Solid Content (%) : </label>
+                                            <input type="text" class="BoInpReadOnly" name="SolidContent"
+                                                value="{{Formulation.SolidContent}}" id="" readonly>
+                                        </div>
+                                        <div class="BoDateDiv">
+                                            <label for="">VOC (Kg/Ltr) : </label>
+                                            <input type="text" class="BoInpReadOnly" name="VOC"
+                                                value="{{Formulation.VOC}}" id="" readonly>
+                                        </div>
+                                        <div class="BoDateDiv">
+                                            <label for="">Density (Kg/Ltr) :</label>
+                                            <input type="text" class="BoInpReadOnly" name="Density"
+                                                value="{{Formulation.Density}}" id="" readonly>
+                                        </div>
+                                        <div class="BoDateDiv">
+                                            <label for="">Costing</label>
+                                            <input type="text" class="BoInpReadOnly" name="Costing" value="0"
+                                                id="BoCosting" readonly>
+                                        </div>
+                                        <div class="BoDateDiv">
+                                            <label for="">Sampled Qty : </label>
+                                            <input type="text" class="BoInpReadOnly" name="SampledQTY"
+                                                value="{{Formulation.SampleQty}}" id="" readonly>
+                                        </div>
+                                    </div>
+
+
                                 </div>
 
-                                {{#if NoQty}}
-                                <div class="BOLowStockAlert">
-                                    <p class="BoLowStocks">{{NoQty}}</p>
-                                    <input type="text" value="0" id="BoTotalQTYLOW" hidden>
-                                </div>
-                                {{/if}}
+                                <div class="BoTopSection2">
 
+                                    <div class="BoTopHeaderSec">
 
-                                {{#if TotalQTY}}
-                                <div class="BOLowStockAlert">
-                                    {{#if Item}}
-                                    <p class="BoLowStocks">Stocks Not available for {{Item}}</p>
-                                    {{else}}
-                                    <p class="BoLowStocks">Stocks Not available for Products</p>
+                                        <div class="BoCategory">
+                                            <label for="">Category :</label>
+                                            <input type="text" name="Category" value="{{Formulation.CategoryName}}"
+                                                id="" readonly>
+                                        </div>
+
+                                        <div class="BoSubCategory">
+                                            <label for="">Sub - Category :</label>
+                                            <input type="text" name="SubCategory"
+                                                value="{{Formulation.SubCategoryName}}" id="" readonly>
+                                        </div>
+                                    </div>
+
+                                    {{#if NoQty}}
+                                    <div class="BOLowStockAlert">
+                                        <p class="BoLowStocks">{{NoQty}}</p>
+                                        <input type="text" value="0" id="BoTotalQTYLOW" hidden>
+                                    </div>
                                     {{/if}}
-                                    <input type="text" value="{{TotalQTY}}" id="BoTotalQTYLOW" hidden>
-                                </div>
-                                {{/if}}
-                                <div class="BoTopSec2">
-                                    <div class="BoEnterQuantityDiv">
-                                        {{#if Liter}}
-                                        <label for="">Enter Quantity (in Ltr) : </label>
-                                        {{else}}
-                                        <label for="">Enter Quantity (in Kg) : </label>
-                                        {{/if}}
 
-                                        {{#if TotalQTY}}
-                                        <input type="number" name="Quantity" value="{{TotalQTY}}" id="ProductQTY"
-                                            required min="0">
+
+                                    {{#if TotalQTY}}
+                                    <div class="BOLowStockAlert">
+                                        {{#if Item}}
+                                        <p class="BoLowStocks">Stocks Not available for {{Item}}</p>
                                         {{else}}
-                                        {{#if QTY}}
-                                        <input type="number" name="Quantity" value="{{QTY}}" id="ProductQTY" required
-                                            min="0">
-                                        {{else}}
-                                        <input type="number" name="Quantity" value="" id="ProductQTY" required min="0">
+                                        <p class="BoLowStocks">Stocks Not available for Products</p>
                                         {{/if}}
-                                        {{/if}}
+                                        <input type="text" value="{{TotalQTY}}" id="BoTotalQTYLOW" hidden>
                                     </div>
+                                    {{/if}}
+                                    <div class="BoTopSec2">
+                                        <div class="BoEnterQuantityDiv">
+                                            {{#if Liter}}
+                                            <label for="">Enter Quantity (in Ltr) : </label>
+                                            {{else}}
+                                            <label for="">Enter Quantity (in Kg) : </label>
+                                            {{/if}}
 
-                                    <div class="BoEnterQuantityDiv">
-                                        {{#if MattOrGloss}}
-                                        <label for="">{{MattOrGloss}}</label>
-                                        <input class="BoMattOrGloss" type="text" name="MattOrGloss"
-                                            value="{{MattOrGlossValue}}" id="PrductQTY" readonly>
-                                        {{/if}}
-                                    </div>
-                                </div>
-
-                                <p class="text-center text-danger">{{errorMessage}}</p>
-                                <div class="BOPriceApiError">
-                                    <p id="BOPriceApiErrorText" class=""></p>
-                                    <br>
-                                    <input type="text" id="BOPriceApiErrorINP" name="PriceErr" hidden>
-                                </div>
-
-                                <hr>
-                                <div class="BoTableDiv">
-
-
-                                    {{!-- ADMainTable table table-bordered text-center ADcustom-border --}}
-                                    <table class="BoQTYTable BOQTYTable table table-bordered text-center">
-                                        <thead class="BoTableHeader BOTableHeader">
-                                            <th>Tinters</th>
-                                            <th>QTY in Grams</th>
-                                            <th>QTY in Volume</th>
-                                        </thead>
-                                        <tbody class="BoTAbleBody">
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="BoBelowTable">
-                                    <div class="BoDataBelowTable">
-
-                                        {{!-- Total without Additives --}}
-                                        {{!-- <div class="BoBindersAndAdditivesUnits">
-                                            <div class="BoLabelWithoutAdditivesDiv">
-                                                <p class="BoBinderName">Total Without Additives</p>
-                                            </div>
-                                            <div class="BoeachUnit ">
-                                                <p class="BoUnitsTotal">QTY (Grams)</p>
-                                                <input type="text" id="TotalGramInputWithoutAdditives"
-                                                    name="TotalWithoutAdditves" class="BoTotalInputElementsGrams "
-                                                    readonly value="0.00" required>
-                                            </div>
-                                            <div class="BoeachUnit ">
-                                                <p class="BoUnitsTotal">Volume (ml)</p>
-                                                <input type="text" id="TotalLiterInputWithoutAdditives"
-                                                    class="BoTotalInputElementsLiter " readonly value="0.00" required>
-                                            </div>
-                                        </div> --}}
-
-                                        {{#if Binder1}}
-                                        {{!--
-                                        <hr> --}}
-                                        <div class="BoBinderDIv">
-                                            <p class="BoBinderHeader">Binder </p>
-                                            <div class="BoBinder1Div">
-                                                <div class="BoBinderLeftSection">
-                                                    <input type="text" class="BinderName" name="Binder1"
-                                                        value="{{Formulation.Binder1Name}}" id="" readonly>
-                                                    <input type="text" name="Binder1Ratio" id="Binder1Ratio"
-                                                        value="{{Formulation.Binder1Ratio}}" hidden>
-                                                    <input type="text" name="Binder1QTY" id="Binder1QTY"
-                                                        class="Binder1QTY" readonly>
-                                                </div>
-                                            </div>
-                                            {{#if Binder2}}
-                                            <div class="BoBinder2Div">
-                                                <div class="BoBinderLeftSection">
-                                                    <input type="text" class="BinderName" name="Binder2"
-                                                        value="{{Formulation.Binder2Name}}" id="" readonly>
-                                                    <input type="text" name="Binder2Ratio" id="Binder2Ratio"
-                                                        value="{{Formulation.Binder2Ratio}}" hidden>
-                                                    <input type="text" name="Binder2QTY" id="Binder2QTY"
-                                                        class="Binder2QTY" readonly>
-                                                </div>
-                                            </div>
+                                            {{#if TotalQTY}}
+                                            <input type="number" name="Quantity" value="{{TotalQTY}}" id="ProductQTY"
+                                                required min="0">
+                                            {{else}}
+                                            {{#if QTY}}
+                                            <input type="number" name="Quantity" value="{{QTY}}" id="ProductQTY"
+                                                required min="0">
+                                            {{else}}
+                                            <input type="number" name="Quantity" value="" id="ProductQTY" required
+                                                min="0">
+                                            {{/if}}
                                             {{/if}}
                                         </div>
-                                        {{/if}}
 
-                                        <hr>
-                                        <div class="BoAdditiveDiv">
-                                            <p class="BoAdditiveHeader">Additives </p>
-                                            <div class="BOAdditiveMainSection">
-                                                <div class="BoAdditiveLeftSection">
-                                                    <input type="text" class="AdditveName" name="Additive"
-                                                        value="{{Formulation.AdditiveName}}" id="" readonly>
-                                                    <input type="text" name="AdditiveRatio" id="AdditiveRatio"
-                                                        value="{{Formulation.AdditiveRatio}}" hidden>
-                                                    <input type="text" name="AdditiveQTY" class="AdditiveQTY"
-                                                        id="AdditiveQTY" readonly>
-                                                </div>
-                                            </div>
+                                        <div class="BoEnterQuantityDiv">
+                                            {{#if MattOrGloss}}
+                                            <label for="">{{MattOrGloss}}</label>
+                                            <input class="BoMattOrGloss" type="text" name="MattOrGloss"
+                                                value="{{MattOrGlossValue}}" id="PrductQTY" readonly>
+                                            {{/if}}
                                         </div>
                                     </div>
 
-                                    <div class="BoRemarksBoxArea">
-                                        <div class="BoRemarksDIVBox">
-                                            <div class="BoRemarkHeaderDiv">
-                                                <p class="BoRemarkHeader">Remarks</p>
+                                    <p class="text-center text-danger">{{errorMessage}}</p>
+                                    <div class="BOPriceApiError">
+                                        <p id="BOPriceApiErrorText" class=""></p>
+                                        <br>
+                                        <input type="text" id="BOPriceApiErrorINP" name="PriceErr" hidden>
+                                    </div>
+
+                                    <hr>
+                                    {{#if UpdateOrder}}
+                                    <input type="text" id="UpdatedOrder" value="UpdatedOrder" hidden>
+                                    {{else}}
+                                    <input type="text" id="UpdatedOrder" value="" hidden>
+                                    {{/if}}
+
+                                    <div class="BoTableDiv">
+
+
+                                        {{!-- ADMainTable table table-bordered text-center ADcustom-border --}}
+                                        <table class="BoQTYTable BOQTYTable table table-bordered text-center">
+                                            <thead class="BoTableHeader BOTableHeader">
+                                                <th>Tinters</th>
+                                                <th>QTY in Grams</th>
+                                                <th>QTY in Volume</th>
+                                            </thead>
+                                            <tbody class="BoTAbleBody">
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="BoBelowTable">
+                                        <div class="BoDataBelowTable">
+
+                                            {{!-- Total without Additives --}}
+                                            {{!-- <div class="BoBindersAndAdditivesUnits">
+                                                <div class="BoLabelWithoutAdditivesDiv">
+                                                    <p class="BoBinderName">Total Without Additives</p>
+                                                </div>
+                                                <div class="BoeachUnit ">
+                                                    <p class="BoUnitsTotal">QTY (Grams)</p>
+                                                    <input type="text" id="TotalGramInputWithoutAdditives"
+                                                        name="TotalWithoutAdditves" class="BoTotalInputElementsGrams "
+                                                        readonly value="0.00" required>
+                                                </div>
+                                                <div class="BoeachUnit ">
+                                                    <p class="BoUnitsTotal">Volume (ml)</p>
+                                                    <input type="text" id="TotalLiterInputWithoutAdditives"
+                                                        class="BoTotalInputElementsLiter " readonly value="0.00"
+                                                        required>
+                                                </div>
+                                            </div> --}}
+
+                                            {{#if Binder1}}
+                                            {{!--
+                                            <hr> --}}
+                                            <div class="BoBinderDIv">
+                                                <p class="BoBinderHeader">Binder </p>
+                                                <div class="BoBinder1Div">
+                                                    <div class="BoBinderLeftSection">
+                                                        <input type="text" class="BinderName" name="Binder1"
+                                                            value="{{Formulation.Binder1Name}}" id="" readonly>
+                                                        <input type="text" name="Binder1Ratio" id="Binder1Ratio"
+                                                            value="{{Formulation.Binder1Ratio}}" hidden>
+                                                        <input type="text" name="Binder1QTY" id="Binder1QTY"
+                                                            class="Binder1QTY" readonly>
+                                                    </div>
+                                                </div>
+                                                {{#if Binder2}}
+                                                <div class="BoBinder2Div">
+                                                    <div class="BoBinderLeftSection">
+                                                        <input type="text" class="BinderName" name="Binder2"
+                                                            value="{{Formulation.Binder2Name}}" id="" readonly>
+                                                        <input type="text" name="Binder2Ratio" id="Binder2Ratio"
+                                                            value="{{Formulation.Binder2Ratio}}" hidden>
+                                                        <input type="text" name="Binder2QTY" id="Binder2QTY"
+                                                            class="Binder2QTY" readonly>
+                                                    </div>
+                                                </div>
+                                                {{/if}}
                                             </div>
-                                            <div class="BoRemarksPDiv">
-                                                <textarea name="remarks" id="BoRemarksTextArea" cols="" rows=""
-                                                    readonly>{{Formulation.Remark}}</textarea>
+                                            {{/if}}
+
+                                            <hr>
+                                            <div class="BoAdditiveDiv">
+                                                <p class="BoAdditiveHeader">Additives </p>
+                                                <div class="BOAdditiveMainSection">
+                                                    <div class="BoAdditiveLeftSection">
+                                                        <input type="text" class="AdditveName" name="Additive"
+                                                            value="{{Formulation.AdditiveName}}" id="" readonly>
+                                                        <input type="text" name="AdditiveRatio" id="AdditiveRatio"
+                                                            value="{{Formulation.AdditiveRatio}}" hidden>
+                                                        <input type="text" name="AdditiveQTY" class="AdditiveQTY"
+                                                            id="AdditiveQTY" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="BoRemarksBoxArea">
+                                            <div class="BoRemarksDIVBox">
+                                                <div class="BoRemarkHeaderDiv">
+                                                    <p class="BoRemarkHeader">Remarks</p>
+                                                </div>
+                                                <div class="BoRemarksPDiv">
+                                                    <textarea name="remarks" id="BoRemarksTextArea" cols="" rows=""
+                                                        readonly>{{Formulation.Remark}}</textarea>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -291,8 +309,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
     </div>
 </section>
 
@@ -634,7 +651,7 @@
         var TotalCost = Binder1_Cost + Binder2_Cost + Additve_Cost + TinterTotalCost
 
         document.getElementById('BoCosting').value = TotalCost.toFixed(2).toString();
-        
+
         hideLoading();
 
     }
@@ -645,6 +662,13 @@
 
     // Function to be executed when the input changes
     function QtyEnteredUser() {
+
+        var isUpdatedFormula = false;
+        const UpdatedFlag = document.getElementById("UpdatedOrder").value;
+
+        if (UpdatedFlag !== "") {
+            isUpdatedFormula = true;
+        }
 
         showLoading();
         // Your code logic here
@@ -660,7 +684,13 @@
         const xhr = new XMLHttpRequest();
 
         // Set up the API endpoint URL with the file number parameter
-        const url = `/api/BulkOrder/${fileNo}`;
+        var url = "";
+
+        if (isUpdatedFormula) {
+            url = `/api/BulkOrder/Updated/${fileNo}`;
+        } else {
+            url = `/api/BulkOrder/${fileNo}`;
+        }
 
         // Set up the HTTP method and URL
         xhr.open('GET', url, true);

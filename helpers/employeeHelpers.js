@@ -90,6 +90,18 @@ module.exports = {
             resolve(Products)
         })
     },
+    GetProductByArrayOfProductByName: (ArrayOfProduct) => {
+        return new Promise(async (resolve, reject) => {
+            var Products = [];
+
+            for (var i = 0; i < ArrayOfProduct.length - 1; i++) {
+                var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Name: ArrayOfProduct[i] });
+                Products.push(Product);
+            }
+            // console.log("ProductByID:",Products);
+            resolve(Products)
+        })
+    },
     FindProductByName: (ProductName) => {
         return new Promise(async (resolve, reject) => {
             let product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": ProductName })
@@ -134,7 +146,42 @@ module.exports = {
                         throw "Error";
                     } else {
                         resolve({
-                            Status: true
+                            Status: true,
+                            Data:Data
+                        })
+                    }
+                })
+            }
+        })
+    },
+    SaveEditedFormulaData: (Data) => {
+        return new Promise(async (resolve, reject) => {
+
+            checkFileNoDuplicates()
+
+            // check the file no for duplicates
+            async function checkFileNoDuplicates() {
+                // console.log("Checking for duplicates: ", Data.FileNo);
+
+                var fileNo = Data.FileNo;
+                var SameFileNoFormula = await db.get().collection(collection.EDITED_FROMULA_COLLECTION).findOne({ FileNo: fileNo });
+                // console.log("SameFileNoFormula: ", SameFileNoFormula);
+                if (SameFileNoFormula) {
+                    Data.FileNo = (parseInt(Data.FileNo) + 1).toString();
+                    checkFileNoDuplicates();
+                } else {
+                    SaveFormulaData();
+                }
+            }
+
+            async function SaveFormulaData() {
+                await db.get().collection(collection.EDITED_FROMULA_COLLECTION).insertOne(Data).then((Response) => {
+                    if (!Response) {
+                        throw "Error";
+                    } else {
+                        resolve({
+                            Status: true,
+                            Data:Data
                         })
                     }
                 })
@@ -162,6 +209,12 @@ module.exports = {
     FindFormulaByFileNo: (FileNo) => {
         return new Promise(async (resolve, reject) => {
             let Formula = await db.get().collection(collection.FORMULA_COLLECTION).findOne({ "FileNo": FileNo });
+            resolve(Formula);
+        })
+    },
+    FindUpdatesFormulaByFileNo: (FileNo) => {
+        return new Promise(async (resolve, reject) => {
+            let Formula = await db.get().collection(collection.EDITED_FROMULA_COLLECTION).findOne({ "FileNo": FileNo });
             resolve(Formula);
         })
     },
@@ -212,6 +265,12 @@ module.exports = {
             resolve(Formula);
         })
     },
+    GetUpdatesFormulaByFileNo: (FileNo) => {
+        return new Promise(async (resolve, reject) => {
+            var Formula = await db.get().collection(collection.EDITED_FROMULA_COLLECTION).findOne({ "FileNo": FileNo });
+            resolve(Formula);
+        })
+    },
     TinterCheckStock: (TinterName, TinterQty) => {
         var State = {
             HaveStock: false,
@@ -225,7 +284,7 @@ module.exports = {
             TinterQty = parseFloat(TinterQty);
             // console.log("Tinter: ", Tinter);
             // console.log("parseFloat(Tinter.Stock): ", parseFloat(Tinter.Stock));
-            if(Tinter){
+            if (Tinter) {
                 if (parseFloat(Tinter.Stock) > TinterQty) {
                     // have Stock for this formula
                     State.HaveStock = true;
@@ -235,7 +294,7 @@ module.exports = {
                     State.HaveStock = false;
                     State.AvailableStock = parseFloat(Tinter.Stock);
                 }
-            }else {
+            } else {
                 // TinterQty is more than avalialable Stock
                 State.HaveStock = false;
                 // State.AvailableStock = parseFloat(Tinter.Stock);
@@ -439,6 +498,33 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             var binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Id: parseInt(B_ID) });
             resolve(binder)
+        })
+    },
+    GetAllSubCategoriesByMatchingCategory: (CategoryID) => {
+        return new Promise(async (resolve, reject) => {
+            // console.log("Requested CategoryID: ",CategoryID);
+            var SubCategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).find({ Category_Id: CategoryID.toString() }).toArray();
+            resolve(SubCategories);
+        })
+    },
+    GetAllTinteresByFormula: (Formula) => {
+        return new Promise(async (resolve, reject) => {
+            var TintersArray = [];
+            // console.log(Formula)
+            for (let i = 1; i <= Formula.TintersCount; i++) {
+                let tinterObj = {
+                    TinterName: Formula[`TinterNameR${i}`],
+                    TinterPrice: parseFloat(Formula[`TinterPriceR${i}`]),
+                    TinterPriceUnit: Formula[`TinterPriceUnit${i}`],
+                    TinterDensity: parseFloat(Formula[`TinterDensity${i}`]),
+                    GramInputTotal: parseFloat(Formula[`GramInputTotalR${i}`]),
+                    LiterInputTotal: parseFloat(Formula[`LiterInputTotalR${i}`]),
+                    TinterCount: i
+                };
+                TintersArray.push(tinterObj);
+            }
+            // console.log(TintersArray);
+            resolve(TintersArray);
         })
     },
 

@@ -10,8 +10,8 @@ const EmployeeVerifyLogin = (req, res, next) => {
   if (req.session.EmployeeLogged) {
     next()
   } else {
-    res.redirect('/login');
-    // next()
+    // res.redirect('/login');
+    next()
   }
 }
 
@@ -243,6 +243,13 @@ router.post('/GetProductsSolidContent/api', (req, res) => {  //EmployeeVerifyLog
   })
 })
 
+router.post('/GetProductsSolidContentByName/api', (req, res) => {  //EmployeeVerifyLogin, 
+  //console.log("ProductsHere: ",req.body);
+  employeeHelpers.GetProductByArrayOfProductByName(req.body.selectedOption).then((Products) => {
+    res.json(Products);
+  })
+})
+
 router.post('/FindProductByName/api', (req, res) => {  //EmployeeVerifyLogin,
   // console.log("Productname: ",req.body);
   employeeHelpers.FindProductByName(req.body.selectedProduct).then((Product) => {
@@ -290,12 +297,12 @@ router.post('/FindAdditiveBinderDensityById/api', async (req, res) => {  // Empl
 
 router.post('/CreateFormula', (req, res) => {
 
-  function StoreRefImage() {
+  function StoreRefImage(SavedData) {
     if (req.files) {
       const imageData = req.files.Image;
       // console.log('Image data:', imageData);
 
-      imageData.mv('./public/images/RefImages/' + req.body.FileNo + ".jpg", (err) => {
+      imageData.mv('./public/images/RefImages/' + SavedData.FileNo + ".jpg", (err) => {
         if (!err) {
         } else {
           console.log("Error at img1 " + err)
@@ -497,7 +504,7 @@ router.post('/CreateFormula', (req, res) => {
                       // res .send data
                       employeeHelpers.SaveFormulaData(Datas).then((State) => {
                         //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
-                        StoreRefImage()
+                        StoreRefImage(State.Data)
                         res.redirect(`/BulkOrders/${Datas.FileNo}`)
                         // res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                       })
@@ -507,7 +514,7 @@ router.post('/CreateFormula', (req, res) => {
                     // res .send data
                     employeeHelpers.SaveFormulaData(Datas).then((State) => {
                       //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
-                      StoreRefImage()
+                      StoreRefImage(State.Data)
                       res.redirect(`/BulkOrders/${Datas.FileNo}`)
                       //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                     })
@@ -517,7 +524,7 @@ router.post('/CreateFormula', (req, res) => {
                 // res .send data
                 employeeHelpers.SaveFormulaData(Datas).then((State) => {
                   //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
-                  StoreRefImage()
+                  StoreRefImage(State.Data)
                   res.redirect(`/BulkOrder/${Datas.FileNo}`)
                   //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                 })
@@ -632,6 +639,10 @@ router.get('/BulkOrders/:FileNo/:Qty', EmployeeVerifyLogin, (req, res) => {
     //console.log(Formulation);
     var Binder1 = false;
     var Binder2 = false;
+    var MattOrGloss = false;
+    var MattOrGlossValue = false;
+
+
     if (Formulation.Binder1) {
       Binder1 = true;
     }
@@ -639,12 +650,21 @@ router.get('/BulkOrders/:FileNo/:Qty', EmployeeVerifyLogin, (req, res) => {
       Binder2 = true;
     }
 
+    if (Formulation.gloss) {
+      MattOrGloss = "Gloss"
+      MattOrGlossValue = Formulation.gloss
+    } else if (Formulation.matt) {
+      MattOrGloss = "Matt"
+      MattOrGlossValue = Formulation.matt
+    }
+
+
     var Liter = false;
     employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
       if (Sub_Category.Liter) {
         Liter = true
       }
-      res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, QTY });
+      res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, QTY });
     })
   })
 
@@ -749,7 +769,6 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
         var Binder2 = false;
         var MattOrGloss = false;
         var MattOrGlossValue = false;
-
 
         if (Formulation.Binder1) {
           Binder1 = true;
@@ -1047,6 +1066,758 @@ router.get('/Printsmlabel/:fileNo', EmployeeVerifyLogin, (req, res) => {
   })
 })
 
+router.get('/EditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
+  var FileNo = req.params.fileNo;
+  employeeHelpers.GetFormulaByFileNo(FileNo).then((Formula) => {
+    // console.log(Formula);
+    // Formula.mattOrGloss = parseInt(Formula.mattOrGloss);
+    var Matt = false;
+    var Gloss = false;
+
+    if (Formula.matt) {
+      Matt = parseInt(Formula.matt);
+    } else if (Formula.gloss) {
+      Gloss = parseInt(Formula.gloss);
+    }
+
+    employeeHelpers.getAllCategories().then((AllCategory) => {
+      // console.log(AllCategory);
+
+      const formulaCategory = Formula.CategoryName; // 'Paints' in this example
+      let reorderedAllCategory = [];
+
+      // First, find the object that matches the formula category
+      const matchingCategory = AllCategory.find(category => category.Category === formulaCategory);
+
+      // Remove the matching category from AllCategory if it exists
+      if (matchingCategory) {
+        reorderedAllCategory = AllCategory.filter(category => category.Category !== formulaCategory);
+
+        // Add it to the beginning of the reorderedAllCategory array
+        reorderedAllCategory.unshift(matchingCategory);
+      } else {
+        reorderedAllCategory = [...AllCategory];
+      }
+
+      var MatchingCategoryID = matchingCategory.Category_Id;
+      employeeHelpers.GetAllSubCategoriesByMatchingCategory(MatchingCategoryID).then((AllSubCategories) => {
+        // console.log("AllSubCategories: ",AllSubCategories);
+
+        const formulaSubcategory = Formula.SubCategoryName;
+        let reOrderedSubcategories = [];
+
+        const MatchingSubCategory = AllSubCategories.find(Subcategory => Subcategory.SubCategory === formulaSubcategory);
+
+        if (MatchingSubCategory) {
+          reOrderedSubcategories = AllSubCategories.filter(Subcategory => Subcategory.SubCategory !== formulaSubcategory)
+
+          reOrderedSubcategories.unshift(MatchingSubCategory);
+          // console.log("Has Matching Sub category")
+        } else {
+          // console.log("not Matching Sub category")
+          reOrderedSubcategories = [...AllSubCategories];
+        }
+
+        employeeHelpers.GetAllAdditives().then((Additives) => {
+          console.log("Additives:", Additives);
+          // Find the index of the Additive with AdditiveName: 'Multi-Mat'
+          const indexToMove = Additives.findIndex(additive => additive.Additive_Name === 'Multi-Mat');
+
+          // If 'Multi-Mat' is found, move it to the beginning of the array
+          if (indexToMove !== -1) {
+            const movedAdditive = Additives.splice(indexToMove, 1)[0]; // Remove and store the found additive
+            Additives.unshift(movedAdditive); // Add it to the beginning of the array
+          }
+
+          employeeHelpers.GetAllTinteresByFormula(Formula).then((Tinters) => {
+            console.log(Tinters);
+
+            res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives });
+
+          })
+        })
+      })
+
+    })
+  })
+})
+
+router.post('/CreateEditedFormula', EmployeeVerifyLogin, (req, res) => {
+  console.log(req.body);
+
+  function StoreRefImage(SavedData) {
+    if (req.files) {
+      const imageData = req.files.Image;
+      // console.log('Image data:', imageData);
+
+      imageData.mv('./public/images/RefImages/' + SavedData.FileNo + ".jpg", (err) => {
+        if (!err) {
+        } else {
+          console.log("Error at img1 " + err)
+        }
+      })
+    }
+  }
+
+  // console.log(req.body);
+  function calculateRatios(data) {
+    // console.log("Calculating Data: ", data);
+    const ratios = {};
+
+    // Get the Total Quantity
+    const totalQty = parseFloat(data.TotalQtyInGram);
+
+    // Calculate the ratios
+    ratios.totalQty = 1;
+    ratios.additive = totalQty !== 0 ? parseFloat(data.TotalAdditives) / totalQty : 0;
+    ratios.binder1 = totalQty !== 0 ? parseFloat(data.Binder1) / totalQty : 0;
+    ratios.binder2 = totalQty !== 0 ? parseFloat(data.Binder2 || 0) / totalQty : 0;
+
+    ratios.tinters = {};
+    const tinterKeys = Object.keys(data).filter(key => key.startsWith('GramInputTotalR'));
+    const tinterCount = tinterKeys.length;
+    const tinterSum = tinterKeys.reduce((sum, key) => sum + parseFloat(data[key] || 0), 0);
+    tinterKeys.forEach((key, index) => {
+      const tinterNo = key.slice(15);
+      ratios.tinters[tinterNo] = totalQty !== 0 ? (parseFloat(data[key]) || 0) / totalQty : 0;
+    });
+
+    return ratios;
+  }
+
+  async function CalculateCostOfAll(ReqData) {
+    var TintersCount = ReqData.TintersRatioArray.length;
+
+    // Find Product Price and Unit
+    const productPromises = []; // Array to store promises
+
+    for (let i = 1; i <= TintersCount; i++) {
+      // Dynamically access the variable using bracket notation
+      let TintervariableName = `TintersR${i}`;
+      let TinterPriceVariable = `TinterPriceR${i}`;
+      let TinterPriceUnitVariable = `TinterPriceUnit${i}`;
+      let TinterDensityCount = `TinterDensity${i}`;
+
+      console.log("ReqData:", ReqData)
+
+      var Tinter = ReqData[TintervariableName];
+
+      // Store the promise in the array
+      const productPromise = employeeHelpers.getProductByName(Tinter).then((Product) => {
+        console.log(Product)
+        ReqData[TinterPriceVariable] = Product.Price;
+        ReqData[TinterPriceUnitVariable] = Product.PriceUnit;
+        ReqData[TinterDensityCount] = Product.Product_Density;
+      });
+
+      productPromises.push(productPromise); // Add promise to the array
+      // console.log(ReqData[TintervariableName]);
+    }
+
+    // Wait for all the getProductByName promises to complete before proceeding
+    await Promise.all(productPromises);
+
+    // console.log("ReqData: ", ReqData);
+
+    // Find Binder Price unit
+    if (ReqData.Binder1Ratio) {
+      await employeeHelpers.GetSubcategotyByName(ReqData.SubCategoryName).then(async (SubCategory) => {
+        var Binder1ID = SubCategory.Binder1
+        await employeeHelpers.GetBinderById(Binder1ID).then((Binder1) => {
+          ReqData.Binder1Price = Binder1.cost;
+          ReqData.Binder1PriceUnit = Binder1.PriceUnit;
+          ReqData.Binder1_Density = Binder1.Binder_Density;
+        })
+        if (ReqData.Binder2Ratio) {
+          const Binder2ID = SubCategory.Binder2;
+          const Binder2 = await employeeHelpers.GetBinderById(Binder2ID);
+          ReqData.Binder2Price = Binder2.cost;
+          ReqData.Binder2PriceUnit = Binder2.PriceUnit;
+          ReqData.Binder2_Density = Binder2.Binder_Density;
+        }
+
+      })
+    }
+
+    // Find Additive Price and unit
+    if (ReqData.AdditiveRatio) {
+      var AdditiveID = ReqData.additives;
+      await employeeHelpers.getAdditivesById(AdditiveID).then((Additive) => {
+        ReqData.AdditivePrice = Additive.cost;
+        ReqData.AdditivePriceUnit = Additive.PriceUnit;
+        ReqData.Additive_Density = Additive.Additive_Density;
+      });
+    }
+
+    // console.log("ReqData: ", ReqData);
+
+    return ReqData;
+
+  }
+
+
+  var Datas = req.body;
+
+  // console.log("Req.body datas: ", Datas)
+
+
+  // Usage
+  const data = {
+    TotalQtyInGram: Datas.TotalQtyInGram,
+    TotalAdditives: Datas.TotalAdditives,
+    Binder1: Datas.Binder1,
+    Binder2: Datas.Binder2,
+    GramInputTotalR1: Datas.GramInputTotalR1,
+    GramInputTotalR2: Datas.GramInputTotalR2,
+    GramInputTotalR3: Datas.GramInputTotalR3
+  };
+
+  const result = calculateRatios(Datas);
+  // console.log('Total Quantity:', result.totalQty);
+  // console.log('Additive Ratio:', result.additive);
+  // console.log('Binder1 Ratio:', result.binder1);
+  // console.log('Binder2 Ratio:', result.binder2);
+  // console.log('Tinters Ratios:', result.tinters);
+  Datas.AdditiveRatio = result.additive;
+  Datas.Binder1Ratio = result.binder1;
+  Datas.Binder2Ratio = result.binder2;
+  Datas.TintersRatioObject = result.tinters;
+  // console.log("Tinters Ratio: ", result.tinters);
+  for (var key in result.tinters) {
+    if (result.tinters[key] === 0) {
+      delete result.tinters[key];
+    }
+  }
+  // console.log("Tinters Ratio: ", result.tinters);
+  Datas.TintersRatioArray = Object.values(result.tinters);
+
+  Datas.TintersCount = Datas.TintersRatioArray.length;
+  Datas.InsertedTime = Date.now()
+
+  employeeHelpers.getAllCategories().then((AllCategory) => {
+    employeeHelpers.GetAllSubCategories().then((AllSubCategory) => {
+
+      // Mapping CategoryName
+      const CategoryMap = {};
+      AllCategory.forEach(category => {
+        CategoryMap[category.Category_Id] = category.Category;
+      });
+
+      Datas.CategoryName = CategoryMap[Datas.Category];
+
+      // Mapping SubCategoryName
+      const SubCategoryMap = {};
+      AllSubCategory.forEach(subCategory => {
+        SubCategoryMap[subCategory.SubCategory_Id] = subCategory.SubCategory;
+      });
+
+      Datas.SubCategoryName = SubCategoryMap[Datas.SubCategory];
+
+      employeeHelpers.GetAllProducts().then((Tinters) => {
+        //console.log(Tinters)
+        // Create a map of Tinter IDs to Tinter names
+        const tinterMap = Tinters.reduce((map, tinter) => {
+          map[tinter.Product_Id] = tinter.Product_Name;
+          return map;
+        }, {});
+
+        // Iterate over each TinterR1, TinterR2, TinterR3 property in Datas
+        for (let i = 1; i <= Datas.TintersCount; i++) {
+          const tinterId = Datas[`TintersR${i}`];
+          if (tinterId && tinterMap.hasOwnProperty(tinterId)) {
+            Datas[`TinterNameR${i}`] = tinterMap[tinterId];
+          }
+        }
+
+        // console.log(Datas);
+        async function CostFindingAndRemainigTasks(Datas) {
+          Datas = await CalculateCostOfAll(Datas);
+          // console.log("REERE", Datas);
+
+
+          employeeHelpers.FindAdditiveById(Datas.additives).then((Additive) => {
+            //console.log(Additive);
+            if (Additive) {
+              Datas.AdditiveName = Additive.Additive_Name;
+            }
+
+            employeeHelpers.GetSubCategoriesById(Datas.SubCategory).then((SubCategory) => {
+              //console.log(SubCategory)
+              // create tintername key.
+              var tinterCount = parseInt(Datas.TintersCount);
+              for (i = 1; i <= tinterCount; i++) {
+                Datas[`TinterNameR${i}`] = Datas[`TintersR${i}`];
+              }
+
+              if (SubCategory.Binder1) {
+                employeeHelpers.getBinderById(SubCategory.Binder1).then((Binder1) => {
+                  //console.log("Binder1: ", Binder1)
+                  if (SubCategory.Binder2) {
+                    employeeHelpers.getBinderById(SubCategory.Binder2).then((Binder2) => {
+                      // console.log("Binder2: ", Binder2)
+                      Datas.Binder1Name = Binder1.Binder_Name;
+                      Datas.Binder2Name = Binder2.Binder_Name;
+                      // res .send data
+                      employeeHelpers.SaveEditedFormulaData(Datas).then((State) => {
+                        //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
+                        StoreRefImage(State.Data)
+                        res.redirect(`/UpdatedBulkOrders/${Datas.FileNo}`)
+                        // res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
+                      })
+                    })
+                  } else {
+                    Datas.Binder1Name = Binder1.Binder_Name;
+                    // res .send data
+                    employeeHelpers.SaveEditedFormulaData(Datas).then((State) => {
+                      //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
+                      StoreRefImage(State.Data)
+                      res.redirect(`/UpdatedBulkOrders/${Datas.FileNo}`)
+                      //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
+                    })
+                  }
+                })
+              } else {
+                // res .send data
+                employeeHelpers.SaveFormulaData(Datas).then((State) => {
+                  //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
+                  StoreRefImage(State.Data)
+                  res.redirect(`/UpdatedBulkOrders/${Datas.FileNo}`)
+                  //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
+                })
+              }
+            })
+            //console.log(Datas);
+          })
+        }
+
+        CostFindingAndRemainigTasks(Datas);
+      })
+
+    })
+  })
+})
+
+router.get('/UpdatedBulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
+  var FileNo = req.params.FileNo;
+
+  //employeeHelpers.AddStocksToBinders()
+
+  // Extract the query parameters
+  var { Stock, Item, TotalQTY } = req.query;
+
+  var { NoQty } = req.query;
+
+  if (NoQty) {
+    // No qty
+    employeeHelpers.FindUpdatesFormulaByFileNo(FileNo).then((Formulation) => {
+      // console.log(Formulation);
+
+      var Binder1 = false;
+      var Binder2 = false;
+      var MattOrGloss = false;
+      var MattOrGlossValue = false;
+
+      if (Formulation.Binder1) {
+        Binder1 = true;
+      }
+      if (Formulation.Binder2) {
+        Binder2 = true;
+      }
+
+      if (Formulation.gloss) {
+        MattOrGloss = "Gloss"
+        MattOrGlossValue = Formulation.gloss
+      } else if (Formulation.matt) {
+        MattOrGloss = "Matt"
+        MattOrGlossValue = Formulation.matt
+      }
+
+      // console.log("MattOrGloss: ", MattOrGloss);
+
+
+      var Liter = false;
+      employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+        if (Sub_Category.Liter) {
+          Liter = true
+        }
+        NoQty = "minimum Quantity is 1";
+        res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, Item, MattOrGlossValue, MattOrGloss, NoQty, UpdateOrder: true });
+      })
+    })
+  } else {
+
+    // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
+
+    if (Stock) {
+      // low stocks
+      employeeHelpers.FindUpdatesFormulaByFileNo(FileNo).then((Formulation) => {
+        // console.log(Formulation);
+
+        var Binder1 = false;
+        var Binder2 = false;
+        var MattOrGloss = false;
+        var MattOrGlossValue = false;
+
+        if (Formulation.Binder1) {
+          Binder1 = true;
+        }
+        if (Formulation.Binder2) {
+          Binder2 = true;
+        }
+
+        if (Formulation.gloss) {
+          MattOrGloss = "Gloss"
+          MattOrGlossValue = Formulation.gloss
+        } else if (Formulation.matt) {
+          MattOrGloss = "Matt"
+          MattOrGlossValue = Formulation.matt
+        }
+
+        // console.log("MattOrGloss: ", MattOrGloss);
+
+
+        var Liter = false;
+        employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+          if (Sub_Category.Liter) {
+            Liter = true
+          }
+
+          res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss, UpdateOrder: true });
+        })
+      })
+
+    } else {
+      // no query , 
+      employeeHelpers.FindUpdatesFormulaByFileNo(FileNo).then((Formulation) => {
+        // console.log(Formulation);
+
+        var Binder1 = false;
+        var Binder2 = false;
+        var MattOrGloss = false;
+        var MattOrGlossValue = false;
+
+        if (Formulation.Binder1) {
+          Binder1 = true;
+        }
+        if (Formulation.Binder2) {
+          Binder2 = true;
+        }
+
+        if (Formulation.gloss) {
+          MattOrGloss = "Gloss"
+          MattOrGlossValue = Formulation.gloss
+        } else if (Formulation.matt) {
+          MattOrGloss = "Matt"
+          MattOrGlossValue = Formulation.matt
+        }
+
+        var Liter = false;
+        employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+          if (Sub_Category.Liter) {
+            Liter = true
+          }
+          res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, UpdateOrder: true });
+        })
+      })
+    }
+  }
+})
+
+router.get('/api/BulkOrder/Updated/:FileNo', (req, res) => {
+  var FileNo = req.params.FileNo;
+  employeeHelpers.FindUpdatesFormulaByFileNo(FileNo).then((Formulation) => {
+    //console.log(Formulation);
+    var Binder1 = false;
+    var Binder2 = false;
+    if (Formulation.Binder1) {
+      Binder1 = true;
+    }
+    if (Formulation.Binder2) {
+      Binder2 = true;
+    }
+
+
+    employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+      var Data = {
+        Formulation: Formulation,
+        Binder1: Binder1,
+        Binder2: Binder2,
+        Sub_Category: Sub_Category
+      }
+
+      if (req.session.CustomerLogged) {
+        Data.Customer = req.session.CustomerLogged
+      }
+      // console.log("Stating to execute!");
+      console.log(Data);
+
+      res.json(Data);
+
+    })
+
+  })
+})
+
+router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
+  var OrderFile = req.body;
+  let id = req.params.id;
+  var TotalQty = OrderFile.Quantity;
+  var LowStockFlag = {
+    Status: false
+  };
+
+  if (parseFloat(TotalQty) <= 0) {
+    var url = `/UpdatedBulkOrders/${id}?NoQty=${TotalQty}`;
+    res.redirect(url);
+  } else {
+
+    try {
+      let FormulaFile = await employeeHelpers.GetUpdatesFormulaByFileNo(id);
+      let TinterCount = parseInt(FormulaFile.TintersCount);
+
+      OrderFile.TinterCount = TinterCount;
+
+      let promises = [];
+
+      for (let i = 1; i <= TinterCount; i++) {
+        var TinterName = OrderFile["TineterName" + i];
+        var TinterQty = OrderFile["TinterGram" + i];
+        //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
+
+        promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
+      }
+
+      let states = await Promise.all(promises);
+
+      for (let i = 0; i < states.length; i++) {
+        let State = states[i];
+        //  console.log(State);
+        if (!State.HaveStock) {
+          LowStocks(OrderFile["TineterName" + (i + 1)], TotalQty);
+          LowStockFlag.Status = true;
+          return; // Exit the loop when there is low stock
+        }
+      }
+
+      // All stocks are available, continue processing
+
+      //check Binder Stocks and Additives Stock.
+
+      if (OrderFile.Binder1) {
+        var Binder1Qty = OrderFile.Binder1QTY;
+        let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
+        if (!binder1State.HaveStock) {
+          LowStocks(OrderFile.Binder1, TotalQty);
+          // console.log(" Binder1 Stocks are not available. ");
+          LowStockFlag.Status = true;
+          return; // Exit the loop when there is low stock
+        }
+        if (OrderFile.Binder2) {
+          var Binder2Qty = OrderFile.Binder2QTY;
+          let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
+          if (!binder2State.HaveStock) {
+            LowStocks(OrderFile.Binder2, TotalQty);
+            //  console.log(" Binder2 Stocks are not available. ");
+            LowStockFlag.Status = true;
+            return; // Exit the loop when there is low stock
+          }
+        }
+      }
+
+      if (OrderFile.Additive) {
+        var AdditiveQTY = OrderFile.AdditiveQTY;
+        let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
+        if (!additiveState.HaveStock) {
+          LowStocks(OrderFile.Additive, TotalQty);
+          // console.log(" Additive Stocks are not available. ");
+          LowStockFlag.Status = true;
+          return; // Exit the loop when there is low stock
+        }
+      }
+
+      // console.log(" Tinter Stocks are available. ");
+
+    } catch (error) {
+      console.error(error);
+    }
+
+    if (!LowStockFlag.Status) {
+      BulkOrderNow(OrderFile);
+    }
+
+    function BulkOrderNow(orderFile) {
+      orderFile.isUpdated = true;
+      employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
+        // Rest of the code...
+        //  console.log("Bulk Updated!");
+        res.redirect('/Orders');
+      });
+    }
+
+    function LowStocks(tinterName, TotalQty) {
+      var FileNo = id;
+      var stockQuery = "low";
+      var itemQuery = tinterName;
+      var TotalQTY = TotalQty;
+
+      var url = `/UpdatedBulkOrders/${FileNo}?Stock=${stockQuery}&Item=${itemQuery}&TotalQTY=${TotalQTY}`;
+      res.redirect(url);
+    }
+  }
+});
+
+router.get('/UpdatedEditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
+  var FileNo = req.params.fileNo;
+  employeeHelpers.GetUpdatesFormulaByFileNo(FileNo).then((Formula) => {
+    // console.log(Formula);
+    // Formula.mattOrGloss = parseInt(Formula.mattOrGloss);
+    var Matt = false;
+    var Gloss = false;
+
+    if (Formula.matt) {
+      Matt = parseInt(Formula.matt);
+    } else if (Formula.gloss) {
+      Gloss = parseInt(Formula.gloss);
+    }
+
+    employeeHelpers.getAllCategories().then((AllCategory) => {
+      // console.log(AllCategory);
+
+      const formulaCategory = Formula.CategoryName; // 'Paints' in this example
+      let reorderedAllCategory = [];
+
+      // First, find the object that matches the formula category
+      const matchingCategory = AllCategory.find(category => category.Category === formulaCategory);
+
+      // Remove the matching category from AllCategory if it exists
+      if (matchingCategory) {
+        reorderedAllCategory = AllCategory.filter(category => category.Category !== formulaCategory);
+
+        // Add it to the beginning of the reorderedAllCategory array
+        reorderedAllCategory.unshift(matchingCategory);
+      } else {
+        reorderedAllCategory = [...AllCategory];
+      }
+
+      var MatchingCategoryID = matchingCategory.Category_Id;
+      employeeHelpers.GetAllSubCategoriesByMatchingCategory(MatchingCategoryID).then((AllSubCategories) => {
+        // console.log("AllSubCategories: ",AllSubCategories);
+
+        const formulaSubcategory = Formula.SubCategoryName;
+        let reOrderedSubcategories = [];
+
+        const MatchingSubCategory = AllSubCategories.find(Subcategory => Subcategory.SubCategory === formulaSubcategory);
+
+        if (MatchingSubCategory) {
+          reOrderedSubcategories = AllSubCategories.filter(Subcategory => Subcategory.SubCategory !== formulaSubcategory)
+
+          reOrderedSubcategories.unshift(MatchingSubCategory);
+          // console.log("Has Matching Sub category")
+        } else {
+          // console.log("not Matching Sub category")
+          reOrderedSubcategories = [...AllSubCategories];
+        }
+
+        employeeHelpers.GetAllAdditives().then((Additives) => {
+          console.log("Additives:", Additives);
+          // Find the index of the Additive with AdditiveName: 'Multi-Mat'
+          const indexToMove = Additives.findIndex(additive => additive.Additive_Name === 'Multi-Mat');
+
+          // If 'Multi-Mat' is found, move it to the beginning of the array
+          if (indexToMove !== -1) {
+            const movedAdditive = Additives.splice(indexToMove, 1)[0]; // Remove and store the found additive
+            Additives.unshift(movedAdditive); // Add it to the beginning of the array
+          }
+
+          employeeHelpers.GetAllTinteresByFormula(Formula).then((Tinters) => {
+            console.log(Tinters);
+
+            res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives });
+
+          })
+        })
+      })
+
+    })
+  })
+})
+
+router.get('/UpdatedBulkOrders/:FileNo/:Qty', EmployeeVerifyLogin, (req, res) => {
+  var FileNo = req.params.FileNo;
+  var QTY = req.params.Qty;
+  //employeeHelpers.AddStocksToBinders()
+
+
+  // no query , 
+  employeeHelpers.FindUpdatesFormulaByFileNo(FileNo).then((Formulation) => {
+    //console.log(Formulation);
+    var Binder1 = false;
+    var Binder2 = false;
+    var MattOrGloss = false;
+    var MattOrGlossValue = false;
+
+
+    if (Formulation.Binder1) {
+      Binder1 = true;
+    }
+    if (Formulation.Binder2) {
+      Binder2 = true;
+    }
+
+    if (Formulation.gloss) {
+      MattOrGloss = "Gloss"
+      MattOrGlossValue = Formulation.gloss
+    } else if (Formulation.matt) {
+      MattOrGloss = "Matt"
+      MattOrGlossValue = Formulation.matt
+    }
+
+
+    var Liter = false;
+    employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+      if (Sub_Category.Liter) {
+        Liter = true
+      }
+      res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, QTY,UpdateOrder:true });
+    })
+  })
+
+})
+
+// router.get('/api/UpdatedBulkOrder/:FileNo', (req, res) => {
+//   var FileNo = req.params.FileNo;
+//   employeeHelpers.FindUpdatesFormulaByFileNo(FileNo).then((Formulation) => {
+//     //console.log(Formulation);
+//     var Binder1 = false;
+//     var Binder2 = false;
+//     if (Formulation.Binder1) {
+//       Binder1 = true;
+//     }
+//     if (Formulation.Binder2) {
+//       Binder2 = true;
+//     }
+
+
+//     employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+//       var Data = {
+//         Formulation: Formulation,
+//         Binder1: Binder1,
+//         Binder2: Binder2,
+//         Sub_Category: Sub_Category
+//       }
+
+//       if (req.session.CustomerLogged) {
+//         Data.Customer = req.session.CustomerLogged
+//       }
+//       // console.log("Stating to execute!");
+//       // console.log(Data);
+
+//       res.json(Data);
+
+//     })
+
+//   })
+// })
 
 // Customers
 router.post('/Customer/Login', (req, res) => {
@@ -1094,13 +1865,13 @@ router.get('/Customer/CreateFormulas', CustomerVerifyLogin, (req, res) => {
 
 router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
 
-  function StoreRefImage() {
+  function StoreRefImage(SavedData) {
     if (req.files) {
 
       const imageData = req.files.Image;
       // console.log('Image data:', imageData);
 
-      imageData.mv('./public/images/RefImages/' + req.body.FileNo + ".jpg", (err) => {
+      imageData.mv('./public/images/RefImages/' + SavedData.FileNo + ".jpg", (err) => {
         if (!err) {
         } else {
           // console.log("Error at img1 " + err)
@@ -1302,7 +2073,7 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
                       // res .send data
                       employeeHelpers.SaveFormulaData(Datas).then((State) => {
                         //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
-                        StoreRefImage()
+                        StoreRefImage(State.Data)
                         res.redirect(`/Customer/BulkOrders/${Datas.FileNo}`)
                         // res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                       })
@@ -1312,7 +2083,7 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
                     // res .send data
                     employeeHelpers.SaveFormulaData(Datas).then((State) => {
                       //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
-                      StoreRefImage()
+                      StoreRefImage(State.Data)
                       res.redirect(`/Customer/BulkOrders/${Datas.FileNo}`)
                       //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                     })
@@ -1322,7 +2093,7 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
                 // res .send data
                 employeeHelpers.SaveFormulaData(Datas).then((State) => {
                   //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
-                  StoreRefImage()
+                  StoreRefImage(State.Data)
                   res.redirect(`/Customer/BulkOrders/${Datas.FileNo}`)
                   //res.render('employee/AfterFormulaCreation', { Datas, TintersRatioObject: Datas.TintersRatioObject, TintersCount: Datas.TintersCount });
                 })
@@ -1631,7 +2402,7 @@ router.get('/Customer/FormulaList', CustomerVerifyLogin, (req, res) => {
 
       Formulation = updatedFormulation;
 
-      res.render('employee/FormulaList', { Formulation, CustomerName: Customer.Customer_Name, Customer });
+      res.render('employee/FormulaList', { Formulation, Customername: Customer.Customer_Name, Customer });
     })
   })
 })
