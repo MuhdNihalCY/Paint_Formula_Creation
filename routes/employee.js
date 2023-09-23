@@ -10,8 +10,8 @@ const EmployeeVerifyLogin = (req, res, next) => {
   if (req.session.EmployeeLogged) {
     next()
   } else {
-    // res.redirect('/login');
-    next()
+    res.redirect('/login');
+    // next()
   }
 }
 
