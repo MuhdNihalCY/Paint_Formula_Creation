@@ -314,7 +314,7 @@ router.post('/CreateFormula', (req, res) => {
 
   // console.log(req.body);
   function calculateRatios(data) {
-    // console.log("Calculating Data: ", data);
+    console.log("Calculating Data: ", data);
     const ratios = {};
 
     // Get the Total Quantity
@@ -334,6 +334,19 @@ router.post('/CreateFormula', (req, res) => {
       const tinterNo = key.slice(15);
       ratios.tinters[tinterNo] = totalQty !== 0 ? (parseFloat(data[key]) || 0) / totalQty : 0;
     });
+
+    // calculate VOLUME Ratio
+    const TotalVolume = data.TotalQtyInLiter;
+console.log("TotalVolume",TotalVolume);
+
+    // Calculate the ratios
+    // ratios.totalVolume = 1;
+    // var TotalAdditivesVolume = "";
+    // ratios.additiveVolume = totalQty !== 0 ? parseFloat(data.TotalAdditives) / totalQty : 0;
+    // ratios.binder1Volume = totalQty !== 0 ? parseFloat(data.Binder1) / totalQty : 0;
+    // ratios.binder2Volume = totalQty !== 0 ? parseFloat(data.Binder2 || 0) / totalQty : 0;
+
+   
 
     return ratios;
   }
@@ -670,7 +683,6 @@ router.get('/BulkOrders/:FileNo/:Qty', EmployeeVerifyLogin, (req, res) => {
 
 })
 
-
 router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
   var FileNo = req.params.FileNo;
 
@@ -796,8 +808,6 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
     }
   }
 })
-
-
 
 router.get('/api/BulkOrder/:FileNo', (req, res) => {
   var FileNo = req.params.FileNo;
@@ -993,7 +1003,6 @@ router.get('/UpdateStocks', EmployeeVerifyLogin, (req, res) => {
     })
   })
 })
-
 
 router.post('/UpdateProductStock/:id', EmployeeVerifyLogin, (req, res) => {
   var Data = req.body;
@@ -1778,46 +1787,12 @@ router.get('/UpdatedBulkOrders/:FileNo/:Qty', EmployeeVerifyLogin, (req, res) =>
       if (Sub_Category.Liter) {
         Liter = true
       }
-      res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, QTY,UpdateOrder:true });
+      res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, QTY, UpdateOrder: true });
     })
   })
 
 })
 
-// router.get('/api/UpdatedBulkOrder/:FileNo', (req, res) => {
-//   var FileNo = req.params.FileNo;
-//   employeeHelpers.FindUpdatesFormulaByFileNo(FileNo).then((Formulation) => {
-//     //console.log(Formulation);
-//     var Binder1 = false;
-//     var Binder2 = false;
-//     if (Formulation.Binder1) {
-//       Binder1 = true;
-//     }
-//     if (Formulation.Binder2) {
-//       Binder2 = true;
-//     }
-
-
-//     employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
-//       var Data = {
-//         Formulation: Formulation,
-//         Binder1: Binder1,
-//         Binder2: Binder2,
-//         Sub_Category: Sub_Category
-//       }
-
-//       if (req.session.CustomerLogged) {
-//         Data.Customer = req.session.CustomerLogged
-//       }
-//       // console.log("Stating to execute!");
-//       // console.log(Data);
-
-//       res.json(Data);
-
-//     })
-
-//   })
-// })
 
 // Customers
 router.post('/Customer/Login', (req, res) => {

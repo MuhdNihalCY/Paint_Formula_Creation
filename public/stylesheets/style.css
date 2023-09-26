@@ -418,7 +418,7 @@ a {
 }
 
 .ADCustomerCatDiv {
-  margin: 2rem  3rem;
+  margin: 2rem 3rem;
   /* margin-left: auto;  */
   width: auto;
   background-color: rgb(223, 223, 223);
@@ -743,7 +743,7 @@ a {
   padding-right: 32px;
 }
 
-.ADCustpassDiv input{
+.ADCustpassDiv input {
   width: 250px;
 }
 
@@ -775,6 +775,7 @@ a {
   background-color: rgba(145, 136, 115, 0.5);
   padding-top: 5rem;
   padding-bottom: 5rem;
+  min-height: 110vh;
 }
 
 .ADSubCategorySubPageSsection {
@@ -1055,6 +1056,14 @@ a {
 
 .BinderSelectDiv {
   margin-bottom: 2rem;
+}
+
+.ADBinderPkg {
+  display: flex;
+}
+
+.ADEachBinder {
+  margin-right: 2rem;
 }
 
 .AddSubCategoryPage {

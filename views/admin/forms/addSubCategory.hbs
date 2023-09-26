@@ -130,43 +130,67 @@
 
                                     {{!-- Select Binder --}}
                                     <div class="BinderSelectDiv">
-                                        <p class="ADAddCategoryLabel">Select Binder 1:</p>
-                                        <select class="BinderSelect" name="Binder1" id="Binder1">
+                                        <div class="ADBinderPkg">
+                                            <div class="ADEachBinder">
+                                                <p class="ADAddCategoryLabel">Select Binder 1:</p>
+                                                <select class="BinderSelect" name="Binder1" id="Binder1">
 
-                                            {{#if EditSubcategory}}
-                                            {{else}}
-                                            <option value="">Select an option</option>
-                                            {{/if}}
+                                                    {{#if EditSubcategory}}
+                                                    {{else}}
+                                                    <option value="">Select an option</option>
+                                                    {{/if}}
 
-                                            {{#each Binders}}
-                                            <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}
-                                            </option>
-                                            {{/each}}
+                                                    {{#each Binders}}
+                                                    <option value="{{this.Binder_Id}}">{{this.Binder_Id}} -
+                                                        {{this.Binder_Name}}
+                                                    </option>
+                                                    {{/each}}
 
-                                            {{#if EditSubcategory}}
-                                            <option value="">Select an option</option>
-                                            {{else}}
-                                            {{/if}}
-                                        </select>
+                                                    {{#if EditSubcategory}}
+                                                    <option value="">Select an option</option>
+                                                    {{else}}
+                                                    {{/if}}
+                                                </select>
+                                            </div>
+                                            <div class="ADEachBinder">
+                                                <p class="ADAddCategoryLabel"> Binder 1 Percentage %:</p>
+                                                
+                                                <input type="number" min="0" placeholder="Binder 1 Percentage %"
+                                                    class="BinderSelect" name="Binder1Percentage" readonly value="{{SubCategory.Binder1Percentage}}"
+                                                    id="Binder1Percentage" />
+                                            </div>
+                                        </div>
                                         <div class="DivForVerticalGap"></div>
-                                        <p class="ADAddCategoryLabel">Select Binder 2:</p>
-                                        {{#if Binder2}}
-                                        <select class="BinderSelect" name="Binder2" id="Binder2">
-                                            {{#each Binder2}}
-                                            <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}
-                                            </option>
-                                            {{/each}}
-                                            <option value="">Select an option</option>
-                                        </select>
-                                        {{else}}
-                                        <select class="BinderSelect" name="Binder2" id="Binder2" disabled>
-                                            <option value="">Select an option</option>
-                                            {{#each Binders}}
-                                            <option value="{{this.Binder_Id}}">{{this.Binder_Id}} - {{this.Binder_Name}}
-                                            </option>
-                                            {{/each}}
-                                        </select>
-                                        {{/if}}
+                                        <div class="ADBinderPkg">
+                                            <div class="ADEachBinder">
+                                                <p class="ADAddCategoryLabel">Select Binder 2:</p>
+                                                {{#if Binder2}}
+                                                <select class="BinderSelect" name="Binder2" id="Binder2">
+                                                    {{#each Binder2}}
+                                                    <option value="{{this.Binder_Id}}">{{this.Binder_Id}} -
+                                                        {{this.Binder_Name}}
+                                                    </option>
+                                                    {{/each}}
+                                                    <option value="">Select an option</option>
+                                                </select>
+                                                {{else}}
+                                                <select class="BinderSelect" name="Binder2" id="Binder2" readonly>
+                                                    <option value="">Select an option</option>
+                                                    {{#each Binders}}
+                                                    <option value="{{this.Binder_Id}}">{{this.Binder_Id}} -
+                                                        {{this.Binder_Name}}
+                                                    </option>
+                                                    {{/each}}
+                                                </select>
+                                                {{/if}}
+                                            </div>
+                                            <div class="ADEachBinder">
+                                                <p class="ADAddCategoryLabel"> Binder 2 Percentage %:</p>
+                                                <input type="number" min="0" placeholder="Binder 2 Percentage %"
+                                                    class="BinderSelect" name="Binder2Percentage" id="Binder2Percentage" value="{{SubCategory.Binder2Percentage}}"
+                                                     />
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <p class="ADAddCategoryLabel">Remarks</p>
@@ -174,10 +198,12 @@
                                         placeholder="Enter Remarks" required value="{{SubCategory.Remarks}}">
 
                                     {{#if EditSubcategory}}
-                                    <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Edit Sub
+                                    <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Edit
+                                        Sub
                                         Category</button>
                                     {{else}}
-                                    <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add Sub
+                                    <button type="submit" class="btn btn-primary ADaddCategorySubmitBTN ">Add
+                                        Sub
                                         Category</button>
                                     {{/if}}
                                 </div>
@@ -197,21 +223,60 @@
 
 <script>
 
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get references to the select and input elements
+        var Binder1Select = document.getElementById("Binder1");
+        var Binder1PercetageInp = document.getElementById("Binder1Percentage");
+        var Binder2Select = document.getElementById("Binder2");
+        var Binder2PercetageInp = document.getElementById("Binder2Percentage");
+
+        // Function to handle the change event
+        function handleBinder1Change() {
+            // Check if the select element is not empty or null
+            if (Binder1Select.value) {
+                // If a value is selected, enable the input
+                Binder1PercetageInp.removeAttribute("readonly");
+            } else {
+                // If no value is selected, disable the input
+                Binder1PercetageInp.setAttribute("readonly", true);
+                Binder1PercetageInp.value = "";
+            }
+
+        }
+
+        function handleBinder2Change() {
+            // Check if the select element is not empty or null
+            if (Binder2Select.value) {
+                // If a value is selected, enable the input
+                Binder2PercetageInp.removeAttribute("readonly");
+            } else {
+                // If no value is selected, disable the input
+                Binder2PercetageInp.setAttribute("readonly", true);
+                Binder2PercetageInp.value = "";
+            }
+        }
+
+        // Attach the change event listener to the select element
+        Binder1Select.addEventListener("change", handleBinder1Change);
+        Binder2Select.addEventListener("change", handleBinder2Change);
+
+        // Call the event handler initially to set the initial state
+        handleBinder1Change();
+        handleBinder2Change();
+    });
 
 
     $(document).ready(function () {
-        if (Binder2) {
+        // Disable Binder 2 initially
+        //$("#Binder2").prop("disabled", true);
 
-        } else {
-            // Disable Binder 2 initially
-            $("#Binder2").prop("disabled", true);
-        }
-        // Bind event listener to Binder 1
+        // Function to handle Binder 1 change event
         $("#Binder1").change(function () {
             var selectedValue = $(this).val(); // Get the selected value
 
             if (selectedValue === "") {
                 // If Binder 1 is unselected, disable Binder 2 and reset its value
+                alert("SelectedValue: ",selectedValue)
                 $("#Binder2").prop("disabled", true).val("");
             } else {
                 // If Binder 1 is selected, enable Binder 2
@@ -220,27 +285,107 @@
                 // Enable all options in Binder 2
                 $("#Binder2 option").prop("disabled", false);
 
-                // Disable selected option in Binder 2 if it matches Binder 1
+                // Disable the selected option in Binder 2 if it matches Binder 1
                 $("#Binder2 option[value='" + selectedValue + "']").prop("disabled", true);
             }
         });
 
-
-
-        // Bind event listener to Binder 2
+        // Function to handle Binder 2 change event
         $("#Binder2").change(function () {
             var selectedValue = $(this).val(); // Get the selected value
 
             if (selectedValue !== "") {
-                // Disable selected option in Binder 1 if it matches Binder 2
+                // Disable the selected option in Binder 1 if it matches Binder 2
                 $("#Binder1 option[value='" + selectedValue + "']").prop("disabled", true);
             } else {
                 // Enable all options in Binder 1 when "Select an option" is selected in Binder 2
                 $("#Binder1 option").prop("disabled", false);
             }
         });
+
+        // Handle radio button behavior for Shine
+        $("input[type=radio][name=Matt]").change(function () {
+            if (this.checked) {
+                $("input[type=radio][name=Gloss]").prop("checked", false);
+            }
+        });
+
+        $("input[type=radio][name=Gloss]").change(function () {
+            if (this.checked) {
+                $("input[type=radio][name=Matt]").prop("checked", false);
+            }
+        });
+
+        // Handle radio button behavior for Unit
+        $("input[type=radio][name=Gram]").change(function () {
+            if (this.checked) {
+                $("input[type=radio][name=Liter]").prop("checked", false);
+            }
+        });
+
+        $("input[type=radio][name=Liter]").change(function () {
+            if (this.checked) {
+                $("input[type=radio][name=Gram]").prop("checked", false);
+            }
+        });
+
+        // Handle radio button behavior for Brand
+        $("input[type=radio][name=Mipa]").change(function () {
+            if (this.checked) {
+                $("input[type=radio][name=Rosner]").prop("checked", false);
+            }
+        });
+
+        $("input[type=radio][name=Rosner]").change(function () {
+            if (this.checked) {
+                $("input[type=radio][name=Mipa]").prop("checked", false);
+            }
+        });
     });
 
+    /*
+        $(document).ready(function () {
+            if (Binder2) {
+    
+            } else {
+                // Disable Binder 2 initially
+                $("#Binder2").prop("disabled", true);
+            }
+            // Bind event listener to Binder 1
+            $("#Binder1").change(function () {
+                var selectedValue = $(this).val(); // Get the selected value
+    
+                if (selectedValue === "") {
+                    // If Binder 1 is unselected, disable Binder 2 and reset its value
+                    $("#Binder2").prop("disabled", true).val("");
+                } else {
+                    // If Binder 1 is selected, enable Binder 2
+                    $("#Binder2").prop("disabled", false);
+    
+                    // Enable all options in Binder 2
+                    $("#Binder2 option").prop("disabled", false);
+    
+                    // Disable selected option in Binder 2 if it matches Binder 1
+                    $("#Binder2 option[value='" + selectedValue + "']").prop("disabled", true);
+                }
+            });
+    
+    
+    
+            // Bind event listener to Binder 2
+            $("#Binder2").change(function () {
+                var selectedValue = $(this).val(); // Get the selected value
+    
+                if (selectedValue !== "") {
+                    // Disable selected option in Binder 1 if it matches Binder 2
+                    $("#Binder1 option[value='" + selectedValue + "']").prop("disabled", true);
+                } else {
+                    // Enable all options in Binder 1 when "Select an option" is selected in Binder 2
+                    $("#Binder1 option").prop("disabled", false);
+                }
+            });
+        });
+    */
 
     // radio button
 

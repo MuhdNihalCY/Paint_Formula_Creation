@@ -83,11 +83,9 @@
                             <div class="MixerDetails" hidden>
                                 <p class="MixerNameLabel">Mixer Name</p>
                                 {{#if CustomerName}}
-                                <input type="text" name="MixerName"
-                                    value="{{CustomerName}}" id="">
+                                <input type="text" name="MixerName" value="{{CustomerName}}" id="">
                                 {{else}}
-                                <input type="text" name="MixerName"
-                                    value="{{MixerName}}" id="">
+                                <input type="text" name="MixerName" value="{{MixerName}}" id="">
                                 {{/if}}
                                 {{!-- Enter Mixer Name Here By Dynamic Process --}}
                             </div>
@@ -106,10 +104,10 @@
                                 {{#if CustomerName}}
                                 <input type="text" class="CFBasicInp" name="CustomerName"
                                     placeholder="Enter Customer Name" value="{{CustomerName}}" required readonly>
-                                    {{else}}
-                                    <input type="text" class="CFBasicInp" name="CustomerName"
-                                    placeholder="Enter Customer Name" value="" required >
-                                    {{/if}}
+                                {{else}}
+                                <input type="text" class="CFBasicInp" name="CustomerName"
+                                    placeholder="Enter Customer Name" value="" required>
+                                {{/if}}
                             </div>
                             <div class="CFBasicDetails">
                                 <p class="CFBasicPtag">Color Code</p>
@@ -285,8 +283,9 @@
                                             <div class="CFTotalCalcDiv ">
                                                 <input type="text" id="TotalGramInput" name="TotalWithoutAdditves"
                                                     class="CFTotalInputElementsGrams " readonly value="0.00" required>
-                                                <input type="text" id="TotalLiterInput" name="TotalVolumeWithoutAdditves"
-                                                    class="CFTotalInputElementsLiter " readonly value="0.00" required>
+                                                <input type="text" id="TotalLiterInput"
+                                                    name="TotalVolumeWithoutAdditves" class="CFTotalInputElementsLiter "
+                                                    readonly value="0.00" required>
                                             </div>
                                         </div>
                                         <div id="mattOrGloss" class="CFBinder1Div">
@@ -357,6 +356,8 @@
                                         <div class="CFBinder1Div">
                                             <p class="CFBinderName">Additives</p>
                                             <input type="text" name="TotalAdditives" id="TotalAdditives" readonly
+                                                value="0">
+                                                <input type="text" name="TotalAdditivesVolume" id="TotalAdditivesVolume" readonly
                                                 value="0">
                                         </div>
                                         {{!-- Binders and Additives Ends Here --}}
@@ -623,7 +624,7 @@
                         totalGrams += inputValue;
                         //console.log("Total Grams", totalGrams)
                         //totalLiters = (totalGrams * 1000) / Product_Density;
-                        totalLiters = (totalGrams * Product_Density) / 1000;
+                        totalLiters = parseFloat(((totalGrams * Product_Density) / 1000).toFixed(1));
                         //   console.log("Total Grams : ", totalGrams, " Product_Density: ", Product_Density, " totalLiters: ", totalLiters)
                     }
                 }
@@ -1328,6 +1329,7 @@
         var AdditivePercentage = parseFloat(document.getElementById('AdditivePercentage').value);
         var TotalGramInput = parseFloat(document.getElementById('TotalGramInput').value);
         var TotalAdditivesInp = document.getElementById('TotalAdditives');
+   
 
         var TotalAdditives = 0;
 
@@ -1375,6 +1377,7 @@
         var TotalAdditivesInp = parseFloat(document.getElementById('TotalAdditives').value);
         var selectAdditive = document.getElementById("CFSelectAdditivess"); // Replace "your-select-id" with the actual ID of your <select> element
         var selectedAdditiveOptionValue = selectAdditive.value;
+        var TotalAdditivesVolume = document.getElementById("TotalAdditivesVolume");
 
         var Binder1Name = document.getElementById('Binder1').textContent;
         var Binder2Name = document.getElementById('Binder2').textContent;
@@ -1519,7 +1522,7 @@
                     //console.log("Calling at 2")
                     FindSolidContentOfProducts()
                 } else {
-                    
+
                     var Binder1 = ReceivedObject.Binder1
                     var Binder2 = ReceivedObject.Binder2
                     //var Additive_Density = additive.Additive_Density;
