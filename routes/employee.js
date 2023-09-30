@@ -326,6 +326,17 @@ router.post('/CreateFormula', (req, res) => {
     ratios.binder1 = totalQty !== 0 ? parseFloat(data.Binder1) / totalQty : 0;
     ratios.binder2 = totalQty !== 0 ? parseFloat(data.Binder2 || 0) / totalQty : 0;
 
+    // calculate VOLUME Ratio
+    const TotalVolume = parseFloat(data.TotalQtyInLiter);
+    //console.log("TotalVolume", TotalVolume);
+
+    ratios.totalVolume = 1;
+    ratios.additiveVolume = TotalVolume !== 0 ? parseFloat(data.TotalAdditivesVolume) / TotalVolume : 0;
+    ratios.binder1Volume = TotalVolume !== 0 ? parseFloat(data.Binder1Volume) / TotalVolume : 0;
+    ratios.binder2Volume = TotalVolume !== 0 ? parseFloat(data.Binder2Volume || 0) / TotalVolume : 0;
+
+
+
     ratios.tinters = {};
     const tinterKeys = Object.keys(data).filter(key => key.startsWith('GramInputTotalR'));
     const tinterCount = tinterKeys.length;
@@ -335,18 +346,14 @@ router.post('/CreateFormula', (req, res) => {
       ratios.tinters[tinterNo] = totalQty !== 0 ? (parseFloat(data[key]) || 0) / totalQty : 0;
     });
 
-    // calculate VOLUME Ratio
-    const TotalVolume = data.TotalQtyInLiter;
-console.log("TotalVolume",TotalVolume);
-
-    // Calculate the ratios
-    // ratios.totalVolume = 1;
-    // var TotalAdditivesVolume = "";
-    // ratios.additiveVolume = totalQty !== 0 ? parseFloat(data.TotalAdditives) / totalQty : 0;
-    // ratios.binder1Volume = totalQty !== 0 ? parseFloat(data.Binder1) / totalQty : 0;
-    // ratios.binder2Volume = totalQty !== 0 ? parseFloat(data.Binder2 || 0) / totalQty : 0;
-
-   
+    ratios.tintersVolume = {};
+    const tinterVolumeKeys = Object.keys(data).filter(key => key.startsWith('LiterInputTotalR'));
+    const tinterVolumeCount = tinterVolumeKeys.length;
+    const tinterVolumeSum = tinterVolumeKeys.reduce((sum, key) => sum + parseFloat(data[key] || 0), 0);
+    tinterVolumeKeys.forEach((key, index) => {
+      const tinterNo = key.slice(15);
+      ratios.tintersVolume[tinterNo] = TotalVolume !== 0 ? (parseFloat(data[key]) || 0) / TotalVolume : 0;
+    });
 
     return ratios;
   }
@@ -444,7 +451,13 @@ console.log("TotalVolume",TotalVolume);
   Datas.AdditiveRatio = result.additive;
   Datas.Binder1Ratio = result.binder1;
   Datas.Binder2Ratio = result.binder2;
+  Datas.AdditiveVolumeRatio = result.additiveVolume;
+  Datas.Binder1VolumeRatio = result.binder1Volume;
+  Datas.Binder2VolumeRatio = result.binder2Volume;
   Datas.TintersRatioObject = result.tinters;
+  Datas.TintersVolumeRatioObject = result.tintersVolume;
+
+
   // console.log("Tinters Ratio: ", result.tinters);
   for (var key in result.tinters) {
     if (result.tinters[key] === 0) {
@@ -453,6 +466,7 @@ console.log("TotalVolume",TotalVolume);
   }
   // console.log("Tinters Ratio: ", result.tinters);
   Datas.TintersRatioArray = Object.values(result.tinters);
+  Datas.TintersVolumeRatioArray = Object.values(result.tintersVolume);
 
   Datas.TintersCount = Datas.TintersRatioArray.length;
   Datas.InsertedTime = Date.now()
@@ -535,6 +549,7 @@ console.log("TotalVolume",TotalVolume);
                 })
               } else {
                 // res .send data
+                // console.log(Datas);
                 employeeHelpers.SaveFormulaData(Datas).then((State) => {
                   //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
                   StoreRefImage(State.Data)
@@ -1181,6 +1196,14 @@ router.post('/CreateEditedFormula', EmployeeVerifyLogin, (req, res) => {
     ratios.additive = totalQty !== 0 ? parseFloat(data.TotalAdditives) / totalQty : 0;
     ratios.binder1 = totalQty !== 0 ? parseFloat(data.Binder1) / totalQty : 0;
     ratios.binder2 = totalQty !== 0 ? parseFloat(data.Binder2 || 0) / totalQty : 0;
+    // calculate VOLUME Ratio
+    const TotalVolume = parseFloat(data.TotalQtyInLiter);
+    //console.log("TotalVolume", TotalVolume);
+
+    ratios.totalVolume = 1;
+    ratios.additiveVolume = TotalVolume !== 0 ? parseFloat(data.TotalAdditivesVolume) / TotalVolume : 0;
+    ratios.binder1Volume = TotalVolume !== 0 ? parseFloat(data.Binder1Volume) / TotalVolume : 0;
+    ratios.binder2Volume = TotalVolume !== 0 ? parseFloat(data.Binder2Volume || 0) / TotalVolume : 0;
 
     ratios.tinters = {};
     const tinterKeys = Object.keys(data).filter(key => key.startsWith('GramInputTotalR'));
@@ -1189,6 +1212,15 @@ router.post('/CreateEditedFormula', EmployeeVerifyLogin, (req, res) => {
     tinterKeys.forEach((key, index) => {
       const tinterNo = key.slice(15);
       ratios.tinters[tinterNo] = totalQty !== 0 ? (parseFloat(data[key]) || 0) / totalQty : 0;
+    });
+
+    ratios.tintersVolume = {};
+    const tinterVolumeKeys = Object.keys(data).filter(key => key.startsWith('LiterInputTotalR'));
+    const tinterVolumeCount = tinterVolumeKeys.length;
+    const tinterVolumeSum = tinterVolumeKeys.reduce((sum, key) => sum + parseFloat(data[key] || 0), 0);
+    tinterVolumeKeys.forEach((key, index) => {
+      const tinterNo = key.slice(15);
+      ratios.tintersVolume[tinterNo] = TotalVolume !== 0 ? (parseFloat(data[key]) || 0) / TotalVolume : 0;
     });
 
     return ratios;
@@ -1290,7 +1322,12 @@ router.post('/CreateEditedFormula', EmployeeVerifyLogin, (req, res) => {
   Datas.AdditiveRatio = result.additive;
   Datas.Binder1Ratio = result.binder1;
   Datas.Binder2Ratio = result.binder2;
+  Datas.AdditiveVolumeRatio = result.additiveVolume;
+  Datas.Binder1VolumeRatio = result.binder1Volume;
+  Datas.Binder2VolumeRatio = result.binder2Volume;
   Datas.TintersRatioObject = result.tinters;
+  Datas.TintersVolumeRatioObject = result.tintersVolume;
+  
   // console.log("Tinters Ratio: ", result.tinters);
   for (var key in result.tinters) {
     if (result.tinters[key] === 0) {
@@ -1869,6 +1906,15 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
     ratios.additive = totalQty !== 0 ? parseFloat(data.TotalAdditives) / totalQty : 0;
     ratios.binder1 = totalQty !== 0 ? parseFloat(data.Binder1) / totalQty : 0;
     ratios.binder2 = totalQty !== 0 ? parseFloat(data.Binder2 || 0) / totalQty : 0;
+    // calculate VOLUME Ratio
+    const TotalVolume = parseFloat(data.TotalQtyInLiter);
+    //console.log("TotalVolume", TotalVolume);
+
+    ratios.totalVolume = 1;
+    ratios.additiveVolume = TotalVolume !== 0 ? parseFloat(data.TotalAdditivesVolume) / TotalVolume : 0;
+    ratios.binder1Volume = TotalVolume !== 0 ? parseFloat(data.Binder1Volume) / TotalVolume : 0;
+    ratios.binder2Volume = TotalVolume !== 0 ? parseFloat(data.Binder2Volume || 0) / TotalVolume : 0;
+
 
     ratios.tinters = {};
     const tinterKeys = Object.keys(data).filter(key => key.startsWith('GramInputTotalR'));
@@ -1877,6 +1923,15 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
     tinterKeys.forEach((key, index) => {
       const tinterNo = key.slice(15);
       ratios.tinters[tinterNo] = totalQty !== 0 ? (parseFloat(data[key]) || 0) / totalQty : 0;
+    });
+
+    ratios.tintersVolume = {};
+    const tinterVolumeKeys = Object.keys(data).filter(key => key.startsWith('LiterInputTotalR'));
+    const tinterVolumeCount = tinterVolumeKeys.length;
+    const tinterVolumeSum = tinterVolumeKeys.reduce((sum, key) => sum + parseFloat(data[key] || 0), 0);
+    tinterVolumeKeys.forEach((key, index) => {
+      const tinterNo = key.slice(15);
+      ratios.tintersVolume[tinterNo] = TotalVolume !== 0 ? (parseFloat(data[key]) || 0) / TotalVolume : 0;
     });
 
     return ratios;
@@ -1975,7 +2030,13 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
   Datas.AdditiveRatio = result.additive;
   Datas.Binder1Ratio = result.binder1;
   Datas.Binder2Ratio = result.binder2;
+  Datas.AdditiveVolumeRatio = result.additiveVolume;
+  Datas.Binder1VolumeRatio = result.binder1Volume;
+  Datas.Binder2VolumeRatio = result.binder2Volume;
   Datas.TintersRatioObject = result.tinters;
+  Datas.TintersVolumeRatioObject = result.tintersVolume;
+
+
   // console.log("Tinters Ratio: ", result.tinters);
   for (var key in result.tinters) {
     if (result.tinters[key] === 0) {
