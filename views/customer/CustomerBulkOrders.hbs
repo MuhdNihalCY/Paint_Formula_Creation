@@ -17,6 +17,13 @@
                         <p>Order</p>
                         <div class="BoHeaderBTNS">
                             <a class="btn BoClearBTN" href="">Clear All</a>
+                            {{#if UpdateOrder}}
+                            <a class="btn BoSaveBTN" href="/CustomerUpdatedEditFormula/{{Formulation.FileNo}}">Edit
+                                Formula</a>
+                            {{else}}
+                            <a class="btn BoSaveBTN" href="/customer/EditFormula/{{Formulation.FileNo}}">Edit
+                                Formula</a>
+                            {{/if}}
                             {{#if lowQTY}}
                             <input id="BoSaveBTN" class="btn BoSaveBTN" type="submit" disabled value="Stock Out">
                             {{else}}
@@ -125,14 +132,20 @@
 
                                     <div class="BoCategory">
                                         <label for="">Category :</label>
-                                        <input type="text" name="Category" value="{{Formulation.CategoryName}}" id=""
-                                            readonly>
+                                        <a href="/customer/EditFormula/{{Formulation.FileNo}}">
+                                            <input type="text" name="Category" value="{{Formulation.CategoryName}}"
+                                                id="" readonly>
+                                            <i class="fa fa-arrow-down"></i>
+                                        </a>
                                     </div>
 
                                     <div class="BoSubCategory">
                                         <label for="">Sub - Category :</label>
-                                        <input type="text" name="SubCategory" value="{{Formulation.SubCategoryName}}"
-                                            id="" readonly>
+                                        <a href="/customer/EditFormula/{{Formulation.FileNo}}">
+                                            <input type="text" name="SubCategory"
+                                                value="{{Formulation.SubCategoryName}}" id="" readonly>
+                                            <i class="fa fa-arrow-down"></i>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -142,6 +155,7 @@
                                     <input type="text" value="0" id="BoTotalQTYLOW" hidden>
                                 </div>
                                 {{/if}}
+
 
                                 {{#if TotalQTY}}
                                 <div class="BOLowStockAlert">
@@ -156,14 +170,16 @@
                                 <div class="BoTopSec2">
                                     <div class="BoEnterQuantityDiv">
                                         {{#if Liter}}
+                                        <input type="text" id="isLiter" value="Liter" hidden />
                                         <label for="">Enter Quantity (in Ltr) : </label>
                                         {{else}}
+                                        <input type="text" id="isLiter" value="" hidden />
                                         <label for="">Enter Quantity (in Kg) : </label>
                                         {{/if}}
 
                                         {{#if TotalQTY}}
                                         <input type="number" name="Quantity" value="{{TotalQTY}}" id="ProductQTY"
-                                            min="0" required min="0">
+                                            required min="0">
                                         {{else}}
                                         {{#if QTY}}
                                         <input type="number" name="Quantity" value="{{QTY}}" id="ProductQTY" required
@@ -182,13 +198,21 @@
                                         {{/if}}
                                     </div>
                                 </div>
+
                                 <p class="text-center text-danger">{{errorMessage}}</p>
                                 <div class="BOPriceApiError">
                                     <p id="BOPriceApiErrorText" class=""></p>
                                     <br>
                                     <input type="text" id="BOPriceApiErrorINP" name="PriceErr" hidden>
                                 </div>
+
                                 <hr>
+                                {{#if UpdateOrder}}
+                                <input type="text" id="UpdatedOrder" value="UpdatedOrder" hidden>
+                                {{else}}
+                                <input type="text" id="UpdatedOrder" value="" hidden>
+                                {{/if}}
+
                                 <div class="BoTableDiv">
 
 
@@ -210,30 +234,17 @@
                                 </div>
                                 <div class="BoBelowTable">
                                     <div class="BoDataBelowTable">
-
-                                        {{!-- Total without Additives --}}
-                                        {{!-- <div class="BoBindersAndAdditivesUnits">
-                                            <div class="BoLabelWithoutAdditivesDiv">
-                                                <p class="BoBinderName">Total Without Additives</p>
-                                            </div>
-                                            <div class="BoeachUnit ">
-                                                <p class="BoUnitsTotal">QTY (Grams)</p>
-                                                <input type="text" id="TotalGramInputWithoutAdditives"
-                                                    name="TotalWithoutAdditves" class="BoTotalInputElementsGrams "
-                                                    readonly value="0.00" required>
-                                            </div>
-                                            <div class="BoeachUnit ">
-                                                <p class="BoUnitsTotal">Volume (ml)</p>
-                                                <input type="text" id="TotalLiterInputWithoutAdditives"
-                                                    class="BoTotalInputElementsLiter " readonly value="0.00" required>
-                                            </div>
-                                        </div> --}}
-
                                         {{#if Binder1}}
                                         {{!--
                                         <hr> --}}
                                         <div class="BoBinderDIv">
-                                            <p class="BoBinderHeader">Binder </p>
+                                            <div class="BinderHeaderDiv">
+                                                <p class="BoBinderHeader">Binder </p>
+                                                <div class="BOBindersubHeadDiv">
+                                                    <p class="BinderGVsubHead">In QTY</p>
+                                                    <p class="BinderGVsubHead">In Volume</p>
+                                                </div>
+                                            </div>
                                             <div class="BoBinder1Div">
                                                 <div class="BoBinderLeftSection">
                                                     <input type="text" class="BinderName" name="Binder1"
@@ -241,6 +252,8 @@
                                                     <input type="text" name="Binder1Ratio" id="Binder1Ratio"
                                                         value="{{Formulation.Binder1Ratio}}" hidden>
                                                     <input type="text" name="Binder1QTY" id="Binder1QTY"
+                                                        class="Binder1QTY" readonly>
+                                                    <input type="text" name="Binder1Volume" id="Binder1Volume"
                                                         class="Binder1QTY" readonly>
                                                 </div>
                                             </div>
@@ -253,6 +266,8 @@
                                                         value="{{Formulation.Binder2Ratio}}" hidden>
                                                     <input type="text" name="Binder2QTY" id="Binder2QTY"
                                                         class="Binder2QTY" readonly>
+                                                    <input type="text" name="Binder2Volume" id="Binder2Volume"
+                                                        class="Binder2QTY" readonly>
                                                 </div>
                                             </div>
                                             {{/if}}
@@ -261,7 +276,13 @@
 
                                         <hr>
                                         <div class="BoAdditiveDiv">
-                                            <p class="BoAdditiveHeader">Additives </p>
+                                            <div class="BinderHeaderDiv">
+                                                <p class="BoAdditiveHeader">Additives </p>
+                                                <div class="BOBindersubHeadDiv">
+                                                    <p class="BinderGVsubHead">In QTY</p>
+                                                    <p class="BinderGVsubHead">In Volume</p>
+                                                </div>
+                                            </div>
                                             <div class="BOAdditiveMainSection">
                                                 <div class="BoAdditiveLeftSection">
                                                     <input type="text" class="AdditveName" name="Additive"
@@ -270,6 +291,8 @@
                                                         value="{{Formulation.AdditiveRatio}}" hidden>
                                                     <input type="text" name="AdditiveQTY" class="AdditiveQTY"
                                                         id="AdditiveQTY" readonly>
+                                                    <input type="text" name="AdditiveVolume" class="AdditiveQTY"
+                                                        id="AdditiveVolume" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -313,6 +336,15 @@
         function calculateAll(Responses) {
 
             // console.log(Responses);
+            var isLiters = document.getElementById("isLiter").value;
+            var isLiter = false;
+
+            if (isLiters) {
+                isLiter = true;
+            }
+
+
+            console.log(Responses);
 
             var TotalQTY = 0;
             var TotalVolume = 0;
@@ -336,7 +368,8 @@
 
             var TintersCount = Formula.TintersCount;
 
-            if (Sub_Category.Liter) {
+            if (isLiter) {
+                // do as the formula in liter
                 for (var i = 1; i <= TintersCount; i++) {
                     // Create a new row element
                     var newRow = document.createElement('tr');
@@ -350,45 +383,27 @@
                     var tinterVolumeCell = document.createElement('td');
                     // var tinterLiterCell = document.createElement('td');
 
-
                     var TinterQtyNameKey = 'GramInputTotalR' + i;
 
-
                     //Calculation of Tineters
-                    //var ProductQty = Formula.
-                    var FromulaVolume = parseFloat(Formula.TotalQtyInLiter)
-                    var ProductQTY = parseFloat(Formula[TinterQtyNameKey]);
-                    // console.log("Tinter Qty:",TineterQTY);
-                    InputedQTY = parseFloat(InputedQTY);
-                    var TineterQTY = ((ProductQTY * InputedQTY * 1000) / FromulaVolume).toFixed(3);
-                    // Test
-                    TotalQTY += TineterQTY;
-
-                    TineterQTY = TineterQTY.toString();
-
-                    // Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000          
-                    var TinterVolume = ((parseFloat(TineterQTY) / parseFloat(Formula[`TinterDensity${i}`])) * 1000).toFixed(3);
-
-                    TotalVolume += TinterVolume;
-
-                    TinterVolume = TinterVolume.toString();
 
                     var tinterNameKey = 'TinterNameR' + i;
                     var tinterName = Formula[tinterNameKey];
 
-                    // console.log(`Tinter name: ${tinterName}`);
+                    var TintersVolumeRatioArray = Formula.TintersVolumeRatioArray;
+                    var tinterRatio = TintersVolumeRatioArray[i - 1];
 
-                    // console.log("TinterNameR + i",TineterName )
+                    InputedQTY = parseFloat(InputedQTY);
+                    var TinterVolume = (tinterRatio * InputedQTY * 1000).toFixed(3);
 
-
-
+                    //Mass (in grams) = (Volume * Density) / 1000
+                    var TineterQTY = ((TinterVolume * parseFloat(Formula[`TinterDensity${i}`])) / 1000).toFixed(3);
 
                     // Customize cell elements by adding attributes
                     tinterNameCell.innerHTML = `<input type="text" name="TineterName${i}" value="${tinterName}" id="TineterName${i}">`;
                     tinterGramCell.innerHTML = `<input type="text" name="TinterGram${i}" value="${TineterQTY}" id="TinterGram${i}">`;
                     tinterVolumeCell.innerHTML = `<input type="text" name="TinterVolume${i}" value="${TinterVolume}" id="TinterVolume${i}">`;
                     // tinterLiterCell.innerHTML = `<input type="text" name="TinterLiter${i}" id="TinterLiter${i}">`;
-
 
                     // Append cell elements to the row element
                     newRow.appendChild(tinterNameCell);
@@ -398,7 +413,6 @@
 
                     // Append the new row element to the parent table
                     tableBody.appendChild(newRow);
-
                 }
 
 
@@ -409,34 +423,50 @@
                 var Binder2Value = Formula.Binder2
 
                 if (Binder1Value) {
-                    var Binder1QTY = ((Binder1Value * InputedQTY * 1000) / FromulaVolume).toFixed(3);
-                    //test
-                    TotalQTY += Binder1QTY
-                    Binder1QTY = Binder1QTY + "";
-                    document.getElementById('Binder1QTY').value = Binder1QTY;
+                    InputedQTY = parseFloat(InputedQTY);
+                    var Binder1VolumeRatio = parseFloat(Formula.Binder1VolumeRatio);
+                    var Binder1Volume = (Binder1VolumeRatio * InputedQTY * 1000).toFixed(3);
+
+                    //Mass (in grams) = (Volume * Density) / 1000
+                    var Binder1QTY = ((Binder1Volume * parseFloat(Formula[`Binder1_Density`])) / 1000).toFixed(3);
+
+                    //document.getElementById('Binder1QTY').value = Binder1QTY;
+                    //put volume instead
+                    document.getElementById('Binder1QTY').value = Binder1QTY
+                    document.getElementById('Binder1Volume').value = Binder1Volume
                 }
 
-                if (Binder2Value) {
-                    var Binder2QTY = ((Binder2Value * InputedQTY * 1000) / FromulaVolume).toFixed(3);
-                    //test
-                    TotalQTY += Binder2QTY
-                    Binder2QTY = Binder2QTY + "";
-                    document.getElementById('Binder2QTY').value = Binder2QTY;
+                if (Binder1Value) {
+                    InputedQTY = parseFloat(InputedQTY);
+                    var Binder2VolumeRatio = parseFloat(Formula.Binder2VolumeRatio);
+                    var Binder2Volume = (Binder2VolumeRatio * InputedQTY * 1000).toFixed(3);
+
+                    //Mass (in grams) = (Volume * Density) / 1000
+                    var Binder2QTY = ((Binder2Volume * parseFloat(Formula[`Binder2_Density`])) / 1000).toFixed(3);
+
+                    // document.getElementById('Binder2QTY').value = Binder2QTY;
+                    //put volume instead
+                    document.getElementById('Binder2QTY').value = Binder2QTY
+                    document.getElementById('Binder2Volume').value = Binder2Volume
                 }
 
-
-                //calculate Additive
                 var AdditiveValue = Formula.TotalAdditives;
                 if (AdditiveValue) {
-                    var additiveQty = ((AdditiveValue * InputedQTY * 1000) / FromulaVolume).toFixed(3);
-                    TotalQTY += additiveQty
-                    additiveQty = additiveQty + "";
+                    InputedQTY = parseFloat(InputedQTY);
+                    var AdditiveVolumeRatio = parseFloat(Formula.AdditiveVolumeRatio);
+                    var AdditiveVolume = (AdditiveVolumeRatio * InputedQTY * 1000).toFixed(3);
+
+                    //Mass (in grams) = (Volume * Density) / 1000
+                    var additiveQty = ((AdditiveVolume * parseFloat(Formula[`Additive_Density`])) / 1000).toFixed(3);
+                    // document.getElementById('AdditiveQTY').value = additiveQty;
+                    //put volume instead
                     document.getElementById('AdditiveQTY').value = additiveQty;
+                    document.getElementById('AdditiveVolume').value = AdditiveVolume
                 }
 
-
             } else {
-
+                // do as the formula in Kilogram
+                // do as the formula in liter
                 for (var i = 1; i <= TintersCount; i++) {
                     // Create a new row element
                     var newRow = document.createElement('tr');
@@ -450,36 +480,27 @@
                     var tinterVolumeCell = document.createElement('td');
                     // var tinterLiterCell = document.createElement('td');
 
+                    var TinterQtyNameKey = 'GramInputTotalR' + i;
+
                     //Calculation of Tineters
-                    var TinCount = i - 1;
-                    var TinterRatio = parseFloat(Formula.TintersRatioArray[TinCount]);
-                    // console.log("TinterRatio * InputedQTY: ", TinterRatio + " * " + InputedQTY);
-                    var TineterQTY = (TinterRatio * InputedQTY * 1000).toFixed(3);;
-
-                    TineterQTY = TineterQTY.toString();
-
-
-                    // Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000          
-                    var TinterVolume = ((parseFloat(TineterQTY) / parseFloat(Formula[`TinterDensity${i}`])) * 1000).toFixed(3);
-
-                    TotalVolume += TinterVolume;
-
-                    TinterVolume = TinterVolume.toString();
 
                     var tinterNameKey = 'TinterNameR' + i;
                     var tinterName = Formula[tinterNameKey];
 
-                    // console.log(`Tinter name: ${tinterName}`);
+                    var TintersRatioArray = Formula.TintersRatioArray;
+                    var tinterRatio = TintersRatioArray[i - 1];
 
-                    // console.log("TinterNameR + i",TineterName )
+                    InputedQTY = parseFloat(InputedQTY);
+                    var TinterQty = (tinterRatio * InputedQTY * 1000).toFixed(3);
 
+                    //volume = (mass * density) /1000
+                    var TinterVolume = ((TinterQty * parseFloat(Formula[`TinterDensity${i}`])) / 1000).toFixed(3);
 
                     // Customize cell elements by adding attributes
                     tinterNameCell.innerHTML = `<input type="text" name="TineterName${i}" value="${tinterName}" id="TineterName${i}">`;
                     tinterGramCell.innerHTML = `<input type="text" name="TinterGram${i}" value="${TineterQTY}" id="TinterGram${i}">`;
                     tinterVolumeCell.innerHTML = `<input type="text" name="TinterVolume${i}" value="${TinterVolume}" id="TinterVolume${i}">`;
                     // tinterLiterCell.innerHTML = `<input type="text" name="TinterLiter${i}" id="TinterLiter${i}">`;
-
 
                     // Append cell elements to the row element
                     newRow.appendChild(tinterNameCell);
@@ -491,37 +512,47 @@
                     tableBody.appendChild(newRow);
                 }
 
-                // calculate Binder
-                var Binder1Ratio = Formula.Binder1Ratio
-                var Binder2Ratio = Formula.Binder2Ratio
 
-                if (Binder1Ratio) {
-                    var Binder1Value = (Binder1Ratio * InputedQTY * 1000).toFixed(3);
-                    //test
-                    TotalQTY += Binder1Value
-                    Binder1Value = Binder1Value + "";
-                    document.getElementById('Binder1QTY').value = Binder1Value;
+                // calculate Binder and Additive
+                var FromulaVolume = parseFloat(Formula.TotalQtyInLiter)
+
+                var Binder1Value = Formula.Binder1
+                var Binder2Value = Formula.Binder2
+
+                if (Binder1Value) {
+                    InputedQTY = parseFloat(InputedQTY);
+                    var Binder1Ratio = parseFloat(Formula.Binder1Ratio);
+                    var Binder1QTY = (Binder1Ratio * InputedQTY * 1000).toFixed(3);
+
+                    //volume = (mass * density) /1000
+                    var Binder1Volume = ((Binder1QTY * parseFloat(Formula[`Binder1_Density`])) / 1000).toFixed(3);
+                    document.getElementById('Binder1QTY').value = Binder1QTY
+                    document.getElementById('Binder1Volume').value = Binder1Volume
                 }
 
-                if (Binder2Ratio) {
-                    var Binder2Value = (Binder2Ratio * InputedQTY * 1000).toFixed(3);
-                    //test
-                    TotalQTY += Binder2Value
-                    Binder2Value = Binder2Value + "";
-                    document.getElementById('Binder2QTY').value = Binder2Value;
+                if (Binder1Value) {
+                    InputedQTY = parseFloat(InputedQTY);
+                    var Binder2VolumeRatio = parseFloat(Formula.Binder2VolumeRatio);
+                    var Binder2QTY = (Binder2Ratio * InputedQTY * 1000).toFixed(3);
+
+                    //volume = (mass * density) /1000
+                    var Binder2Volume = ((Binder2QTY * parseFloat(Formula[`Binder2_Density`])) / 1000).toFixed(3);
+                    document.getElementById('Binder2QTY').value = Binder2QTY
+                    document.getElementById('Binder2Volume').value = Binder2Volume
                 }
 
+                var AdditiveValue = Formula.TotalAdditives;
+                if (AdditiveValue) {
+                    InputedQTY = parseFloat(InputedQTY);
+                    var AdditiveRatio = parseFloat(Formula.AdditiveRatio);
+                    var additiveQty = (AdditiveRatio * InputedQTY * 1000).toFixed(3);
 
-                //calculate Additive
-                var additiveRatio = Formula.AdditiveRatio;
-                if (additiveRatio) {
-                    var additiveValue = (additiveRatio * InputedQTY * 1000).toFixed(3);
-                    TotalQTY += additiveValue
-                    additiveValue = additiveValue + "";
-                    document.getElementById('AdditiveQTY').value = additiveValue;
+                    //Mass (in grams) = (Volume * Density) / 1000
+                    var AdditiveVolume = ((additiveQty * parseFloat(Formula[`Additive_Density`])) / 1000).toFixed(3);
+                    document.getElementById('AdditiveQTY').value = additiveQty
+                    document.getElementById('AdditiveVolume').value = AdditiveVolume
                 }
             }
-            // alert("calculate all Finished!");
         }
 
         await calculateAll(Responses); // Wait for calculateAll to complete
@@ -690,118 +721,6 @@
             hideLoading();
 
         }
-
-
-        /* // console.log(Responses);
- 
- 
- 
-         Responses = Responses.Formulation;
-         // console.log("Caliing Cost : ", Responses);
- 
-         var Binder1_Cost = 0;
-         var Binder2_Cost = 0;
-         var Additve_Cost = 0;
-         var TinterTotalCost = 0;
- 
-         if (Responses.Binder1) {
-             var Binder1 = parseFloat(document.getElementById('Binder1QTY').value);
- 
-             if (Binder1 > 0) {
- 
-                 // console.log(Binder1);
- 
- 
- 
-                               var Binder1PriceRatio = parseFloat(Responses.Binder1Price);
-                                 var Binder1PriceUnit = Responses.Binder1PriceUnit;
-                                 var Binder1_Density = parseFloat(Responses.Binder1_Density)
-                                 // console.log("Binder1 Cost : ", Binder1);
-                 
-                                 if (Binder1PriceUnit === 'Ltr') {
-                                     //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
-                                     var Binder1_Liter = (Binder1 / Binder1_Density) //* 1000;
-                                     Binder1_Cost = Binder1_Liter * Binder1PriceRatio
-                 
-                                 } else if (Binder1PriceUnit === 'kg') {
-                                     Binder1_Cost = Binder1 * Binder1PriceRatio
-                                 }
-             }
-         }
- 
-         if (Responses.Binder2) {
-             var Binder2 = parseFloat(document.getElementById('Binder2QTY').value);
-             if (Binder2 > 0) {
- 
-                 // console.log(Binder2);
- 
-                 var Binder2PriceRatio = parseFloat(Responses.Binder2Price);
-                 var Binder2PriceUnit = Responses.Binder2PriceUnit;
-                 var Binder2_Density = parseFloat(Responses.Binder2_Density)
- 
-                 if (Binder2PriceUnit === 'Ltr') {
-                     //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
-                     var Binder2_Liter = (Binder2 / Binder2_Density) //* 1000;
-                     Binder2_Cost = Binder2_Liter * Binder2PriceRatio
- 
-                 } else if (Binder2PriceUnit === 'kg') {
-                     Binder2_Cost = Binder2 * Binder2PriceRatio
-                 }
-             }
-         }
- 
-         if (Responses.AdditivePercentage) {
-             var Additive = parseFloat(document.getElementById('AdditiveQTY').value);
- 
-             if (Additive > 0) {
- 
-                 // console.log(Additive);
- 
-                 var AdditivePriceRatio = parseFloat(Responses.AdditivePrice);
-                 var AdditivePriceUnit = Responses.AdditivePriceUnit;
-                 var Additive_Density = parseFloat(Responses.Additive_Density);
- 
-                 if (AdditivePriceUnit === 'Ltr') {
-                     //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
-                     var Additive_Liter = (Additive / Additive_Density)// * 1000;
-                     var Additve_Cost = Additive_Liter * AdditivePriceRatio;
-                 } else if (AdditivePriceUnit === 'kg') {
-                     Additve_Cost = Additive * AdditivePriceRatio;
-                 }
-             }
-         }
- 
-         var TinterCount = parseInt(Responses.TintersCount);
- 
-         for (var i = 1; i <= TinterCount; i++) {
-             var TinterQTYRatio = parseFloat(Responses.TintersRatioObject[`${i}`]);
-             var TinterPriceRatio = parseFloat(Responses[`TinterPriceR${i}`]);
-             var TinterPriceUnit = Responses[`TinterPriceUnit${i}`];
-             var TinterDensity = parseFloat(Responses[`TinterDensity${i}`]);
- 
-             // console.log("Tinter calculating");
-             // console.log(TinterQTYRatio);
- 
-             var TinterCost = 0;
- 
-             if (TinterPriceUnit === 'Ltr') {
-                 //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
-                 var Tinter_Liter = (TinterQTYRatio / TinterDensity)// * 1000;
-                 TinterCost = Tinter_Liter * TinterPriceRatio
- 
-             } else if (TinterPriceUnit === 'kg') {
-                 TinterCost = TinterQTYRatio * TinterPriceRatio
-             }
- 
-             TinterTotalCost += TinterCost;
-         }
- 
-         //after all the process is finished to this process
- 
-         var TotalCost = Binder1_Cost + Binder2_Cost + Additve_Cost + TinterTotalCost
- 
-         document.getElementById('BoCosting').value = TotalCost.toFixed(2).toString();
-         */
 
     }
 
@@ -1059,17 +978,24 @@
         background-color: #e0e0e0;
     }
 
-    .BOPriceApiError {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: red;
-        font-weight: 600;
-        display: none;
-        flex-direction: column;
+    .BoCategory i,
+    .BoSubCategory i {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        /* Adjust the right offset to position the icon as needed */
+        transform: translateY(-50%);
     }
 
-
+    /* Example of Font Awesome usage (assuming you've included Font Awesome CSS) */
+    i.fa.fa-arrow-down::before {
+        content: "\f063";
+        /* Unicode character for the down arrow icon */
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+    }
 
     .BOLowStockAlert {
         width: 100%;
@@ -1101,7 +1027,7 @@
     #PrductQTY {
         font-size: 20px;
         font-weight: 600;
-        width: 7rem;
+        width: 8rem;
     }
 
     .BoDataBelowTable {
@@ -1110,6 +1036,7 @@
         padding: 2rem;
         font-size: 18px;
         font-weight: 600;
+        padding-right: 10px;
     }
 
     .BoBindersAndAdditivesUnits {
@@ -1137,6 +1064,23 @@
         width: 70%;
     }
 
+    .BinderHeaderDiv {
+        display: flex;
+    }
+
+    .BoBinderHeader,
+    .BoAdditiveHeader {
+        width: 13rem;
+    }
+
+    .BOBindersubHeadDiv {
+        display: flex;
+    }
+
+    .BinderGVsubHead {
+        margin: 0 2rem;
+    }
+
     .BinderName,
     .AdditveName {
         border: none;
@@ -1146,10 +1090,13 @@
 
     .Binder1QTY,
     .Binder2QTY,
-    .AdditiveQTY {
+    .AdditiveQTY,
+    #Binder1Volume,
+    #Binder2Volume {
         border: none;
         background: #e0e0e0;
         padding: .5rem;
+        max-width: 7rem;
     }
 
     .BoAdditiveHeader {
@@ -1205,6 +1152,8 @@
         font-size: 20px;
         height: 5rem;
     }
+
+
 
     /*Loading styles*/
 

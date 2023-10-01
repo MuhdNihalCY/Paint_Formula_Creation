@@ -132,14 +132,20 @@
 
                                         <div class="BoCategory">
                                             <label for="">Category :</label>
-                                            <input type="text" name="Category" value="{{Formulation.CategoryName}}"
-                                                id="" readonly>
+                                            <a href="/EditFormula/{{Formulation.FileNo}}">
+                                                <input type="text" name="Category" value="{{Formulation.CategoryName}}"
+                                                    id="" readonly>
+                                                <i class="fa fa-arrow-down"></i>
+                                            </a>
                                         </div>
 
                                         <div class="BoSubCategory">
                                             <label for="">Sub - Category :</label>
-                                            <input type="text" name="SubCategory"
-                                                value="{{Formulation.SubCategoryName}}" id="" readonly>
+                                            <a href="/EditFormula/{{Formulation.FileNo}}">
+                                                <input type="text" name="SubCategory"
+                                                    value="{{Formulation.SubCategoryName}}" id="" readonly>
+                                                <i class="fa fa-arrow-down"></i>
+                                            </a>
                                         </div>
                                     </div>
 
@@ -937,6 +943,25 @@
         padding: 11px 11px;
         border: transparent;
         background-color: #e0e0e0;
+    }
+
+    .BoCategory i,
+    .BoSubCategory i {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        /* Adjust the right offset to position the icon as needed */
+        transform: translateY(-50%);
+    }
+
+    /* Example of Font Awesome usage (assuming you've included Font Awesome CSS) */
+    i.fa.fa-arrow-down::before {
+        content: "\f063";
+        /* Unicode character for the down arrow icon */
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
     }
 
     .BOLowStockAlert {
