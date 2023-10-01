@@ -394,16 +394,20 @@ router.post('/CreateFormula', (req, res) => {
       await employeeHelpers.GetSubcategotyByName(ReqData.SubCategoryName).then(async (SubCategory) => {
         var Binder1ID = SubCategory.Binder1
         await employeeHelpers.GetBinderById(Binder1ID).then((Binder1) => {
-          ReqData.Binder1Price = Binder1.cost;
-          ReqData.Binder1PriceUnit = Binder1.PriceUnit;
-          ReqData.Binder1_Density = Binder1.Binder_Density;
+          if (Binder1) {
+            ReqData.Binder1Price = Binder1.cost;
+            ReqData.Binder1PriceUnit = Binder1.PriceUnit;
+            ReqData.Binder1_Density = Binder1.Binder_Density;
+          }
         })
         if (ReqData.Binder2Ratio) {
           const Binder2ID = SubCategory.Binder2;
           const Binder2 = await employeeHelpers.GetBinderById(Binder2ID);
-          ReqData.Binder2Price = Binder2.cost;
-          ReqData.Binder2PriceUnit = Binder2.PriceUnit;
-          ReqData.Binder2_Density = Binder2.Binder_Density;
+          if (Binder2) {
+            ReqData.Binder2Price = Binder2.cost;
+            ReqData.Binder2PriceUnit = Binder2.PriceUnit;
+            ReqData.Binder2_Density = Binder2.Binder_Density;
+          }
         }
 
       })
@@ -1098,9 +1102,9 @@ router.get('/EditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
     var Matt = false;
     var Gloss = false;
 
-    if (Formula.matt) {
+    if (!isNaN(Formula.matt)) {
       Matt = parseInt(Formula.matt);
-    } else if (Formula.gloss) {
+    } else if (!isNaN(Formula.gloss)) {
       Gloss = parseInt(Formula.gloss);
     }
 
@@ -1265,16 +1269,20 @@ router.post('/CreateEditedFormula', EmployeeVerifyLogin, (req, res) => {
       await employeeHelpers.GetSubcategotyByName(ReqData.SubCategoryName).then(async (SubCategory) => {
         var Binder1ID = SubCategory.Binder1
         await employeeHelpers.GetBinderById(Binder1ID).then((Binder1) => {
-          ReqData.Binder1Price = Binder1.cost;
-          ReqData.Binder1PriceUnit = Binder1.PriceUnit;
-          ReqData.Binder1_Density = Binder1.Binder_Density;
+          if (Binder1) {
+            ReqData.Binder1Price = Binder1.cost;
+            ReqData.Binder1PriceUnit = Binder1.PriceUnit;
+            ReqData.Binder1_Density = Binder1.Binder_Density;
+          }
         })
         if (ReqData.Binder2Ratio) {
           const Binder2ID = SubCategory.Binder2;
           const Binder2 = await employeeHelpers.GetBinderById(Binder2ID);
-          ReqData.Binder2Price = Binder2.cost;
-          ReqData.Binder2PriceUnit = Binder2.PriceUnit;
-          ReqData.Binder2_Density = Binder2.Binder_Density;
+          if (Binder2) {
+            ReqData.Binder2Price = Binder2.cost;
+            ReqData.Binder2PriceUnit = Binder2.PriceUnit;
+            ReqData.Binder2_Density = Binder2.Binder_Density;
+          }
         }
 
       })
@@ -1425,7 +1433,7 @@ router.post('/CreateEditedFormula', EmployeeVerifyLogin, (req, res) => {
                 })
               } else {
                 // res .send data
-                employeeHelpers.SaveFormulaData(Datas).then((State) => {
+                employeeHelpers.SaveEditedFormulaData(Datas).then((State) => {
                   //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
                   StoreRefImage(State.Data)
                   res.redirect(`/UpdatedBulkOrders/${Datas.FileNo}`)
@@ -1721,9 +1729,9 @@ router.get('/UpdatedEditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
     var Matt = false;
     var Gloss = false;
 
-    if (Formula.matt) {
+     if (!isNaN(Formula.matt)) {
       Matt = parseInt(Formula.matt);
-    } else if (Formula.gloss) {
+    } else if (!isNaN(Formula.gloss)) {
       Gloss = parseInt(Formula.gloss);
     }
 
@@ -1779,7 +1787,7 @@ router.get('/UpdatedEditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
           employeeHelpers.GetAllTinteresByFormula(Formula).then((Tinters) => {
             console.log(Tinters);
 
-            res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives });
+            res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives,UpdatedOrder:true });
 
           })
         })
@@ -1974,16 +1982,20 @@ router.post('/Customer/CreateFormula', CustomerVerifyLogin, (req, res) => {
       await employeeHelpers.GetSubcategotyByName(ReqData.SubCategoryName).then(async (SubCategory) => {
         var Binder1ID = SubCategory.Binder1
         await employeeHelpers.GetBinderById(Binder1ID).then((Binder1) => {
-          ReqData.Binder1Price = Binder1.cost;
-          ReqData.Binder1PriceUnit = Binder1.PriceUnit;
-          ReqData.Binder1_Density = Binder1.Binder_Density;
+          if (Binder1) {
+            ReqData.Binder1Price = Binder1.cost;
+            ReqData.Binder1PriceUnit = Binder1.PriceUnit;
+            ReqData.Binder1_Density = Binder1.Binder_Density;
+          }
         })
         if (ReqData.Binder2Ratio) {
           const Binder2ID = SubCategory.Binder2;
           const Binder2 = await employeeHelpers.GetBinderById(Binder2ID);
-          ReqData.Binder2Price = Binder2.cost;
-          ReqData.Binder2PriceUnit = Binder2.PriceUnit;
-          ReqData.Binder2_Density = Binder2.Binder_Density;
+          if (Binder2) {
+            ReqData.Binder2Price = Binder2.cost;
+            ReqData.Binder2PriceUnit = Binder2.PriceUnit;
+            ReqData.Binder2_Density = Binder2.Binder_Density;
+          }
         }
 
       })
@@ -2669,9 +2681,9 @@ router.get('/customer/EditFormula/:fileNo', CustomerVerifyLogin, (req, res) => {
     var Matt = false;
     var Gloss = false;
 
-    if (Formula.matt) {
+     if (!isNaN(Formula.matt)) {
       Matt = parseInt(Formula.matt);
-    } else if (Formula.gloss) {
+    } else if (!isNaN(Formula.gloss)) {
       Gloss = parseInt(Formula.gloss);
     }
 
@@ -2757,7 +2769,7 @@ router.post('/Customer/CreateEditedFormula', CustomerVerifyLogin, (req, res) => 
 
   // console.log(req.body);
   function calculateRatios(data) {
-    // console.log("Calculating Data: ", data);
+    console.log("Calculating Data: ", data);
     const ratios = {};
 
     // Get the Total Quantity
@@ -2839,16 +2851,20 @@ router.post('/Customer/CreateEditedFormula', CustomerVerifyLogin, (req, res) => 
       await employeeHelpers.GetSubcategotyByName(ReqData.SubCategoryName).then(async (SubCategory) => {
         var Binder1ID = SubCategory.Binder1
         await employeeHelpers.GetBinderById(Binder1ID).then((Binder1) => {
-          ReqData.Binder1Price = Binder1.cost;
-          ReqData.Binder1PriceUnit = Binder1.PriceUnit;
-          ReqData.Binder1_Density = Binder1.Binder_Density;
+          if (Binder1) {
+            ReqData.Binder1Price = Binder1.cost;
+            ReqData.Binder1PriceUnit = Binder1.PriceUnit;
+            ReqData.Binder1_Density = Binder1.Binder_Density;
+          }
         })
         if (ReqData.Binder2Ratio) {
           const Binder2ID = SubCategory.Binder2;
           const Binder2 = await employeeHelpers.GetBinderById(Binder2ID);
-          ReqData.Binder2Price = Binder2.cost;
-          ReqData.Binder2PriceUnit = Binder2.PriceUnit;
-          ReqData.Binder2_Density = Binder2.Binder_Density;
+          if (Binder2) {
+            ReqData.Binder2Price = Binder2.cost;
+            ReqData.Binder2PriceUnit = Binder2.PriceUnit;
+            ReqData.Binder2_Density = Binder2.Binder_Density;
+          }
         }
 
       })
@@ -2999,7 +3015,7 @@ router.post('/Customer/CreateEditedFormula', CustomerVerifyLogin, (req, res) => 
                 })
               } else {
                 // res .send data
-                employeeHelpers.SaveFormulaData(Datas).then((State) => {
+                employeeHelpers.SaveEditedFormulaData(Datas).then((State) => {
                   //res.redirect(`/Printsmlabel/${Datas.FileNo}`)
                   StoreRefImage(State.Data)
                   res.redirect(`/Customer/UpdatedBulkOrders/${Datas.FileNo}`)
@@ -3181,7 +3197,7 @@ router.get('/Customer/UpdatedBulkOrders/:FileNo/:Qty', CustomerVerifyLogin, (req
       if (Sub_Category.Liter) {
         Liter = true
       }
-      res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, QTY, UpdateOrder: true ,CustomerName:true });
+      res.render("customer/CustomerBulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, QTY, UpdateOrder: true, CustomerName: true });
     })
   })
 
@@ -3195,9 +3211,9 @@ router.get('/CustomerUpdatedEditFormula/:fileNo', CustomerVerifyLogin, (req, res
     var Matt = false;
     var Gloss = false;
 
-    if (Formula.matt) {
+     if (!isNaN(Formula.matt)) {
       Matt = parseInt(Formula.matt);
-    } else if (Formula.gloss) {
+    } else if (!isNaN(Formula.gloss)) {
       Gloss = parseInt(Formula.gloss);
     }
 

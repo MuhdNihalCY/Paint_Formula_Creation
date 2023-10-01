@@ -62,7 +62,62 @@
     </style>
 </div>
 
+
 <section>
+    {{!-- loading screen start here --}}
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <style>
+        /*Loading styles*/
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #3498db;
+            border-radius: 50%;
+            animation: loadingAnimation 1s infinite;
+        }
+
+        @keyframes loadingAnimation {
+
+            0%,
+            100% {
+                transform: scale(0.2);
+            }
+
+            50% {
+                transform: scale(1);
+            }
+        }
+    </style>
+    {{!-- loading screen ends here --}}
+
     {{#if CustomerName}}
     <form id="uploadForm" action="/Customer/CreateEditedFormula" method="post" enctype="multipart/form-data">
         {{else}}
@@ -83,7 +138,7 @@
                             <div class="MixerDetails" hidden>
                                 <p class="MixerNameLabel">Mixer Name</p>
                                 {{#if CustomerName}}
-                                <input type="text" name="MixerName" value="{{CustomerName}}" id="">
+                                <input type="text" name="MixerName" value="{{Formula.CustomerName}}" id="">
                                 {{else}}
                                 <input type="text" name="MixerName" value="{{Formula.MixerName}}" id="">
                                 {{/if}}
@@ -102,7 +157,8 @@
                                 <p class="CFBasicPtag">Customer Name</p>
                                 {{#if CustomerName}}
                                 <input type="text" class="CFBasicInp" name="CustomerName"
-                                    placeholder="Enter Customer Name" value="{{CustomerName}}" required readonly>
+                                    placeholder="Enter Customer Name" value="{{Formula.CustomerName}}" required
+                                    readonly>
                                 {{else}}
                                 <input type="text" class="CFBasicInp" name="CustomerName"
                                     placeholder="Enter Customer Name" value="{{Formula.CustomerName}}" required>
@@ -221,8 +277,8 @@
                                 <div id="mattOrGloss" class="CFMainSelectionDiv " style="display: none;">
                                     <p class="CFmainSelection MattOrGloss"></p>
                                     <input type="text" name="mattOrGloss" id="MattOrGlossINPTag"
-                                        class=" MattOrGlossINP " min="0" value="{{Formula.mattOrGloss}}"
-                                        onkeypress="return isNumeric(event)" oninput=" makeChangesInBinderMattGloss()">
+                                        class=" MattOrGlossINP " min="0" value="0" onkeypress="return isNumeric(event)"
+                                        oninput=" makeChangesInBinderMattGloss()">
                                 </div>
                                 {{/if}}
                                 {{/if}}
@@ -355,6 +411,8 @@
                                             <div class="CFTotalCalcDiv">
                                                 <input name="Binder1" type="text" class="CFTotalInputElements "
                                                     id="Binder1INP" readonly value="" min="0">
+                                                <input name="Binder1Volume" type="text" class="CFTotalInputElements "
+                                                    id="Binder1Volume" readonly value="" min="0">
                                                 {{!-- <input type="text" class="CFTotalInputElements " readonly
                                                     value="43">
                                                 --}}
@@ -365,6 +423,8 @@
                                             <div class="CFTotalCalcDiv">
                                                 <input type="text" name="Binder2" class="CFTotalInputElements "
                                                     id="Binder2INP" readonly value="" min="0">
+                                                <input type="text" name="Binder2Volume" class="CFTotalInputElements "
+                                                    id="Binder2Volume" readonly value="" min="0">
                                                 {{!-- <input type="text" class="CFTotalInputElements " readonly
                                                     value="43">
                                                 --}}
@@ -394,6 +454,8 @@
                                             <p class="CFBinderName">Additives</p>
                                             <input type="text" name="TotalAdditives" id="TotalAdditives" readonly
                                                 value="0">
+                                            <input type="text" name="TotalAdditivesVolume" id="TotalAdditivesVolume"
+                                                readonly value="0">
                                         </div>
                                         {{!-- Binders and Additives Ends Here --}}
                                         <hr>
@@ -832,6 +894,8 @@
 
     function CFSubcategorySelect() {
 
+        showLoading();
+
         var subCategorySelect = document.getElementById("SubCategorySelect");
         var selectedOption = subCategorySelect.value;
 
@@ -862,22 +926,7 @@
 
                 console.table(datas);
 
-                /*var tintersSelect = document.getElementById("CFTintersR1");
-                tintersSelect.innerHTML = ""; // Clear any existing options
-
-                // Loop through the data and create <option> elements
-                var option = document.createElement("option");
-                option.value = ''; // Set the option value
-                option.textContent = 'Select a product'; // Set the option text
-                tintersSelect.appendChild(option);
-
-                for (var i = 0; i < data.length; i++) {
-                    var option = document.createElement("option");
-                    option.value = data[i].Product_Id; // Set the option value
-                    option.textContent = data[i].Product_Name; // Set the option text
-                    tintersSelect.appendChild(option); // Add the option to the <select>
-                }*/
-
+               
                 // Update the UI or perform any other actions with the data
                 // Assuming you have a variable `Sub_Category` with the relevant properties
 
@@ -918,6 +967,9 @@
                 // Handle any errors that occurred during the AJAX call
                 console.error(error);
             });
+
+        
+
     }
 
 
@@ -988,6 +1040,8 @@
 
     function makeChangesInBinderMattGloss() {
 
+        showLoading();
+
         //api ajax
 
         var subCategorySelect = document.getElementById("SubCategorySelect");
@@ -1037,11 +1091,17 @@
                     mattOrGlossDiv.style.display = "flex";
                     mattOrGlossName.textContent = "Matt value";
                     MattOrGlossINPTag.disabled = false;
+                    if (isNaN(MattOrGlossINPTag.value) || MattOrGlossINPTag.value < 0) {
+                        MattOrGlossINPTag.value = 0;
+                    }
                     mattOrGlossInput.setAttribute("name", "matt");
                 } else if (gloss === "on") {
                     mattOrGlossDiv.style.display = "flex";
                     mattOrGlossName.textContent = "Gloss value";
                     MattOrGlossINPTag.disabled = false;
+                    if (isNaN(MattOrGlossINPTag.value) || MattOrGlossINPTag.value < 0) {
+                        MattOrGlossINPTag.value = 0;
+                    }
                     mattOrGlossInput.setAttribute("name", "gloss");
                 } else {
                     mattOrGlossDiv.style.display = "none";
@@ -1054,33 +1114,42 @@
                 var Binder1DIV = document.querySelector('.Binder1DIV');
                 var Binder2DIV = document.querySelector('.Binder2DIV');
                 var Binder1input = document.getElementById("Binder1INP");
+                var Binder1Volume = document.getElementById("Binder1Volume");
                 var Binder2input = document.getElementById("Binder2INP");
-
+                var Binder2Volume = document.getElementById("Binder2Volume");
 
 
                 if (datas.Binder1) {
                     //// alert();
                     // put Binder1 name
                     Binder1DIV.style.display = "flex";
-                    Binder1PTag.textContent = Binder1.Binder_Name
+                    Binder1PTag.textContent = Binder1.Binder_Name;
+                    Binder1input.value = "";
+                    Binder1Volume.value = "";
 
 
                     if (datas.Binder2) {
                         //put Binder2 Name
                         Binder2DIV.style.display = "flex";
-                        Binder2PTag.textContent = Binder2.Binder_Name
+                        Binder2PTag.textContent = Binder2.Binder_Name;
+                        Binder2input.value = "";
+                        Binder2Volume.value = "";
 
 
                     } else {
                         //// alert("no Binder2");
                         //remove Binder 2
                         Binder2DIV.style.display = "none";
+                        Binder2input.value = "";
+                        Binder2Volume.value = "";
                     }
 
                     FindBinderValue(Sub_Category);
                 } else {
                     //remove Binder 1
                     Binder1DIV.style.display = "none";
+                    Binder1input.value = "";
+                    Binder1Volume.value = "";
                 }
                 // console.log("handleAdditivePercentageChange 2")
                 handleAdditivePercentageChange()
@@ -1476,7 +1545,13 @@
                         // Perform actions for numeric value
                         var Binder1_Density = parseFloat(Binder1.Binder_Density)
                         TotalQtyOfFormula = TotalGramInput + Binder1INP;
-                        TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * 1000) / Binder1_Density)
+                        // TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * 1000) / Binder1_Density)
+                        TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * Binder1_Density) / 1000);
+                        var Binder1Vol = (Binder1INP * Binder1_Density) / 1000;
+                        document.getElementById("Binder1Volume").value = Binder1Vol.toFixed(3);
+                        console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
+                        //console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
+
 
 
                         if (!isNaN(Binder2INP)) {
@@ -1484,7 +1559,11 @@
                             // Perform actions for numeric value
                             var Binder2_Density = parseFloat(Binder2.Binder_Density)
                             TotalQtyOfFormula = TotalGramInput + Binder1INP + Binder2INP;
-                            TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * 1000) / Binder1_Density) + ((Binder2INP * 1000) / Binder2_Density)
+                            TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * Binder1_Density) / 1000) + ((Binder2INP * Binder2_Density) / 1000)
+                            var Binder2Vol = (Binder2INP * Binder2_Density) / 1000;
+                            document.getElementById("Binder2Volume").value = Binder2Vol.toFixed(3);
+                            console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
+                            //console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
 
                         } else {
                             // Binder2INP is not a number or cannot be parsed as a number
@@ -1500,8 +1579,8 @@
                         TotalVolumeOfFormula = TotalVolumeInput
                     }
 
-                    TotalQtyInGram.value = TotalQtyOfFormula.toString();
-                    TotalQtyInLiter.value = TotalVolumeOfFormula.toString();
+                    TotalQtyInGram.value = TotalQtyOfFormula.toFixed(3).toString();
+                    TotalQtyInLiter.value = TotalVolumeOfFormula.toFixed(3).toString();
 
 
                     //console.log("TotalQtyOfFormula", TotalQtyOfFormula)
@@ -1511,6 +1590,7 @@
                     var additive = ReceivedObject.Additive
                     var Binder1 = ReceivedObject.Binder1
                     var Binder2 = ReceivedObject.Binder2
+                    var TotalAdditivesVolume
 
 
 
@@ -1529,8 +1609,14 @@
                         // Binder1INP is a number (int or float)
                         // Perform actions for numeric value
                         var Binder1_Density = parseFloat(Binder1.Binder_Density)
-                        TotalQtyOfFormula = TotalGramInput + TotalAdditivesInp + Binder1INP;
-                        TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * 1000) / Additive_Density) + ((Binder1INP * 1000) / Binder1_Density)
+                        TotalQtyOfFormula = TotalGramInput + TotalAdditivesInp + Binder1INP;;
+                        TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * Additive_Density) / 1000) + ((Binder1INP * Binder1_Density) / 1000)
+                        var Binder1Vol = (Binder1INP * Binder1_Density) / 1000;
+                        document.getElementById("Binder1Volume").value = Binder1Vol.toFixed(3);
+                        //console.log("Binder1Vol ", Binder1Vol, " = (Binder1INP * Binder1_Density)"Binder1INP, " * ", Binder1_Density, " / ", 1000)
+                        console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
+                        TotalAdditivesVolume = (TotalAdditivesInp * Additive_Density) / 1000;
+                        document.getElementById("TotalAdditivesVolume").value = TotalAdditivesVolume.toFixed(2);;
 
 
                         if (!isNaN(Binder2INP)) {
@@ -1538,7 +1624,13 @@
                             // Perform actions for numeric value
                             var Binder2_Density = parseFloat(Binder2.Binder_Density)
                             TotalQtyOfFormula = TotalGramInput + TotalAdditivesInp + Binder1INP + Binder2INP;
-                            TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * 1000) / Additive_Density) + ((Binder1INP * 1000) / Binder1_Density) + ((Binder2INP * 1000) / Binder2_Density)
+                            TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * Additive_Density) / 1000) + ((Binder1INP * Binder1_Density) / 1000) + ((Binder2INP * Binder2_Density) / 1000)
+                            var Binder2Vol = (Binder2INP * Binder2_Density) / 1000;
+                            document.getElementById("Binder2Volume").value = Binder2Vol.toFixed(3);
+                            //console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
+                            console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
+                            TotalAdditivesVolume = (TotalAdditivesInp * Additive_Density) / 1000;
+                            document.getElementById("TotalAdditivesVolume").value = TotalAdditivesVolume.toFixed(2);;
 
                         } else {
                             // Binder2INP is not a number or cannot be parsed as a number
@@ -1551,11 +1643,13 @@
                         // Perform actions for non-numeric value
                         ////console.log("Binder1 bad:", Binder1INP);
                         TotalQtyOfFormula = TotalGramInput + TotalAdditivesInp;
-                        TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * 1000) / Additive_Density)
+                        TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * Additive_Density) / 1000)
+                        TotalAdditivesVolume = (TotalAdditivesInp * Additive_Density) / 1000;
+                        document.getElementById("TotalAdditivesVolume").value = TotalAdditivesVolume.toFixed(2);
                     }
 
-                    TotalQtyInGram.value = TotalQtyOfFormula.toString();
-                    TotalQtyInLiter.value = TotalVolumeOfFormula.toString();
+                    TotalQtyInGram.value = TotalQtyOfFormula.toFixed(3).toString();
+                    TotalQtyInLiter.value = TotalVolumeOfFormula.toFixed(3).toString();
                     //console.log("TotalQtyOfFormula", TotalQtyOfFormula)
                     //console.log("Calling at 2")
                     FindSolidContentOfProducts()
@@ -1583,11 +1677,15 @@
 
 
                         if (!isNaN(Binder2INP)) {
-                            // Binder2INP is a number (int or float)
+                            // Binder1INP is a number (int or float)
                             // Perform actions for numeric value
-                            var Binder2_Density = parseFloat(Binder2.Binder_Density)
-                            TotalQtyOfFormula = TotalGramInput + Binder1INP + Binder2INP;
-                            TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * 1000) / Binder1_Density) + ((Binder2INP * 1000) / Binder2_Density)
+                            var Binder1_Density = parseFloat(Binder1.Binder_Density)
+                            TotalQtyOfFormula = TotalGramInput + Binder1INP;
+                            TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * Binder1_Density) / 1000)
+                            var Binder1Vol = (Binder1INP * Binder1_Density) / 1000;
+                            document.getElementById("Binder1Volume").value = Binder1Vol.toFixed(3);
+                            //console.log("Binder1Vol ", Binder1Vol, " = (Binder1INP * Binder1_Density)"Binder1INP, " * ", Binder1_Density, " / ", 1000)
+                            console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
 
                         } else {
                             // Binder2INP is not a number or cannot be parsed as a number
@@ -1603,8 +1701,8 @@
                         TotalVolumeOfFormula = TotalVolumeInput
                     }
 
-                    TotalQtyInGram.value = TotalQtyOfFormula.toString();
-                    TotalQtyInLiter.value = TotalVolumeOfFormula.toString();
+                    TotalQtyInGram.value = TotalQtyOfFormula.toFixed(3).toString();
+                    TotalQtyInLiter.value = TotalVolumeOfFormula.toFixed(3).toString();
 
 
                     //console.log("TotalQtyOfFormula", TotalQtyOfFormula)
@@ -1729,6 +1827,8 @@
                 var SampledQty = TotalQtyInGram + "/" + TotalQtyInLiter;
                 document.getElementById('SampleQty').value = SampledQty;
 
+                hideLoading()
+
 
 
 
@@ -1775,6 +1875,33 @@
     // Add CSS class to readonly inputs
     for (var i = 0; i < readonlyInputs.length; i++) {
         readonlyInputs[i].classList.add('readonly-input');
+    }
+
+
+
+
+    function showLoading() {
+        console.log("Showing Loader");
+        var loadingScreen = document.getElementById("loadingScreen");
+        var form = document.getElementById("uploadForm");
+
+        if (form) {
+            form.addEventListener("submit", preventFormSubmit);
+        }
+        loadingScreen.style.display = "flex";
+    }
+
+    function hideLoading() {
+        console.log("Hiding Loader");
+        var loadingScreen = document.getElementById("loadingScreen");
+        var form = document.getElementById("uploadForm");
+
+        loadingScreen.style.display = "none";
+        form.removeEventListener("submit", preventFormSubmit);
+    }
+
+    function preventFormSubmit(event) {
+        event.preventDefault();
     }
 
 

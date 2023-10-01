@@ -132,20 +132,36 @@
 
                                         <div class="BoCategory">
                                             <label for="">Category :</label>
+                                            {{#if UpdateOrder}}
+                                            <a href="/UpdatedEditFormula/{{Formulation.FileNo}}">
+                                                <input type="text" name="Category" value="{{Formulation.CategoryName}}"
+                                                    id="" readonly>
+                                                <i class="fa fa-arrow-down"></i>
+                                            </a>
+                                            {{else}}
                                             <a href="/EditFormula/{{Formulation.FileNo}}">
                                                 <input type="text" name="Category" value="{{Formulation.CategoryName}}"
                                                     id="" readonly>
                                                 <i class="fa fa-arrow-down"></i>
                                             </a>
+                                            {{/if}}
                                         </div>
 
                                         <div class="BoSubCategory">
                                             <label for="">Sub - Category :</label>
+                                            {{#if UpdateOrder}}
+                                            <a href="/UpdatedEditFormula/{{Formulation.FileNo}}">
+                                                <input type="text" name="SubCategory"
+                                                    value="{{Formulation.SubCategoryName}}" id="" readonly>
+                                                <i class="fa fa-arrow-down"></i>
+                                            </a>
+                                            {{else}}
                                             <a href="/EditFormula/{{Formulation.FileNo}}">
                                                 <input type="text" name="SubCategory"
                                                     value="{{Formulation.SubCategoryName}}" id="" readonly>
                                                 <i class="fa fa-arrow-down"></i>
                                             </a>
+                                            {{/if}}
                                         </div>
                                     </div>
 
@@ -200,7 +216,7 @@
                                         </div>
                                     </div>
 
-                                    <p class="text-center text-danger">{{errorMessage}}</p>
+                                    <p class="text-center text-danger errorMSg">{{errorMessage}}</p>
                                     <div class="BOPriceApiError">
                                         <p id="BOPriceApiErrorText" class=""></p>
                                         <br>
@@ -249,7 +265,8 @@
                                                 <div class="BoBinder1Div">
                                                     <div class="BoBinderLeftSection">
                                                         <input type="text" class="BinderName" name="Binder1"
-                                                            value="{{Formulation.Binder1Name}}" id="" readonly>
+                                                            value="{{Formulation.Binder1Name}}" id="Binder1Name"
+                                                            readonly>
                                                         <input type="text" name="Binder1Ratio" id="Binder1Ratio"
                                                             value="{{Formulation.Binder1Ratio}}" hidden>
                                                         <input type="text" name="Binder1QTY" id="Binder1QTY"
@@ -262,7 +279,8 @@
                                                 <div class="BoBinder2Div">
                                                     <div class="BoBinderLeftSection">
                                                         <input type="text" class="BinderName" name="Binder2"
-                                                            value="{{Formulation.Binder2Name}}" id="" readonly>
+                                                            value="{{Formulation.Binder2Name}}" id="Binder2Name"
+                                                            readonly>
                                                         <input type="text" name="Binder2Ratio" id="Binder2Ratio"
                                                             value="{{Formulation.Binder2Ratio}}" hidden>
                                                         <input type="text" name="Binder2QTY" id="Binder2QTY"
@@ -287,7 +305,8 @@
                                                 <div class="BOAdditiveMainSection">
                                                     <div class="BoAdditiveLeftSection">
                                                         <input type="text" class="AdditveName" name="Additive"
-                                                            value="{{Formulation.AdditiveName}}" id="" readonly>
+                                                            value="{{Formulation.AdditiveName}}" id="AdditiveName"
+                                                            readonly>
                                                         <input type="text" name="AdditiveRatio" id="AdditiveRatio"
                                                             value="{{Formulation.AdditiveRatio}}" hidden>
                                                         <input type="text" name="AdditiveQTY" class="AdditiveQTY"
@@ -436,7 +455,7 @@
                     document.getElementById('Binder1Volume').value = Binder1Volume
                 }
 
-                if (Binder1Value) {
+                if (Binder2Value) {
                     InputedQTY = parseFloat(InputedQTY);
                     var Binder2VolumeRatio = parseFloat(Formula.Binder2VolumeRatio);
                     var Binder2Volume = (Binder2VolumeRatio * InputedQTY * 1000).toFixed(3);
@@ -446,6 +465,7 @@
 
                     // document.getElementById('Binder2QTY').value = Binder2QTY;
                     //put volume instead
+
                     document.getElementById('Binder2QTY').value = Binder2QTY
                     document.getElementById('Binder2Volume').value = Binder2Volume
                 }
@@ -498,7 +518,7 @@
 
                     // Customize cell elements by adding attributes
                     tinterNameCell.innerHTML = `<input type="text" name="TineterName${i}" value="${tinterName}" id="TineterName${i}">`;
-                    tinterGramCell.innerHTML = `<input type="text" name="TinterGram${i}" value="${TineterQTY}" id="TinterGram${i}">`;
+                    tinterGramCell.innerHTML = `<input type="text" name="TinterGram${i}" value="${TinterQty}" id="TinterGram${i}">`;
                     tinterVolumeCell.innerHTML = `<input type="text" name="TinterVolume${i}" value="${TinterVolume}" id="TinterVolume${i}">`;
                     // tinterLiterCell.innerHTML = `<input type="text" name="TinterLiter${i}" id="TinterLiter${i}">`;
 
@@ -530,7 +550,7 @@
                     document.getElementById('Binder1Volume').value = Binder1Volume
                 }
 
-                if (Binder1Value) {
+                if (Binder2Value) {
                     InputedQTY = parseFloat(InputedQTY);
                     var Binder2VolumeRatio = parseFloat(Formula.Binder2VolumeRatio);
                     var Binder2QTY = (Binder2Ratio * InputedQTY * 1000).toFixed(3);
@@ -582,6 +602,20 @@
                 var Binder1PriceUnit = Responses.Binder1PriceUnit;
                 // var Binder1_Density = parseFloat(Responses.Binder1_Density)
                 //console.log("Binder1 Cost : ", Binder1);
+                var Binder1name = document.getElementById("Binder1Name").value;
+
+                if (!Binder1PriceRatio) {
+                    //alert("Price is not assigned to " + Binder1name);
+                    document.getElementById("BoSaveBTN").disabled = true;
+                    // Find the element with the class name "errorMSg"
+                    var errorMsgElement = document.querySelector('.errorMSg');
+
+                    // Check if the element exists before updating its text content
+                    if (errorMsgElement) {
+                        // Update the text content of the element
+                        errorMsgElement.textContent = "Price is not assigned to " + Binder1name; // Replace 'New Error Message' with your desired text
+                    }
+                }
 
                 if (Binder1PriceUnit === 'Ltr') {
                     var Binder1InVolume = parseFloat(document.getElementById("Binder1Volume").value);
@@ -593,6 +627,17 @@
                 } else if (Binder1PriceUnit === 'kg') {
                     var Binder1InQty = parseFloat(document.getElementById("Binder1QTY").value);
                     Binder1_Cost = (Binder1InQty / 1000) * Binder1PriceRatio;
+                } else {
+                   // alert("Price Unit is not assigned to " + Binder1name);
+                    document.getElementById("BoSaveBTN").disabled = true;
+                    // Find the element with the class name "errorMSg"
+                    var errorMsgElement = document.querySelector('.errorMSg');
+
+                    // Check if the element exists before updating its text content
+                    if (errorMsgElement) {
+                        // Update the text content of the element
+                        errorMsgElement.textContent = "Price Unit is not assigned to " + Binder1name; // Replace 'New Error Message' with your desired text
+                    }
                 }
             }
         }
@@ -606,6 +651,20 @@
                 var Binder2PriceRatio = parseFloat(Responses.Binder2Price);
                 var Binder2PriceUnit = Responses.Binder2PriceUnit;
                 //var Binder2_Density = parseFloat(Responses.Binder2_Density)
+                var Binder2name = document.getElementById("Binder2Name").value;
+
+                if (!Binder2PriceRatio) {
+                   // alert("Price is not assigned to " + Binder2name);
+                    document.getElementById("BoSaveBTN").disabled = true;
+                    // Find the element with the class name "errorMSg"
+                    var errorMsgElement = document.querySelector('.errorMSg');
+
+                    // Check if the element exists before updating its text content
+                    if (errorMsgElement) {
+                        // Update the text content of the element
+                        errorMsgElement.textContent = "Price is not assigned to " + Binder2name; // Replace 'New Error Message' with your desired text
+                    }
+                }
 
                 if (Binder2PriceUnit === 'Ltr') {
                     //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
@@ -617,6 +676,17 @@
                 } else if (Binder2PriceUnit === 'kg') {
                     var Binder2InQty = parseFloat(document.getElementById("Binder2QTY").value);
                     Binder2_Cost = (Binder2InQty / 1000) * Binder2PriceRatio;
+                } else {
+                   // alert("Price Unit is not assigned to " + Binder2name);
+                    document.getElementById("BoSaveBTN").disabled = true;
+                    // Find the element with the class name "errorMSg"
+                    var errorMsgElement = document.querySelector('.errorMSg');
+
+                    // Check if the element exists before updating its text content
+                    if (errorMsgElement) {
+                        // Update the text content of the element
+                        errorMsgElement.textContent = "Price Unit is not assigned to " + Binder2name; // Replace 'New Error Message' with your desired text
+                    }
                 }
             }
         }
@@ -631,6 +701,20 @@
                 var AdditivePriceRatio = parseFloat(Responses.AdditivePrice);
                 var AdditivePriceUnit = Responses.AdditivePriceUnit;
                 // var Additive_Density = parseFloat(Responses.Additive_Density);
+                var AdditiveName = document.getElementById("AdditiveName").value;
+                if (!AdditivePriceRatio) {
+                    //alert("Price is not assigned to " + AdditiveName);
+                    document.getElementById("BoSaveBTN").disabled = true;
+                    // Find the element with the class name "errorMSg"
+                    var errorMsgElement = document.querySelector('.errorMSg');
+
+                    // Check if the element exists before updating its text content
+                    if (errorMsgElement) {
+                        // Update the text content of the element
+                        errorMsgElement.textContent = "Price is not assigned to " + AdditiveName; // Replace 'New Error Message' with your desired text
+                    }
+                }
+
 
                 if (AdditivePriceUnit === 'Ltr') {
                     //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
@@ -638,6 +722,17 @@
                     var Additve_Cost = (Additive_Liter / 1000) * AdditivePriceRatio;
                 } else if (AdditivePriceUnit === 'kg') {
                     Additve_Cost = (Additive / 1000) * AdditivePriceRatio;
+                } else {
+                    //alert("Price Unit is not assigned to " + AdditiveName);
+                    document.getElementById("BoSaveBTN").disabled = true;
+                    // Find the element with the class name "errorMSg"
+                    var errorMsgElement = document.querySelector('.errorMSg');
+
+                    // Check if the element exists before updating its text content
+                    if (errorMsgElement) {
+                        // Update the text content of the element
+                        errorMsgElement.textContent = "Price Unit is not assigned to " + AdditiveName; // Replace 'New Error Message' with your desired text
+                    }
                 }
             }
         }
@@ -650,10 +745,26 @@
             var TinterPriceUnit = Responses[`TinterPriceUnit${i}`];
             var TinterVolume = parseFloat(document.getElementById(`TinterVolume${i}`).value);
             var TinterQTY = parseFloat(document.getElementById(`TinterGram${i}`).value);
+            var TinterName = document.getElementById(`TineterName${i}`).value
             //var TinterDensity = parseFloat(Responses[`TinterDensity${i}`]);
 
             //console.log("Tinter calculating");
             //console.log(TinterQTYRatio);
+
+            if (!TinterPriceRatio) {
+               // alert("Price is not assigned to " + TinterName);
+                document.getElementById("BoSaveBTN").disabled = true;
+                // Find the element with the class name "errorMSg"
+                var errorMsgElement = document.querySelector('.errorMSg');
+
+                // Check if the element exists before updating its text content
+                if (errorMsgElement) {
+                    // Update the text content of the element
+                    errorMsgElement.textContent = "Price is not assigned to " + TinterName; // Replace 'New Error Message' with your desired text
+                }
+            }
+
+
 
             var TinterCost = 0;
 
@@ -663,6 +774,17 @@
 
             } else if (TinterPriceUnit === 'kg') {
                 TinterCost = (TinterQTY / 1000) * TinterPriceRatio
+            } else {
+                //alert("Price Unit is not assigned to " + TinterName);
+                document.getElementById("BoSaveBTN").disabled = true;
+                // Find the element with the class name "errorMSg"
+                var errorMsgElement = document.querySelector('.errorMSg');
+
+                // Check if the element exists before updating its text content
+                if (errorMsgElement) {
+                    // Update the text content of the element
+                    errorMsgElement.textContent = "Price Unit is not assigned to " + TinterName; // Replace 'New Error Message' with your desired text
+                }
             }
             console.log("Tinter ", i, "Cost : ", TinterCost)
 
