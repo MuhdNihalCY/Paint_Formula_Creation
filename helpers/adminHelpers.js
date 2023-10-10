@@ -808,6 +808,75 @@ module.exports = {
             })
         })
     },
+    AddUser: (UserData) => {
+        return new Promise(async (resolve, reject) => {
+            // {
+            //   UserName: 'sdfasffd',
+            //   Designation: 'Employee',
+            //   Contact: '3453453456345',
+            //   WhatsAppNumber: '3453453456345',
+            //   ContactNumberSame: 'on',
+            //   AlternateContact: '34634564356'
+            // }
+            var sameUserName = await db.get().collection(collection.USERS_COLLECTION).findOne({ UserName: UserData.UserName });
+
+            // console.log("Same User", sameUserName); // null or not null
+            UserData.InsertedTime = Date.now();
+            var LatestUser = await db.get().collection(collection.USERS_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
+
+            var State = {
+                Status: false,
+                Err: false
+            }
+
+            if (sameUserName) {
+                //Username Already Exist
+                console.log("Customer already Existed");
+                resolve(State.Err = "Not inserted");
+            } else {
+                // add User
+
+                LatestUser = LatestUser[0];
+                if (LatestUser) {
+                    var LatestUserID = parseInt(LatestUser.UserID);
+                    UserData.UserID = LatestUserID + 1;
+                } else {
+                    UserData.UserID = 1000;
+                }
+
+                console.log("Customer Adding")
+
+                await db.get().collection(collection.USERS_COLLECTION).insertOne(UserData).then((response) => {
+                    if (response.insertedId) {
+                        resolve(State.Status = false);
+                    } else {
+                        resolve(State.Err = "Not inserted");
+                    }
+                })
+            }
+        })
+    },
+    getAllUser: () => {
+        return new Promise(async (resolve, reject) => {
+            let UsersList = await db.get().collection(collection.USERS_COLLECTION).find().toArray();
+            resolve(UsersList);
+        })
+    },
+    getUserByID: (UserID) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USERS_COLLECTION).findOne({ UserID: parseInt(UserID) }).then((User) => {
+                resolve(User)
+            })
+        })
+    },
+    updateUser: (UserData) => {
+        return new Promise(async (resolve, reject) => {
+           await db.get().collection(collection.USERS_COLLECTION).updateOne({UserID : UserData.UserID},{$set:UserData}).then((response)=>{
+            console.log(response);
+            resolve(response);
+           })
+        })
+    },
 
 
 

@@ -13,8 +13,8 @@ const verifyLogin = (req, res, next) => {
   if (req.session.AdminLog) {
     next()
   } else {
-    res.redirect('/admin/login');
-    // next()
+    // res.redirect('/admin/login');
+    next()
   }
 }
 
@@ -587,7 +587,7 @@ router.get('/editBinder/:id', verifyLogin, (req, res) => {
 
 router.get('/getallcustmercategoriesybyBinder/:BinderName', verifyLogin, (req, res) => {
   adminHelpers.GetBinderByname(req.params.BinderName).then((Binder) => {
-    res.json(Binder)
+    res.json(Binder);
   })
 })
 
@@ -597,101 +597,192 @@ router.post('/UpdateBinder', verifyLogin, (req, res) => {
   })
 })
 
-router.post('/AddEmployee', verifyLogin, (req, res) => {
-  adminHelpers.AddEmployee(req.body).then((State) => {
-    if (State.Status) {
-      res.redirect('/admin/Employees');
-    } else {
-      res.redirect(`/admin/Employees/?Error=${State.error}`);
-    }
-  })
-})
-
-router.get('/Employees', verifyLogin, (req, res) => {
-  adminHelpers.GetAllEmployees().then((Employees) => {
-    res.render('admin/Employees', { admin: true, Employees });
-  })
-})
-
-router.get('/editEmployee/:id', verifyLogin, (req, res) => {
-  adminHelpers.GetEmployeeById(req.params.id).then((Employee) => {
-    // console.log(Employee);
-    res.render('admin/forms/editEmployee', { admin: true, Employee });
-  })
-})
-
-router.post('/EditEmployee/:id', verifyLogin, (req, res) => {
-  adminHelpers.UpdateEmployee(req.body, req.params.id).then(() => {
-    res.redirect('/admin/Employees');
-  })
-})
-
-router.get('/deleteEmployee/:id', verifyLogin, (req, res) => {
-  adminHelpers.DeleteEmployeeById(req.params.id).then((State) => {
-    if (State.Status) {
-      res.redirect('/admin/Employees');
-    } else {
-      res.redirect(`/admin/Employees/?Error=${State.error}`);
-    }
-  })
-})
-
-router.get('/Customers', verifyLogin, (req, res) => {
-  adminHelpers.getAllCustomers().then((customers) => {
+router.get('/Users', verifyLogin, (req, res) => {
+  adminHelpers.getAllUser().then((Users) => {
     adminHelpers.getAllCustomerCategory().then((CustomerCategory) => {
-      res.render('admin/Customer', { admin: true, customers, CustomerCategory });
+      res.render('admin/Users', { admin: true, Users, CustomerCategory });
     })
   })
 })
 
+router.post('/addUser', verifyLogin, (req, res) => {
+  // console.log(req.body);
 
-router.post('/AddCustomer', verifyLogin, (req, res) => {
-  adminHelpers.AddCustomer(req.body).then((State) => {
-    if (State.Status) {
-      res.redirect('/admin/Customers');
-    } else {
-      res.redirect(`/admin/Customers/?Error=${State.error}`);
-    }
+  adminHelpers.AddUser(req.body).then((State) => {
+    // if (State.Status) {
+    res.redirect('/admin/Users');
+    // }
   })
 })
 
-router.get('/editCustomer/:id', verifyLogin, (req, res) => {
-  adminHelpers.GetCustomerById(req.params.id).then((Customer) => {
-    adminHelpers.getAllCustomerCategory().then((CustomerCategory) => {
-      // console.log("CustomerCategory =  ", CustomerCategory);
-      // console.log("Customer = ", Customer);
-      const customerCategoryToRemove = Customer.CustomerCategory;
+router.get('/editUser/:id', verifyLogin, (req, res) => {
+  adminHelpers.getUserByID(req.params.id).then((User) => {
+    adminHelpers.getAllUser().then(AllUsers => {
 
-      const updatedCustomerCategory = CustomerCategory.filter(category => category.Category !== customerCategoryToRemove);
+      // Step 1: Extract unique Designations
+      var Designations = ["Customer", "Sales", "Office", "Production", "Dispatcher", "Driver"];
 
-      // console.log(updatedCustomerCategory);
-      CustomerCategory = updatedCustomerCategory;
 
-      res.render('admin/forms/editCustomer', { admin: true, Customer, CustomerCategory });
+      // Step 2: Remove the selectedUser's Designation
+      var indexToRemove = Designations.indexOf(User.Designation);
+      if (indexToRemove !== -1) {
+        Designations.splice(indexToRemove, 1);
+      }
+
+      // Step 3: Prepend the selectedUser's Designation
+      Designations.unshift(User.Designation);
+
+      // Designations now contains the list of unique Designations with the selectedUser's Designation at the beginning
+      // console.log(Designations);
+      console.log(User);
+
+      //     Designation: 'Customer',
+      // Category: 'Category 1',
+
+      if (User.Designation === 'Customer') {
+        // user is customer
+        adminHelpers.getAllCustomerCategory().then(CustomerCategories => {
+          var CustomerCategory = User.Category;
+          // console.log(CustomerCategories);
+          // Find the index of the object with CustomerCategory
+          var indexToMove = CustomerCategories.findIndex(function (item) {
+            return item.Category === CustomerCategory;
+          });
+
+          // If the CustomerCategory is found in the array
+          if (indexToMove !== -1) {
+            // Remove the object from its current position
+            var categoryToMove = CustomerCategories.splice(indexToMove, 1)[0];
+
+            // Add it as the first element in the array
+            CustomerCategories.unshift(categoryToMove);
+          }
+
+          // Now, AllCustomerCategory has the object with CustomerCategory as the first element
+          console.log(CustomerCategories);
+
+          res.render("admin/forms/EditUser", { admin: true, User, Designations, CustomerCategories });
+        })
+      }else{
+        res.render("admin/forms/EditUser", { admin: true, User, Designations });
+      }
+
     })
   })
 })
 
-router.post('/EditCustomer/:id', verifyLogin, (req, res) => {
-  adminHelpers.UpdateCustomer(req.body, req.params.id).then((State) => {
-    if (State.Status) {
-      res.redirect('/admin/Customers');
-    } else {
-      res.redirect(`/admin/Customers/?Error=${State.error}`);
-    }
+router.get('/getAllUsers/Api', verifyLogin, (req, res) => {
+  adminHelpers.getAllUser().then(Users => {
+    console.log(Users);
+    res.json(Users);
   })
 })
 
-router.get('/DeleteCustomer/:id', verifyLogin, (req, res) => {
-  adminHelpers.DeleteCustomerById(req.params.id).then((State) => {
-    if (State.Status) {
-      res.redirect('/admin/Customers');
-    } else {
-      res.redirect(`/admin/Customers/?Error=${State.error}`);
-    }
-
+router.post('/UpdateUser/:UserId', verifyLogin, (req, res) => {
+  var UserData = req.body;
+  UserData.UserID = parseInt(req.params.UserId);
+  adminHelpers.updateUser(UserData).then((response) => {
+    res.redirect('/admin/Users')
   })
+
 })
+
+
+// router.post('/AddEmployee', verifyLogin, (req, res) => {
+//   adminHelpers.AddEmployee(req.body).then((State) => {
+//     if (State.Status) {
+//       res.redirect('/admin/Employees');
+//     } else {
+//       res.redirect(`/admin/Employees/?Error=${State.error}`);
+//     }
+//   })
+// })
+
+// router.get('/Employees', verifyLogin, (req, res) => {
+//   adminHelpers.GetAllEmployees().then((Employees) => {
+//     res.render('admin/Employees', { admin: true, Employees });
+//   })
+// })
+
+// router.get('/editEmployee/:id', verifyLogin, (req, res) => {
+//   adminHelpers.GetEmployeeById(req.params.id).then((Employee) => {
+//     // console.log(Employee);
+//     res.render('admin/forms/editEmployee', { admin: true, Employee });
+//   })
+// })
+
+// router.post('/EditEmployee/:id', verifyLogin, (req, res) => {
+//   adminHelpers.UpdateEmployee(req.body, req.params.id).then(() => {
+//     res.redirect('/admin/Employees');
+//   })
+// })
+
+// router.get('/deleteEmployee/:id', verifyLogin, (req, res) => {
+//   adminHelpers.DeleteEmployeeById(req.params.id).then((State) => {
+//     if (State.Status) {
+//       res.redirect('/admin/Employees');
+//     } else {
+//       res.redirect(`/admin/Employees/?Error=${State.error}`);
+//     }
+//   })
+// })
+
+// router.get('/Customers', verifyLogin, (req, res) => {
+//   adminHelpers.getAllCustomers().then((customers) => {
+//     adminHelpers.getAllCustomerCategory().then((CustomerCategory) => {
+//       res.render('admin/Customer', { admin: true, customers, CustomerCategory });
+//     })
+//   })
+// })
+
+
+// router.post('/AddCustomer', verifyLogin, (req, res) => {
+//   adminHelpers.AddCustomer(req.body).then((State) => {
+//     if (State.Status) {
+//       res.redirect('/admin/Customers');
+//     } else {
+//       res.redirect(`/admin/Customers/?Error=${State.error}`);
+//     }
+//   })
+// })
+
+// router.get('/editCustomer/:id', verifyLogin, (req, res) => {
+//   adminHelpers.GetCustomerById(req.params.id).then((Customer) => {
+//     adminHelpers.getAllCustomerCategory().then((CustomerCategory) => {
+//       // console.log("CustomerCategory =  ", CustomerCategory);
+//       // console.log("Customer = ", Customer);
+//       const customerCategoryToRemove = Customer.CustomerCategory;
+
+//       const updatedCustomerCategory = CustomerCategory.filter(category => category.Category !== customerCategoryToRemove);
+
+//       // console.log(updatedCustomerCategory);
+//       CustomerCategory = updatedCustomerCategory;
+
+//       res.render('admin/forms/editCustomer', { admin: true, Customer, CustomerCategory });
+//     })
+//   })
+// })
+
+// router.post('/EditCustomer/:id', verifyLogin, (req, res) => {
+//   adminHelpers.UpdateCustomer(req.body, req.params.id).then((State) => {
+//     if (State.Status) {
+//       res.redirect('/admin/Customers');
+//     } else {
+//       res.redirect(`/admin/Customers/?Error=${State.error}`);
+//     }
+//   })
+// })
+
+// router.get('/DeleteCustomer/:id', verifyLogin, (req, res) => {
+//   adminHelpers.DeleteCustomerById(req.params.id).then((State) => {
+//     if (State.Status) {
+//       res.redirect('/admin/Customers');
+//     } else {
+//       res.redirect(`/admin/Customers/?Error=${State.error}`);
+//     }
+
+//   })
+// })
 
 router.get('/api/GetSubcategoryByCategoryId/:id', verifyLogin, (req, res) => {
   adminHelpers.getSubCategoryByCategoryId(req.params.id).then((SubCategory) => {
@@ -704,9 +795,9 @@ router.post('/AddCustomerCategory', verifyLogin, (req, res) => {
   // console.log(req.body);
   adminHelpers.addCustomerCategory(req.body).then((State) => {
     if (State.status) {
-      res.redirect('/admin/Customers');
+      res.redirect('/admin/Users');
     } else {
-      res.redirect(`/admin/Customers/?Error=${encodeURIComponent(State.Error)}&message=${encodeURIComponent(State.message)}`);
+      res.redirect(`/admin/Users/?Error=${encodeURIComponent(State.Error)}&message=${encodeURIComponent(State.message)}`);
       //Error: 'Already Added!'
     }
   })
@@ -714,7 +805,7 @@ router.post('/AddCustomerCategory', verifyLogin, (req, res) => {
 
 router.get('/removecustomerCategory/:Category', verifyLogin, (req, res) => {
   adminHelpers.RemoveCustomerCategoryByName(req.params.Category).then((Response) => {
-    res.redirect('/admin/Customers');
+    res.redirect('/admin/Users');
   })
 })
 
@@ -728,19 +819,19 @@ router.get('/getallcustmercategories', verifyLogin, (req, res) => {
 
 
 
-// Add Cost
-router.get('/AddCost/Dev/:id', (req, res) => {
-  adminHelpers.getAdditiveById(req.params.id).then((Additive) => {
-    // console.log(Additive);
-    res.render('admin/forms/AddCost', { Additive })
-  })
-})
+// // Add Cost
+// router.get('/AddCost/Dev/:id', (req, res) => {
+//   adminHelpers.getAdditiveById(req.params.id).then((Additive) => {
+//     // console.log(Additive);
+//     res.render('admin/forms/AddCost', { Additive })
+//   })
+// })
 
-router.post('/addCost', (req, res) => {
-  adminHelpers.PutCostByID(req.body).then(() => {
-    res.redirect('/admin/Binders');
-  })
-})
+// router.post('/addCost', (req, res) => {
+//   adminHelpers.PutCostByID(req.body).then(() => {
+//     res.redirect('/admin/Binders');
+//   })
+// })
 
 
 

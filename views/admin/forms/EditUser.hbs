@@ -1,0 +1,390 @@
+<section class="AdminPage">
+
+
+    <aside class="ADSidebar">
+        <div class="ADSidebarLogoDiv">
+            <img class="AdLogo" src="/images/Logo/MegaPaintsLogo.png" alt="">
+        </div>
+        <div class="ADSelectioSideBarDIv">
+            <a href="/admin">
+                <div class="Category ">
+                    <p class="ADDelectionSideBarLabel">Category</p>
+                    <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                </div>
+            </a>
+            <a href="/admin/Sub-Category">
+                <div class="Category">
+                    <p class="ADDelectionSideBarLabel">Sub-Category</p>
+                    <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                </div>
+            </a>
+            <a href="/admin/Product">
+                <div class="Category">
+                    <p class="ADDelectionSideBarLabel">Product</p>
+                    <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                </div>
+            </a>
+            <a href="/admin/Additives">
+                <div class="Category">
+                    <p class="ADDelectionSideBarLabel">Additives</p>
+                    <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                </div>
+            </a>
+            <a href="/admin/Binders">
+                <div class="Category">
+                    <p class="ADDelectionSideBarLabel">Binders</p>
+                    <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                </div>
+            </a>
+            <a href="/admin/Users">
+                <div class="Category ADactiveButton">
+                    <p class="ADDelectionSideBarLabel">Users</p>
+                    <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                </div>
+            </a>
+
+
+            <div class="ADAccount">
+                <p class="ADDelectionSideBarLabel">Account</p>
+                <img src="/images/Icons/MoreSelect.png" alt="" class="ADAccountIcon">
+            </div>
+
+            <div class="ADAccountExpandDiv">
+                <a href="/admin/change-password">
+                    <div class="ADlogoutDiv">
+                        <p>Change Password</p>
+                        {{!-- <img src="/images/Icons/logout.png" alt="" class="ADLogoutIcon"> --}}
+                    </div>
+                </a>
+                <a href="/admin/logout">
+                    <div class="ADlogoutDiv">
+                        <p>Logout</p>
+                        <img src="/images/Icons/logout.png" alt="" class="ADLogoutIcon">
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </aside>
+
+    <section class="AdMainArea">
+        <!-- Your form goes here -->
+        <div class="container UserUpdateMainDiv">
+            <form action="/admin/UpdateUser/{{User.UserID}}" method="post">
+                <div class="AddUserFormDiv">
+                    <div class="AddUserHeaderDiv">
+                        <p class="AddUserHeading">Update User</p>
+                        {{!-- <div id="AddUserCloseBtn" class="AddUserCloseBtn">
+                            <p>X</p>
+                        </div> --}}
+                    </div>
+                    <hr>
+                    <div class="AddUserBodyDiv">
+                        <div class="AddUserEachSectionDiv">
+                            <p class="AddUserLabel">User Name</p>
+                            <input type="text" required placeholder="Enter User Name" value="{{User.UserName}}"
+                                name="UserName" class="AddUserINP">
+                        </div>
+                        <div class="AddUserEachSectionDiv">
+                            <p class="AddUserLabel">Designation</p>
+                            <select required name="Designation" class="AddUserINP" id="designationSelect">
+                                {{#each Designations}}
+                                <option value="{{this}}">{{this}}</option>
+                                {{/each}}
+                                <option value="" disabled>Select a Designation</option>
+                            </select>
+                        </div>
+                        <div id="categoryDIVCustomer" class="AddUserEachSectionDiv categoryDIVCustomer">
+                            <p class="AddUserLabel">Category</p>
+                            <select required name="Category" class="AddUserINP" id="categorySelect" disabled>
+                                {{#each CustomerCategories}}
+                                <option value="{{this.Category}}">{{this.Category}}</option>
+                                {{/each}}
+                                <option value="" disabled>Select a Category</option>
+                            </select>
+                        </div>
+                        <div class="AddUserEachSectionDiv">
+                            <p class="AddUserLabel">Contact</p>
+                            <input type="text" name="Contact" value="{{User.Contact}}"
+                                placeholder="Enter Contact Number" class="AddUserINP" required id="contactInput">
+                        </div>
+                        <div class="AddUserEachSectionDiv">
+                            <p class="AddUserLabel">WhatsApp Number</p>
+                            <input type="text" placeholder="Enter WhatsApp Number" value="{{User.WhatsAppNumber}}"
+                                id="whatsappInput" required name="WhatsAppNumber" class="AddUserINP">
+                            <div class="AdduserTickSameContact">
+                                <input type="checkbox" name="ContactNumberSame" id="isSameContactNumber">
+                                <p>Same as Contact Number</p>
+                            </div>
+                        </div>
+                        <div class="AddUserEachSectionDiv">
+                            <p class="AddUserLabel AdduserAlternateLabel">Alternate Contact</p>
+                            <input type="text" placeholder=" Enter Alternate Contact" value="{{User.AlternateContact}}"
+                                name="AlternateContact" id="alternateContactInput" class="AddUserINP">
+                        </div>
+                        <div class="AddUserEachSectionDiv">
+                            <p class="AddUserLabel ">Login Password</p>
+                            <input type="password" placeholder=" Enter Login password" value="{{User.Password}}"
+                                name="Password" required id="LoginPassword" class="AddUserINP">
+                            <div class="password-container">
+                                <input type="checkbox" onclick="togglePassword()">Show Password
+                            </div>
+                        </div>
+                        <div class="AddUserEachSectionDiv AdduserSubmitDiv">
+                            <input type="submit" class="btn AddUserBTNSubmit" value="Add User">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</section>
+
+
+<script>
+    // Get references to the select boxes
+    const designationSelect = document.getElementById('designationSelect');
+    const categorySelect = document.getElementById('categorySelect');
+    const categoryDIVCustomer = document.getElementById("categoryDIVCustomer");
+
+
+    // Add an event listener to the Designation select box
+    document.addEventListener("DOMContentLoaded", function () {
+        customerOrNot();
+    });
+
+    designationSelect.addEventListener('change', customerOrNot);
+
+    function customerOrNot() {
+        // Check if the selected option is "Customer"
+        if (designationSelect.value === 'Customer') {
+            // If "Customer" is selected, enable and make the Category select box required
+            categorySelect.disabled = false;
+            categorySelect.required = true;
+            categoryDIVCustomer.style.display = "block"
+        } else {
+            // If any other option is selected, disable and reset the Category select box
+            categorySelect.disabled = true;
+            categorySelect.required = false;
+            categorySelect.selectedIndex = 0; // Reset to the default option
+            categoryDIVCustomer.style.display = "none"
+        }
+    }
+
+
+    // Get references to the elements
+    const contactInput = document.getElementById('contactInput');
+    const whatsappInput = document.getElementById('whatsappInput');
+    const isSameContactNumberCheckbox = document.getElementById('isSameContactNumber');
+
+    // Function to update WhatsApp Number based on Contact
+    function updateWhatsAppNumber() {
+        if (isSameContactNumberCheckbox.checked) {
+            // If the checkbox is checked, copy the value from Contact to WhatsApp Number
+            whatsappInput.value = contactInput.value;
+            whatsappInput.setAttribute('readonly', true); // Make it read-only
+        }
+    }
+
+    // Add an input event listener to the Contact input field
+    contactInput.addEventListener('input', updateWhatsAppNumber);
+
+    // Add an event listener to the checkbox
+    isSameContactNumberCheckbox.addEventListener('change', function () {
+        if (isSameContactNumberCheckbox.checked) {
+            // If the checkbox is checked, update WhatsApp Number immediately
+            updateWhatsAppNumber();
+        } else {
+            // If the checkbox is unchecked, clear the value and allow input again
+            whatsappInput.value = '';
+            whatsappInput.removeAttribute('readonly');
+        }
+    });
+
+
+
+    // Function to allow only numeric input
+    function allowOnlyNumericInput(inputField) {
+        inputField.addEventListener('input', function () {
+            // Remove any non-numeric characters
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+
+    // Get references to the input fields
+    //const contactInput = document.getElementById('contactInput');
+    //const whatsappInput = document.getElementById('whatsappInput');
+    const alternateContactInput = document.getElementById('alternateContactInput');
+
+    // Call the function for each input field
+    allowOnlyNumericInput(contactInput);
+    allowOnlyNumericInput(whatsappInput);
+    allowOnlyNumericInput(alternateContactInput);
+
+
+
+    function togglePassword() {
+        const passwordInput = document.getElementById('LoginPassword');
+        //var x = document.getElementById("myInput");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+
+</script>
+
+
+
+<style>
+    .AdminPage {
+        display: flex;
+    }
+
+    .ADSidebar {
+        flex: 0 0 auto;
+        /* Prevent the sidebar from growing or shrinking */
+        min-height: 100%;
+        /* Minimum height to fill the container */
+    }
+
+    .AdMainArea {
+        flex: 1;
+        /* Allow the main area to grow and fill the remaining space */
+        min-height: 100vh;
+        /* Minimum height of the viewport */
+        /* Add any other styling you want for the main area */
+        padding-top: 3rem;
+    }
+
+    .UserUpdateMainDiv {
+        padding: 0 5rem;
+    }
+
+    .ADSubCategorySelectionSelectBox {
+        width: 18rem;
+        margin-right: 30px;
+    }
+
+    .AddUserHeaderDiv {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 2rem;
+        align-items: center;
+    }
+
+    .AddUserHeading {
+        font-size: 25px;
+        font-weight: 600;
+        color: #3d3d3d;
+        margin: 0;
+    }
+
+    .AddUserCloseBtn {
+        border: 3px #3d3d3d solid;
+        border-radius: 5px;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .AddUserCloseBtn p {
+        margin: 0;
+        color: #3d3d3d;
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .AddUserBodyDiv {
+        padding: 2rem;
+    }
+
+    .AddUserEachSectionDiv {
+        margin-bottom: 2rem;
+    }
+
+    /* Style for the label */
+    .AddUserLabel {
+        color: #3d3d3d;
+        font-size: 16px;
+        /* Adjust font size as needed */
+        margin-bottom: 0px;
+        /* Add vertical gap space between label and input */
+        font-weight: 700;
+    }
+
+    /* Style for the required asterisk */
+    .AddUserLabel::after {
+        content: '*';
+        color: red;
+        margin-left: 2px;
+        /* Add a small horizontal gap between label and asterisk */
+    }
+
+    /* Style for the input field */
+    .AddUserINP {
+        /* Add any desired styles for the input, e.g., border, padding, etc. */
+        border: 1px solid #3d3d3d;
+        padding: 5px;
+        width: 50%;
+        border-radius: 5px;
+        padding: 10px 10px;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    #categoryDIVCustomer {
+        display: none;
+    }
+
+    .AdduserAlternateLabel::after {
+        content: '';
+        color: #3d3d3d;
+        margin-left: 2px;
+        /* Add a small horizontal gap between label and asterisk */
+    }
+
+    .AdduserTickSameContact {
+        display: flex;
+
+    }
+
+    .AdduserTickSameContact p {
+        margin: 0;
+    }
+
+    .AdduserSubmitDiv {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .AddUserBTNSubmit {
+        background-color: rgb(26, 26, 188);
+        color: white;
+        font-weight: 600;
+        font-size: 20px;
+        width: 80%;
+        border-radius: 5px;
+    }
+
+    .AddUserBTNSubmit:hover {
+        cursor: pointer;
+        background-color: blue;
+        color: white;
+    }
+
+    /* Optional: You can style the entire section if needed */
+    .AddUserEachSectionDiv {
+        /* Add any desired styles for the entire section */
+    }
+
+    .password-container {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+    }
+</style>
