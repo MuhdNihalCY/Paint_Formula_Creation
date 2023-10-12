@@ -115,7 +115,7 @@
         // Initial fetch to populate table
         var CustomerName = document.getElementById('CustomerName').value;
 
-        fetch(`/getAllFormula/api/${CustomerName}`) // Replace with your API URL
+        fetch(`/customer/getAllFormula/api/${CustomerName}`) // Replace with your API URL
             .then(response => response.json())
             .then(data => {
                 // Handle the successful response here

@@ -194,8 +194,11 @@
                             </div>
                             <div class="CFBasicDetailsImg">
                                 {{!-- Display referance image that is selected --}}
-                                <img src="/images/RefImages/{{Formula.FileNo}}.jpg" alt="" id="CFselectedImage"> {{!--
-                                /images/RefImages/{{Formula.FileNo}}.jpg /images/RefImages/10019.jpg--}}
+                                <img src="/images/RefImages/{{Formula.FileNo}}.jpg" alt="" id="CFselectedImage">
+                                <div class="ImageCopyCheckDiv" hidden>
+                                    <input type="checkbox" name="CopyImage" id="imageCopyCheckbox" checked> copy Image
+                                </div>
+                                {{!-- /images/RefImages/{{Formula.FileNo}}.jpg /images/RefImages/10019.jpg--}}
                             </div>
 
                             {{!-- Solid Content start here --}}
@@ -521,6 +524,7 @@
 
     window.onload = function () {
         makeChangesInBinderMattGloss();
+        checkImageLoaded();
     };
 
     document.getElementById('uploadForm').addEventListener('submit', function (event) {
@@ -544,7 +548,6 @@
             }
         });
     });
-
 
 
 
@@ -926,7 +929,7 @@
 
                 console.table(datas);
 
-               
+
                 // Update the UI or perform any other actions with the data
                 // Assuming you have a variable `Sub_Category` with the relevant properties
 
@@ -968,7 +971,7 @@
                 console.error(error);
             });
 
-        
+
 
     }
 
@@ -2011,6 +2014,11 @@
         text-align: center;
         width: fit-content;
         height: 10rem;
+    }
+
+    .ImageCopyCheckDiv {
+        display: flex;
+        justify-content: center;
     }
 
     .CFMainContent {

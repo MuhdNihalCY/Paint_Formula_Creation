@@ -18,7 +18,7 @@
                         <div class="BoHeaderBTNS">
                             <a class="btn BoClearBTN" href="">Clear All</a>
                             {{#if UpdateOrder}}
-                            <a class="btn BoSaveBTN" href="/CustomerUpdatedEditFormula/{{Formulation.FileNo}}">Edit
+                            <a class="btn BoSaveBTN" href="/customer/UpdatedEditFormula/{{Formulation.FileNo}}">Edit
                                 Formula</a>
                             {{else}}
                             <a class="btn BoSaveBTN" href="/customer/EditFormula/{{Formulation.FileNo}}">Edit
@@ -201,7 +201,7 @@
 
                                 <p class="text-center text-danger">{{errorMessage}}</p>
                                 <div class="BOPriceApiError">
-                                    <p id="BOPriceApiErrorText" class=""></p>
+                                    <p id="BOPriceApiErrorText" style="color: red;" class="text-center"></p>
                                     <br>
                                     <input type="text" id="BOPriceApiErrorINP" name="PriceErr" hidden>
                                 </div>
@@ -436,11 +436,12 @@
                     document.getElementById('Binder1Volume').value = Binder1Volume
                 }
 
-                if (Binder1Value) {
+                if (Binder2Value) {
                     InputedQTY = parseFloat(InputedQTY);
                     var Binder2VolumeRatio = parseFloat(Formula.Binder2VolumeRatio);
+                    // console.log("Binder2VolumeRatio: ", Binder2VolumeRatio)
                     var Binder2Volume = (Binder2VolumeRatio * InputedQTY * 1000).toFixed(3);
-
+                    //console.log("Binder2Volume: ", Binder2Volume);
                     //Mass (in grams) = (Volume * Density) / 1000
                     var Binder2QTY = ((Binder2Volume * parseFloat(Formula[`Binder2_Density`])) / 1000).toFixed(3);
 
@@ -498,7 +499,7 @@
 
                     // Customize cell elements by adding attributes
                     tinterNameCell.innerHTML = `<input type="text" name="TineterName${i}" value="${tinterName}" id="TineterName${i}">`;
-                    tinterGramCell.innerHTML = `<input type="text" name="TinterGram${i}" value="${TineterQTY}" id="TinterGram${i}">`;
+                    tinterGramCell.innerHTML = `<input type="text" name="TinterGram${i}" value="${TinterQty}" id="TinterGram${i}">`;
                     tinterVolumeCell.innerHTML = `<input type="text" name="TinterVolume${i}" value="${TinterVolume}" id="TinterVolume${i}">`;
                     // tinterLiterCell.innerHTML = `<input type="text" name="TinterLiter${i}" id="TinterLiter${i}">`;
 
@@ -522,17 +523,20 @@
                 if (Binder1Value) {
                     InputedQTY = parseFloat(InputedQTY);
                     var Binder1Ratio = parseFloat(Formula.Binder1Ratio);
+
                     var Binder1QTY = (Binder1Ratio * InputedQTY * 1000).toFixed(3);
+                    console.log(Binder1QTY);
 
                     //volume = (mass * density) /1000
                     var Binder1Volume = ((Binder1QTY * parseFloat(Formula[`Binder1_Density`])) / 1000).toFixed(3);
+                   // console.log("Binder1Volume: ",Binder1Volume);
                     document.getElementById('Binder1QTY').value = Binder1QTY
                     document.getElementById('Binder1Volume').value = Binder1Volume
                 }
 
-                if (Binder1Value) {
+                if (Binder2Value) {
                     InputedQTY = parseFloat(InputedQTY);
-                    var Binder2VolumeRatio = parseFloat(Formula.Binder2VolumeRatio);
+                    var Binder2Ratio = parseFloat(Formula.Binder2VolumeRatio);
                     var Binder2QTY = (Binder2Ratio * InputedQTY * 1000).toFixed(3);
 
                     //volume = (mass * density) /1000
@@ -565,16 +569,41 @@
 
 
         var Customer = Responses.Customer;
-        var CustomerCategory = Customer.CustomerCategory
+        var CustomerCategory = Customer.Category
 
-        //  alert("sdf");
+
+        console.log("CustomerCategory: ", Customer);
 
         // alert("Calculating Cost");
         getAlltoCalCostCustomer()
 
         function getAlltoCalCostCustomer() {
+
+
+            var isUpdatedFormula = false;
+            const UpdatedFlag = document.getElementById("UpdatedOrder").value;
+            var isLiters = document.getElementById("isLiter").value;
+            var isLiter = false;
+
+            if (isLiters) {
+                isLiter = true;
+            }
+
+            if (UpdatedFlag !== "") {
+                isUpdatedFormula = true;
+            }
+
             var Formulation = Responses.Formulation;
-            const apiUrl = `/getAllToCalCostCustomer/api/${Formulation.FileNo}/${CustomerCategory}`;
+
+
+            var apiUrl = ""
+
+            if (isUpdatedFormula) {
+                apiUrl = `/customer/getAllToCalCostCustomer/api/updated/${Formulation.FileNo}/${CustomerCategory}`;
+            } else {
+                apiUrl = `/customer/getAllToCalCostCustomer/api/${Formulation.FileNo}/${CustomerCategory}`;
+            }
+
 
             // Make a GET request using fetch
             fetch(apiUrl)
@@ -606,7 +635,7 @@
                     } else {
 
                         Responses = data;
-                        // console.log("Caliing Cost : ", Responses);
+                        console.log("Caliing Cost : ", Responses);
 
                         var Binder1_Cost = 0;
                         var Binder2_Cost = 0;
@@ -626,16 +655,22 @@
                                 var Binder1PriceUnit = Responses.Binder1PriceUnit;
                                 var Binder1_Density = parseFloat(Responses.Binder1_Density)
                                 // console.log("Binder1 Cost : ", Binder1);
+                                var Binder1InGrams = parseFloat(document.getElementById("Binder1QTY").value);
+                                var Binder1InMilliLiter = parseFloat(document.getElementById("Binder1Volume").value);
+                                console.log(Binder1InGrams);
+                                console.log(Binder1InMilliLiter);
 
                                 if (Binder1PriceUnit === 'Ltr') {
                                     //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
-                                    var Binder1_Liter = (Binder1 / Binder1_Density) //* 1000;
+                                    var Binder1_Liter = Binder1InMilliLiter / 1000;  //(Binder1 / Binder1_Density) //* 1000;
                                     Binder1_Cost = Binder1_Liter * Binder1PriceRatio
 
                                 } else if (Binder1PriceUnit === 'kg') {
-                                    Binder1_Cost = Binder1 * Binder1PriceRatio
+                                    Binder1_Cost = (Binder1InGrams / 1000) * Binder1PriceRatio
                                 }
                             }
+
+                            console.log("Binder1_Cost: ", Binder1_Cost);
                         }
 
                         if (Responses.Binder2) {
@@ -648,15 +683,22 @@
                                 var Binder2PriceUnit = Responses.Binder2PriceUnit;
                                 var Binder2_Density = parseFloat(Responses.Binder2_Density)
 
+                                var Binder2InGrams = parseFloat(document.getElementById("Binder2QTY").value);
+                                var Binder2InMilliLiter = parseFloat(document.getElementById("Binder2Volume").value);
+                                console.log(Binder2InGrams);
+                                console.log(Binder2InMilliLiter);
+
                                 if (Binder2PriceUnit === 'Ltr') {
                                     //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
-                                    var Binder2_Liter = (Binder2 / Binder2_Density) //* 1000;
+                                    var Binder2_Liter = Binder2InMilliLiter / 1000;   //(Binder2 / Binder2_Density) //* 1000;
                                     Binder2_Cost = Binder2_Liter * Binder2PriceRatio
 
                                 } else if (Binder2PriceUnit === 'kg') {
-                                    Binder2_Cost = Binder2 * Binder2PriceRatio
+                                    Binder2_Cost = (Binder2InGrams / 1000) * Binder2PriceRatio
                                 }
                             }
+
+                            console.log("Binder2_Cost: ", Binder2_Cost);
                         }
 
                         if (Responses.AdditivePercentage) {
@@ -670,14 +712,19 @@
                                 var AdditivePriceUnit = Responses.AdditivePriceUnit;
                                 var Additive_Density = parseFloat(Responses.Additive_Density);
 
+                                var AdditiveInGrams = parseFloat(document.getElementById("AdditiveQTY").value);
+                                var AdditiveInMilliLiter = parseFloat(document.getElementById("AdditiveVolume").value);
+
+
                                 if (AdditivePriceUnit === 'Ltr') {
                                     //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
-                                    var Additive_Liter = (Additive / Additive_Density)// * 1000;
+                                    var Additive_Liter = AdditiveInMilliLiter / 1000     //(Additive / Additive_Density)// * 1000;
                                     var Additve_Cost = Additive_Liter * AdditivePriceRatio;
                                 } else if (AdditivePriceUnit === 'kg') {
-                                    Additve_Cost = Additive * AdditivePriceRatio;
+                                    Additve_Cost = (AdditiveInGrams / 1000) * AdditivePriceRatio;
                                 }
                             }
+                            console.log("Additive_Cost: ", Additve_Cost);
                         }
 
                         var TinterCount = parseInt(Responses.TintersCount);
@@ -688,6 +735,11 @@
                             var TinterPriceUnit = Responses[`TinterPriceUnit${i}`];
                             var TinterDensity = parseFloat(Responses[`TinterDensity${i}`]);
 
+
+                            var TinterIngrams = parseFloat(document.getElementById(`TinterGram${i}`).value);
+                            var TInterInMiliLiter = parseFloat(document.getElementById(`TinterVolume${i}`).value);
+
+
                             // console.log("Tinter calculating");
                             // console.log(TinterQTYRatio);
 
@@ -695,14 +747,20 @@
 
                             if (TinterPriceUnit === 'Ltr') {
                                 //Total Volume of Formulation = (Total Quantity of Formulation / Density of Formulation) * 1000
-                                var Tinter_Liter = (TinterQTYRatio / TinterDensity)// * 1000;
+
+                                var Tinter_Liter = TInterInMiliLiter / 1000   //(TinterQTYRatio / TinterDensity)// * 1000;
                                 TinterCost = Tinter_Liter * TinterPriceRatio
 
+
                             } else if (TinterPriceUnit === 'kg') {
-                                TinterCost = TinterQTYRatio * TinterPriceRatio
+                                TinterCost = (TinterIngrams / 1000) * TinterPriceRatio
                             }
 
                             TinterTotalCost += TinterCost;
+                            console.log(`TinterQTYRatio${i}: `, TinterQTYRatio)
+                            console.log(`Tinter_Liter${i}: `, Tinter_Liter)
+                            console.log(`TinterPriceRatio ${i} Cost : `, TinterPriceRatio);
+                            console.log(`Tinter Cost ${i}: `, TinterCost);
                         }
 
                         //after all the process is finished to this process
@@ -731,6 +789,19 @@
 
     // Function to be executed when the input changes
     function QtyEnteredUser() {
+
+        var isUpdatedFormula = false;
+        const UpdatedFlag = document.getElementById("UpdatedOrder").value;
+        var isLiters = document.getElementById("isLiter").value;
+        var isLiter = false;
+
+        if (isLiters) {
+            isLiter = true;
+        }
+
+        if (UpdatedFlag !== "") {
+            isUpdatedFormula = true;
+        }
         showLoading()
         // Your code logic here
         // console.log("QtyEnteredUser() function executed");
@@ -745,7 +816,14 @@
         const xhr = new XMLHttpRequest();
 
         // Set up the API endpoint URL with the file number parameter
-        const url = `/api/BulkOrder/${fileNo}`;
+        var url = "";
+
+        if (isUpdatedFormula) {
+            url = `/api/BulkOrder/Updated/${fileNo}`;
+        } else {
+            url = `/api/BulkOrder/${fileNo}`;
+        }
+
 
         // Set up the HTTP method and URL
         xhr.open('GET', url, true);

@@ -831,8 +831,9 @@ module.exports = {
 
             if (sameUserName) {
                 //Username Already Exist
-                console.log("Customer already Existed");
-                resolve(State.Err = "Not inserted");
+                console.log("Same Username already Existed");
+                State.Err = "Same Username already Existed"
+                resolve(State);
             } else {
                 // add User
 
@@ -848,9 +849,11 @@ module.exports = {
 
                 await db.get().collection(collection.USERS_COLLECTION).insertOne(UserData).then((response) => {
                     if (response.insertedId) {
-                        resolve(State.Status = false);
+                        State.Status = false
+                        resolve(State);
                     } else {
-                        resolve(State.Err = "Not inserted");
+                        State.Err = "Not inserted"
+                        resolve(State);
                     }
                 })
             }

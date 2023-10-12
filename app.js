@@ -11,7 +11,12 @@ const fileUpload = require('express-fileupload');
 
 var EmployeeRouter = require('./routes/employee');
 var AdminRouter = require('./routes/admin');
-// var CustomerRouter = require('./routes/customer');
+var CustomerRouter = require('./routes/customer');
+var SalesRouter = require('./routes/sales');
+var OfficeRouter = require('./routes/office');
+var ManagerRouter = require('./routes/manager');
+var DispatcherRouter = require('./routes/dispatcher');
+var DriverRouter = require('./routes/driver');
 
 var app = express();
 
@@ -70,7 +75,12 @@ startApp();
 
 app.use('/', EmployeeRouter);
 app.use('/admin', AdminRouter);
-// app.use('/customer',CustomerRouter);
+app.use('/customer',CustomerRouter);
+app.use('/sales',SalesRouter);
+app.use('/office',OfficeRouter);
+app.use('/dispatcher',DispatcherRouter);
+app.use('/driver',DriverRouter);
+app.use('/manager',ManagerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

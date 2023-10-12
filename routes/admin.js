@@ -598,9 +598,16 @@ router.post('/UpdateBinder', verifyLogin, (req, res) => {
 })
 
 router.get('/Users', verifyLogin, (req, res) => {
+  const Error = req.query.Error;
+  console.log(Error)
+
   adminHelpers.getAllUser().then((Users) => {
     adminHelpers.getAllCustomerCategory().then((CustomerCategory) => {
-      res.render('admin/Users', { admin: true, Users, CustomerCategory });
+      if (Error) {
+        res.render('admin/Users', { admin: true, Users, CustomerCategory ,Error});
+      } else {
+        res.render('admin/Users', { admin: true, Users, CustomerCategory });
+      }
     })
   })
 })
@@ -609,9 +616,11 @@ router.post('/addUser', verifyLogin, (req, res) => {
   // console.log(req.body);
 
   adminHelpers.AddUser(req.body).then((State) => {
-    // if (State.Status) {
-    res.redirect('/admin/Users');
-    // }
+    if (!State.Err) {
+      res.redirect('/admin/Users');
+    } else {
+      res.redirect(`/admin/Users?Error=${encodeURIComponent(State.Err)}`);
+    }
   })
 })
 
@@ -663,7 +672,7 @@ router.get('/editUser/:id', verifyLogin, (req, res) => {
 
           res.render("admin/forms/EditUser", { admin: true, User, Designations, CustomerCategories });
         })
-      }else{
+      } else {
         res.render("admin/forms/EditUser", { admin: true, User, Designations });
       }
 

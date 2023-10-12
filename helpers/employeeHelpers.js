@@ -9,34 +9,28 @@ module.exports = {
     DoLogin: (Data) => {
         return new Promise(async (resolve, reject) => {
             var State = {}
-            var User = await db.get().collection(collection.EMPLOYEE_COLLECTION).findOne({ "Employee_Name": Data.userName });
-            if (User) {
-                // user ok. 
-                //check password
-                if (User.Password === Data.password) {
-                    State.employeeLooged = true;
+            console.log(Data)  // { userName: 'fdsfad', password: 'sdfasdf' }
+            var MatchedUser = await db.get().collection(collection.USERS_COLLECTION).findOne({ UserName: Data.userName });
+
+            if (MatchedUser) {
+                // have User with Name Matching
+                if (MatchedUser.Password === Data.password) {
+                    // password Match
+                    delete MatchedUser.Password;
+                    // console.log(MatchedUser);
+                    State.User = MatchedUser;
+                    State.loggedStatus = true
+                    resolve(State)
                 } else {
-                    State.employeeLooged = false;
-                    State.err = "Incorrect Password!"
+                    // incorrect Password
+                    State.error = "Password not Match";
+                    resolve(State)
                 }
             } else {
-                //check user by email
-                var User = await db.get().collection(collection.EMPLOYEE_COLLECTION).findOne({ "Email": Data.userName });
-                if (User) {
-                    // user Ok 
-                    // check password
-                    if (User.Password === Data.password) {
-                        State.employeeLooged = true;
-                    } else {
-                        State.employeeLooged = false;
-                        State.err = "Incorrect Password!"
-                    }
-                } else {
-                    State.employeeLooged = false;
-                    State.err = 'No User Found!'
-                }
+                // incorrect User name
+                State.error = "Username not Match";
+                resolve(State)
             }
-            resolve(State);
         })
     },
     CreateNewUser: () => {
@@ -147,7 +141,7 @@ module.exports = {
                     } else {
                         resolve({
                             Status: true,
-                            Data:Data
+                            Data: Data
                         })
                     }
                 })
@@ -164,7 +158,7 @@ module.exports = {
                 // console.log("Checking for duplicates: ", Data.FileNo);
 
                 var fileNo = Data.FileNo;
-                var SameFileNoFormula = await db.get().collection(collection.EDITED_FROMULA_COLLECTION).findOne({ FileNo: fileNo });
+                var SameFileNoFormula = await db.get().collection(collection.FORMULA_COLLECTION).findOne({ FileNo: fileNo });
                 // console.log("SameFileNoFormula: ", SameFileNoFormula);
                 if (SameFileNoFormula) {
                     Data.FileNo = (parseInt(Data.FileNo) + 1).toString();
@@ -175,13 +169,13 @@ module.exports = {
             }
 
             async function SaveFormulaData() {
-                await db.get().collection(collection.EDITED_FROMULA_COLLECTION).insertOne(Data).then((Response) => {
+                await db.get().collection(collection.FORMULA_COLLECTION).insertOne(Data).then((Response) => {
                     if (!Response) {
                         throw "Error";
                     } else {
                         resolve({
                             Status: true,
-                            Data:Data
+                            Data: Data
                         })
                     }
                 })
@@ -214,7 +208,7 @@ module.exports = {
     },
     FindUpdatesFormulaByFileNo: (FileNo) => {
         return new Promise(async (resolve, reject) => {
-            let Formula = await db.get().collection(collection.EDITED_FROMULA_COLLECTION).findOne({ "FileNo": FileNo });
+            let Formula = await db.get().collection(collection.FORMULA_COLLECTION).findOne({ "FileNo": FileNo });
             resolve(Formula);
         })
     },
@@ -267,7 +261,7 @@ module.exports = {
     },
     GetUpdatesFormulaByFileNo: (FileNo) => {
         return new Promise(async (resolve, reject) => {
-            var Formula = await db.get().collection(collection.EDITED_FROMULA_COLLECTION).findOne({ "FileNo": FileNo });
+            var Formula = await db.get().collection(collection.FORMULA_COLLECTION).findOne({ "FileNo": FileNo });
             resolve(Formula);
         })
     },
@@ -562,6 +556,173 @@ module.exports = {
             resolve(Formula);
         })
     },
+    GetAllUpdatedToCalCostCustomerById: (FormulaID, customerCategory) => {
+        return new Promise(async (resolve, reject) => {
+            var Formula = await db.get().collection(collection.FORMULA_COLLECTION).findOne({ FileNo: FormulaID });
+
+            // console.log("Formula: ", Formula);
+
+            for (let i = 1; i <= parseInt(Formula.TintersCount); i++) {
+                var TinterName = Formula[`TinterNameR${i}`];
+                var Tinter = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Name: TinterName });
+                console.log("Tineter: ", Tinter);
+                console.log("customerCategory: ",customerCategory);
+
+                // check fort tinter price and if not reject;
+                // Get the corresponding price for the customer's category
+                // const customerPrice = Tinter[`Category_${customerCategory.split(' ')[1]}`];
+
+
+                // Replace this with the actual customer category name
+                // const customerCategory = 'Category 2';
+
+                // Find the price for the given customer category
+                // const customerCategory = 'Category 1'; // Change this to test different customer categories
+
+                function getPriceForCategory(customerCategory, tinter) {
+                    for (const key in tinter) {
+                        if (key.startsWith('CategoryName_') && tinter[key] === customerCategory) {
+                            const index = key.split('_')[1];
+                            const priceKey = `Category_${index}`;
+                            return tinter[priceKey];
+                        }
+                    }
+                    return null;
+                }
+
+                const customerPrice = getPriceForCategory(customerCategory, Tinter);
+
+                if (customerPrice !== null) {
+                    // console.log(`Price for ${customerCategory}: ${customerPrice}`);
+                } else {
+                    // console.log(`Price for ${customerCategory} not found.`);
+                }
+
+
+
+                if (customerPrice) {
+                    //console.log(`Price for ${customerCategory}: ${customerPrice}`);
+                    Formula[`TinterPriceR${i}`] = customerPrice;
+                } else {
+                    // price not decleared for this tinter.
+                    resolve({ Status: false, errMsg: 'price not decleared for this tinter: ' + Tinter.Product_Name });
+                }
+            }
+
+            // console.log("Formula Modified Tinter Price : ", Formula);
+
+            // take binders
+
+            var Binder1 = false;
+            var Binder2 = false;
+
+
+            if (Formula.Binder1Name) {
+                Binder1 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Name: Formula.Binder1Name });
+                // console.log(Binder1);
+
+                // Get the corresponding price for the customer's category
+                // const customerBinder1Price = Binder1[`Category_${customerCategory.split(' ')[1]}`];
+
+                // Find the price for the given customer category
+                function getPriceForCategory(customerCategory, Binder1) {
+                    for (const key in Binder1) {
+                        if (key.startsWith('CategoryName_') && Binder1[key] === customerCategory) {
+                            const index = key.split('_')[1];
+                            const priceKey = `Category_${index}`;
+                            return Binder1[priceKey];
+                        }
+                    }
+                    return null;
+                }
+
+                const customerBinder1Price = getPriceForCategory(customerCategory, Binder1);
+
+                if (customerBinder1Price !== null) {
+                    // console.log(`Price for ${customerCategory}: ${customerBinder1Price}`);
+                } else {
+                    // console.log(`Price for ${customerCategory} not found.`);
+                }
+
+
+
+                if (customerBinder1Price) {
+                    Formula.Binder1Price = customerBinder1Price;
+                } else {
+                    // price not decleared for this Binder.
+                    resolve({ Status: false, errMsg: 'price not decleared for this Binder: ' + Binder1.Binder_Name })
+                }
+
+                if (Formula.Binder2Name) {
+                    Binder2 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Name: Formula.Binder2Name });
+                    // console.log(Binder2);
+
+                    // Get the corresponding price for the customer's category
+                    // const customerBinder2Price = Binder2[`Category_${customerCategory.split(' ')[1]}`];
+
+                    // Find the price for the given customer category
+                    function getPriceForCategory(customerCategory, Binder2) {
+                        for (const key in Binder2) {
+                            if (key.startsWith('CategoryName_') && Binder2[key] === customerCategory) {
+                                const index = key.split('_')[1];
+                                const priceKey = `Category_${index}`;
+                                return Binder2[priceKey];
+                            }
+                        }
+                        return null;
+                    }
+
+                    const customerBinder2Price = getPriceForCategory(customerCategory, Binder2);
+
+
+
+                    if (customerBinder2Price) {
+                        Formula.Binder2Price = customerBinder2Price;
+                    } else {
+                        // price not decleared for this Binder.
+                        resolve({ Status: false, errMsg: 'price not decleared for this Binder: ' + Binder2.Binder_Name });
+                    }
+                }
+            }
+
+            //  console.log("Formula Modified Binder Price : ", Formula);
+
+            // take Additives
+
+            if (Formula.AdditiveName) {
+                var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ Additive_Name: Formula.AdditiveName });
+
+                // Get the corresponding price for the customer's category
+                // const customerAdditivePrice = Additive[`Category_${customerCategory.split(' ')[1]}`];
+
+                // Find the price for the given customer category
+                function getPriceForCategory(customerCategory, Additive) {
+                    for (const key in Additive) {
+                        if (key.startsWith('CategoryName_') && Additive[key] === customerCategory) {
+                            const index = key.split('_')[1];
+                            const priceKey = `Category_${index}`;
+                            return Additive[priceKey];
+                        }
+                    }
+                    return null;
+                }
+
+                const customerAdditivePrice = getPriceForCategory(customerCategory, Additive);
+
+                if (customerAdditivePrice) {
+                    Formula.AdditivePrice = customerAdditivePrice;
+                } else {
+                    // price not decleared for this Additive.
+                    resolve({ Status: false, errMsg: 'price not decleared for this Additive: ' + Additive.Additive_Name })
+                }
+            }
+
+            //  console.log("Formula Modified Additive Price : ", Formula);
+
+            resolve(Formula);
+
+        })
+    },
     GetAllToCalCostCustomerById: (FormulaID, customerCategory) => {
         return new Promise(async (resolve, reject) => {
             var Formula = await db.get().collection(collection.FORMULA_COLLECTION).findOne({ FileNo: FormulaID });
@@ -571,7 +732,8 @@ module.exports = {
             for (let i = 1; i <= parseInt(Formula.TintersCount); i++) {
                 var TinterName = Formula[`TinterNameR${i}`];
                 var Tinter = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Name: TinterName });
-                //   console.log("Tineter: ", Tinter);
+                console.log("Tineter: ", Tinter);
+                console.log("customerCategory: ",customerCategory);
 
                 // check fort tinter price and if not reject;
                 // Get the corresponding price for the customer's category
