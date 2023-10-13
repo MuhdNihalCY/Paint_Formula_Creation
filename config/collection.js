@@ -11,5 +11,6 @@ module.exports={
     BULK_ORDER_COLLECTION: 'Bulk_Order_Collection',
     CUSTOMER_CATETGORY_COLLECTION: 'Customer_Category_Collection',
     EDITED_FROMULA_COLLECTION: 'Updated_Fromula_Collection',
-    USERS_COLLECTION:'Users_Collection'
+    USERS_COLLECTION:'Users_Collection',
+    CARD_COLLECTION:'Card_Collection'
 };

@@ -566,7 +566,7 @@ module.exports = {
                 var TinterName = Formula[`TinterNameR${i}`];
                 var Tinter = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Name: TinterName });
                 console.log("Tineter: ", Tinter);
-                console.log("customerCategory: ",customerCategory);
+                console.log("customerCategory: ", customerCategory);
 
                 // check fort tinter price and if not reject;
                 // Get the corresponding price for the customer's category
@@ -733,7 +733,7 @@ module.exports = {
                 var TinterName = Formula[`TinterNameR${i}`];
                 var Tinter = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Name: TinterName });
                 console.log("Tineter: ", Tinter);
-                console.log("customerCategory: ",customerCategory);
+                console.log("customerCategory: ", customerCategory);
 
                 // check fort tinter price and if not reject;
                 // Get the corresponding price for the customer's category
@@ -900,6 +900,33 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             var Formulations = await db.get().collection(collection.FORMULA_COLLECTION).find({ MixerName: CustomerName }).sort({ "InsertedTime": -1 }).toArray();
             resolve(Formulations)
+        })
+    },
+    StoreCardData: (cardData) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CARD_COLLECTION).insertOne(cardData).then(() => {
+                resolve();
+            })
+        })
+    },
+    GetSameCardByCardName: (cardName) => {
+        return new Promise(async (resolve, reject) => {
+            var State = {
+                name: cardName,
+                Status: false
+            }
+            await db.get().collection(collection.CARD_COLLECTION).findOne({ name: cardName }).then((card) => {
+                if (card) {
+                    if (card.name === cardName) {
+                        State.Status = true;
+                        resolve(State);
+                    } else {
+                        resolve(State);
+                    }
+                } else {
+                    resolve(State);
+                }
+            })
         })
     }
 

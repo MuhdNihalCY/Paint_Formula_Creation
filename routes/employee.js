@@ -3,6 +3,7 @@ var router = express.Router();
 var EmployeeHeplers = require('../helpers/employeeHelpers');
 const employeeHelpers = require('../helpers/employeeHelpers');
 const { json } = require('express/lib/response');
+const trelloHelpers = require('../helpers/trelloHelpers');
 
 
 // verify login 
@@ -53,6 +54,7 @@ router.get('/', EmployeeVerifyLogin, function (req, res, next) {
             Additive.Stock = parseFloat(Additive.Stock).toFixed(3);
           }
         }
+       
         res.render('employee/home', { EmployeeName, Products, Binders, Additives });
       })
     })
@@ -75,8 +77,6 @@ router.get('/logout', EmployeeVerifyLogin, (req, res) => {
 
   res.redirect('/login');
 })
-
-
 
 router.get('/login', (req, res) => {
   var loginpage = true
@@ -1011,7 +1011,9 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
       employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
         // Rest of the code...
         //  console.log("Bulk Updated!");
-        res.redirect('/Orders');
+        trelloHelpers.addTrelloCard(orderFile).then(()=>{
+          res.redirect('/Orders');
+        })
       });
     }
 
@@ -1762,7 +1764,9 @@ router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
       employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
         // Rest of the code...
         //  console.log("Bulk Updated!");
-        res.redirect('/Orders');
+        trelloHelpers.addTrelloCard(orderFile).then(()=>{
+          res.redirect('/Orders');
+        })
       });
     }
 

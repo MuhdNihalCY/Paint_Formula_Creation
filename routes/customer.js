@@ -4,6 +4,7 @@ var router = express.Router();
 const fs = require('fs');
 var app = express();
 var path = require('path');
+const trelloHelpers = require('../helpers/trelloHelpers');
 
 
 // customer Verify
@@ -584,7 +585,9 @@ router.post('/BulkOrder/:FileNo', CustomerVerifyLogin, async (req, res) => {
                 employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
                     // Rest of the code...
                     //  console.log("Bulk Updated!");
-                    res.redirect('/Customer/Orders');
+                    trelloHelpers.addTrelloCard(orderFile).then(() => {
+                        res.redirect('/Customer/Orders');
+                    })
                 });
             }
 
