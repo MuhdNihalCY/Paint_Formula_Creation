@@ -70,7 +70,7 @@ module.exports = {
                 .then(response => {
                     console.log(`Response: ${response.status} ${response.statusText}`);
                     // return response.data; // Use response.data to access the JSON response
-                    console.log("card Data: ", response.data);
+                    // console.log("card Data: ", response.data);
                     resolve(response.data);
                 })
                 .catch(error => {
@@ -244,5 +244,196 @@ module.exports = {
                 }
             })();
         })
-    }
+    },
+    getAllCardsFromOrders: () => {
+        return new Promise(async (resolve, reject) => {
+            var OrdersListData;
+            var OrdersListID;
+
+            try {
+                AllLists = await module.exports.getAllList();
+                // console.log("All Lists:", AllLists);
+            } catch (error) {
+                console.error(error);
+            }
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === "Order") {
+                    OrdersListData = AllLists[i];
+                    // console.log("OrdersListData: ", OrdersListData);
+                    OrdersListID = OrdersListData.id;
+                    try {
+                        var AllCards = await module.exports.getAllcardsFromCardID(OrdersListID);
+                        //  console.log("All cards:", AllCards);
+                        resolve(AllCards)
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                    break;
+                } else {
+                    resolve({ status: false });
+                }
+            }
+            // resolve(OrdersListData);
+        })
+    },
+    getAllcardsFromCardID: (cardID) => {
+        return new Promise(async (resolve, reject) => {
+            axios.get(`https://api.trello.com/1/lists/${cardID}/cards?key=${ApiKey}&token=${Token}`, { //'https://api.trello.com/1/cards/{id}?key=APIKey&token=APIToken'
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => {
+                    console.log(`Response: ${response.status} ${response.statusText}`);
+                    // return response.data; // Use response.data to access the JSON response
+                    // console.log("cards Data: ", response.data);
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                    reject(error);
+                });
+        })
+    },
+    addImageToCardsInArray: (AllCard) => {
+        return new Promise(async (resolve, reject) => {
+            // Create an array of promises for the image requests
+            const imagePromises = AllCard.map(async (card) => {
+                const cardId = card.id;
+                const attachmentID = card.idAttachmentCover;
+                if (attachmentID) {
+                    const apiUrl = `https://api.trello.com/1/cards/${cardId}/attachments/${attachmentID}?key=${ApiKey}&token=${Token}`;
+
+                    try {
+                        const response = await axios.get(apiUrl, {
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        });
+                        // console.log(response.data.url)
+                        card.ImageUrl = response.data.url;
+                    } catch (error) {
+                        console.error('Error fetching image:', error);
+                    }
+                }
+            });
+
+            // Wait for all promises to resolve
+            await Promise.all(imagePromises);
+
+            resolve(AllCard);
+        });
+    },
+    UpdateCardNameandDescription: (NewcardData, OldCardData) => {
+        return new Promise(async (resolve, reject) => {
+            const cardId = NewcardData.id;
+            const newCardName = OldCardData.name + "-" + NewcardData.CustomerName;
+            const NewDescription = NewcardData.description;
+            var OfficeSectionList;
+            var OfficeSectionID;
+
+            try {
+                AllLists = await module.exports.getAllList();
+                // console.log("All Lists:", AllLists);
+            } catch (error) {
+                console.error(error);
+            }
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === "OFFICE SECTION") {
+                    OfficeSectionList = AllLists[i];
+                    // console.log("OrdersListData: ", OrdersListData);
+                    OfficeSectionID = OfficeSectionList.id;
+                    break;
+                }
+            }
+
+
+
+
+
+            await axios.put(`https://api.trello.com/1/cards/${cardId}`, null, {
+                params: {
+                    key: ApiKey,
+                    token: Token,
+                    name: newCardName, 
+                    desc: NewDescription,
+                    idList: OfficeSectionID
+                },
+            })
+                .then(response => {
+                    console.log(`Response: ${response.status} ${response.statusText}`);
+                    resolve(response.data);
+                })
+                .then(data => console.log(data))
+                .catch(error => {
+                    console.error(error)
+                    reject(error)
+                });
+        })
+    },
+    createNewChecklistAndItems: (NewcardData) => {
+        return new Promise(async (resolve, reject) => {
+            const cardId = NewcardData.id;
+            const checklistName = 'Checklist';
+
+            // Extract checklist items from NewcardData
+            var checklistItems = [];
+            for (const key in NewcardData) {
+                if (key.startsWith('ChecklistItem')) {
+                    checklistItems.push(NewcardData[key]);
+                }
+            }
+
+            // Remove null or empty strings from the array
+            const filteredChecklistItems = checklistItems.filter(item => item !== null && item !== '');
+            checklistItems = filteredChecklistItems;
+
+
+            // Create a new checklist
+            axios.post(`https://api.trello.com/1/checklists`, null, {
+                params: {
+                    idCard: cardId,
+                    name: checklistName,
+                    key: ApiKey,
+                    token: Token,
+                },
+            }).then((response) => {
+                console.log(`Response: ${response.status} ${response.statusText}`);
+                return response.data;
+            }).then(async (checklist) => {
+                console.log('Created Checklist:', checklist);
+
+                // Add checklist items
+                const addItemPromises = checklistItems.map(async (itemName) => {
+                    await axios.post(
+                        `https://api.trello.com/1/checklists/${checklist.id}/checkItems`,
+                        null,
+                        {
+                            params: {
+                                name: itemName.toString(),
+                                key: ApiKey, // Replace with your API key
+                                token: Token, // Replace with your API token
+                            },
+                        }
+                    );
+                });
+
+                console.log("Added Items");
+                const itemStatuses = await Promise.all(addItemPromises)
+                    .catch((error) => {
+                        console.error("Error adding checklist items:", error);
+                        // You can reject the promise here if needed
+                        reject(error);
+                    });
+
+                // console.log("itemStatuses: ", itemStatuses);
+                resolve(itemStatuses);
+            })
+
+        });
+    }   
+
 }

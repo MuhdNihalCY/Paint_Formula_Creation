@@ -928,6 +928,17 @@ module.exports = {
                 }
             })
         })
+    },
+
+    //sales
+    StoreModifiedCardBySales: (card) => {
+        return new Promise(async (resolve, reject) => {
+            card.InsertedTime = Date.now();
+            console.log("Modied card: ",card);
+            await db.get().collection(collection.SALES_MODIFIED_CARDS).insertOne(card).then((response) => {
+                resolve()
+            })
+        })
     }
 
 }

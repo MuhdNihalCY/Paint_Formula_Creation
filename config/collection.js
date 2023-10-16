@@ -12,5 +12,6 @@ module.exports={
     CUSTOMER_CATETGORY_COLLECTION: 'Customer_Category_Collection',
     EDITED_FROMULA_COLLECTION: 'Updated_Fromula_Collection',
     USERS_COLLECTION:'Users_Collection',
-    CARD_COLLECTION:'Card_Collection'
+    CARD_COLLECTION:'Card_Collection',
+    SALES_MODIFIED_CARDS:'Sales_Modified_Cards'
 };
