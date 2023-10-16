@@ -87,7 +87,7 @@ module.exports = {
             var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0, so add 1
             var yy = String(today.getFullYear()).slice(-2); // Get the last 2 digits of the year
 
-            var cardName = `${dd}-${mm}-${yy}-${data.FileName}1`;
+            var cardName = `${dd}-${mm}-${yy}-${data.InsertedTime}`;
             console.log("card Name: ", cardName);
 
 
