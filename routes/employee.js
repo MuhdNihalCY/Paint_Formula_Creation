@@ -54,7 +54,7 @@ router.get('/', EmployeeVerifyLogin, function (req, res, next) {
             Additive.Stock = parseFloat(Additive.Stock).toFixed(3);
           }
         }
-       
+
         res.render('employee/home', { EmployeeName, Products, Binders, Additives });
       })
     })
@@ -107,7 +107,7 @@ router.post('/login', (req, res) => {
         case 'Sales':
           storeSales(UserData);
           break;
-        case 'office':
+        case 'Office':
           storeOffice(UserData);
           break;
         case 'Dispatcher':
@@ -1011,8 +1011,10 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
       employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
         // Rest of the code...
         //  console.log("Bulk Updated!");
-        trelloHelpers.addTrelloCard(orderFile).then(()=>{
-          res.redirect('/Orders');
+        trelloHelpers.addTrelloCard(orderFile).then((CardId) => {
+          employeeHelpers.SaveCardIDToOrder(orderFile.FileName, CardId).then(() => {
+            res.redirect('/Orders');
+          })
         })
       });
     }
@@ -1764,8 +1766,11 @@ router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
       employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
         // Rest of the code...
         //  console.log("Bulk Updated!");
-        trelloHelpers.addTrelloCard(orderFile).then(()=>{
-          res.redirect('/Orders');
+        trelloHelpers.addTrelloCard(orderFile).then((CardId) => {
+          employeeHelpers.SaveCardIDToOrder(orderFile.FileName, CardId).then(() => {
+            res.redirect('/Orders');
+          })
+          // res.redirect('/Orders');
         })
       });
     }

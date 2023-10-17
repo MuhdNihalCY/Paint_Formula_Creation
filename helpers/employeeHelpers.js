@@ -929,16 +929,44 @@ module.exports = {
             })
         })
     },
+    SaveCardIDToOrder: (OrderFileNO, CardID) => {
+        return new Promise(async (resolve, reject) => {
+            console.log("OrderFile No: ", OrderFileNO, " CardID: ", CardID);
+            await db.get().collection(collection.BULK_ORDER_COLLECTION).updateOne({ FileName: OrderFileNO }, { $set: { CardID: CardID } }).then((response) => {
+                // console.log("REsponse of updated Order: ", response);
+                // resolve();
+            })
+            var updatedOrder = await db.get().collection(collection.BULK_ORDER_COLLECTION).findOne({ CardID: CardID });
+            // console.log("Updated ORdde dara: ", updatedOrder);
+            resolve();
+        })
+    },
 
     //sales
     StoreModifiedCardBySales: (card) => {
         return new Promise(async (resolve, reject) => {
             card.InsertedTime = Date.now();
-            console.log("Modied card: ",card);
+            console.log("Modied card: ", card);
             await db.get().collection(collection.SALES_MODIFIED_CARDS).insertOne(card).then((response) => {
                 resolve()
             })
         })
-    }
+    },
 
+    //ofiice
+
+    getCardContactDetails: (CardId) => {
+        return new Promise(async (resolve, reject) => {
+            console.log("CardId: ", CardId);
+            var ContactDetails = await db.get().collection(collection.SALES_MODIFIED_CARDS).findOne({ id: CardId });
+            // console.log("ContactDetails: ",ContactDetails);
+            resolve(ContactDetails);
+        })
+    },
+    getAllProductionPeople: () => {
+        return new Promise(async (resolve, reject) => {
+            var ProductionPeople = await db.get().collection(collection.USERS_COLLECTION).find({ Designation: "Production" }).project({ Password: 0 }).toArray();
+            resolve(ProductionPeople);
+        })
+    }
 }

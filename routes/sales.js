@@ -33,7 +33,7 @@ router.post('/cardUpdated/:CardId', SalesVerifyLogin, (req, res) => {
     console.log(Card);
     trelloHelpers.getCardByID(Card.id).then((CardData) => {
         // console.log("CardData: ", CardData);
-        trelloHelpers.UpdateCardNameandDescription(Card, CardData).then((updatedCard) => {
+        trelloHelpers.UpdateCardNameandDescriptionAndMoveToOffice(Card, CardData).then((updatedCard) => {
             // console.log("updatedCard: ", updatedCard);
             trelloHelpers.createNewChecklistAndItems(Card).then((response) => {
                 // console.log("CheckList Added: respose: ",response);

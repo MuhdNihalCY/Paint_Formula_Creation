@@ -43,7 +43,10 @@
     {{else}}
     {{#if SalesLogged}}
     {{else}}
+    {{#if OfficeLogged}}
+    {{else}}
     {{>header}}
+    {{/if}}
     {{/if}}
     {{{body}}}
     {{>footer}}

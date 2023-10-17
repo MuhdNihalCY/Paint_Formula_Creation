@@ -171,13 +171,14 @@ module.exports = {
                             'Accept': 'application/json',
                         }
                     })
-                    .then(response => {
+                    .then(async (response) => {
                         if (response.status === 200) {
                             const card = response.data;
                             console.log("card:", card);
                             CardDetails = card;
                             AddAttachment(card)
-                            // resolve(card);
+                            await employeeHelpers.SaveCardIDToOrder(data.FileName, CardDetails.id)
+                            // resolve(CardDetails.id);
                         } else {
                             console.log("Error response:", response.status, response.statusText);
                             console.log("Error data:", response.data);
@@ -228,7 +229,7 @@ module.exports = {
                             .then(response => {
                                 console.log(`Response: ${response.status} ${response.statusText}`);
                                 console.log("Added Attachement : ", response.data);
-                                resolve(response.data);
+                                resolve(CardDetails.id);
                             })
                             .catch(error => {
                                 console.error(error)
@@ -239,16 +240,18 @@ module.exports = {
                         // The file does not exist, handle the error
                         console.error('File does not exist:', sourceImagePath);
                         // reject('File does not exist');
-                        resolve(CardDetails)
+                        resolve(CardDetails.id)
                     }
                 }
             })();
         })
     },
+
     getAllCardsFromOrders: () => {
         return new Promise(async (resolve, reject) => {
             var OrdersListData;
             var OrdersListID;
+            let OrderSectionFound = false;
 
             try {
                 AllLists = await module.exports.getAllList();
@@ -269,34 +272,61 @@ module.exports = {
                     } catch (error) {
                         console.error(error);
                     }
-
+                    OrderSectionFound = true;
                     break;
-                } else {
-                    resolve({ status: false });
                 }
+            }
+            if (!OrderSectionFound) {
+                console.log("No 'Order' list found.");
+                resolve({ status: false });
             }
             // resolve(OrdersListData);
         })
     },
+
     getAllcardsFromCardID: (cardID) => {
         return new Promise(async (resolve, reject) => {
-            axios.get(`https://api.trello.com/1/lists/${cardID}/cards?key=${ApiKey}&token=${Token}`, { //'https://api.trello.com/1/cards/{id}?key=APIKey&token=APIToken'
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-                .then(response => {
-                    console.log(`Response: ${response.status} ${response.statusText}`);
-                    // return response.data; // Use response.data to access the JSON response
-                    // console.log("cards Data: ", response.data);
-                    resolve(response.data);
-                })
-                .catch(error => {
-                    console.error(error);
-                    reject(error);
+            console.log("Getting Card!");
+            try {
+                console.log(cardID);
+                // console.log(`https://api.trello.com/1/lists/${cardID}/cards?key=${ApiKey}&token=${Token}`);
+                const response = await axios.get(`https://api.trello.com/1/lists/${cardID}/cards?key=${ApiKey}&token=${Token}`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
                 });
+
+                console.log("Cards Data: ", response.data);
+                console.log(`Response: ${response.status} ${response.statusText}`);
+                resolve(response.data);
+            } catch (error) {
+                console.log("Error Happened!")
+                console.error(error);
+                reject(error);
+            }
         })
     },
+    // getAllcardsFromCardID: (cardID) => {
+    //     console.log(cardID);
+    //     return new Promise(async (resolve, reject) => {
+    //         console.log("getiign card!");
+    //         await axios.get(`https://api.trello.com/1/lists/652c3b0715a63afcc95708b1/cards?key=${ApiKey}&token=${Token}`, {
+    //             headers: {
+    //                 'Accept': 'application/json'
+    //             }
+    //         })
+    //         .then(response => {
+    //                 console.log("cards Data: ", response);
+    //                 console.log(`Response: ${response.status} ${response.statusText}`);
+    //                 // return response.data; // Use response.data to access the JSON response
+    //                 resolve(response.data);
+    //             })
+    //             .catch(error => {
+    //                 console.error(error);
+    //                 reject(error);
+    //             });
+    //     })
+    // },
     addImageToCardsInArray: (AllCard) => {
         return new Promise(async (resolve, reject) => {
             // Create an array of promises for the image requests
@@ -326,7 +356,7 @@ module.exports = {
             resolve(AllCard);
         });
     },
-    UpdateCardNameandDescription: (NewcardData, OldCardData) => {
+    UpdateCardNameandDescriptionAndMoveToOffice: (NewcardData, OldCardData) => {
         return new Promise(async (resolve, reject) => {
             const cardId = NewcardData.id;
             const newCardName = OldCardData.name + "-" + NewcardData.CustomerName;
@@ -344,7 +374,7 @@ module.exports = {
             for (let i = 0; i < AllLists.length; i++) {
                 if (AllLists[i].name === "OFFICE SECTION") {
                     OfficeSectionList = AllLists[i];
-                    // console.log("OrdersListData: ", OrdersListData);
+                    console.log("Office section: ", OfficeSectionList);
                     OfficeSectionID = OfficeSectionList.id;
                     break;
                 }
@@ -358,13 +388,13 @@ module.exports = {
                 params: {
                     key: ApiKey,
                     token: Token,
-                    name: newCardName, 
+                    name: newCardName,
                     desc: NewDescription,
                     idList: OfficeSectionID
                 },
             })
                 .then(response => {
-                    console.log(`Response: ${response.status} ${response.statusText}`);
+                    console.log(`Response: ${response.data} `);
                     resolve(response.data);
                 })
                 .then(data => console.log(data))
@@ -434,6 +464,155 @@ module.exports = {
             })
 
         });
-    }   
+    },
+    getAllCardsFromOfficeSection: () => {
+        return new Promise(async (resolve, reject) => {
+            var OrdersListData;
+            var OrdersListID;
+            let officeSectionFound = false; // Flag to track if the office section is found
+
+            try {
+                AllLists = await module.exports.getAllList();
+            } catch (error) {
+                console.error(error);
+            }
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === "OFFICE SECTION") {
+                    OrdersListData = AllLists[i];
+                    console.log("OrdersListData: ", OrdersListData);
+                    OrdersListID = OrdersListData.id;
+                    try {
+                        var AllCards = await module.exports.getAllcardsFromCardID(OrdersListID);
+                        console.log("All cards:", AllCards);
+                        resolve(AllCards);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                    officeSectionFound = true; // Set the flag to true if the office section is found
+                    break;
+                }
+            }
+
+            if (!officeSectionFound) {
+                console.log("No 'OFFICE SECTION' list found.");
+                resolve({ status: false });
+            }
+        })
+    },
+    getChecklistFromCheckListID: (ChecklistID) => {
+        return new Promise(async (resolve, reject) => {
+            console.log(`https://api.trello.com/1/checklists/${ChecklistID}?key=${ApiKey}&token=${Token}`);
+            await axios.get(`https://api.trello.com/1/checklists/${ChecklistID}?key=${ApiKey}&token=${Token}`, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => {
+                    console.log(`Response: ${response.status} ${response.statusText}`);
+                    // return response.data; // Use response.data to access the JSON response
+                    console.log(response.data.checkItems);
+                    resolve(response.data.checkItems);
+                })
+                .catch(error => {
+                    console.error(error);
+                    reject(error);
+                });
+        })
+    },
+    moveCardtoReadyToDispatchByCardID: (CardID) => {
+        return new Promise(async (resolve, reject) => {
+            var AllLists;
+            var DispatcherList;
+
+            try {
+                AllLists = await module.exports.getAllList();
+                // console.log("All Lists:", AllLists);
+            } catch (error) {
+                console.error(error);
+            }
+
+            //console.log("All Lists: outside: ", AllLists);
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === "READY FOR DISPATCH") {
+                    DispatcherList = AllLists[i];
+                    break;
+                }
+            }
+
+            console.log("Dispatcher List: ", DispatcherList);
+            var idList = DispatcherList.id;
+            console.log("Dispatcher List ID: ", idList);
+
+
+            // update the list from the card or move card to dispatcher
+            await axios.put(`https://api.trello.com/1/cards/${CardID}`, null, {
+                params: {
+                    key: ApiKey,
+                    token: Token,
+                    idList: idList
+                },
+            })
+                .then(response => {
+                    console.log(`Response: ${response.status} ${response.statusText}`);
+                    resolve(response.data);
+                })
+                .then(data => console.log(data))
+                .catch(error => {
+                    console.error(error)
+                    reject(error)
+                });
+
+        })
+    },
+    moveCardToProduction: (CardID, ProductionPerson) => {
+        return new Promise(async (resolve, reject) => {
+            var AllLists;
+            var ProductionList;
+
+            try {
+                AllLists = await module.exports.getAllList();
+                // console.log("All Lists:", AllLists);
+            } catch (error) {
+                console.error(error);
+            }
+
+            //console.log("All Lists: outside: ", AllLists);
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === ProductionPerson) {
+                    ProductionList = AllLists[i];
+                    break;
+                }
+            }
+
+            console.log("Production List: ", ProductionList);
+            var idList = ProductionList.id;
+            console.log("Production List ID: ", idList);
+
+
+            // update the list from the card or move card to dispatcher
+            await axios.put(`https://api.trello.com/1/cards/${CardID}`, null, {
+                params: {
+                    key: ApiKey,
+                    token: Token,
+                    idList: idList
+                },
+            })
+                .then(response => {
+                    console.log(`Response: ${response.status} ${response.statusText}`);
+                    resolve(response.data);
+                })
+                .then(data => console.log(data))
+                .catch(error => {
+                    console.error(error)
+                    reject(error)
+                });
+        })
+    }
+
+
+
 
 }
