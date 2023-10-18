@@ -979,5 +979,17 @@ module.exports = {
             })
 
         })
+    },
+
+
+    //dispatcher
+    getAllDriverPeople: () => {
+        return new Promise(async (resolve, reject) => {
+            var Driver = await db.get().collection(collection.USERS_COLLECTION).find({ Designation: "Driver" }).project({ Password: 0 }).toArray();
+            resolve(Driver);
+        })
     }
+
+
+    
 }

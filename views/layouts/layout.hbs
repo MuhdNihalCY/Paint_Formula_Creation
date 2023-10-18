@@ -45,7 +45,10 @@
     {{else}}
     {{#if OfficeLogged}}
     {{else}}
+    {{#if DispatcherLoggedIn}}
+    {{else}}
     {{>header}}
+    {{/if}}
     {{/if}}
     {{/if}}
     {{{body}}}

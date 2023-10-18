@@ -631,8 +631,137 @@ module.exports = {
                 resolve(response);
             })
         })
-    }
+    },
 
+
+    //Dispatcher
+
+    getAllCardsFromDispatcherSection: () => {
+        return new Promise(async (resolve, reject) => {
+            var DispatchListData;
+            var DispatchListID;
+            let DispatchSectionFound = false; // Flag to track if the office section is found
+
+            try {
+                AllLists = await module.exports.getAllList();
+            } catch (error) {
+                console.error(error);
+            }
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === "READY FOR DISPATCH") {
+                    DispatchListData = AllLists[i];
+                    console.log("OrdersListData: ", DispatchListData);
+                    DispatchListID = DispatchListData.id;
+                    try {
+                        var AllCards = await module.exports.getAllcardsFromCardID(DispatchListID);
+                        console.log("All cards:", AllCards);
+                        resolve(AllCards);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                    DispatchSectionFound = true; // Set the flag to true if the office section is found
+                    break;
+                }
+            }
+
+            if (!DispatchSectionFound) {
+                console.log("No 'READY FOR DISPATCH' list found.");
+                resolve({ status: false });
+            }
+        })
+    },
+    moveCardtoCustomerCollectionByCardID: (CardID) => {
+        return new Promise(async (resolve, reject) => {
+            var AllLists;
+            var Customer_CollectionList;
+
+            try {
+                AllLists = await module.exports.getAllList();
+                // console.log("All Lists:", AllLists);
+            } catch (error) {
+                console.error(error);
+            }
+
+            //console.log("All Lists: outside: ", AllLists);
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === "Customer Collection") {
+                    Customer_CollectionList = AllLists[i];
+                    break;
+                }
+            }
+
+            console.log("Customer_Collection List: ", Customer_CollectionList);
+            var idList = Customer_CollectionList.id;
+            console.log("Customer_Collection List ID: ", idList);
+
+
+            // update the list from the card or move card to dispatcher
+            await axios.put(`https://api.trello.com/1/cards/${CardID}`, null, {
+                params: {
+                    key: ApiKey,
+                    token: Token,
+                    idList: idList
+                },
+            })
+                .then(response => {
+                    console.log(`Response: ${response.status} ${response.statusText}`);
+                    resolve(response.data);
+                })
+                .then(data => console.log(data))
+                .catch(error => {
+                    console.error(error)
+                    reject(error)
+                });
+
+        })
+    },
+    moveCardToDriver: (CardID, Driver) => {
+        return new Promise(async (resolve, reject) => {
+            var AllLists;
+            var DriverList;
+
+            try {
+                AllLists = await module.exports.getAllList();
+                // console.log("All Lists:", AllLists);
+            } catch (error) {
+                console.error(error);
+            }
+
+            //console.log("All Lists: outside: ", AllLists);
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === Driver) {
+                    DriverList = AllLists[i];
+                    break;
+                }
+            }
+
+            console.log("Driver List: ", DriverList);
+            var idList = DriverList.id;
+            console.log("Driver List ID: ", idList);
+
+
+            // update the list from the card or move card to dispatcher
+            await axios.put(`https://api.trello.com/1/cards/${CardID}`, null, {
+                params: {
+                    key: ApiKey,
+                    token: Token,
+                    idList: idList
+                },
+            })
+                .then(response => {
+                    console.log(`Response: ${response.status} ${response.statusText}`);
+                    resolve(response.data);
+                })
+                .then(data => console.log(data))
+                .catch(error => {
+                    console.error(error)
+                    reject(error)
+                });
+        })
+    }
 
 
 

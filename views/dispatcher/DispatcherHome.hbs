@@ -1,0 +1,919 @@
+<section>
+    <div id="popupWrapper">
+
+    </div>
+    <div id="overlay"></div>
+
+
+    <div class="MainSection">
+        <div class="OfficeHeader">
+            <div class="OfficeEndSection">
+                <a href="/Office/logout" class="OfficeLogoutAtag">
+                    <div class="OfficeLogoutDiv">
+                        <img src="/images/Icons/logout.png" alt="" class="officeLogoutImg">
+                        <p class="OfficeLogoutText">Logout</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="custom-container">
+            <div class="OfficeWelcomeDivHeader">
+                <div class="mainInner">
+                    <p class="OfficeWelcomeText">Welcome Dispatcher</p>
+                    <div class="SearchFormDiv">
+                        <div class="searchInput">
+                            <input type="search" id="FormSearch" placeholder="Search"
+                                class="autocomplete-input SearchInP">
+                            <div class="autocomplete-options" id="FormSearchList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="OrdersGridMainDiv">
+                <div id="cardParent" class="row align-items-start justify-content-center">
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+</section>
+
+
+<script>
+
+    // global state declaration
+    let State = {};
+
+
+    async function fetchAllCardsFormOfficeSectionList() {
+        try {
+            const backendURL = '/dispatcher/getAllCardsFromDispatcherSection';
+            const response = await fetch(backendURL);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json(); // Parse the response as JSON.
+            State.AllCards = data.AllCards;
+            addCardDataToCards(data.AllCards);
+        } catch (error) {
+            // Handle any errors that occurred during the fetch.
+            console.error('Fetch error:', error);
+        }
+    }
+
+    // Call the function to initiate the AJAX request.
+    document.addEventListener('DOMContentLoaded', function () {
+        // This code will run when the page is fully loaded and ready
+        fetchAllCardsFormOfficeSectionList();
+
+
+    });
+
+    function addCardDataToCards(AllCards) {
+        console.log("Cards: ", AllCards)
+        const parentDiv = document.getElementById('cardParent');
+        // Clear the parent element by setting its innerHTML to an empty string
+        parentDiv.innerHTML = '';
+
+        let NewCard;
+        if (AllCards.length === 0) {
+            // If there are no elements in AllCards, display "No Orders"
+            NewCard = `<div class="NoOrders">No Orders</div>`;
+            // Create a temporary div element to convert the HTML string to DOM elements
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = NewCard;
+
+            // Append the child elements from tempDiv to parentDiv
+            while (tempDiv.firstChild) {
+                parentDiv.appendChild(tempDiv.firstChild);
+            }
+
+        } else {
+            AllCards.forEach((card, index) => {
+                if (card.ImageUrl) {
+                    //console.log("Have attachment image Url" + card.id);
+                    NewCard = `
+
+                    <div class="EachCard " onclick="SelectaCard('${card.id}')" >
+                        <div class="cardNamesection">
+                            <p class="Cardname">${card.name}</p>
+                        </div>
+                        <div class="cardImagesection">
+                            <img src="${card.ImageUrl}" class="cardImg">
+                        </div>
+                        <div class="cardActionBTNSEction">
+                            {{!-- <button class="ViewCardBtn" onclick="SelectaCard('${card.id}')">View Card</button> --}}
+                            {{!-- <button class="ActionCardBtn" onclick="MoveCardToDriver('${card.id}')" >Move card to Driver</button> --}}
+                              {{!-- <a href="/dispatcher/moveToCustomerCollection/${card.id}" class="btn ActionCardBtn">Move Card to Customer Collection</a> --}}
+                            {{!-- <button class="ActionCardBtn" onclick="moveToCustomerCollection('${card.id}')" >Move Card to Customer Collection</button> --}}
+                        </div>
+                    </div>`;
+
+                } else {
+                    //console.log("Didn't have attachment image Url" + card.id);
+                    NewCard = `
+                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                    <div class="cardNamesection">
+                        <p class="Cardname">${card.name}</p>
+                    </div>
+                    <div class="cardImagesection">
+                    </div>
+                </div>`;
+                }
+
+                // Create a temporary div element to convert the HTML string to DOM elements
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = NewCard;
+
+                // Append the child elements from tempDiv to parentDiv
+                while (tempDiv.firstChild) {
+                    parentDiv.appendChild(tempDiv.firstChild);
+                }
+            });
+        }
+    }
+
+
+
+    // search functionality
+
+    const input = document.getElementById('FormSearch'); // Assuming you have an input element
+    const searchMatchedArray = [];
+
+    // Add an event listener to listen for input changes in the search input
+    input.addEventListener('input', function () {
+        const searchTerm = input.value.toLowerCase(); // Convert the input to lowercase for case-insensitive matching
+
+        const allcards = State.AllCards;
+        // Use the filter method to find matching cards
+        const matchingCards = allcards.filter(card => {
+            // Check if the search term exists in the card's name or description
+            return (
+                card.name.toLowerCase().includes(searchTerm) ||
+                card.desc.toLowerCase().includes(searchTerm)
+            );
+        });
+
+        // Update the searchMatchedArray with the matching cards
+        searchMatchedArray.length = 0; // Clear the array
+        searchMatchedArray.push(...matchingCards); // Add matching cards
+
+        // You can now use the searchMatchedArray as needed
+        //console.log(searchMatchedArray);
+        addCardDataToCards(searchMatchedArray);
+    });
+
+
+
+
+    // pop up screen
+    function SelectaCard(id) {
+        console.log("card ID: ", id)
+        let AllCards = State.AllCards;
+        let Card;
+
+        for (let i = 0; i < AllCards.length; i++) {
+            if (AllCards[i].id == id) {
+                card = AllCards[i];
+
+                showCardPopup(card)
+                break;
+            }
+        }
+    }
+
+
+
+    function showCardPopup(card) {
+        document.getElementById('popupWrapper').style.display = 'flex';
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popupWrapper').innerHTML = "";
+
+        var popup = document.createElement('div');
+        popup.id = 'popup';
+
+        var popupContent = `
+            <form action="/dispatcher/cardUpdated/${card.id}" method="post">
+                <div class="CloseBTNsection">
+                    <p class="CardTitle">Card Details</p>
+                    <div onclick="closeCardPopup()" id="closeButton">X</div>
+                </div>
+                <div id="popupContent">
+                    <div class="CardNameSection">
+                        <img src="/images/Icons/CardName.png" class="CardnameIcon" alt="">
+                        <p class="CardNameStatic">${card.name}</p>
+                    </div>
+                    <div class="CardDiscriptionSection">
+                        <div class="CardDiscriptionHeader">
+                            <img src="/images/Icons/description.png" alt="" class="cardDescriptionIcon">
+                            <p class="CardDescriptionHeadername">Description</p>
+                        </div>
+                        <textarea id="description" class="CardDescription" name="description" required
+                            placeholder="Enter card description..." readonly>${card.desc}</textarea>
+                    </div>
+                    <div class="CardChecklistSection">
+                        <div class="CardChecklistSectionHeader">
+                            <img src="/images/Icons/Tick Box.png" alt="" class="cardCheckliseIcon">
+                            <p class="cardChecklistHeaderName">Checklist</p>
+                        </div>
+                        <div class="ChecklistItemsParent">
+    ${card.checkItems.map((checkItem, index) => `
+        <input type="text" class="checklistItem" name="ChecklistItem${index}" value="${checkItem.name}" placeholder="Checklist Item" readonly>
+    `).join('')}
+</div>
+                    </div>
+                    <div class="CardContactSection">
+                        <div class="ContactHeader">
+                            <img src="/images/Icons/Contacts.png" alt="" class="cardContactIcon">
+                            <p class="cardContactHeaderName">Contact number</p>
+                        </div>
+                        <div class="cardContactNumberDiv">
+                             <input type="text" name="ContactcountrySelect" id="ContactcountrySelect " required readonly value="${card.ContactDetails.ContactcountrySelect}"
+                                class="CountryCodeselecte">
+                            <input type="text" class="ContactNumber" id="ContactNumber" name="ContactNumber" oninput="validateContactNumber()" readonly value="${card.ContactDetails.ContactNumber}"
+                                placeholder="Contact number" required>
+                        </div>
+                    </div>
+                    <div class="CardContactSection">
+                        <div class="ContactHeader">
+                            <img src="/images/Icons/WhatsApp.png" alt="" class="cardContactIcon">
+                            <p class="cardContactHeaderName">WhatsApp number</p>
+                        </div>
+                        <div class="cardWhatsappNumberDiv">
+                             <input type="text" name="WhatsAppcountrySelect" id="WhatsAppcountrySelect" required readonly value="${card.ContactDetails.WhatsAppcountrySelect}"
+                                class="CountryCodeselecte">
+                            <input type="text" name="WhatsappNumber" class="WhatsappNumber" id="WhatsappNumber" oninput="validateWhatsapptNumber()" readonly  value="${card.ContactDetails.WhatsappNumber}"
+                                placeholder="Whatsapp number" required>
+                        </div>
+                        {{!-- <div class="SameAsContactCheckSection">
+                            <input type="checkbox" id="IsSameContact" name="IsSameContact">
+                            <p class="SameContactText">Same as Contact number</p>
+                        </div> --}}
+                    </div>
+                    <div class="CardContactSection">
+                        <div class="ContactHeader">
+                            <img src="/images/Icons/Contacts.png" alt="" class="cardContactIcon">
+                            <p class="cardContactHeaderName">Contact number</p>
+                        </div>
+                        <div class="cardAlternateContactNumberDiv">
+                             <input type="text" name="AlternateContactcountrySelect" id="AlternateContactcountrySelect " readonly value="${card.ContactDetails.AlternateContactcountrySelect}"
+                                class="CountryCodeselecte">
+                            <input type="text" class="AltenateContactNumber" id="AlternateContactNumber" oninput="validateAlternateContactNumber" readonly value="${card.ContactDetails.AlternateContactNumber}"
+                                name="AlternateContactNumber" placeholder="Alternate Contact number">
+                        </div>
+                    </div>
+                    <div class="CardAttachmentSEction">
+                        <div class="CardAttachmentHeader">
+                            <img src="/images/Icons/Attach.png" alt="" class="cardAttachIcon">
+                            <p class="cardContactHeaderName">Attachment</p>
+                        </div>
+                        <div class="AttachmentImageDiv">
+                            <img src="${card.ImageUrl}" class="AttachmentIMG" alt="">
+                        </div>
+                    </div>
+                     <div class="CardAttachmentSEction">
+                        <div class="CardAttachmentHeader">
+                            <img src="/images/Icons/Driver.png" alt="" class="cardAttachIcon">
+                            <p class="cardContactHeaderName">Selete Driver</p>
+                        </div>
+                        <div class="cardAlternateContactNumberDiv">
+    <select name="Driver" class="SelectProPeople" required>
+        <option value="">Select a Driver</option>
+        ${card.Driver.map(person => `<option value="${person.UserName}">${person.UserName}</option>`).join('')}
+    </select>
+</div>
+                    </div>
+                    <div class="CardPrintLabelDiv" >
+                    </div>
+                    <div class="CardSaveBTNSEction">
+                        <input type="submit" value="Move card to Driver" class="btn SaveBTN">
+                         <a href="/dispatcher/moveToCustomerCollection/${card.id}" class="btn SaveBTN">Move card to Customer Collection</a>
+                    </div>
+                </div>
+            </form>
+       `;
+
+        // Set the HTML content for the popup
+        popup.innerHTML = popupContent;
+
+        // Append the popup to the popupWrapper
+        var popupWrapper = document.getElementById('popupWrapper');
+        popupWrapper.appendChild(popup);
+
+        // Display the popup
+        // popup.style.display = 'block';
+    }
+
+    function closeCardPopup() {
+        document.getElementById('popupWrapper').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    /*
+        document.getElementById('closeButton').addEventListener('click', function () {
+            closeCardPopup()
+        });
+        
+        */
+    /*
+        document.getElementById('popupWrapper').addEventListener('click', function () {
+            closeCardPopup()
+        });
+    */
+
+
+
+
+    // Remove any non-numeric characters
+    function validateContactNumber() {
+        const ContactNumber = document.getElementById('ContactNumber');
+
+        ContactNumber.value = ContactNumber.value.replace(/[^0-9]/g, '');
+    }
+
+
+
+    // Remove any non-numeric characters
+    function validateWhatsapptNumber() {
+        const WhatsappNumber = document.getElementById('WhatsappNumber');
+        WhatsappNumber.value = WhatsappNumber.value.replace(/[^0-9]/g, '');
+    }
+
+    // Remove any non-numeric characters
+    function validateAlternateContactNumber() {
+        const alternateContactInput = document.getElementById('AlternateContactNumber');
+        alternateContactInput.value = alternateContactInput.value.replace(/[^0-9]/g, '');
+    }
+
+
+
+    function ShowInputForCheckList() {
+
+
+        //   console.log("CheckListCount: ", CheckListCount);
+
+
+        const cardAddChecklistSection = document.getElementById('CardAddChecklistsection');
+        cardAddChecklistSection.removeAttribute('hidden');
+
+        const AddAnItemBTN = document.getElementById('AddAnItemBTN').setAttribute('hidden', true);
+
+
+
+    }
+
+
+    function AddItemToCheckList() {
+        const parentDiv = document.querySelector('.ChecklistItemsParent');
+        const checklistItems = parentDiv.querySelectorAll('.checklistItem'); // Corrected the selector
+        var CheckListCount = checklistItems.length;
+        var ListItemElement = document.getElementById('AddCheckListItemINP');
+        var ChecklistItem = ListItemElement.value; // Assuming you have an element with this id
+
+        if (ChecklistItem) {
+
+
+
+            var CountOfNextItem = parseInt(CheckListCount) + 1;
+
+            // Create a new input element
+            var newItem = document.createElement('input');
+            newItem.type = 'text';
+            newItem.className = 'checklistItem';
+            newItem.name = `ChecklistItem${CountOfNextItem}`;
+            newItem.value = ChecklistItem;
+            newItem.placeholder = 'checklist Item';
+            newItem.readOnly = true;
+
+            // Append the new item to the parentDiv
+            parentDiv.appendChild(newItem);
+            ListItemElement.value = "";
+            const cardAddChecklistSection = document.getElementById('CardAddChecklistsection');
+            cardAddChecklistSection.setAttribute('hidden', true);
+            const AddAnItemBTN = document.getElementById('AddAnItemBTN').removeAttribute('hidden');
+
+        }
+
+
+    }
+
+
+    function CloseAddItem() {
+        var ListItemElement = document.getElementById('AddCheckListItemINP');
+        ListItemElement.value = "";
+        const cardAddChecklistSection = document.getElementById('CardAddChecklistsection');
+        cardAddChecklistSection.setAttribute('hidden', true);
+        const AddAnItemBTN = document.getElementById('AddAnItemBTN').removeAttribute('hidden');
+    }
+
+
+
+    //function MoveCardToDriver(CardID) {
+    // open POP up for move card to driver
+
+    //}
+
+
+    /*
+    
+        const cardAddChecklistSection = document.getElementById('CardAddChecklistsection');
+    cardAddChecklistSection.setAttribute('hidden', true);
+    
+    */
+
+</script>
+
+<style>
+    body {
+        background-color: #EEF0FD;
+    }
+
+    .custom-container {
+        max-width: 100%;
+        /* Adjust this value to your preferred maximum width */
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 15px;
+        /* Add padding to match Bootstrap's container padding */
+        padding-right: 15px;
+        /* Add padding to match Bootstrap's container padding */
+        box-sizing: border-box;
+        /* Include padding and border in the width */
+    }
+
+    .MainSection {
+        padding: 2rem 0;
+    }
+
+    .OfficeEndSection {
+        display: flex;
+        justify-content: end;
+        padding-right: 2rem;
+    }
+
+    .OfficeLogoutAtag {
+        text-decoration: none !important;
+    }
+
+    .OfficeLogoutDiv {
+        background-color: #2d2d2d;
+        width: 19rem;
+        height: 5rem;
+        border-radius: 2rem;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .officeLogoutImg {
+        width: 50px;
+        margin-right: 2rem;
+    }
+
+    .OfficeLogoutText {
+        margin: 0;
+        color: white;
+        text-decoration: none;
+        font-size: 33px;
+        font-weight: 600;
+    }
+
+    .OfficeWelcomeDivHeader {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 9rem 0;
+    }
+
+    .mainInner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .OfficeWelcomeText {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .SearchInP {
+        padding-right: 3rem;
+        background-image: url(/images/Icons/Search_icon.svg);
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5rem;
+        width: 100%;
+    }
+
+    .autocomplete-input {
+        border: 1px solid lightgray;
+        border-left-color: blue;
+        border-left-width: 5px;
+        padding-left: 15px;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 1rem;
+        border-radius: 14px;
+        height: 3rem;
+    }
+
+    .EachCard {
+        /* width: 30rem;*/
+        min-height: 8rem;
+        background-color: white;
+        border: 1px solid gray;
+        border-radius: 25px;
+        margin: 1rem;
+        max-width: 550px;
+    }
+
+    .cardNamesection {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        padding: 2rem 1rem;
+    }
+
+    .Cardname {
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .CardEditIcon {
+        width: 35px;
+        cursor: pointer;
+    }
+
+    .CardEditIcon:hover {
+        width: 40px;
+    }
+
+    .cardImagesection {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .cardImg {
+        height: 13rem;
+    }
+
+    /*Pop up screen*/
+
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        /*none*/
+        z-index: 1;
+    }
+
+    #popupWrapper {
+        display: none;
+        /*none*/
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+    }
+
+    #popup {
+        background: #EEF0FD;
+        width: 80%;
+        padding: 20px;
+        border-radius: 10px;
+        position: relative;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .CloseBTNsection {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2rem;
+        padding: 0 3rem;
+        width: 100%;
+        margin-right: 2rem;
+    }
+
+    .CardTitle {
+        margin: 0;
+        font-size: 35px;
+        font-weight: 800;
+    }
+
+    #closeButton {
+        font-weight: 900;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    #popupContent {
+        /* Your content styles */
+        padding-top: 3rem;
+    }
+
+
+    .CardNameSection {
+        display: flex;
+        justify-content: start;
+        margin: 1rem 2rem;
+        align-items: center;
+    }
+
+    .CardnameIcon,
+    .cardDescriptionIcon,
+    .cardCheckliseIcon,
+    .cardContactIcon,
+    .cardAttachIcon {
+        height: 30px;
+        background-color: inherit;
+    }
+
+
+    .CardCustomerName,
+    .CardNameStatic,
+    .CardDescriptionHeadername,
+    .cardChecklistHeaderName,
+    .cardContactHeaderName {
+        font-size: 25px;
+        font-weight: 600;
+        margin: 0;
+        margin-left: 0.5rem;
+    }
+
+    .CardCustomerName {
+        border-radius: 5px;
+        border-color: gray;
+        padding: 0.5rem 1rem;
+        width: 50%;
+    }
+
+    .CardDiscriptionSection,
+    .CardChecklistSection,
+    .CardContactSection,
+    .CardAttachmentSEction {
+        display: flex;
+        flex-direction: column;
+        margin: 2rem 2rem;
+    }
+
+    .CardDiscriptionHeader,
+    .CardChecklistSectionHeader,
+    .ContactHeader,
+    .CardAttachmentHeader {
+        display: flex;
+        margin-bottom: 1rem;
+    }
+
+    .CardDescription {
+        width: 100%;
+        height: 150px;
+        /* Adjust the height as needed */
+        padding: 10px;
+        /*border: 1px solid #ccc;
+        border-radius: 5px;*/
+        resize: vertical;
+        /* Allows vertical resizing */
+        font-size: 16px;
+        border: none;
+        outline: none;
+        background-color: #EEF0FD;
+    }
+
+    .ChecklistItemsParent {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .checklistItem {
+        border: none;
+        width: 80%;
+        outline: none;
+        font-size: 25px;
+        font-size: 600;
+        margin-left: 3rem;
+        background-color: #EEF0FD;
+    }
+
+    .AddAnItemBTN {
+        margin-top: 2rem;
+        padding: 1rem 2rem;
+        width: 12rem;
+        border: none;
+        border-radius: 20px;
+        background-color: #3B3BE1;
+        color: white;
+        font-size: 22px;
+        font-weight: 600;
+        margin-left: 3rem;
+    }
+
+    .AddCheckListItemINP {
+        border: 1px solid gray;
+        border-radius: 5px;
+        padding: 1rem;
+        margin-left: 2rem;
+        width: 80%;
+        margin-top: 2rem;
+    }
+
+    .AddChecklistBTns {
+        margin-left: 2rem;
+    }
+
+    .SaveChecklistBTN,
+    .CancelCheklistBTN {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 20px;
+        background-color: #3B3BE1;
+        color: white;
+        font-size: 22px;
+        font-weight: 600;
+        outline: none;
+        margin: 1rem;
+    }
+
+    .CancelCheklistBTN {
+        background-color: transparent;
+        color: black;
+        border: 1px solid gray;
+    }
+
+    .CountryCodeselecte,
+    .ContactNumber,
+    .WhatsappNumber,
+    .AltenateContactNumber,
+    .SelectProPeople {
+        width: 7rem;
+        padding: 1rem 1rem;
+        font-size: 25px;
+        font-weight: 600;
+        border-radius: 5px;
+    }
+
+    .ContactNumber,
+    .WhatsappNumber,
+    .AltenateContactNumber,
+    .SelectProPeople {
+        min-width: 20rem;
+    }
+
+    .cardWhatsappNumberDiv,
+    .cardContactNumberDiv,
+    .cardAlternateContactNumberDiv {
+        margin: 0 2rem;
+    }
+
+    .SameAsContactCheckSection {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    #IsSameContact {
+        margin-right: 0.5rem;
+        border: 2px solid gray;
+    }
+
+    input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+    }
+
+    .SameContactText {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .AttachmentImageDiv {
+        width: 100%;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: auto;
+        border: 1px solid gray;
+        border-radius: 25px;
+    }
+
+    .AttachmentIMG {
+        height: 300px;
+    }
+
+    .CardSaveBTNSEction {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding-bottom: 5rem;
+    }
+
+    .SaveBTN {
+        margin-top: 2rem;
+        padding: 1rem 2rem;
+        width: 35rem;
+        border: none;
+        border-radius: 20px;
+        background-color: #3B3BE1;
+        color: white;
+        font-size: 22px;
+        font-weight: 600;
+        margin-left: 3rem;
+    }
+
+    .SaveBTN:hover {
+        font-weight: 700;
+        color: wheat;
+    }
+
+    .NoOrders {
+        width: 100%;
+        height: 5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* border: 1px solid gray;*/
+        border-radius: 25px;
+        color: red;
+        font-size: 30px;
+        font-weight: 600;
+        padding-bottom: 5rem;
+    }
+
+    .CardPrintLabelDiv {
+        padding-left: 32px;
+    }
+
+    .PrintBtn {
+        background-color: #EEF0FD;
+        border: 1px solid gray;
+        border-radius: 24px;
+        width: 16rem;
+        margin: 1rem 2rem;
+        font-size: 25px;
+        font-weight: 600;
+        padding: 1rem 0;
+    }
+
+    .PrintBtn:hover {
+        background-color: #c1c9ff;
+    }
+
+    .cardActionBTNSEction {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 3rem;
+    }
+
+    .ActionCardBtn {
+        padding: 0.5rem 1rem;
+        width: 27rem;
+        border: none;
+        border-radius: 20px;
+        background-color: #3B3BE1;
+        color: white;
+        font-size: 22px;
+        font-weight: 600;
+        margin-top: 1rem;
+
+    }
+
+    .ActionCardBtn:hover {
+        color: rgb(224, 224, 241);
+    }
+
+    .ViewCardBtn {
+        background-color: #EEF0FD;
+        padding: 0.5rem 1rem;
+        width: 15rem;
+        border-radius: 20px;
+        color: black;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 1rem 0;
+    }
+</style>
