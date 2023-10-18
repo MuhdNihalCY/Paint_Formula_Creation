@@ -44,7 +44,7 @@
 
     // global state declaration
     let State = {};
-   
+
 
     async function fetchAllCardsFormOfficeSectionList() {
         try {
@@ -197,13 +197,13 @@
                 </div>
                 <div id="popupContent">
                     <div class="CardNameSection">
-                        <img src="/images/Icons/CardName.jpg" class="CardnameIcon" alt="">
+                        <img src="/images/Icons/CardName.png" class="CardnameIcon" alt="">
                         <p class="CardNameStatic">${card.name}</p>
                         
                     </div>
                     <div class="CardDiscriptionSection">
                         <div class="CardDiscriptionHeader">
-                            <img src="/images/Icons/description.jpg" alt="" class="cardDescriptionIcon">
+                            <img src="/images/Icons/description.png" alt="" class="cardDescriptionIcon">
                             <p class="CardDescriptionHeadername">Description</p>
                         </div>
                         <textarea id="description" class="CardDescription" name="description" required
@@ -211,7 +211,7 @@
                     </div>
                     <div class="CardChecklistSection">
                         <div class="CardChecklistSectionHeader">
-                            <img src="/images/Icons/Tick Box.jpg" alt="" class="cardCheckliseIcon">
+                            <img src="/images/Icons/Tick Box.png" alt="" class="cardCheckliseIcon">
                             <p class="cardChecklistHeaderName">Checklist</p>
                         </div>
                         <div class="ChecklistItemsParent">
@@ -222,7 +222,7 @@
                     </div>
                     <div class="CardContactSection">
                         <div class="ContactHeader">
-                            <img src="/images/Icons/Contacts.jpg" alt="" class="cardContactIcon">
+                            <img src="/images/Icons/Contacts.png" alt="" class="cardContactIcon">
                             <p class="cardContactHeaderName">Contact number</p>
                         </div>
                         <div class="cardContactNumberDiv">
@@ -234,7 +234,7 @@
                     </div>
                     <div class="CardContactSection">
                         <div class="ContactHeader">
-                            <img src="/images/Icons/WhatsApp.jpg" alt="" class="cardContactIcon">
+                            <img src="/images/Icons/WhatsApp.png" alt="" class="cardContactIcon">
                             <p class="cardContactHeaderName">WhatsApp number</p>
                         </div>
                         <div class="cardWhatsappNumberDiv">
@@ -250,7 +250,7 @@
                     </div>
                     <div class="CardContactSection">
                         <div class="ContactHeader">
-                            <img src="/images/Icons/Contacts.jpg" alt="" class="cardContactIcon">
+                            <img src="/images/Icons/Contacts.png" alt="" class="cardContactIcon">
                             <p class="cardContactHeaderName">Contact number</p>
                         </div>
                         <div class="cardAlternateContactNumberDiv">
@@ -262,7 +262,7 @@
                     </div>
                     <div class="CardAttachmentSEction">
                         <div class="CardAttachmentHeader">
-                            <img src="/images/Icons/Attach.jpg" alt="" class="cardAttachIcon">
+                            <img src="/images/Icons/Attach.png" alt="" class="cardAttachIcon">
                             <p class="cardContactHeaderName">Attachment</p>
                         </div>
                         <div class="AttachmentImageDiv">
@@ -271,7 +271,7 @@
                     </div>
                      <div class="CardAttachmentSEction">
                         <div class="CardAttachmentHeader">
-                            <img src="/images/Icons/Construction Worker.jpg" alt="" class="cardAttachIcon">
+                            <img src="/images/Icons/Construction Worker.png" alt="" class="cardAttachIcon">
                             <p class="cardContactHeaderName">Selete Production Person</p>
                         </div>
                         <div class="cardAlternateContactNumberDiv">
@@ -281,7 +281,10 @@
     </select>
 </div>
                     </div>
+                    <div class="CardPrintLabelDiv" >
+                    </div>
                     <div class="CardSaveBTNSEction">
+                         <a href="/Office/Printlabel/${card.id}" class="btn PrintBtn" target="_blank">Print label</a>
                         <input type="submit" value="Save card and Move to Production" class="btn SaveBTN">
                          <a href="/Office/moveCardtoReadyToDispatch/${card.id}" class="btn SaveBTN">Move card to Ready To Dispatch</a>
                     </div>
@@ -580,7 +583,7 @@
     }
 
     #popup {
-        background: #ffffff;
+        background: #EEF0FD;
         width: 80%;
         padding: 20px;
         border-radius: 10px;
@@ -633,7 +636,7 @@
         background-color: inherit;
     }
 
-   
+
     .CardCustomerName,
     .CardNameStatic,
     .CardDescriptionHeadername,
@@ -681,6 +684,7 @@
         font-size: 16px;
         border: none;
         outline: none;
+        background-color: #EEF0FD;
     }
 
     .ChecklistItemsParent {
@@ -695,6 +699,7 @@
         font-size: 25px;
         font-size: 600;
         margin-left: 3rem;
+        background-color: #EEF0FD;
     }
 
     .AddAnItemBTN {
@@ -837,11 +842,30 @@
         display: flex;
         justify-content: center;
         align-items: center;
-       /* border: 1px solid gray;*/
+        /* border: 1px solid gray;*/
         border-radius: 25px;
         color: red;
         font-size: 30px;
         font-weight: 600;
         padding-bottom: 5rem;
+    }
+
+    .CardPrintLabelDiv {
+        padding-left: 32px;
+    }
+
+    .PrintBtn {
+        background-color: #EEF0FD;
+        border: 1px solid gray;
+        border-radius: 24px;
+        width: 16rem;
+        margin: 1rem 2rem;
+        font-size: 25px;
+        font-weight: 600;
+        padding: 1rem 0;
+    }
+
+    .PrintBtn:hover {
+        background-color: #c1c9ff;
     }
 </style>

@@ -9,16 +9,25 @@ const OfficeVerifyLogin = (req, res, next) => {
     if (req.session.OfficeData) {
         next();
     } else {
-        // res.redirect('/login');
-        next()
+        res.redirect('/login');
+        // next()
     }
 }
+
 
 
 
 router.get('/', OfficeVerifyLogin, (req, res, next) => {
     res.render('office/Officehome', { OfficeLogged: req.session.OfficeData });
 })
+
+router.get('/logout', OfficeVerifyLogin, (req, res) => {
+    delete req.session.OfficeData;
+    delete req.session.OfficeLogged;
+    // res.redirect('/login');
+    res.redirect('/Office');
+})
+
 
 router.get('/getAllCardsFromOfficeSection', OfficeVerifyLogin, async (req, res) => {
     try {
@@ -68,9 +77,18 @@ router.post('/cardUpdated/:cardID', OfficeVerifyLogin, (req, res) => {
         trelloHelpers.moveCardToProduction(CardID, ProductionPerson).then((response) => {
             res.redirect('/Office')
         })
-    }else{
-        res.redirect('/Office',{Error: "No Production person is selected"})
+    } else {
+        res.redirect('/Office', { Error: "No Production person is selected" })
     }
+})
+
+router.get('/Printlabel/:CardID',OfficeVerifyLogin,async (req,res)=>{
+    let cardID=req.params.CardID;
+    
+    var InsertedTime = await employeeHelpers.getOrderIDByCardId(cardID);
+    console.log('Inserted Time : ',InsertedTime);
+
+    res.redirect(`/printlabel/${InsertedTime}`);
 })
 
 

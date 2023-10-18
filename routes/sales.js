@@ -16,6 +16,13 @@ router.get('/', SalesVerifyLogin, (req, res, next) => {
     res.render('sales/home', { SalesLogged: req.session.SalesData });
 })
 
+router.get('/logout', SalesVerifyLogin, (req, res) => {
+    delete req.session.SalesData;
+    delete req.session.SalesLogged;
+    // res.redirect('/login');
+    res.redirect('/sales');
+})
+
 router.get('/getAllCardsFromOrders', SalesVerifyLogin, (req, res) => {
     trelloHelpers.getAllCardsFromOrders().then((Cards) => {
         // console.table(Cards);

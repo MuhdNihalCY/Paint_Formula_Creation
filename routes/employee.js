@@ -170,7 +170,7 @@ router.post('/login', (req, res) => {
   })
 })
 
-router.get('/printlabel/:orderNo', EmployeeVerifyLogin, (req, res) => {
+router.get('/printlabel/:orderNo',  (req, res) => {
   var OrderNo = req.params.orderNo;
   employeeHelpers.getOrderByInsertedTime(OrderNo).then((Order) => {
     var Print = true;

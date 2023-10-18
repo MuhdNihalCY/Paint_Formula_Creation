@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var adminHelpers = require('../helpers/adminHelpers');
+const trelloHelpers = require('../helpers/trelloHelpers');
 
 const AdminUser = {
   userName: "Admin",
@@ -604,7 +605,7 @@ router.get('/Users', verifyLogin, (req, res) => {
   adminHelpers.getAllUser().then((Users) => {
     adminHelpers.getAllCustomerCategory().then((CustomerCategory) => {
       if (Error) {
-        res.render('admin/Users', { admin: true, Users, CustomerCategory ,Error});
+        res.render('admin/Users', { admin: true, Users, CustomerCategory, Error });
       } else {
         res.render('admin/Users', { admin: true, Users, CustomerCategory });
       }
@@ -617,7 +618,16 @@ router.post('/addUser', verifyLogin, (req, res) => {
 
   adminHelpers.AddUser(req.body).then((State) => {
     if (!State.Err) {
-      res.redirect('/admin/Users');
+      var User = req.body;
+      if (User.Designation === "Production" || User.Designation === "Driver") {
+        trelloHelpers.AddListForPeople(User.UserName).then(() => {
+          res.redirect('/admin/Users');
+        });
+      } else {
+        res.redirect('/admin/Users');
+      }
+
+
     } else {
       res.redirect(`/admin/Users?Error=${encodeURIComponent(State.Err)}`);
     }

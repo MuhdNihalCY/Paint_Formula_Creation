@@ -968,5 +968,16 @@ module.exports = {
             var ProductionPeople = await db.get().collection(collection.USERS_COLLECTION).find({ Designation: "Production" }).project({ Password: 0 }).toArray();
             resolve(ProductionPeople);
         })
+    },
+    getOrderIDByCardId: (CardID) => {
+        return new Promise(async (resolve, reject) => {
+            console.log("CardID: ",CardID);
+             await db.get().collection(collection.BULK_ORDER_COLLECTION).findOne({ CardID: CardID }).then((Order)=>{
+                 console.log("BulkOrder: ", Order)
+                 var InsertedTime = Order.InsertedTime;
+                 resolve(InsertedTime);
+            })
+
+        })
     }
 }

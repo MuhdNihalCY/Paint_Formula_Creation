@@ -610,6 +610,27 @@ module.exports = {
                     reject(error)
                 });
         })
+    },
+
+    //admin
+
+    AddListForPeople: (UserName) => {
+        return new Promise(async (resolve, reject) => {
+            await axios.post(
+                `https://api.trello.com/1/lists`,
+                null,
+                {
+                    params: {
+                        name: UserName.toString(),
+                        idBoard: BoardID,
+                        key: ApiKey, // Replace with your API key
+                        token: Token, // Replace with your API token
+                    },
+                }
+            ).then((response) => {
+                resolve(response);
+            })
+        })
     }
 
 
