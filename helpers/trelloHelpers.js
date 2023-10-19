@@ -761,6 +761,79 @@ module.exports = {
                     reject(error)
                 });
         })
+    },
+
+
+    // Production
+
+    GetAllCardsFromProductionByPersonName: (ProductionPerson) => {
+        return new Promise(async (resolve, reject) => {
+            var ProductionListData;
+            var ProductionListID;
+            let ProductionSectionFound = false; // Flag to track if the office section is found
+
+            try {
+                AllLists = await module.exports.getAllList();
+            } catch (error) {
+                console.error(error);
+            }
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === ProductionPerson) {
+                    ProductionListData = AllLists[i];
+                    console.log("ProductionListData: ", ProductionListData);
+                    ProductionListID = ProductionListData.id;
+                    try {
+                        var AllCards = await module.exports.getAllcardsFromCardID(ProductionListID);
+                        console.log("All cards:", AllCards);
+                        resolve(AllCards);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                    ProductionSectionFound = true; // Set the flag to true if the office section is found
+                    break;
+                }
+            }
+
+            if (!ProductionSectionFound) {
+                console.log("No 'Production' list found.");
+                resolve({ status: false });
+            }
+
+        })
+    },
+    ChangeStateOfCheckItem: (CheckListNeedToChange) => {
+        return new Promise(async (resolve, reject) => {
+            const promises = [];
+
+            for (let i = 0; i < CheckListNeedToChange.length; i++) {
+                const CheckItem = CheckListNeedToChange[i];
+                const CardId = CheckItem.CardId;
+                const CheckId = CheckItem.CheckId;
+
+                const promise = axios.put(`https://api.trello.com/1/cards/${CardId}/checkItem/${CheckId}`, null, {
+                    params: {
+                        key: ApiKey,
+                        token: Token,
+                        state: CheckItem.state,
+                    },
+                });
+
+                promises.push(promise);
+            }
+
+            Promise.all(promises)
+                .then((responses) => {
+                    for (const response of responses) {
+                        console.log(`Response: ${response.status} ${response.statusText}`);
+                    }
+                    resolve(responses); // Resolve with an array of responses
+                })
+                .catch((error) => {
+                    console.error(error);
+                    reject(error);
+                });
+        });
     }
 
 

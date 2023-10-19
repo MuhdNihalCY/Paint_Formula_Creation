@@ -170,7 +170,7 @@ router.post('/login', (req, res) => {
   })
 })
 
-router.get('/printlabel/:orderNo',  (req, res) => {
+router.get('/printlabel/:orderNo', (req, res) => {
   var OrderNo = req.params.orderNo;
   employeeHelpers.getOrderByInsertedTime(OrderNo).then((Order) => {
     var Print = true;
@@ -1903,6 +1903,139 @@ router.get('/UpdatedBulkOrders/:FileNo/:Qty', EmployeeVerifyLogin, (req, res) =>
     })
   })
 
+})
+
+
+router.get('/Production', EmployeeVerifyLogin, (req, res) => {
+  res.render('employee/Production');
+})
+
+
+router.get('/getAllCardsFromProduction', EmployeeVerifyLogin, async (req, res) => {
+  // trelloHelpers.GetAllCardsFromProductionByPersonName(ProductionPersonName).then((Cards) => {
+  // })
+
+  try {
+    var ProductionPersonName = req.session.EmployeeName;
+    var Cards = await trelloHelpers.GetAllCardsFromProductionByPersonName(ProductionPersonName);
+    Cards = await trelloHelpers.addImageToCardsInArray(Cards)
+    console.log(Cards);
+
+
+    const allCardDataPromises = Cards.map(async (card) => {
+      const cardChecklistIDArray = card.idChecklists;
+      console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
+      if (cardChecklistIDArray[0]) {
+        const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
+        card.checkItems = checkItems;
+        console.log("Check Items: ", checkItems);
+      }
+      const ContactDetails = await employeeHelpers.getCardContactDetails(card.id);
+      card.ContactDetails = ContactDetails;
+      console.log("ContactDetails: ", ContactDetails);
+      // const ProductionPeopole = await employeeHelpers.getAllProductionPeople();
+      // console.log("Production Peoplae: ", ProductionPeopole);
+      // card.ProductionPeople = ProductionPeopole
+      return card;
+    });
+
+    const AllCards = await Promise.all(allCardDataPromises);
+
+
+    console.log("AllCard: ", AllCards);
+    res.json({ AllCards });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+})
+
+router.post('/cardUpdated/:cardId', EmployeeVerifyLogin, async (req, res) => {
+  const checkItems = await trelloHelpers.getChecklistFromCheckListID(req.body.ChecklistID);
+  console.log("Card Save ", req.body);
+  console.log("checkItems : ", checkItems);
+
+  var CheckListNeedToChange = []
+
+  for (let i = 0; i < checkItems.length; i++) {
+    if (req.body[`ChecklistItemCheck${i}`]) {
+      if (checkItems[i].state === "complete") {
+        // no need to change
+      } else {
+        // need to change state to "complete"
+        var CheckItem = {
+          CardId: req.params.cardId,
+          CheckId: checkItems[i].id,
+          state: "complete"
+        }
+        CheckListNeedToChange.push(CheckItem);
+      }
+    } else {
+      if (checkItems[i].state === "incomplete") {
+        // no need to change
+      } else {
+        // need to change state to "incomplete"
+        var CheckItem = {
+          CardId: req.params.cardId,
+          CheckId: checkItems[i].id,
+          state: "incomplete"
+        }
+        CheckListNeedToChange.push(CheckItem);
+      }
+    }
+  }
+
+  trelloHelpers.ChangeStateOfCheckItem(CheckListNeedToChange).then(() => {
+    res.redirect('/production');
+  })
+})
+
+
+
+router.post('/cardUpdatedReadyforDispatch/:cardId', EmployeeVerifyLogin, async (req, res) => {
+  console.log("AllCheckList : ", req.body);
+  const checkItems = await trelloHelpers.getChecklistFromCheckListID(req.body.ChecklistID);
+  console.log("Card Save ", req.body);
+  console.log("checkItems : ", checkItems);
+
+  var CheckListNeedToChange = []
+
+  for (let i = 0; i < checkItems.length; i++) {
+    if (req.body[`ChecklistItemCheck${i}`]) {
+      if (checkItems[i].state === "complete") {
+        // no need to change
+      } else {
+        // need to change state to "complete"
+        var CheckItem = {
+          CardId: req.params.cardId,
+          CheckId: checkItems[i].id,
+          state: "complete"
+        }
+        CheckListNeedToChange.push(CheckItem);
+      }
+    } else {
+      if (checkItems[i].state === "incomplete") {
+        // no need to change
+      } else {
+        // need to change state to "incomplete"
+        var CheckItem = {
+          CardId: req.params.cardId,
+          CheckId: checkItems[i].id,
+          state: "incomplete"
+        }
+        CheckListNeedToChange.push(CheckItem);
+      }
+    }
+  }
+
+  trelloHelpers.ChangeStateOfCheckItem(CheckListNeedToChange).then(() => {
+    // move this card to ready to dispatch
+    trelloHelpers.moveCardtoReadyToDispatchByCardID(req.params.cardId).then((response) => {
+      res.redirect('/production');
+
+    })
+  })
 })
 
 
