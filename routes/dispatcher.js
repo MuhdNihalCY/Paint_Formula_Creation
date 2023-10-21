@@ -20,6 +20,13 @@ router.get('/', DispatcherVerifyLogin, (req, res, next) => {
     res.render('dispatcher/DispatcherHome', { DispatcherLoggedIn: req.session.DispatcherData })
 })
 
+router.get('/logout', DispatcherVerifyLogin, (req, res) => {
+    delete req.session.DispatcherData;
+    delete req.session.DispatcherData;
+    // res.redirect('/login');
+    res.redirect('/dispatcher');
+})
+
 router.get('/getAllCardsFromDispatcherSection', DispatcherVerifyLogin, async (req, res) => {
     try {
         var Cards = await trelloHelpers.getAllCardsFromDispatcherSection();
@@ -28,11 +35,13 @@ router.get('/getAllCardsFromDispatcherSection', DispatcherVerifyLogin, async (re
 
 
         const allCardDataPromises = Cards.map(async (card) => {
-            const cardChecklistIDArray = card.idChecklists;
-            console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
-            const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
-            card.checkItems = checkItems;
-            console.log("Check Items: ", checkItems);
+            if (card.idChecklists.length > 0) {
+                const cardChecklistIDArray = card.idChecklists;
+                console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
+                const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
+                card.checkItems = checkItems;
+                console.log("Check Items: ", checkItems);
+            }
             const ContactDetails = await employeeHelpers.getCardContactDetails(card.id);
             card.ContactDetails = ContactDetails;
             console.log("ContactDetails: ", ContactDetails);
@@ -72,6 +81,55 @@ router.post('/cardUpdated/:CardID', DispatcherVerifyLogin, (req, res) => {
     } else {
         res.redirect('/dispatcher', { Error: "No Production person is selected" })
     }
+})
+
+
+router.get('/CustomerCollection', DispatcherVerifyLogin, async (req, res) => {
+    res.render('dispatcher/CustomerCollection', { DispatcherLoggedIn: req.session.DispatcherData })
+})
+
+
+router.get('/getAllCardsFromCustomerCollection', DispatcherVerifyLogin, async (req, res) => {
+    try {
+        var Cards = await trelloHelpers.getAllCardsFromCustomerCollectionSection();
+        Cards = await trelloHelpers.addImageToCardsInArray(Cards)
+        console.log(Cards);
+
+
+        const allCardDataPromises = Cards.map(async (card) => {
+            if (card.idChecklists.length > 0) {
+                const cardChecklistIDArray = card.idChecklists;
+                console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
+                const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
+                card.checkItems = checkItems;
+                console.log("Check Items: ", checkItems);
+            }
+            const ContactDetails = await employeeHelpers.getCardContactDetails(card.id);
+            card.ContactDetails = ContactDetails;
+            console.log("ContactDetails: ", ContactDetails);
+            const Driver = await employeeHelpers.getAllDriverPeople();
+            console.log("Driver Peoplae: ", Driver);
+            card.Driver = Driver
+            return card;
+        });
+
+        const AllCards = await Promise.all(allCardDataPromises);
+
+
+        res.json({ AllCards });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+})
+
+
+router.get('/moveToDoneToday/:cardId', DispatcherVerifyLogin, (req, res) => {
+    var cardID = req.params.cardId;
+    console.log("cardID: ", cardID);
+    trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
+        res.redirect('/dispatcher/CustomerCollection')
+    })
 })
 
 module.exports = router;

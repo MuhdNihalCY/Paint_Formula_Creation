@@ -1,4 +1,7 @@
 <section>
+
+
+
     <div id="popupWrapper">
 
     </div>
@@ -6,11 +9,20 @@
 
 
     <div class="MainSection">
-        
+        {{!-- <div class="OfficeHeader">
+            <div class="OfficeEndSection">
+                <a href="/driver/logout" class="OfficeLogoutAtag">
+                    <div class="OfficeLogoutDiv">
+                        <img src="/images/Icons/logout.png" alt="" class="officeLogoutImg">
+                        <p class="OfficeLogoutText">Logout</p>
+                    </div>
+                </a>
+            </div>
+        </div> --}}
         <div class="custom-container">
-            <div class="SalesWelcomeDivHeader">
+            <div class="OfficeWelcomeDivHeader">
                 <div class="mainInner">
-                    <p class="SalesWelcomeText">Welcome Salesman</p>
+                    {{!-- <p class="OfficeWelcomeText">Welcome Driver</p> --}}
                     <div class="SearchFormDiv">
                         <div class="searchInput">
                             <input type="search" id="FormSearch" placeholder="Search"
@@ -25,6 +37,8 @@
 
 
 
+
+
                 </div>
             </div>
         </div>
@@ -36,38 +50,35 @@
     // global state declaration
     let State = {};
 
-    function fetchAllCardsFormOrderList() {
-        // Replace 'your-backend-url' with the actual URL of your backend endpoint.
-        const backendURL = '/sales/getAllCardsFromOrders';
 
-        // Make a GET request to the backend using the fetch API.
-        fetch(backendURL)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); // Parse the response as JSON.
-            })
-            .then(data => {
-                // Now 'data' contains the response from the server.
-                // console.table(data.Cards);
-                State.AllCards = data.AllCards;
-                addCardDataToCards(data.AllCards)
-            }).catch(error => {
-                // Handle any errors that occurred during the fetch.
-                console.error('Fetch error:', error);
-            });
+    async function fetchAllCardsFormOfficeSectionList() {
+        try {
+            const backendURL = '/sales/getAllCardsFromCustomerCollection';
+            const response = await fetch(backendURL);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json(); // Parse the response as JSON.
+            State.AllCards = data.AllCards;
+            addCardDataToCards(data.AllCards);
+        } catch (error) {
+            // Handle any errors that occurred during the fetch.
+            console.error('Fetch error:', error);
+        }
     }
 
     // Call the function to initiate the AJAX request.
     document.addEventListener('DOMContentLoaded', function () {
         // This code will run when the page is fully loaded and ready
-        fetchAllCardsFormOrderList();
+        fetchAllCardsFormOfficeSectionList();
 
 
     });
 
     function addCardDataToCards(AllCards) {
+        console.log("Cards: ", AllCards)
         const parentDiv = document.getElementById('cardParent');
         // Clear the parent element by setting its innerHTML to an empty string
         parentDiv.innerHTML = '';
@@ -90,25 +101,31 @@
                 if (card.ImageUrl) {
                     //console.log("Have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
-                    <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
-                        <img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">
-                    </div>
-                    <div class="cardImagesection">
-                        <img src="${card.ImageUrl}" class="cardImg">
-                    </div>
-                </div>`;
+
+                    <div class="EachCard " onclick="SelectaCard('${card.id}')" >
+                        <div class="cardNamesection">
+                            <p class="Cardname">${card.name}</p>
+                        </div>
+                        <div class="cardImagesection">
+                            <img src="${card.ImageUrl}" class="cardImg">
+                        </div>
+                        <div class="cardActionBTNSEction">
+                              <a href="/sales/moveToDoneToday/${card.id}" class="btn ActionCardBtn">Move Card to Done Today</a>
+                        </div>
+                    </div>`;
+
                 } else {
                     //console.log("Didn't have attachment image Url" + card.id);
                     NewCard = `
                 <div class="EachCard " onclick="SelectaCard('${card.id}')">
                     <div class="cardNamesection">
                         <p class="Cardname">${card.name}</p>
-                        <img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">
                     </div>
                     <div class="cardImagesection">
                     </div>
+                    <div class="cardActionBTNSEction">
+                              <a href="/sales/moveToDoneToday/${card.id}" class="btn ActionCardBtn">Move Card to Done Today</a>
+                        </div>
                 </div>`;
                 }
 
@@ -184,7 +201,7 @@
         popup.id = 'popup';
 
         var popupContent = `
-            <form action="/sales/cardUpdated/${card.id}" method="post">
+            <form action="" id="EmployeeCardUpdate" method="post">
                 <div class="CloseBTNsection">
                     <p class="CardTitle">Card Details</p>
                     <div onclick="closeCardPopup()" id="closeButton">X</div>
@@ -192,9 +209,7 @@
                 <div id="popupContent">
                     <div class="CardNameSection">
                         <img src="/images/Icons/CardName.png" class="CardnameIcon" alt="">
-                        <p class="CardNameStatic">${card.name}-</p>
-                        <input type="text" name="CustomerName" class="CardCustomerName" placeholder="Customer name"
-                            required>
+                        <p class="CardNameStatic">${card.name}</p>
                     </div>
                     <div class="CardDiscriptionSection">
                         <div class="CardDiscriptionHeader">
@@ -202,239 +217,83 @@
                             <p class="CardDescriptionHeadername">Description</p>
                         </div>
                         <textarea id="description" class="CardDescription" name="description" required
-                            placeholder="Enter card description...">${card.desc}</textarea>
+                            placeholder="Enter card description..." readonly>${card.desc}</textarea>
                     </div>
                     <div class="CardChecklistSection">
                         <div class="CardChecklistSectionHeader">
                             <img src="/images/Icons/Tick Box.png" alt="" class="cardCheckliseIcon">
                             <p class="cardChecklistHeaderName">Checklist</p>
                         </div>
-                        <div class="ChecklistItemsParent">
-                          
-                        </div>
-                        <input type="button" onclick="ShowInputForCheckList()" id="AddAnItemBTN" class="AddAnItemBTN"
-                            value="Add an Item">
-                        <div class="CardAddChecklistsection" id="CardAddChecklistsection" hidden>
-                            <input type="text" class="AddCheckListItemINP" id="AddCheckListItemINP" name="ChecklistItem"
-                                placeholder="Enter Item">
-                            <div class="AddChecklistBTns">
-                                <input type="button" onclick="AddItemToCheckList()" class="SaveChecklistBTN"
-                                    value="Add Item">
-                                <input type="button" onclick="CloseAddItem()" class="CancelCheklistBTN" value="Cancel">
-                            </div>
-                        </div>
+                      <div class="ChecklistItemsParent">
+                        <input type="text" name="ChecklistID" value="${card.idChecklists[0]}" hidden readonly>  
+    ${card.checkItems ? card.checkItems.map((checkItem, index) => `
+        <div class="CheckEachItem">
+            <input type="checkbox" id="ChecklistItem${index}" name="ChecklistItemCheck${index}" class="ChecklistItem"
+                   onchange="toggleTextDecoration(this, 'checklistItem${index}', '${card.id}')" ${checkItem.state === "complete" ? `checked` : ''} disabled />
+            <input type="text" class="checklistItem${index} checklistItem" ${checkItem.state === "complete" ? `style="text-decoration: line-through;"` : ''}
+                   name="ChecklistItem${index}" value="${checkItem.name}" placeholder="Checklist Item" readonly>
+        </div>
+    `).join('') : ''}
+</div>
+
+        </div >
+        <div class="CardContactSection">
+            <div class="ContactHeader">
+                <img src="/images/Icons/Contacts.png" alt="" class="cardContactIcon">
+                    <p class="cardContactHeaderName">Contact number</p>
+            </div>
+            <div class="cardContactNumberDiv">
+                <input type="text" name="ContactcountrySelect" id="ContactcountrySelect " required readonly value="${card.ContactDetails.ContactcountrySelect}"
+                    class="CountryCodeselecte">
+                    <input type="text" class="ContactNumber" id="ContactNumber" name="ContactNumber" oninput="validateContactNumber()" readonly value="${card.ContactDetails.ContactNumber}"
+                        placeholder="Contact number" required>
                     </div>
-                    <div class="CardContactSection">
-                        <div class="ContactHeader">
-                            <img src="/images/Icons/Contacts.png" alt="" class="cardContactIcon">
-                            <p class="cardContactHeaderName">Contact number</p>
+            </div>
+            <div class="CardContactSection">
+                <div class="ContactHeader">
+                    <img src="/images/Icons/WhatsApp.png" alt="" class="cardContactIcon">
+                        <p class="cardContactHeaderName">WhatsApp number</p>
+                </div>
+                <div class="cardWhatsappNumberDiv">
+                    <input type="text" name="WhatsAppcountrySelect" id="WhatsAppcountrySelect" required readonly value="${card.ContactDetails.WhatsAppcountrySelect}"
+                        class="CountryCodeselecte">
+                        <input type="text" name="WhatsappNumber" class="WhatsappNumber" id="WhatsappNumber" oninput="validateWhatsapptNumber()" readonly value="${card.ContactDetails.WhatsappNumber}"
+                            placeholder="Whatsapp number" required>
                         </div>
-                        <div class="cardContactNumberDiv">
-                            <select name="ContactcountrySelect" id="ContactcountrySelect " required
-                                class="CountryCodeselecte">
-                                {{!-- <option value="" selected disabled>Select a country</option> --}}
-                                <option value="+971">+971</option>
-                                <option value="+966">+966</option>
-                                <option value="+91">+91</option>
-                                <option value="+98">+98</option>
-                                <option value="+86">+86</option>
-                                <option value="+81">+81</option>
-                                <option value="+7">+7</option>
-                                <option value="+60">+60</option>
-                                <option value="+65">+65</option>
-                                <option value="+92">+92</option>
-                                <option value="+880">+880</option>
-                                <option value="+62">+62</option>
-                                <option value="+1">+1</option>
-                                <option value="+27">+27</option>
-                                <option value="+30">+30</option>
-                                <option value="+31">+31</option>
-                                <option value="+32">+32</option>
-                                <option value="+33">+33</option>
-                                <option value="+34">+34</option>
-                                <option value="+351">+351</option>
-                                <option value="+358">+358</option>
-                                <option value="+39">+39</option>
-                                <option value="+40">+40</option>
-                                <option value="+41">+41</option>
-                                <option value="+420">+420</option>
-                                <option value="+43">+43</option>
-                                <option value="+44">+44</option>
-                                <option value="+45">+45</option>
-                                <option value="+46">+46</option>
-                                <option value="+47">+47</option>
-                                <option value="+48">+48</option>
-                                <option value="+49">+49</option>
-                                <option value="+51">+51</option>
-                                <option value="+52">+52</option>
-                                <option value="+53">+53</option>
-                                <option value="+54">+54</option>
-                                <option value="+55">+55</option>
-                                <option value="+56">+56</option>
-                                <option value="+57">+57</option>
-                                <option value="+58">+58</option>
-                                <option value="+61">+61</option>
-                                <option value="+64">+64</option>
-                                <option value="+66">+66</option>
-                                <option value="+673">+673</option>
-                                <option value="+82">+82</option>
-                                <option value="+84">+84</option>
-                                <option value="+90">+90</option>
-                                <option value="+93">+93</option>
-                                <option value="+94">+94</option>
-                                <option value="+95">+95</option>
-                            </select>
-                            <input type="text" class="ContactNumber" id="ContactNumber" name="ContactNumber" oninput="validateContactNumber()"
-                                placeholder="Contact number" required>
-                        </div>
-                    </div>
-                    <div class="CardContactSection">
-                        <div class="ContactHeader">
-                            <img src="/images/Icons/WhatsApp.png" alt="" class="cardContactIcon">
-                            <p class="cardContactHeaderName">WhatsApp number</p>
-                        </div>
-                        <div class="cardWhatsappNumberDiv">
-                            <select name="WhatsAppcountrySelect" id="WhatsAppcountrySelect" required
-                                class="CountryCodeselecte">
-                                {{!-- <option value="" selected disabled>Select a country</option> --}}
-                                <option value="+971">+971</option>
-                                <option value="+966">+966</option>
-                                <option value="+91">+91</option>
-                                <option value="+98">+98</option>
-                                <option value="+86">+86</option>
-                                <option value="+81">+81</option>
-                                <option value="+7">+7</option>
-                                <option value="+60">+60</option>
-                                <option value="+65">+65</option>
-                                <option value="+92">+92</option>
-                                <option value="+880">+880</option>
-                                <option value="+62">+62</option>
-                                <option value="+1">+1</option>
-                                <option value="+27">+27</option>
-                                <option value="+30">+30</option>
-                                <option value="+31">+31</option>
-                                <option value="+32">+32</option>
-                                <option value="+33">+33</option>
-                                <option value="+34">+34</option>
-                                <option value="+351">+351</option>
-                                <option value="+358">+358</option>
-                                <option value="+39">+39</option>
-                                <option value="+40">+40</option>
-                                <option value="+41">+41</option>
-                                <option value="+420">+420</option>
-                                <option value="+43">+43</option>
-                                <option value="+44">+44</option>
-                                <option value="+45">+45</option>
-                                <option value="+46">+46</option>
-                                <option value="+47">+47</option>
-                                <option value="+48">+48</option>
-                                <option value="+49">+49</option>
-                                <option value="+51">+51</option>
-                                <option value="+52">+52</option>
-                                <option value="+53">+53</option>
-                                <option value="+54">+54</option>
-                                <option value="+55">+55</option>
-                                <option value="+56">+56</option>
-                                <option value="+57">+57</option>
-                                <option value="+58">+58</option>
-                                <option value="+61">+61</option>
-                                <option value="+64">+64</option>
-                                <option value="+66">+66</option>
-                                <option value="+673">+673</option>
-                                <option value="+82">+82</option>
-                                <option value="+84">+84</option>
-                                <option value="+90">+90</option>
-                                <option value="+93">+93</option>
-                                <option value="+94">+94</option>
-                                <option value="+95">+95</option>
-                            </select>
-                            <input type="text" name="WhatsappNumber" class="WhatsappNumber" id="WhatsappNumber" oninput="validateWhatsapptNumber()"
-                                placeholder="Whatsapp number" required>
-                        </div>
-                        {{!-- <div class="SameAsContactCheckSection">
-                            <input type="checkbox" id="IsSameContact" name="IsSameContact">
+                        {{!-- < div class="SameAsContactCheckSection">
+                        <input type="checkbox" id="IsSameContact" name="IsSameContact">
                             <p class="SameContactText">Same as Contact number</p>
                         </div> --}}
-                    </div>
-                    <div class="CardContactSection">
-                        <div class="ContactHeader">
-                            <img src="/images/Icons/Contacts.png" alt="" class="cardContactIcon">
+                </div>
+                <div class="CardContactSection">
+                    <div class="ContactHeader">
+                        <img src="/images/Icons/Contacts.png" alt="" class="cardContactIcon">
                             <p class="cardContactHeaderName">Contact number</p>
-                        </div>
-                        <div class="cardAlternateContactNumberDiv">
-                            <select name="AlternateContactcountrySelect" id="AlternateContactcountrySelect "
-                                class="CountryCodeselecte">
-                                {{!-- <option value="" selected disabled>Select a country</option> --}}
-                                <option value="+971">+971</option>
-                                <option value="+966">+966</option>
-                                <option value="+91">+91</option>
-                                <option value="+98">+98</option>
-                                <option value="+86">+86</option>
-                                <option value="+81">+81</option>
-                                <option value="+7">+7</option>
-                                <option value="+60">+60</option>
-                                <option value="+65">+65</option>
-                                <option value="+92">+92</option>
-                                <option value="+880">+880</option>
-                                <option value="+62">+62</option>
-                                <option value="+1">+1</option>
-                                <option value="+27">+27</option>
-                                <option value="+30">+30</option>
-                                <option value="+31">+31</option>
-                                <option value="+32">+32</option>
-                                <option value="+33">+33</option>
-                                <option value="+34">+34</option>
-                                <option value="+351">+351</option>
-                                <option value="+358">+358</option>
-                                <option value="+39">+39</option>
-                                <option value="+40">+40</option>
-                                <option value="+41">+41</option>
-                                <option value="+420">+420</option>
-                                <option value="+43">+43</option>
-                                <option value="+44">+44</option>
-                                <option value="+45">+45</option>
-                                <option value="+46">+46</option>
-                                <option value="+47">+47</option>
-                                <option value="+48">+48</option>
-                                <option value="+49">+49</option>
-                                <option value="+51">+51</option>
-                                <option value="+52">+52</option>
-                                <option value="+53">+53</option>
-                                <option value="+54">+54</option>
-                                <option value="+55">+55</option>
-                                <option value="+56">+56</option>
-                                <option value="+57">+57</option>
-                                <option value="+58">+58</option>
-                                <option value="+61">+61</option>
-                                <option value="+64">+64</option>
-                                <option value="+66">+66</option>
-                                <option value="+673">+673</option>
-                                <option value="+82">+82</option>
-                                <option value="+84">+84</option>
-                                <option value="+90">+90</option>
-                                <option value="+93">+93</option>
-                                <option value="+94">+94</option>
-                                <option value="+95">+95</option>
-                            </select>
-                            <input type="text" class="AltenateContactNumber" id="AlternateContactNumber" oninput="validateAlternateContactNumber"
+                    </div>
+                    <div class="cardAlternateContactNumberDiv">
+                        <input type="text" name="AlternateContactcountrySelect" id="AlternateContactcountrySelect " readonly value="${card.ContactDetails.AlternateContactcountrySelect}"
+                            class="CountryCodeselecte">
+                            <input type="text" class="AltenateContactNumber" id="AlternateContactNumber" oninput="validateAlternateContactNumber" readonly value="${card.ContactDetails.AlternateContactNumber}"
                                 name="AlternateContactNumber" placeholder="Alternate Contact number">
-                        </div>
+                            </div>
                     </div>
                     <div class="CardAttachmentSEction">
                         <div class="CardAttachmentHeader">
                             <img src="/images/Icons/Attach.png" alt="" class="cardAttachIcon">
-                            <p class="cardContactHeaderName">Attachment</p>
+                                <p class="cardContactHeaderName">Attachment</p>
                         </div>
                         <div class="AttachmentImageDiv">
                             <img src="${card.ImageUrl}" class="AttachmentIMG" alt="">
                         </div>
                     </div>
+                    
+                    
                     <div class="CardSaveBTNSEction">
-                        <input type="submit" value="Save card and Move to Office Section" class="SaveBTN">
+                               <a href="/sales/moveToDoneToday/${card.id}" class="btn SaveBTN">Move Card to Done Today</a>
                     </div>
                 </div>
             </form>
-       `;
+            `;
 
         // Set the HTML content for the popup
         popup.innerHTML = popupContent;
@@ -442,6 +301,8 @@
         // Append the popup to the popupWrapper
         var popupWrapper = document.getElementById('popupWrapper');
         popupWrapper.appendChild(popup);
+
+        checkAllCheckboxes(card.id)
 
         // Display the popup
         // popup.style.display = 'block';
@@ -454,15 +315,15 @@
 
     /*
         document.getElementById('closeButton').addEventListener('click', function () {
-            closeCardPopup()
-        });
-        
-        */
+                closeCardPopup()
+            });
+
+            */
     /*
         document.getElementById('popupWrapper').addEventListener('click', function () {
-            closeCardPopup()
-        });
-    */
+                closeCardPopup()
+            });
+            */
 
 
 
@@ -550,6 +411,55 @@
     }
 
 
+    function toggleTextDecoration(checkbox, inputClassName, cardId) {
+        const inputElement = document.querySelector(`input.${inputClassName}`);
+        inputElement.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+        const checkboxes = document.querySelectorAll('[type="checkbox"]');
+        const allChecked = [...checkboxes].every(checkbox => checkbox.checked);
+        const form = document.getElementById('EmployeeCardUpdate');
+        const submitButton = document.getElementById('SaveBTN');
+
+        if (allChecked) {
+            form.action = `/cardUpdatedReadyforDispatch/${cardId}`;
+            submitButton.value = "Save card and Move to Ready to Dispatch";
+        } else {
+            form.action = `/cardUpdated/${cardId}`;
+            submitButton.value = "Save card";
+        }
+    }
+
+
+    function checkAllCheckboxes(cardId) {
+        const checkboxes = document.querySelectorAll('.ChecklistItem');
+        const form = document.getElementById('EmployeeCardUpdate');
+        const submitButton = document.getElementById('SaveBTN');
+        let allChecked = true;
+
+        checkboxes.forEach(checkbox => {
+            if (!checkbox.checked) {
+                allChecked = false;
+            }
+        });
+
+        if (allChecked) {
+            form.action = `/cardUpdatedReadyforDispatch/${cardId}`;
+            submitButton.value = "Save card and Move to Ready to Dispatch";
+        } else {
+            form.action = `/cardUpdated/${cardId}`;
+            submitButton.value = "Save card";
+        }
+    }
+
+
+
+
+
+
+    //function MoveCardToDriver(CardID) {
+    // open POP up for move card to driver
+
+    //}
+
 
     /*
     
@@ -582,17 +492,17 @@
         padding: 2rem 0;
     }
 
-    .SalesEndSection {
+    .OfficeEndSection {
         display: flex;
         justify-content: end;
         padding-right: 2rem;
     }
 
-    .SalesLogoutAtag {
+    .OfficeLogoutAtag {
         text-decoration: none !important;
     }
 
-    .SalesLogoutDiv {
+    .OfficeLogoutDiv {
         background-color: #2d2d2d;
         width: 19rem;
         height: 5rem;
@@ -603,12 +513,12 @@
         align-items: center;
     }
 
-    .salesLogoutImg {
+    .officeLogoutImg {
         width: 50px;
         margin-right: 2rem;
     }
 
-    .SalesLogoutText {
+    .OfficeLogoutText {
         margin: 0;
         color: white;
         text-decoration: none;
@@ -616,11 +526,11 @@
         font-weight: 600;
     }
 
-    .SalesWelcomeDivHeader {
+    .OfficeWelcomeDivHeader {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: 9rem 0;
+        padding: 2rem 0;
     }
 
     .mainInner {
@@ -630,7 +540,7 @@
         align-items: center;
     }
 
-    .SalesWelcomeText {
+    .OfficeWelcomeText {
         font-size: 30px;
         font-weight: bold;
         margin-bottom: 20px;
@@ -727,7 +637,7 @@
     }
 
     #popup {
-        background: #fff;
+        background: #EEF0FD;
         width: 80%;
         padding: 20px;
         border-radius: 10px;
@@ -777,7 +687,9 @@
     .cardContactIcon,
     .cardAttachIcon {
         height: 30px;
+        background-color: inherit;
     }
+
 
     .CardCustomerName,
     .CardNameStatic,
@@ -819,11 +731,14 @@
         height: 150px;
         /* Adjust the height as needed */
         padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+        /*border: 1px solid #ccc;
+        border-radius: 5px;*/
         resize: vertical;
         /* Allows vertical resizing */
         font-size: 16px;
+        border: none;
+        outline: none;
+        background-color: #EEF0FD;
     }
 
     .ChecklistItemsParent {
@@ -837,7 +752,8 @@
         outline: none;
         font-size: 25px;
         font-size: 600;
-        margin-left: 3rem;
+        margin-left: 0.5rem;
+        background-color: #EEF0FD;
     }
 
     .AddAnItemBTN {
@@ -888,7 +804,8 @@
     .CountryCodeselecte,
     .ContactNumber,
     .WhatsappNumber,
-    .AltenateContactNumber {
+    .AltenateContactNumber,
+    .SelectProPeople {
         width: 7rem;
         padding: 1rem 1rem;
         font-size: 25px;
@@ -898,7 +815,8 @@
 
     .ContactNumber,
     .WhatsappNumber,
-    .AltenateContactNumber {
+    .AltenateContactNumber,
+    .SelectProPeople {
         min-width: 20rem;
     }
 
@@ -950,6 +868,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-direction: column;
+        padding-bottom: 5rem;
     }
 
     .SaveBTN {
@@ -963,7 +883,11 @@
         font-size: 22px;
         font-weight: 600;
         margin-left: 3rem;
-        margin-bottom: 5rem;
+    }
+
+    .SaveBTN:hover {
+        font-weight: 700;
+        color: wheat;
     }
 
     .NoOrders {
@@ -972,10 +896,72 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid gray;
+        /* border: 1px solid gray;*/
         border-radius: 25px;
         color: red;
         font-size: 30px;
         font-weight: 600;
+        padding-bottom: 5rem;
+    }
+
+    .CardPrintLabelDiv {
+        padding-left: 32px;
+    }
+
+    .PrintBtn {
+        background-color: #EEF0FD;
+        border: 1px solid gray;
+        border-radius: 24px;
+        width: 16rem;
+        margin: 1rem 2rem;
+        font-size: 25px;
+        font-weight: 600;
+        padding: 1rem 0;
+    }
+
+    .PrintBtn:hover {
+        background-color: #c1c9ff;
+    }
+
+    .cardActionBTNSEction {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 3rem;
+    }
+
+    .ActionCardBtn {
+        padding: 0.5rem 1rem;
+        width: 27rem;
+        border: none;
+        border-radius: 20px;
+        background-color: #3B3BE1;
+        color: white;
+        font-size: 22px;
+        font-weight: 600;
+        margin-top: 1rem;
+
+    }
+
+    .ActionCardBtn:hover {
+        color: rgb(224, 224, 241);
+    }
+
+    .ViewCardBtn {
+        background-color: #EEF0FD;
+        padding: 0.5rem 1rem;
+        width: 15rem;
+        border-radius: 20px;
+        color: black;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 1rem 0;
+    }
+
+    .CheckEachItem {
+        display: flex;
+        align-items: center;
+        padding-left: 3rem;
     }
 </style>

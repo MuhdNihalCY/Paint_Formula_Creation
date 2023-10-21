@@ -6,16 +6,16 @@
 
 
     <div class="MainSection">
-        <div class="OfficeHeader">
+        {{!-- <div class="OfficeHeader">
             <div class="OfficeEndSection">
-                <a href="/Office/logout" class="OfficeLogoutAtag">
+                <a href="/dispatcher/logout" class="OfficeLogoutAtag">
                     <div class="OfficeLogoutDiv">
                         <img src="/images/Icons/logout.png" alt="" class="officeLogoutImg">
                         <p class="OfficeLogoutText">Logout</p>
                     </div>
                 </a>
             </div>
-        </div>
+        </div> --}}
         <div class="custom-container">
             <div class="OfficeWelcomeDivHeader">
                 <div class="mainInner">
@@ -222,9 +222,9 @@
                             <p class="cardChecklistHeaderName">Checklist</p>
                         </div>
                         <div class="ChecklistItemsParent">
-    ${card.checkItems.map((checkItem, index) => `
+    ${card.checkItems? card.checkItems.map((checkItem, index) => `
         <input type="text" class="checklistItem" name="ChecklistItem${index}" value="${checkItem.name}" placeholder="Checklist Item" readonly>
-    `).join('')}
+    `).join('') : ''}
 </div>
                     </div>
                     <div class="CardContactSection">
@@ -233,9 +233,9 @@
                             <p class="cardContactHeaderName">Contact number</p>
                         </div>
                         <div class="cardContactNumberDiv">
-                             <input type="text" name="ContactcountrySelect" id="ContactcountrySelect " required readonly value="${card.ContactDetails.ContactcountrySelect}"
+                             <input type="text" name="ContactcountrySelect" id="ContactcountrySelect " required readonly value="${card.ContactDetails ? card.ContactDetails.ContactcountrySelect : ''}"
                                 class="CountryCodeselecte">
-                            <input type="text" class="ContactNumber" id="ContactNumber" name="ContactNumber" oninput="validateContactNumber()" readonly value="${card.ContactDetails.ContactNumber}"
+                            <input type="text" class="ContactNumber" id="ContactNumber" name="ContactNumber" oninput="validateContactNumber()" readonly value="${card.ContactDetails ? card.ContactDetails.ContactNumber : ''}"
                                 placeholder="Contact number" required>
                         </div>
                     </div>
@@ -245,9 +245,9 @@
                             <p class="cardContactHeaderName">WhatsApp number</p>
                         </div>
                         <div class="cardWhatsappNumberDiv">
-                             <input type="text" name="WhatsAppcountrySelect" id="WhatsAppcountrySelect" required readonly value="${card.ContactDetails.WhatsAppcountrySelect}"
+                             <input type="text" name="WhatsAppcountrySelect" id="WhatsAppcountrySelect" required readonly value="${card.ContactDetails ? card.ContactDetails.WhatsAppcountrySelect : ''}"
                                 class="CountryCodeselecte">
-                            <input type="text" name="WhatsappNumber" class="WhatsappNumber" id="WhatsappNumber" oninput="validateWhatsapptNumber()" readonly  value="${card.ContactDetails.WhatsappNumber}"
+                            <input type="text" name="WhatsappNumber" class="WhatsappNumber" id="WhatsappNumber" oninput="validateWhatsapptNumber()" readonly  value="${card.ContactDetails ? card.ContactDetails.WhatsappNumber : ''}"
                                 placeholder="Whatsapp number" required>
                         </div>
                         {{!-- <div class="SameAsContactCheckSection">
@@ -261,9 +261,9 @@
                             <p class="cardContactHeaderName">Contact number</p>
                         </div>
                         <div class="cardAlternateContactNumberDiv">
-                             <input type="text" name="AlternateContactcountrySelect" id="AlternateContactcountrySelect " readonly value="${card.ContactDetails.AlternateContactcountrySelect}"
+                             <input type="text" name="AlternateContactcountrySelect" id="AlternateContactcountrySelect " readonly value="${card.ContactDetails ? card.ContactDetails.AlternateContactcountrySelect : ''}"
                                 class="CountryCodeselecte">
-                            <input type="text" class="AltenateContactNumber" id="AlternateContactNumber" oninput="validateAlternateContactNumber" readonly value="${card.ContactDetails.AlternateContactNumber}"
+                            <input type="text" class="AltenateContactNumber" id="AlternateContactNumber" oninput="validateAlternateContactNumber" readonly value="${card.ContactDetails ? card.ContactDetails.AlternateContactNumber : ''}"
                                 name="AlternateContactNumber" placeholder="Alternate Contact number">
                         </div>
                     </div>

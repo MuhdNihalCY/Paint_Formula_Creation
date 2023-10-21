@@ -27,7 +27,7 @@
         integrity="sha384-KyZXEAg3QhqLMpG8r+V0THKTk6pmbwOnEIQbT4FxCGiZP7uHv1Emn2MKjsX3+W5l" crossorigin="anonymous">
 
 
-   
+
 
 </head>
 
@@ -42,12 +42,19 @@
     {{{body}}}
     {{else}}
     {{#if SalesLogged}}
+    {{>TrelloHeader}}
     {{else}}
     {{#if OfficeLogged}}
+    {{>TrelloHeader}}
     {{else}}
     {{#if DispatcherLoggedIn}}
+    {{>TrelloHeader}}
+    {{else}}
+    {{#if DriverLoggedIn}}
+    {{>TrelloHeader}}
     {{else}}
     {{>header}}
+    {{/if}}
     {{/if}}
     {{/if}}
     {{/if}}
@@ -83,7 +90,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     -->
 
-   
+
 
 </body>
 

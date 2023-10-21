@@ -2,27 +2,33 @@
     <div class="HeaderMainALl">
 
         <div class="Container">
-            {{#if CustomerName}}
-            <a href="/Customer">
+            <a {{#if SalesLogged}} href="/sales" {{/if}} {{#if OfficeLogged}} href="/office" {{/if}} {{#if
+                DispatcherLoggedIn}} href="/dispatcher" {{/if}} {{#if DriverLoggedIn}} href="/driver" {{/if}}>
                 <div class="logo">
                     <img src="/images/Logo/logo.jpg" alt="logo">
                 </div>
             </a>
-            {{else}}
-            <a href="/">
-                <div class="logo">
-                    <img src="/images/Logo/logo.jpg" alt="logo">
-                </div>
-            </a>
-            {{/if}}
+
             <nav>
                 <ul class="menu">
 
-                    {{#if CustomerName}}
-                    <li><a href="/Customer">
+                    {{!-- {{#if CustomerName}} --}}
+                    <li><a {{#if SalesLogged}} href="/sales" {{/if}} {{#if OfficeLogged}} href="/office" {{/if}} {{#if
+                            DispatcherLoggedIn}} href="/dispatcher" {{/if}} {{#if DriverLoggedIn}} href="/driver"
+                            {{/if}}>
                             <div class="HeaderLinkItem">Home </div>
                         </a></li>
                     <li>
+                        <a {{#if SalesLogged}} href="/sales/CustomerCollection" {{/if}} {{#if OfficeLogged}} href="/office/CustomerCollection" {{/if}} {{#if
+                            DispatcherLoggedIn}} href="/dispatcher/CustomerCollection" {{/if}} {{#if DriverLoggedIn}} href="/driver/CustomerCollection"
+                            {{/if}}>
+                            <div class="HeaderLinkItem">Customer Collection </div>
+                        </a>
+                    </li>
+                    <li><a class="profile-btn" {{#if SalesLogged}} href="/sales/Logout" {{/if}} {{#if OfficeLogged}} href="/office/Logout" {{/if}} {{#if
+                            DispatcherLoggedIn}} href="/dispatcher/Logout" {{/if}} {{#if DriverLoggedIn}} href="/driver/Logout"
+                            {{/if}}>Logout </a></li>
+                    {{!-- <li>
                         <a href="/Customer/CreateFormulas">
                             <div class="HeaderLinkItem">Create Formula </div>
                         </a>
@@ -41,12 +47,12 @@
                     <li><a href="/">
                             <div class="HeaderLinkItem">Home </div>
                         </a></li>
-                    {{!-- <li>
+                    <li>
                         <a href="/CreateFormulas">
                             <div class="HeaderLinkItem">Create Formula </div>
                         </a>
-                    </li> --}}
-                     <li>
+                    </li>
+                    <li>
                         <a href="/Production">
                             <div class="HeaderLinkItem">Production </div>
                         </a>
@@ -57,16 +63,11 @@
                     <li><a href="/Orders">
                             <div class="HeaderLinkItem">Orders </div>
                         </a></li>
-                        <li>
-                        <a href="/CustomerCollection">
-                            <div class="HeaderLinkItem">Customer Collection </div>
-                        </a>
-                    </li>
                     <li><a href="/UpdateStocks">
                             <div class="HeaderLinkItem">Inventory</div>
                         </a></li>
                     <li><a class="profile-btn" href="/Logout">Logout </a></li>
-                    {{/if}}
+                    {{/if}} --}}
                 </ul>
             </nav>
 
@@ -120,7 +121,7 @@
         text-decoration: none;
         color: whitesmoke;
         font-weight: bold;
-        font-size: 16px;
+        font-size: 20px;
     }
 
 

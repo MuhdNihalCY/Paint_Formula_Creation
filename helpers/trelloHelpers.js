@@ -834,6 +834,126 @@ module.exports = {
                     reject(error);
                 });
         });
+    },
+
+
+    // Driver
+    getAllCardsFromDriverSection:(DirvarName)=>{
+        console.log("DirvarName : ",DirvarName);
+        return new Promise(async(resolve,reject)=>{
+            var DriverListData;
+            var DriverListID;
+            let DriverSectionFound = false; // Flag to track if the office section is found
+
+            try {
+                AllLists = await module.exports.getAllList();
+            } catch (error) {
+                console.error(error);
+            }
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === DirvarName) {
+                    DriverListData = AllLists[i];
+                    console.log("DriverListData: ", DriverListData);
+                    DriverListID = DriverListData.id;
+                    try {
+                        var AllCards = await module.exports.getAllcardsFromCardID(DriverListID);
+                        console.log("All cards:", AllCards);
+                        resolve(AllCards);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                    DriverSectionFound = true; // Set the flag to true if the office section is found
+                    break;
+                }
+            }
+
+            if (!DriverSectionFound) {
+                console.log("No 'Driver' list found.");
+                resolve({ status: false });
+            } 
+        })
+    },
+    moveCardtoDoneTodayByCardID: (CardID) => {
+        return new Promise(async (resolve, reject) => {
+            var AllLists;
+            var Customer_CollectionList;
+
+            try {
+                AllLists = await module.exports.getAllList();
+                // console.log("All Lists:", AllLists);
+            } catch (error) {
+                console.error(error);
+            }
+
+            //console.log("All Lists: outside: ", AllLists);
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === "DONE TODAY") {
+                    Customer_CollectionList = AllLists[i];
+                    break;
+                }
+            }
+
+            console.log("Customer_Collection List: ", Customer_CollectionList);
+            var idList = Customer_CollectionList.id;
+            console.log("Customer_Collection List ID: ", idList);
+
+
+            // update the list from the card or move card to dispatcher
+            await axios.put(`https://api.trello.com/1/cards/${CardID}`, null, {
+                params: {
+                    key: ApiKey,
+                    token: Token,
+                    idList: idList
+                },
+            })
+                .then(response => {
+                    console.log(`Response: ${response.status} ${response.statusText}`);
+                    resolve(response.data);
+                })
+                .then(data => console.log(data))
+                .catch(error => {
+                    console.error(error)
+                    reject(error)
+                });
+
+        })
+    },
+    getAllCardsFromCustomerCollectionSection:()=>{
+        return new Promise(async(resolve,reject) => {
+            var CustomerListData;
+            var CustomerListID;
+            let Customer_CollectionSectionFound = false; // Flag to track if the office section is found
+
+            try {
+                AllLists = await module.exports.getAllList();
+            } catch (error) {
+                console.error(error);
+            }
+
+            for (let i = 0; i < AllLists.length; i++) {
+                if (AllLists[i].name === "Customer Collection") {
+                    CustomerListData = AllLists[i];
+                    console.log("CustomerListData: ", CustomerListData);
+                    CustomerListID = CustomerListData.id;
+                    try {
+                        var AllCards = await module.exports.getAllcardsFromCardID(CustomerListID);
+                        console.log("All cards:", AllCards);
+                        resolve(AllCards);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                    Customer_CollectionSectionFound = true; // Set the flag to true if the office section is found
+                    break;
+                }
+            }
+
+            if (!Customer_CollectionSectionFound) {
+                console.log("No 'READY FOR DISPATCH' list found.");
+                resolve({ status: false });
+            } 
+        })
     }
 
 

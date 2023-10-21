@@ -53,4 +53,54 @@ router.post('/cardUpdated/:CardId', SalesVerifyLogin, (req, res) => {
     })
 })
 
+
+router.get('/moveToDoneToday/:cardId', SalesVerifyLogin, (req, res) => {
+    var cardID = req.params.cardId;
+    console.log("cardID: ", cardID);
+    trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
+        res.redirect('/sales/CustomerCollection')
+    })
+})
+
+router.get('/CustomerCollection', SalesVerifyLogin, async (req, res) => {
+    res.render('sales/CustomerCollection', { SalesLogged: req.session.SalesData })
+})
+
+
+router.get('/getAllCardsFromCustomerCollection', SalesVerifyLogin, async (req, res) => {
+    try {
+        var Cards = await trelloHelpers.getAllCardsFromCustomerCollectionSection();
+        Cards = await trelloHelpers.addImageToCardsInArray(Cards)
+        console.log(Cards);
+
+
+        const allCardDataPromises = Cards.map(async (card) => {
+            if (card.idChecklists.length > 0) {
+                const cardChecklistIDArray = card.idChecklists;
+                console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
+                const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
+                card.checkItems = checkItems;
+                console.log("Check Items: ", checkItems);
+            }
+            const ContactDetails = await employeeHelpers.getCardContactDetails(card.id);
+            card.ContactDetails = ContactDetails;
+            console.log("ContactDetails: ", ContactDetails);
+            const Driver = await employeeHelpers.getAllDriverPeople();
+            console.log("Driver Peoplae: ", Driver);
+            card.Driver = Driver
+            return card;
+        });
+
+        const AllCards = await Promise.all(allCardDataPromises);
+
+
+        res.json({ AllCards });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+})
+
+
+
 module.exports = router;

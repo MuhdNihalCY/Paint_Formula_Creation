@@ -971,13 +971,18 @@ module.exports = {
     },
     getOrderIDByCardId: (CardID) => {
         return new Promise(async (resolve, reject) => {
-            console.log("CardID: ",CardID);
-             await db.get().collection(collection.BULK_ORDER_COLLECTION).findOne({ CardID: CardID }).then((Order)=>{
-                 console.log("BulkOrder: ", Order)
-                 var InsertedTime = Order.InsertedTime;
-                 resolve(InsertedTime);
+            console.log("CardID: ", CardID);
+            await db.get().collection(collection.BULK_ORDER_COLLECTION).findOne({ CardID: CardID }).then((Order) => {
+                console.log("BulkOrder: ", Order);
+                if (Order) {
+                    var InsertedTime = Order.InsertedTime;
+                    resolve(InsertedTime);
+                }
             })
-
+                .catch(error => {
+                    console.error(error)
+                    reject(error)
+                });
         })
     },
 
@@ -991,5 +996,5 @@ module.exports = {
     }
 
 
-    
+
 }

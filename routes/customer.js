@@ -585,8 +585,11 @@ router.post('/BulkOrder/:FileNo', CustomerVerifyLogin, async (req, res) => {
                 employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
                     // Rest of the code...
                     //  console.log("Bulk Updated!");
-                    trelloHelpers.addTrelloCard(orderFile).then(() => {
-                        res.redirect('/Customer/Orders');
+
+                    trelloHelpers.addTrelloCard(orderFile).then((CardId) => {
+                        employeeHelpers.SaveCardIDToOrder(orderFile.FileName, CardId).then(() => {
+                            res.redirect('/Customer/Orders');
+                        })
                     })
                 });
             }

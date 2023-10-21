@@ -82,13 +82,69 @@ router.post('/cardUpdated/:cardID', OfficeVerifyLogin, (req, res) => {
     }
 })
 
-router.get('/Printlabel/:CardID',OfficeVerifyLogin,async (req,res)=>{
-    let cardID=req.params.CardID;
-    
-    var InsertedTime = await employeeHelpers.getOrderIDByCardId(cardID);
-    console.log('Inserted Time : ',InsertedTime);
+router.get('/Printlabel/:CardID', OfficeVerifyLogin, async (req, res) => {
+    let cardID = req.params.CardID;
 
-    res.redirect(`/printlabel/${InsertedTime}`);
+    try {
+        var InsertedTime = await employeeHelpers.getOrderIDByCardId(cardID);
+        console.log('Inserted Time: ', InsertedTime);
+
+        res.redirect(`/printlabel/${InsertedTime}`);
+    } catch (error) {
+        console.error('Error getting InsertedTime:', error);
+        // Handle the error here or provide an appropriate response to the client.
+    }
+
+})
+
+
+
+
+router.get('/moveToDoneToday/:cardId', OfficeVerifyLogin, (req, res) => {
+    var cardID = req.params.cardId;
+    console.log("cardID: ", cardID);
+    trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
+        res.redirect('/office/CustomerCollection')
+    })
+})
+
+router.get('/CustomerCollection', OfficeVerifyLogin, async (req, res) => {
+    res.render('office/CustomerCollection', { OfficeLogged: req.session.OfficeData })
+})
+
+
+router.get('/getAllCardsFromCustomerCollection', OfficeVerifyLogin, async (req, res) => {
+    try {
+        var Cards = await trelloHelpers.getAllCardsFromCustomerCollectionSection();
+        Cards = await trelloHelpers.addImageToCardsInArray(Cards)
+        console.log(Cards);
+
+
+        const allCardDataPromises = Cards.map(async (card) => {
+            if (card.idChecklists.length > 0) {
+                const cardChecklistIDArray = card.idChecklists;
+                console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
+                const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
+                card.checkItems = checkItems;
+                console.log("Check Items: ", checkItems);
+            }
+            const ContactDetails = await employeeHelpers.getCardContactDetails(card.id);
+            card.ContactDetails = ContactDetails;
+            console.log("ContactDetails: ", ContactDetails);
+            const Driver = await employeeHelpers.getAllDriverPeople();
+            console.log("Driver Peoplae: ", Driver);
+            card.Driver = Driver
+            return card;
+        });
+
+        const AllCards = await Promise.all(allCardDataPromises);
+
+
+        res.json({ AllCards });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 })
 
 
