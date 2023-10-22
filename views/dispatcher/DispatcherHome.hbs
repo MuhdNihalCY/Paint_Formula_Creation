@@ -5,26 +5,57 @@
     <div id="overlay"></div>
 
 
-    <div class="MainSection">
-        {{!-- <div class="OfficeHeader">
-            <div class="OfficeEndSection">
-                <a href="/dispatcher/logout" class="OfficeLogoutAtag">
-                    <div class="OfficeLogoutDiv">
-                        <img src="/images/Icons/logout.png" alt="" class="officeLogoutImg">
-                        <p class="OfficeLogoutText">Logout</p>
-                    </div>
-                </a>
+
+    <div id="fullscreen-popup">
+        <!-- Popup content -->
+        <div class="popupContent">
+            <div class="PopHeaderDiv">
+                <p class="PopHeader">Select Date</p>
+                <button class="Popclose-button" onclick="closeFullscreenPopup()">X</button>
             </div>
-        </div> --}}
+            <hr>
+            <div class="PopUpDatesDiv">
+                <p class="PopUpLabel">Start Date</p>
+                <input type="date" placeholder="Select Start Date" name="StartDate" id="StartDate">
+                <p class="PopUpLabel">End Date</p>
+                <input type="date" placeholder="Select Start Date" name="EndDate" id="EndDate">
+            </div>
+            <div class="PopButtonDiv">
+                <button class="PopSubmitBtn" onclick="submitDateRange()">Apply Dates</button>
+                <button class="PopCancelBtn" onclick="ClearDate()">Clear Filters</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="MainSection">
+
         <div class="custom-container">
             <div class="OfficeWelcomeDivHeader">
                 <div class="mainInner">
                     <p class="OfficeWelcomeText">Welcome Dispatcher</p>
                     <div class="SearchFormDiv">
-                        <div class="searchInput">
-                            <input type="search" id="FormSearch" placeholder="Search"
-                                class="autocomplete-input SearchInP">
-                            <div class="autocomplete-options" id="FormSearchList"></div>
+                        <div class="SearchTypesection">
+                            <div class="SearchTypeDiv">
+                                <p class="SearchTypeLabel">Search Type</p>
+                                <select class="search_type" name="" id="search_type" onchange="handleInputChange()">
+                                    <option value="Internal">Internal search</option>
+                                    <option value="Global">Global search</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="SearchMainInpSection">
+                            <div class="searchInput">
+                                <input type="search" id="FormSearch" placeholder="Search"
+                                    class="autocomplete-input SearchInP">
+                                <div class="autocomplete-options" id="FormSearchList"></div>
+                            </div>
+
+
+                            <div id="dateRangeContainer">
+                                <input readonly type="text" id="DateRange" placeholder="Select Date Range"
+                                    class="autocomplete-input DateInputS" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -46,6 +77,29 @@
 
     // global state declaration
     let State = {};
+
+    function getAllCardsFromBoard() {
+        // Replace 'your-backend-url' with the actual URL of your backend endpoint.
+        const backendURL = '/dispatcher/getAllCardsFromBoard';
+
+        // Make a GET request to the backend using the fetch API.
+        fetch(backendURL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the response as JSON.
+            })
+            .then(data => {
+                // Now 'data' contains the response from the server.
+                console.table("got all global cards:", data.AllCards);
+                State.AllCardsFromBoard = data.AllCards;
+                // addCardDataToCards(data.AllCardsFromBoard)
+            }).catch(error => {
+                // Handle any errors that occurred during the fetch.
+                console.error('Fetch error:', error);
+            });
+    }
 
 
     async function fetchAllCardsFormOfficeSectionList() {
@@ -70,7 +124,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         // This code will run when the page is fully loaded and ready
         fetchAllCardsFormOfficeSectionList();
-
+        getAllCardsFromBoard()
 
     });
 
@@ -140,12 +194,87 @@
 
 
 
+    // gloabl Card data
+    function addCardDataToCardsGlobal(AllCards) {
+        const parentDiv = document.getElementById('cardParent');
+        // Clear the parent element by setting its innerHTML to an empty string
+        parentDiv.innerHTML = '';
+
+        let NewCard;
+        if (AllCards.length === 0) {
+            // If there are no elements in AllCards, display "No Orders"
+            NewCard = `<div class="NoOrders">No Orders</div>`;
+            // Create a temporary div element to convert the HTML string to DOM elements
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = NewCard;
+
+            // Append the child elements from tempDiv to parentDiv
+            while (tempDiv.firstChild) {
+                parentDiv.appendChild(tempDiv.firstChild);
+            }
+
+        } else {
+            AllCards.forEach((card, index) => {
+                if (card.ImageUrl) {
+                    //console.log("Have attachment image Url" + card.id);
+                    NewCard = `
+                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                    <div class="cardNamesection">
+                        <p class="Cardname">${card.name}</p>
+                        ${card.List.name === "READY FOR DISPATCH" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                    </div>
+                    <div class="cardNamesection">
+                        <p class="Cardname">Current List: ${card.List.name}</p>
+                    </div>
+                    
+                    <div class="cardImagesection">
+                        <img src="${card.ImageUrl}" class="cardImg">
+                    </div>
+                </div>`;
+                } else {
+                    //console.log("Didn't have attachment image Url" + card.id);
+                    NewCard = `
+                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                    <div class="cardNamesection">
+                        <p class="Cardname">${card.name}</p>
+                           ${card.List.name === "READY FOR DISPATCH" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                    </div>
+                    <div class="cardNamesection">
+                        <p class="Cardname">Current List: ${card.List.name}</p>
+                    </div>
+                    <div class="cardImagesection">
+                    </div>
+                </div>`;
+                }
+
+                // Create a temporary div element to convert the HTML string to DOM elements
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = NewCard;
+
+                // Append the child elements from tempDiv to parentDiv
+                while (tempDiv.firstChild) {
+                    parentDiv.appendChild(tempDiv.firstChild);
+                }
+            });
+        }
+    }
+
+
+
+
+
+
+
     // search functionality
 
     const input = document.getElementById('FormSearch'); // Assuming you have an input element
     const searchMatchedArray = [];
 
-    // Add an event listener to listen for input changes in the search input
+    input.addEventListener('input', function () {
+        handleInputChange();
+    });
+
+    /*// Add an event listener to listen for input changes in the search input
     input.addEventListener('input', function () {
         const searchTerm = input.value.toLowerCase(); // Convert the input to lowercase for case-insensitive matching
 
@@ -166,7 +295,7 @@
         // You can now use the searchMatchedArray as needed
         //console.log(searchMatchedArray);
         addCardDataToCards(searchMatchedArray);
-    });
+    });*/
 
 
 
@@ -222,7 +351,7 @@
                             <p class="cardChecklistHeaderName">Checklist</p>
                         </div>
                         <div class="ChecklistItemsParent">
-    ${card.checkItems? card.checkItems.map((checkItem, index) => `
+    ${card.checkItems ? card.checkItems.map((checkItem, index) => `
         <input type="text" class="checklistItem" name="ChecklistItem${index}" value="${checkItem.name}" placeholder="Checklist Item" readonly>
     `).join('') : ''}
 </div>
@@ -426,11 +555,311 @@
     
     */
 
+
+
+    // Date Popup
+
+    const dateRangeContainer = document.getElementById("dateRangeContainer");
+
+    /* dateRangeContainer.addEventListener("click", openFullScreenPopup);
+ 
+     // add alternative to date popup
+     const DateRange = document.getElementById("DateRange");
+     DateRange.addEventListener("click", openFullScreenPopup);*/
+
+    dateRangeContainer.addEventListener("click", function (event) {
+        if (event.target.id === "DateRange") {
+            openFullScreenPopup();
+        }
+    });
+
+
+    function openFullScreenPopup() {
+        var element = document.getElementById('fullscreen-popup');
+        element.style.display = "flex";
+    }
+
+    function closeFullscreenPopup() {
+        var element = document.getElementById('fullscreen-popup');
+        element.style.display = "none";
+    }
+
+
+
+    function ClearDate() {
+        var StartDate = document.getElementById('StartDate');
+        var EndDate = document.getElementById('EndDate');
+        var DateRange = document.getElementById('DateRange');
+
+        StartDate.value = "";
+        EndDate.value = "";
+        DateRange.value = "";
+        StartDate.max = "";
+        EndDate.min = "";
+    }
+
+    function HandleStartDate() {
+        var startDateInp = document.getElementById('StartDate');
+        var endDateInp = document.getElementById('EndDate');
+        endDateInp.min = startDateInp.value;
+    }
+
+    function HandleEndDate() {
+        var startDateInp = document.getElementById('StartDate');
+        var endDateInp = document.getElementById('EndDate');
+        startDateInp.max = endDateInp.value;
+    }
+
+    const startDateInput = document.getElementById('StartDate');
+    const endDateInput = document.getElementById('EndDate');
+
+    // When the Start Date changes, update the minimum date for the End Date
+    startDateInput.addEventListener('change', () => {
+        HandleStartDate()
+    });
+
+    // When the End Date changes, update the maximum date for the Start Date
+    endDateInput.addEventListener('change', () => {
+        HandleEndDate()
+    });
+
+    function submitDateRange() {
+        var startDateIn = document.getElementById('StartDate').value;
+        var endDateIn = document.getElementById('EndDate').value;
+
+        // Check if both start date and end date are selected
+        if (startDateIn && endDateIn) {
+            // Convert to Date objects
+            const startDate = new Date(startDateIn);
+            const endDate = new Date(endDateIn);
+
+            // Function to format the date as "day month year" (e.g., "5 July 2023")
+            function formatDate(date) {
+                const day = date.getDate();
+                const month = date.toLocaleString('default', { month: 'long' });
+                const year = date.getFullYear();
+                return `${day} ${month} ${year}`;
+            }
+
+            // Convert to formatted date strings
+            const formattedStartDate = formatDate(startDate);
+            const formattedEndDate = formatDate(endDate);
+
+            // Output
+            // console.log("Formatted Date:", formattedStartDate, " to ", formattedEndDate);
+
+            var FormattedDate = formattedStartDate + " to " + formattedEndDate;
+
+            document.getElementById('DateRange').value = FormattedDate;
+            closeFullscreenPopup();
+        } else {
+            // Handle case when no date is selected
+            document.getElementById('DateRange').value = "";
+            alert("Select two Dates!")
+        }
+
+        handleInputChange();
+
+    }
+
+    function onClearAllForm() {
+        document.getElementById('customerName').value = "";
+        document.getElementById('colorCode').value = "";
+        document.getElementById('colorName').value = "";
+        document.getElementById('DateRange').value = "";
+        document.getElementById('StartDate').value = "";
+        document.getElementById('EndDate').value = "";
+    }
+
+    function handleInputChange() {
+        const SearchType = document.getElementById('search_type').value;
+
+        if (SearchType === "Internal") {
+            doInternalSearch()
+        } else {
+            doExternalSearch()
+        }
+
+
+        function doInternalSearch() {
+            const searchInput = document.getElementById('FormSearch');
+            const startDateInput = document.getElementById('StartDate');
+            const endDateInput = document.getElementById('EndDate');
+
+            const searchTerm = searchInput.value.toLowerCase();
+            const startDate = startDateInput.value;
+            const endDate = endDateInput.value;
+
+
+
+            const allcards = State.AllCards;
+
+            console.log("Doing Internal Search", allcards);
+
+            // Use the filter method to find matching cards based on search term
+            const matchingCards = allcards.filter(card => {
+                // Check if the search term exists in the card's name or description
+                return (
+                    card.name.toLowerCase().includes(searchTerm) ||
+                    card.desc.toLowerCase().includes(searchTerm)
+                );
+            });
+
+            // Filter cards based on the date range
+            const results = matchingCards.filter(card => {
+                const cardDate = new Date(card.dateLastActivity); // Replace 'date' with the actual date property
+                if (startDate && endDate) {
+                    const startDateObj = new Date(startDate);
+                    const endDateObj = new Date(endDate);
+                    return cardDate >= startDateObj && cardDate <= endDateObj;
+                }
+                return true; // Return true if no date range is specified
+            });
+
+            // Update the searchMatchedArray with the matching cards
+            searchMatchedArray.length = 0; // Clear the array
+            searchMatchedArray.push(...results); // Add matching cards
+
+            // You can now use the searchMatchedArray as needed
+            addCardDataToCards(searchMatchedArray);
+        }
+
+
+        function doExternalSearch() {
+            const searchInput = document.getElementById('FormSearch');
+            const startDateInput = document.getElementById('StartDate');
+            const endDateInput = document.getElementById('EndDate');
+
+            const searchTerm = searchInput.value.toLowerCase();
+            const startDate = startDateInput.value;
+            const endDate = endDateInput.value;
+
+
+
+            const allcards = State.AllCardsFromBoard;
+
+            console.log("Doing External Search", allcards);
+
+            // Use the filter method to find matching cards based on search term
+            const matchingCards = allcards.filter(card => {
+                // Check if the search term exists in the card's name or description
+                return (
+                    card.name.toLowerCase().includes(searchTerm) ||
+                    card.desc.toLowerCase().includes(searchTerm)
+                );
+            });
+
+            // Filter cards based on the date range
+            const results = matchingCards.filter(card => {
+                const cardDate = new Date(card.dateLastActivity); // Replace 'date' with the actual date property
+                if (startDate && endDate) {
+                    const startDateObj = new Date(startDate);
+                    const endDateObj = new Date(endDate);
+                    return cardDate >= startDateObj && cardDate <= endDateObj;
+                }
+                return true; // Return true if no date range is specified
+            });
+
+            // Update the searchMatchedArray with the matching cards
+            searchMatchedArray.length = 0; // Clear the array
+            searchMatchedArray.push(...results); // Add matching cards
+
+            // You can now use the searchMatchedArray as needed
+
+            addCardDataToCardsGlobal(searchMatchedArray);
+        }
+
+    }
+
 </script>
 
 <style>
     body {
         background-color: #EEF0FD;
+    }
+
+
+    #fullscreen-popup {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(34, 37, 49, .7);
+        z-index: 9999;
+        overflow: hidden;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popupContent {
+        width: 40rem;
+        height: 18rem;
+        background-color: rgb(229, 233, 242);
+    }
+
+    .PopHeaderDiv {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 3rem;
+        padding-right: 2rem;
+    }
+
+    .PopHeader {
+        font-size: 25px;
+        font-weight: 600;
+        margin-top: 2rem;
+    }
+
+    .Popclose-button {
+        border: none;
+        font-size: 30px;
+        font-weight: 700;
+        background-color: rgb(229, 233, 242);
+        color: gray;
+    }
+
+    .Popclose-button:hover {
+        color: rgb(20, 20, 20);
+    }
+
+    .PopUpDatesDiv {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .PopUpLabel {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 1rem;
+        margin-left: 2rem;
+    }
+
+    #StartDate,
+    #EndDate {
+        padding: 1rem;
+        margin-right: 2rem;
+    }
+
+    .PopButtonDiv {
+        display: flex;
+        justify-content: center;
+    }
+
+    .PopButtonDiv button {
+        margin: 2rem;
+        background-color: #3b3be1;
+        padding: 1rem 2rem;
+        color: whitesmoke;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .PopButtonDiv button:hover {
+        background-color: #2121be;
     }
 
     .custom-container {
@@ -504,6 +933,55 @@
         margin-bottom: 20px;
     }
 
+    .SearchFormDiv {
+        width: 80%;
+    }
+
+    .SalesWelcomeText {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .SearchTypesection {
+        width: 100%;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .SearchTypeDiv {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        padding: 2rem 0;
+    }
+
+    .SearchTypeLabel {
+        margin: 0;
+    }
+
+    .search_type {
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+    }
+
+    .SearchMainInpSection {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .searchInput {
+        width: 50vw;
+    }
+
+    .DateInputS {
+        width: 25vw;
+    }
+
+
     .SearchInP {
         padding-right: 3rem;
         background-image: url(/images/Icons/Search_icon.svg);
@@ -520,7 +998,6 @@
         padding-left: 15px;
         font-size: 20px;
         font-weight: 600;
-        margin: 0 1rem;
         border-radius: 14px;
         height: 3rem;
     }

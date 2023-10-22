@@ -132,4 +132,17 @@ router.get('/moveToDoneToday/:cardId', DispatcherVerifyLogin, (req, res) => {
     })
 })
 
+
+router.get('/getAllCardsFromBoard', DispatcherVerifyLogin, (req, res) => {
+    trelloHelpers.getAllCardsFromBoard().then((Cards) => {
+        // console.table(Cards);
+        trelloHelpers.addImageToCardsInArray(Cards).then((AllCard) => {
+            trelloHelpers.AddListToCards(AllCard).then((AllCards)=>{
+                // console.log(AllCards);
+                res.json({ AllCards });
+            })
+        })
+    })
+})
+
 module.exports = router;

@@ -148,6 +148,19 @@ router.get('/getAllCardsFromCustomerCollection', OfficeVerifyLogin, async (req, 
 })
 
 
+router.get('/getAllCardsFromBoard', OfficeVerifyLogin, (req, res) => {
+    trelloHelpers.getAllCardsFromBoard().then((Cards) => {
+        // console.table(Cards);
+        trelloHelpers.addImageToCardsInArray(Cards).then((AllCard) => {
+            trelloHelpers.AddListToCards(AllCard).then((AllCards)=>{
+                // console.log(AllCards);
+                res.json({ AllCards });
+            })
+        })
+    })
+})
+
+
 
 
 

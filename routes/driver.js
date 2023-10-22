@@ -120,5 +120,20 @@ router.get('/customerCollection/moveToDoneToday/:cardId', DriverVerifyLogin, (re
 })
 
 
+router.get('/getAllCardsFromBoard', DriverVerifyLogin, (req, res) => {
+    trelloHelpers.getAllCardsFromBoard().then((Cards) => {
+        // console.table(Cards);
+        trelloHelpers.addImageToCardsInArray(Cards).then((AllCard) => {
+            trelloHelpers.AddListToCards(AllCard).then((AllCards)=>{
+                console.log(AllCards);
+                AllCards.map((cards)=>{
+                    cards.DriverName = req.session.DriverData.UserName
+                })
+                res.json({ AllCards });
+            })
+        })
+    })
+})
+
 
 module.exports = router;

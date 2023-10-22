@@ -838,9 +838,9 @@ module.exports = {
 
 
     // Driver
-    getAllCardsFromDriverSection:(DirvarName)=>{
-        console.log("DirvarName : ",DirvarName);
-        return new Promise(async(resolve,reject)=>{
+    getAllCardsFromDriverSection: (DirvarName) => {
+        console.log("DirvarName : ", DirvarName);
+        return new Promise(async (resolve, reject) => {
             var DriverListData;
             var DriverListID;
             let DriverSectionFound = false; // Flag to track if the office section is found
@@ -871,7 +871,7 @@ module.exports = {
             if (!DriverSectionFound) {
                 console.log("No 'Driver' list found.");
                 resolve({ status: false });
-            } 
+            }
         })
     },
     moveCardtoDoneTodayByCardID: (CardID) => {
@@ -920,8 +920,8 @@ module.exports = {
 
         })
     },
-    getAllCardsFromCustomerCollectionSection:()=>{
-        return new Promise(async(resolve,reject) => {
+    getAllCardsFromCustomerCollectionSection: () => {
+        return new Promise(async (resolve, reject) => {
             var CustomerListData;
             var CustomerListID;
             let Customer_CollectionSectionFound = false; // Flag to track if the office section is found
@@ -952,10 +952,59 @@ module.exports = {
             if (!Customer_CollectionSectionFound) {
                 console.log("No 'READY FOR DISPATCH' list found.");
                 resolve({ status: false });
-            } 
+            }
+        })
+    },
+
+
+    getAllCardsFromBoard: () => {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+
+                const response = await axios.get(`https://api.trello.com/1/boards/${BoardID}/cards?key=${ApiKey}&token=${Token}`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                console.log("Cards Data: ", response.data);
+                console.log(`Response: ${response.status} ${response.statusText}`);
+                resolve(response.data);
+            } catch (error) {
+                console.log("Error Happened!")
+                console.error(error);
+                reject(error);
+            }
+        })
+    },
+    AddListToCards: (Cards) => {
+        return new Promise(async (resolve, reject) => {
+
+            // Create an array of promises for the image requests
+            const imagePromises = Cards.map(async (card) => {
+
+                const apiUrl = `https://api.trello.com/1/cards/${card.id}/list?key=${ApiKey}&token=${Token}`;
+
+                try {
+                    const response = await axios.get(apiUrl, {
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    card.List = response.data;
+                } catch (error) {
+                    console.error('Error fetching image:', error);
+                }
+
+            });
+
+            // Wait for all promises to resolve
+            await Promise.all(imagePromises);
+
+            console.log("List Added: ",Cards[0]);
+
+            resolve(Cards);
         })
     }
-
-
-
-}
+}    

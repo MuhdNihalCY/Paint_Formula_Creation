@@ -102,5 +102,18 @@ router.get('/getAllCardsFromCustomerCollection', SalesVerifyLogin, async (req, r
 })
 
 
+router.get('/getAllCardsFromBoard', SalesVerifyLogin, (req, res) => {
+    trelloHelpers.getAllCardsFromBoard().then((Cards) => {
+        // console.table(Cards);
+        trelloHelpers.addImageToCardsInArray(Cards).then((AllCard) => {
+            trelloHelpers.AddListToCards(AllCard).then((AllCards)=>{
+                // console.log(AllCards);
+                res.json({ AllCards });
+            })
+        })
+    })
+})
+
+
 
 module.exports = router;
