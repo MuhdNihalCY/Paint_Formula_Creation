@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var adminHelpers = require('../helpers/adminHelpers');
 const trelloHelpers = require('../helpers/trelloHelpers');
+const whatsappHelper = require('../helpers/whatsappHelper');
 
 const AdminUser = {
   userName: "Admin",
@@ -29,7 +30,9 @@ router.get('/', verifyLogin, function (req, res, next) {
       var DelError = req.query.DelError
       res.render('admin/Dashboard', { admin: true, AllCategory, DelError });
     } else {
-      res.render('admin/Dashboard', { admin: true, AllCategory });
+      // whatsappHelper.sendTestMessage().then(() => {
+        res.render('admin/Dashboard', { admin: true, AllCategory });
+      // })
       //res.redirect(req.originalUrl.split('?')[0]); // Redirect to the same route without query parameters
     }
   })
