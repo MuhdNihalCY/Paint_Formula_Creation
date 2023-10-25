@@ -1083,239 +1083,56 @@
             gloss = parseFloat(document.getElementById('MattOrGlossINPTag').value);
         }
 
+        console.log("Matt Values: ", mattValue, "  Gloss Values: ", gloss);
+        console.log("Sum QTY: ", Sum_qty);
+
+
+        var Binder1Avalue = parseFloat(Sub_Category.Binder1Avalue);
+        var Binder1Bvalue = parseFloat(Sub_Category.Binder1Bvalue);
+        var Binder1Cvalue = parseFloat(Sub_Category.Binder1Cvalue);
+        var Binder1Dvalue = parseFloat(Sub_Category.Binder1dvalue);
+
+
+        var Binder2Avalue = parseFloat(Sub_Category.Binder2Avalue);
+
+        console.log(`Binder1Avalue ${Binder1Avalue} ,  Binder1Bvalue ${Binder1Bvalue}  ,   Binder1Cvalue ${Binder1Cvalue} , Binder1Dvalue ${Binder1Dvalue}, Binder2Avalue ${Binder2Avalue}`);
+
+
+
+
 
         //console.log("Sum_qty", Sum_qty, " mattValue", mattValue, " gloss", gloss);
 
         var Binder1INP = document.getElementById('Binder1INP');
         var Binder2INP = document.getElementById('Binder2INP');
 
+        if (Sub_Category.Binder1) {
+            // error handle in no values enter by admin.
+            if (isNaN(Binder1Avalue) || isNaN(Binder1Bvalue) || isNaN(Binder1Cvalue) || isNaN(Binder1Dvalue)) {
+                alert("Binder calculations are not possible at Binder 1 without the proper binder equation for this sub-category.");
+            } else {
+                Binder1INP.value = (((Sum_qty * Binder1Avalue * mattValue) - (Binder1Bvalue * Binder1Cvalue * Sum_qty)) / Binder1Dvalue).toFixed(3).toString();
+            }
 
-        // Switch Case for the binder calculations based on sub category selected in dropdown menu
-        switch (Sub_Category_Name) {
-            case "Mipa_2K_PUR":
-                Binder1_EQ = Sum_qty * mattValue;
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                ////console.log("Binder1_EQ",Binder1_EQ)
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                break;
 
-            case "Mipa_BC":
-                Binder1_EQ = Sum_qty * 0.2;
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                break;
 
-            case "Mipa_2K_PMI":
-            case "PU_240_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
-                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                break;
 
-            case "Rosner_PU":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 85 + total_PP;
-                Binder2_EQ = (Sum_qty * 80 / 20) + total_PP - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "Rosner_NC":
-                Binder1_EQ = ((Sum_qty * 85 / 15 * gloss) - (10 * 85 / 15 * Sum_qty)) / 80 + total_PP;
-                Binder2_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "PU_250_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
-                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "PU_248_90":
-                Binder1_EQ = (Sum_qty * 67 / 33);
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "PU_330_20":
-                Binder1_EQ = Sum_qty * 9;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "BC_201_30":
-                Binder1_EQ = Sum_qty * 3;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "PU_240_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
-                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "EP_275_70":
-                Binder1_EQ = (Sum_qty / 0.12 * 0.88);
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "AK_232_90":
-                Binder1_EQ = (Sum_qty / 0.25 * 0.73);
-                Binder2_EQ = (Sum_qty / 0.25 * 0.02);
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "EP_150_70":
-                Binder1_EQ = Sum_qty * 9;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "Rosner_PU_Effects":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 85;
-                Binder2_EQ = (Sum_qty * 80 / 20) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "Rosner_NC_Effects":
-                Binder1_EQ = ((Sum_qty * 85 / 15 * gloss) - (10 * 85 / 15 * Sum_qty)) / 80;
-                Binder2_EQ = (Sum_qty * 85 / 15) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "Mipa_2K_PMI_Effects":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (10 * 3 * Sum_qty)) / 80;
-                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "Rosner_Acrylic":
-            case "Rosner_Acrylic_Effects":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
-                Binder2_EQ = (Sum_qty * 80 / 20) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "BC_201_30_Effects":
-                Binder1_EQ = Sum_qty * 3;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "EP_100_20":
-                Binder1_EQ = Sum_qty * 9;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "EP_140_30":
-                Binder1_EQ = Sum_qty * 85 / 15;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "VB_103_20":
-                Binder1_EQ = Sum_qty * 4;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "WPU_2425_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (10 * 3 * Sum_qty)) / 80;
-                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "Rosner_Treppenlack":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
-                Binder2_EQ = (Sum_qty * 4) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "WEP_1000_20":
-                Binder1_EQ = Sum_qty * 9;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "Mipa_VIP":
-                Binder1_EQ = Sum_qty * 9;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "WPU_4005_XX":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (10 * 3 * Sum_qty)) / 80;
-                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "WPU_8300_05":
-                Binder1_EQ = Sum_qty * 4;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "WPA_2400_70":
-                Binder1_EQ = Sum_qty * 3;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            case "WPU_2425_XX_Effects":
-                Binder1_EQ = ((Sum_qty * 3 * gloss) - (5 * 3 * Sum_qty)) / 85;
-                Binder2_EQ = (Sum_qty * 3) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "Treppenlack_Effects":
-                Binder1_EQ = ((Sum_qty * 80 / 20 * gloss) - (5 * 80 / 20 * Sum_qty)) / 65;
-                Binder2_EQ = (Sum_qty * 4) - Binder1_EQ;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                Binder2INP.value = Binder2_EQ.toFixed(3).toString();
-                break;
-
-            case "PU_100_20":
-                Binder1_EQ = Sum_qty * 85 / 15;
-                //AlertBinder(Binder1_EQ, Binder2_EQ);
-                Binder1INP.value = Binder1_EQ.toFixed(3).toString();
-                break;
-
-            default:
-                BinderError = true;
-                err = "Binder Not Found!";
-                break;
         }
+
+        if (Sub_Category.Binder2EQ1) {
+            if (isNaN(Binder2Avalue)) {
+                alert("Binder calculations are not possible at Binder 2 without the proper binder equation for this sub-category.");
+            } else {
+                Binder2INP.value = ((Sum_qty * Binder2Avalue) - parseFloat(Binder1INP.value)).toFixed(3).toString();
+            }
+        } else if (Sub_Category.Binder2EQ2) {
+            if (isNaN(Binder2Avalue)) {
+                alert("Binder calculations are not possible at Binder 2 without the proper binder equation for this sub-category.");
+            } else {
+                Binder2INP.value = (Sum_qty * Binder2Avalue).toFixed(3).toString();
+            }
+        }
+
 
         function AlertBinder(Binder1_, Binder2_) {
             // alert("Binder 1: ", Binder1_);
@@ -1537,7 +1354,7 @@
                         ////console.log("Binder1 bad:", Binder1INP);
                         TotalQtyOfFormula = TotalGramInput + TotalAdditivesInp;
                         TotalVolumeOfFormula = TotalVolumeInput + ((TotalAdditivesInp * Additive_Density) / 1000)
-                        TotalAdditivesVolume = (TotalAdditivesInp * Additive_Density)/1000;
+                        TotalAdditivesVolume = (TotalAdditivesInp * Additive_Density) / 1000;
                         document.getElementById("TotalAdditivesVolume").value = TotalAdditivesVolume.toFixed(2);
                     }
 
