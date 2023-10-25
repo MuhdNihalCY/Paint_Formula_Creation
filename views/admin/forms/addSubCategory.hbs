@@ -20,7 +20,7 @@
                             <form action="/admin/AddSubCategory" method="post">
                                 {{/if}}
                                 <div class="ADAddCategoryFromDiv">
-                                    <p class="ADAddCategoryLabel">Category Name:</p>
+                                    <p class="ADAddCategoryLabel">Select Category</p>
                                     <select class="ADSelectCategory" name="Category_Id" id="">
                                         {{#each AllCategory}}
                                         <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
@@ -152,15 +152,39 @@
                                                     {{/if}}
                                                 </select>
                                             </div>
-                                            <div class="ADEachBinder">
+                                            {{!-- <div class="ADEachBinder">
                                                 <p class="ADAddCategoryLabel"> Binder 1 Percentage %:</p>
-                                                
+
                                                 <input type="number" min="0" placeholder="Binder 1 Percentage %"
-                                                    class="BinderSelect" name="Binder1Percentage" readonly value="{{SubCategory.Binder1Percentage}}"
-                                                    id="Binder1Percentage" />
+                                                    class="BinderSelect" name="Binder1Percentage" readonly
+                                                    value="{{SubCategory.Binder1Percentage}}" id="Binder1Percentage" />
+                                            </div> --}}
+                                        </div>
+                                        <div class="Binder1EquationDiv">
+                                            <p class="Binder1EquationLabel">
+                                                Binder 1 Equation
+                                            </p>
+                                            <div class="Binder1EquationBorderDiv">
+                                                <div class="Binder1EquationTopSection">
+                                                    <p>( Total tinter X </p>
+                                                    <input type="text" name="Binder1Avalue" class="BinderInputVariable"
+                                                        value="{{SubCategory.Binder1Avalue}}" >
+                                                    <p> X Gloss or Matt ) - ( </p>
+                                                    <input type="text" name="Binder1Bvalue" class="BinderInputVariable"
+                                                        value="{{SubCategory.Binder1Bvalue}}" >
+                                                    <p> X </p>
+                                                    <input type="text" name="Binder1Cvalue" class="BinderInputVariable"
+                                                        value="{{SubCategory.Binder1Cvalue}}" >
+                                                    <p> X Total tinter )</p>
+                                                </div>
+                                                <hr>
+                                                <div class="Binder1EquationBottomSection">
+                                                    <input type="text" name="Binder1dvalue" class="BinderInputVariable"
+                                                        value="{{SubCategory.Binder1dvalue}}" >
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="DivForVerticalGap"></div>
+                                        <div c+lass="DivForVerticalGap"></div>
                                         <div class="ADBinderPkg">
                                             <div class="ADEachBinder">
                                                 <p class="ADAddCategoryLabel">Select Binder 2:</p>
@@ -184,14 +208,57 @@
                                                 </select>
                                                 {{/if}}
                                             </div>
-                                            <div class="ADEachBinder">
+                                            {{!-- <div class="ADEachBinder">
                                                 <p class="ADAddCategoryLabel"> Binder 2 Percentage %:</p>
                                                 <input type="number" min="0" placeholder="Binder 2 Percentage %"
-                                                    class="BinderSelect" name="Binder2Percentage" id="Binder2Percentage" value="{{SubCategory.Binder2Percentage}}"
-                                                     />
+                                                    class="BinderSelect" name="Binder2Percentage" id="Binder2Percentage"
+                                                    value="{{SubCategory.Binder2Percentage}}" />
+                                            </div> --}}
+                                        </div>
+
+                                        <div class="Binder2EquationDiv">
+
+                                            <p class="Binder1EquationLabel"> Binder 2 Equation </p>
+
+                                            <div class="Binder2EquationTypeSelection">
+                                                <div class="Binder2EQSec ">
+                                                    <div class="Binder2RadioTypeDiv">
+                                                        <input type="radio" id="Binder2EQ1" name="Binder2EQ1">
+                                                        <label for="Binder2EQ1">Equation with Binder 1 value</label>
+                                                    </div>
+                                                    <div class="Binder2RadioTypeDiv">
+                                                        <input type="radio" id="Binder2EQ2" name="Binder2EQ2">
+                                                        <label for="Binder2EQ2">Equation without Binder 1 value</label>
+                                                    </div>
+                                                </div>
+                                                <div class="Binder2EquationClearBTNDIV">
+                                                    <input type="button" name="" onclick="Binder2EQCLearBtn()"
+                                                        class="Binder2EQCLearBtn" id="" value="Clear Binder 2 Equation">
+                                                </div>
+                                            </div>
+
+                                            <div hidden>
+                                                <input type="text" name="Binder2XvalueHidden" id="Binder2XvalueHidden"
+                                                    class="BinderInputVariable" value="{{SubCategory.Binder2Avalue}}">
+
+                                                <input type="text" name="Binder2XWithoutB1Hidden" id="Binder2XWithoutB1Hidden"
+                                                    class="BinderInputVariable" value="{{SubCategory.Binder2EQ2}}">
+
+                                                <input type="text" name="Binder2XwithB1Hidden" id="Binder2XwithB1Hidden"
+                                                    class="BinderInputVariable" value="{{SubCategory.Binder2EQ1}}">
+                                            </div>
+                                            <div class="Binder2EqBorderDiv" id="Binder2EqBorderDiv">
+                                                {{!-- <p>( Total tinter X </p>
+                                                <input type="text" name="Binder1Avalue" class="BinderInputVariable"
+                                                    required>
+                                                <p> ) - Value of Binder 1 </p> --}}
+
                                             </div>
                                         </div>
+
                                     </div>
+
+
 
                                     <p class="ADAddCategoryLabel">Remarks</p>
                                     <input class="ADAddCategoryTextInput" type="text" name="Remarks"
@@ -230,7 +297,7 @@
         var Binder2Select = document.getElementById("Binder2");
         var Binder2PercetageInp = document.getElementById("Binder2Percentage");
 
-        // Function to handle the change event
+        /*// Function to handle the change event
         function handleBinder1Change() {
             // Check if the select element is not empty or null
             if (Binder1Select.value) {
@@ -254,15 +321,16 @@
                 Binder2PercetageInp.setAttribute("readonly", true);
                 Binder2PercetageInp.value = "";
             }
-        }
+        }*/
 
-        // Attach the change event listener to the select element
+      /*  // Attach the change event listener to the select element
         Binder1Select.addEventListener("change", handleBinder1Change);
         Binder2Select.addEventListener("change", handleBinder2Change);
 
         // Call the event handler initially to set the initial state
         handleBinder1Change();
-        handleBinder2Change();
+        handleBinder2Change();*/
+        handleBinder2Equation();
     });
 
 
@@ -276,7 +344,7 @@
 
             if (selectedValue === "") {
                 // If Binder 1 is unselected, disable Binder 2 and reset its value
-                alert("SelectedValue: ",selectedValue)
+                alert("SelectedValue: ", selectedValue)
                 $("#Binder2").prop("disabled", true).val("");
             } else {
                 // If Binder 1 is selected, enable Binder 2
@@ -343,49 +411,7 @@
         });
     });
 
-    /*
-        $(document).ready(function () {
-            if (Binder2) {
-    
-            } else {
-                // Disable Binder 2 initially
-                $("#Binder2").prop("disabled", true);
-            }
-            // Bind event listener to Binder 1
-            $("#Binder1").change(function () {
-                var selectedValue = $(this).val(); // Get the selected value
-    
-                if (selectedValue === "") {
-                    // If Binder 1 is unselected, disable Binder 2 and reset its value
-                    $("#Binder2").prop("disabled", true).val("");
-                } else {
-                    // If Binder 1 is selected, enable Binder 2
-                    $("#Binder2").prop("disabled", false);
-    
-                    // Enable all options in Binder 2
-                    $("#Binder2 option").prop("disabled", false);
-    
-                    // Disable selected option in Binder 2 if it matches Binder 1
-                    $("#Binder2 option[value='" + selectedValue + "']").prop("disabled", true);
-                }
-            });
-    
-    
-    
-            // Bind event listener to Binder 2
-            $("#Binder2").change(function () {
-                var selectedValue = $(this).val(); // Get the selected value
-    
-                if (selectedValue !== "") {
-                    // Disable selected option in Binder 1 if it matches Binder 2
-                    $("#Binder1 option[value='" + selectedValue + "']").prop("disabled", true);
-                } else {
-                    // Enable all options in Binder 1 when "Select an option" is selected in Binder 2
-                    $("#Binder1 option").prop("disabled", false);
-                }
-            });
-        });
-    */
+
 
     // radio button
 
@@ -442,6 +468,91 @@
         }
     });
 
+
+
+    const Binder2EQ1 = document.getElementById('Binder2EQ1');
+    const Binder2EQ2 = document.getElementById('Binder2EQ2');
+
+
+    // Add event listener to the Binder2EQ1 radio button
+    Binder2EQ1.addEventListener('change', function () {
+        if (Binder2EQ1.checked) {
+            Binder2EQ2.checked = false;
+            ShowBinder2EQ1()
+        }
+    });
+
+    // Add event listener to the Binder2EQ2 radio button
+    Binder2EQ2.addEventListener('change', function () {
+        if (Binder2EQ2.checked) {
+            Binder2EQ1.checked = false;
+            ShowBinder2EQ2()
+        }
+    });
+
+
+    function ShowBinder2EQ1(value) {
+        var Binder2EqBorderDiv = document.getElementById('Binder2EqBorderDiv');
+        if (value) {
+
+            Binder2EqBorderDiv.innerHTML = `
+        <p>( Total tinter X </p>
+        <input type="text" name="Binder2Avalue" id="Binder2Avalue" value="${value}" class="BinderInputVariable" required>
+        <p> ) - Value of Binder 1 </p>`;
+        } else {
+            Binder2EqBorderDiv.innerHTML = `
+        <p>( Total tinter X </p>
+        <input type="text" name="Binder2Avalue" id="Binder2Avalue"  class="BinderInputVariable" required>
+        <p> ) - Value of Binder 1 </p>`;
+        }
+
+        var Binder2 = document.getElementById('Binder2').value;
+        if (!Binder2) {
+            document.getElementById('Binder2Avalue').required = false;
+        }
+    }
+
+    function ShowBinder2EQ2(value) {
+        var Binder2EqBorderDiv = document.getElementById('Binder2EqBorderDiv');
+        if (value) {
+            Binder2EqBorderDiv.innerHTML = `
+        <p>Total tinter X </p>
+        <input type="text" name="Binder2Avalue" id="Binder2Avalue" value="${value}" class="BinderInputVariable" required>`;
+
+        } else {
+            Binder2EqBorderDiv.innerHTML = `
+        <p>Total tinter X </p>
+        <input type="text" name="Binder2Avalue" id="Binder2Avalue" class="BinderInputVariable" required>`;
+
+        }
+
+        var Binder2 = document.getElementById('Binder2').value;
+        if (!Binder2) {
+            document.getElementById('Binder2Avalue').required = false;
+        }
+    }
+
+    function Binder2EQCLearBtn() {
+        Binder2EQ2.checked = false;
+        Binder2EQ1.checked = false;
+        var Binder2EqBorderDiv = document.getElementById('Binder2EqBorderDiv');
+        Binder2EqBorderDiv.innerHTML = ``;
+    }
+
+
+    function handleBinder2Equation() {
+        var Binder2XwithB1Hidden = document.getElementById('Binder2XwithB1Hidden');
+        var Binder2XWithoutB1Hidden = document.getElementById('Binder2XWithoutB1Hidden');
+        var Binder2XvalueHidden = document.getElementById('Binder2XvalueHidden');
+
+        if (Binder2XwithB1Hidden.value) {
+            ShowBinder2EQ1(Binder2XvalueHidden.value);
+        }
+
+        if (Binder2XWithoutB1Hidden.value) {
+            ShowBinder2EQ2(Binder2XvalueHidden.value);
+        }
+    }
 
 
 

@@ -2042,7 +2042,7 @@ router.post('/cardUpdatedReadyforDispatch/:cardId', EmployeeVerifyLogin, async (
 
 
 router.get('/CustomerCollection', EmployeeVerifyLogin, async (req, res) => {
-  res.render('employee/CustomerCollection',)
+  res.render('employee/customerCollection',)
 })
 
 

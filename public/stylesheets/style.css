@@ -732,10 +732,10 @@ a {
 }
 
 .ADAddCategoryTextInput {
-  /* width: 100%; */
-  padding: .5rem .5rem .5rem 1rem;
+  padding: 0.7rem 1.5rem 0.7rem 1rem;
   margin-bottom: 2rem;
-  width: 325px;
+  width: 80%;
+  border-radius: 11px;
 }
 
 .ADCustpassDiv {
@@ -757,10 +757,11 @@ a {
 
 .ADSelectCategory {
   margin-bottom: 2rem;
-  width: 100%;
-  padding: .5rem .5rem .5rem 1rem;
+  width: 80%;
+  padding: 0.7rem 1.5rem 0.7rem 1rem;
   font-size: 1rem;
   font-weight: 600;
+  border-radius: 11px;
 }
 
 .ADSelectCategoryOptions {
@@ -1020,7 +1021,7 @@ a {
 .ADPopUpRadioButton {
   display: inline-block;
   margin-left: 1rem;
-  margin-top: -0.2rem;
+  margin-top: -0.4rem;
 }
 
 .ADPopUpRadioButton input[type="radio"] {
@@ -1030,9 +1031,9 @@ a {
 .ADPopUpRadioButton label {
   display: inline-block;
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 6px 32px;
   background-color: #f2f2f2;
-  border: 1px solid #ccc;
+  border: 1px solid #000;
   border-radius: 3px;
   font-size: 20px;
   font-weight: 600;
@@ -1049,6 +1050,8 @@ a {
   padding: 1rem;
   font-size: 18px;
   font-weight: 600;
+  width: 80%;
+  border-radius: 11px;
 }
 
 .BinderSelect option {
@@ -1059,12 +1062,136 @@ a {
   margin-bottom: 2rem;
 }
 
+.Binder1EquationDiv,
+.Binder2EquationDiv {
+  margin-top: 2rem;
+}
+
+.Binder1EquationLabel {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.Binder1EquationBorderDiv,
+.Binder2EqBorderDiv {
+  border: #000 1px solid;
+  padding: 1rem;
+  border-radius: 11px;
+  margin-bottom: 2rem;
+  width: 120%;
+}
+
+.Binder1EquationTopSection {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.Binder2EqBorderDiv {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.BinderInputVariable {
+  width: 70px;
+  padding: .5rem;
+}
+
+.Binder1EquationTopSection p,
+.Binder2EqBorderDiv p {
+  margin: 0;
+}
+
+.Binder2EqBorderDiv p {
+  margin: 0 1rem;
+}
+
+.Binder1EquationBottomSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Binder2EquationTypeSelection {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+}
+
+.Binder2EquationClearBTNDIV {
+  display: flex;
+  justify-content: end;
+  align-items: start;
+  padding: 1rem 0;
+  width: 100%;
+  margin-top: -190px;
+
+}
+
+.Binder2EQCLearBtn {
+  padding: 1rem;
+}
+
+
+.Binder2EQSec {}
+
+
+/* CSS to display radio buttons horizontally */
+.Binder2RadioTypeDiv {
+  display: flex;
+  width: 100%;
+  padding-bottom: 2rem;
+}
+
+.Binder2RadioTypeDiv {
+  display: inline-block;
+  margin-left: 1rem;
+  margin-top: -0.4rem;
+}
+
+.Binder2RadioTypeDiv input[type="radio"] {
+  display: none;
+}
+
+.Binder2RadioTypeDiv label {
+  display: inline-block;
+  cursor: pointer;
+  padding: 6px 32px;
+  background-color: #f2f2f2;
+  border: 1px solid #000;
+  border-radius: 3px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.Binder2RadioTypeDiv input[type="radio"]:checked+label {
+  background-color: #4d67b6;
+  color: whitesmoke;
+}
+
+
+
+
+
+
+
+
+
+
 .ADBinderPkg {
   display: flex;
+  width: 100%;
 }
 
 .ADEachBinder {
-  margin-right: 2rem;
+  width: 100%;
 }
 
 .AddSubCategoryPage {
@@ -1075,6 +1202,8 @@ a {
 .DivForVerticalGap {
   margin-top: 2rem;
 }
+
+
 
 
 /* Create formula finished */

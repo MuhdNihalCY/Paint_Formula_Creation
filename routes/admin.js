@@ -215,7 +215,7 @@ router.get('/edit-subcategory/:id', verifyLogin, (req, res) => {
 
         // console.log(SubCategory);
 
-        var Gram, Liter, Matt, Gloss, Binder2;
+        var Gram, Liter, Matt, Gloss, Binder2, Mipa, Rosner;
 
         if (SubCategory.Gram) {
           Gram = true;
@@ -228,6 +228,14 @@ router.get('/edit-subcategory/:id', verifyLogin, (req, res) => {
         } else if (SubCategory.Gloss) {
           Gloss = true;
         }
+
+        if (SubCategory.Mipa) {
+          Mipa = true;
+        } else if (SubCategory.Rosner) {
+          Rosner = true;
+        }
+
+       
 
         // console.log(Gram, Liter, Matt, Gloss);
 
@@ -260,10 +268,10 @@ router.get('/edit-subcategory/:id', verifyLogin, (req, res) => {
           //  console.log(remainingBinders);
           Binder2 = remainingBinders;
           var EditSubcategory = true
-          res.render('admin/forms/addSubCategory', { admin: true, EditSubcategory, AllCategory, SubCategory, Binders, Gram, Liter, Matt, Gloss, Binder2 });
+          res.render('admin/forms/addSubCategory', { admin: true, EditSubcategory, AllCategory, SubCategory, Binders, Gram, Liter, Matt, Gloss, Binder2, Mipa, Rosner });
         } else {
           var EditSubcategory = true
-          res.render('admin/forms/addSubCategory', { admin: true, EditSubcategory, AllCategory, SubCategory, Binders, Gram, Liter, Matt, Gloss, Binder2 });
+          res.render('admin/forms/addSubCategory', { admin: true, EditSubcategory, AllCategory, SubCategory, Binders, Gram, Liter, Matt, Gloss, Binder2, Mipa, Rosner });
         }
 
 
