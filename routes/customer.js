@@ -571,7 +571,7 @@ router.post('/BulkOrder/:FileNo', CustomerVerifyLogin, async (req, res) => {
                     }
                 }
 
-                // console.log(" Tinter Stocks are available. ");
+                // console.log(" Tinter Stocks are available. "); 
 
             } catch (error) {
                 console.error(error);
@@ -915,7 +915,8 @@ router.get('/EditFormula/:fileNo', CustomerVerifyLogin, (req, res) => {
                     employeeHelpers.GetAllTinteresByFormula(Formula).then((Tinters) => {
                         console.log(Tinters);
 
-                        res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives, CustomerName: true });
+                        res.render('employee/CopyFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives })
+                        // res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives, CustomerName: true });
 
                     })
                 })

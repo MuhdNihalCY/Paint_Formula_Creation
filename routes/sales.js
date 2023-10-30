@@ -115,5 +115,11 @@ router.get('/getAllCardsFromBoard', SalesVerifyLogin, (req, res) => {
 })
 
 
+router.get('/AllFormula',SalesVerifyLogin,(req,res)=>{
+    employeeHelpers.GetAllFormulations().then((Formula)=>{
+        console.log(Formula);
+    })
+})
+
 
 module.exports = router;

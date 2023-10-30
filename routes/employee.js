@@ -1191,7 +1191,7 @@ router.get('/EditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
       var MatchingCategoryID = matchingCategory.Category_Id;
       employeeHelpers.GetAllSubCategoriesByMatchingCategory(MatchingCategoryID).then((AllSubCategories) => {
         // console.log("AllSubCategories: ",AllSubCategories);
-
+ 
         const formulaSubcategory = Formula.SubCategoryName;
         let reOrderedSubcategories = [];
 
@@ -1221,7 +1221,8 @@ router.get('/EditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
           employeeHelpers.GetAllTinteresByFormula(Formula).then((Tinters) => {
             console.log(Tinters);
 
-            res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives });
+            res.render('employee/CopyFormula',{ Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives })
+          //  res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives });
 
           })
         })

@@ -129,7 +129,7 @@
                         <h2 class="CFheader">Edit Formula</h2>
                         <div class="CFMinHeaderBTNs">
                             <a class="CFclearAllBTN btn" href="">Clear All</a>
-                            <input type="submit" value="Save" class="CFSaveBTN btn" id="">
+                            <input type="submit" value="Save as new Fromula " class="CFSaveBTN btn" id="">
                         </div>
                     </div>
                     <hr>
@@ -287,9 +287,9 @@
                                 {{/if}}
 
                             </div>
-                            <div class="TableStarting">
-                                <table class="table table-bordered text-center"> {{!-- table table-bordered text-center
-                                    --}}
+                            <div class="TableStarting"> 
+                                {{!-- table table-bordered text-center    --}}
+                                <table class="table table-bordered text-center">
                                     <thead class="EDTableHeader">
                                         <th>Tinters</th>
                                         <th>QTY in Grams</th>
@@ -521,6 +521,8 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+    var State = {}
 
     window.onload = function () {
         makeChangesInBinderMattGloss();
@@ -983,7 +985,7 @@
 
         // Get all the rows with class "row-template"
         var rows = document.getElementsByClassName("row-template");
-
+        console.log("rows.length: ",rows.length);
         // Loop through each row
         for (var i = 1; i <= rows.length; i++) {
             // Get the input value for the current row

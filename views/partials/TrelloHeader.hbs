@@ -19,15 +19,21 @@
                             <div class="HeaderLinkItem">Home </div>
                         </a></li>
                     <li>
-                        <a {{#if SalesLogged}} href="/sales/CustomerCollection" {{/if}} {{#if OfficeLogged}} href="/office/CustomerCollection" {{/if}} {{#if
-                            DispatcherLoggedIn}} href="/dispatcher/CustomerCollection" {{/if}} {{#if DriverLoggedIn}} href="/driver/CustomerCollection"
-                            {{/if}}>
+                        <a {{#if SalesLogged}} href="/sales/CustomerCollection" {{/if}} {{#if OfficeLogged}}
+                            href="/office/CustomerCollection" {{/if}} {{#if DispatcherLoggedIn}}
+                            href="/dispatcher/CustomerCollection" {{/if}} {{#if DriverLoggedIn}}
+                            href="/driver/CustomerCollection" {{/if}}>
                             <div class="HeaderLinkItem">Customer Collection </div>
                         </a>
                     </li>
-                    <li><a class="profile-btn" {{#if SalesLogged}} href="/sales/Logout" {{/if}} {{#if OfficeLogged}} href="/office/Logout" {{/if}} {{#if
-                            DispatcherLoggedIn}} href="/dispatcher/Logout" {{/if}} {{#if DriverLoggedIn}} href="/driver/Logout"
-                            {{/if}}>Logout </a></li>
+                   
+                    {{!-- {{#if SalesLogged}}
+                    <li><a href="/sales/AllFormula"><div class="HeaderLinkItem">All Formula </div></a></li>
+                    {{/if}} --}}
+                   
+                    <li><a class="profile-btn" {{#if SalesLogged}} href="/sales/Logout" {{/if}} {{#if OfficeLogged}}
+                            href="/office/Logout" {{/if}} {{#if DispatcherLoggedIn}} href="/dispatcher/Logout" {{/if}}
+                            {{#if DriverLoggedIn}} href="/driver/Logout" {{/if}}>Logout </a></li>
                     {{!-- <li>
                         <a href="/Customer/CreateFormulas">
                             <div class="HeaderLinkItem">Create Formula </div>
