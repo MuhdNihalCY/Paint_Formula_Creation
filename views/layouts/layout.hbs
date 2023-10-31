@@ -32,6 +32,9 @@
 </head>
 
 <body>
+    {{#if FullErrorPage}}
+    {{{body}}}
+    {{else}}
     {{#if Print}}
     {{{body}}}
     {{else}}
@@ -60,6 +63,7 @@
     {{/if}}
     {{{body}}}
     {{>footer}}
+    {{/if}}
     {{/if}}
     {{/if}}
     {{/if}}
