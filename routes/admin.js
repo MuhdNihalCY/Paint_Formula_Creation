@@ -30,9 +30,9 @@ router.get('/', verifyLogin, function (req, res, next) {
       var DelError = req.query.DelError
       res.render('admin/Dashboard', { admin: true, AllCategory, DelError });
     } else {
-      whatsappHelper.sendTestMessage().then(() => {
-        res.render('admin/Dashboard', { admin: true, AllCategory });
-      })
+      res.render('admin/Dashboard', { admin: true, AllCategory });
+      // whatsappHelper.sendTestMessage().then(() => {
+      // })
       //res.redirect(req.originalUrl.split('?')[0]); // Redirect to the same route without query parameters
     }
   })

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const trelloHelpers = require('../helpers/trelloHelpers');
 const employeeHelpers = require('../helpers/employeeHelpers');
+const whatsappHelper = require('../helpers/whatsappHelper');
 
 
 const DispatcherVerifyLogin = (req, res, next) => {
@@ -144,5 +145,36 @@ router.get('/getAllCardsFromBoard', DispatcherVerifyLogin, (req, res) => {
         })
     })
 })
+
+
+router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', DispatcherVerifyLogin, (req, res) => {
+
+    var cardID = req.params.cardID;
+    var DeliveryLocation = req.params.DeliveryLocation;
+    console.log("cardID: ", cardID);
+    trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
+      trelloHelpers.getCardByID(cardID).then(async (Card) => {
+        if (Card.idChecklists.length > 0) {
+          const cardChecklistIDArray = Card.idChecklists;
+          console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
+          const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
+          Card.checkItems = checkItems;
+          console.log("Check Items: ", checkItems);
+        }
+        const ContactDetails = await employeeHelpers.getCardContactDetails(Card.id);
+        Card.ContactDetails = ContactDetails;
+        console.log("ContactDetails: ", ContactDetails);
+  
+        console.log("Card: ", Card);
+  
+        whatsappHelper.sendDeliveyMessage(Card, DeliveryLocation).then(() => {
+  
+          res.redirect('/dispatcher/CustomerCollection')
+        })
+  
+      })
+  
+    })
+  })
 
 module.exports = router;

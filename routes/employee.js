@@ -4,6 +4,7 @@ var EmployeeHeplers = require('../helpers/employeeHelpers');
 const employeeHelpers = require('../helpers/employeeHelpers');
 const { json } = require('express/lib/response');
 const trelloHelpers = require('../helpers/trelloHelpers');
+const WhatsappHelper = require('../helpers/whatsappHelper');
 
 
 // verify login 
@@ -1191,7 +1192,7 @@ router.get('/EditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
       var MatchingCategoryID = matchingCategory.Category_Id;
       employeeHelpers.GetAllSubCategoriesByMatchingCategory(MatchingCategoryID).then((AllSubCategories) => {
         // console.log("AllSubCategories: ",AllSubCategories);
- 
+
         const formulaSubcategory = Formula.SubCategoryName;
         let reOrderedSubcategories = [];
 
@@ -1221,8 +1222,8 @@ router.get('/EditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
           employeeHelpers.GetAllTinteresByFormula(Formula).then((Tinters) => {
             console.log(Tinters);
 
-            res.render('employee/CopyFormula',{ Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives })
-          //  res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives });
+            res.render('employee/CopyFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives })
+            //  res.render('employee/EditFormula', { Formula, Categories: reorderedAllCategory, Subcategories: reOrderedSubcategories, Matt, Gloss, Tinters, Additives });
 
           })
         })
@@ -2083,11 +2084,11 @@ router.get('/getAllCardsFromCustomerCollection', EmployeeVerifyLogin, async (req
 
 
 router.get('/moveToDoneToday/:cardId', EmployeeVerifyLogin, (req, res) => {
-  var cardID = req.params.cardId;
-  console.log("cardID: ", cardID);
-  trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
-    res.redirect('/CustomerCollection')
-  })
+  // var cardID = req.params.cardId;
+  // console.log("cardID: ", cardID);
+  // trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
+  res.redirect('/CustomerCollection')
+  // })
 })
 
 
@@ -2103,6 +2104,36 @@ router.get('/getAllCardsFromBoard', EmployeeVerifyLogin, (req, res) => {
         res.json({ AllCards });
       })
     })
+  })
+})
+
+router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', EmployeeVerifyLogin, (req, res) => {
+
+  var cardID = req.params.cardID;
+  var DeliveryLocation = req.params.DeliveryLocation;
+  console.log("cardID: ", cardID);
+  trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
+    trelloHelpers.getCardByID(cardID).then(async (Card) => {
+      if (Card.idChecklists.length > 0) {
+        const cardChecklistIDArray = Card.idChecklists;
+        console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
+        const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
+        Card.checkItems = checkItems;
+        console.log("Check Items: ", checkItems);
+      }
+      const ContactDetails = await employeeHelpers.getCardContactDetails(Card.id);
+      Card.ContactDetails = ContactDetails;
+      console.log("ContactDetails: ", ContactDetails);
+
+      console.log("Card: ", Card);
+
+      WhatsappHelper.sendDeliveyMessage(Card, DeliveryLocation).then(() => {
+
+        res.redirect('/CustomerCollection')
+      })
+
+    })
+
   })
 })
 

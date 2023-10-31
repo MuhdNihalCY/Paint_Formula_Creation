@@ -683,6 +683,7 @@
             literTotalInput.value = 0.00;
             calculateTotalGrams(input);
             makeChangesInBinderMattGloss()
+            FindSolidContentOfProducts()
         } else {
 
 
@@ -1915,7 +1916,6 @@
                                                  ${oldTinter.map(oneTinter => `
                                                    <option value="${oneTinter.Product_Id}">${oneTinter.Product_Name}</option>
                                                     `).join('')}
-                                                     <option value="">select a Tinter</option>
                                             </select>
                                         </td>
 

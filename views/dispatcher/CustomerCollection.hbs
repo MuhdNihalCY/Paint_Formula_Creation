@@ -8,6 +8,23 @@
     <div id="overlay"></div>
 
 
+    <!-- The popup -->
+    <div id="myPopup" class="popup">
+        <div class="popup-content">
+            <div class="forms">
+                <div id="cofirmTitle" class="title"></div>
+                <div id="cofirmdescription" class="description"></div>
+                <input type="text" id="ConfirmHiddenID" hidden>
+                <div>
+                    <input type="text" id="DeliveredLocation" placeholder="Enter Delivered Location or Name of Person">
+                    <button onclick="sendWhatsAppMessage()">Send</button>
+                    <button onclick="closePopupConfirm()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="MainSection">
         {{!-- <div class="OfficeHeader">
             <div class="OfficeEndSection">
@@ -110,7 +127,8 @@
                             <img src="${card.ImageUrl}" class="cardImg">
                         </div>
                         <div class="cardActionBTNSEction">
-                              <a href="/dispatcher/moveToDoneToday/${card.id}" class="btn ActionCardBtn">Move Card to Done Today</a>
+                              <a href="#" class="btn ActionCardBtn" onclick="checkForConfirmation('${card.id}')">Move Card to Done Today</a>
+                            {{!-- <a href="/moveToDoneToday/${card.id}" class="btn ActionCardBtn" onclick="checkForConfirmation('${card.id}'')">Move Card to Done Today</a> --}}
                         </div>
                     </div>`;
 
@@ -124,7 +142,8 @@
                     <div class="cardImagesection">
                     </div>
                     <div class="cardActionBTNSEction">
-                              <a href="/dispatcher/moveToDoneToday/${card.id}" class="btn ActionCardBtn">Move Card to Done Today</a>
+                              <a href="#" class="btn ActionCardBtn" onclick="checkForConfirmation('${card.id}')">Move Card to Done Today</a>
+                            {{!-- <a href="/moveToDoneToday/${card.id}" class="btn ActionCardBtn" onclick="checkForConfirmation('${card.id}'')">Move Card to Done Today</a> --}}
                         </div>
                 </div>`;
                 }
@@ -289,7 +308,7 @@
                     
                     
                     <div class="CardSaveBTNSEction">
-                               <a href="/dispatcher/moveToDoneToday/${card.id}" class="btn SaveBTN">Move Card to Done Today</a>
+                               <a href="#" class="btn SaveBTN" onclick="checkForConfirmation('${card.id}')">Move Card to Done Today</a>
                     </div>
                 </div>
             </form>
@@ -402,7 +421,7 @@
     }
 
 
-    function CloseAddItem() {
+    /*function CloseAddItem() {
         var ListItemElement = document.getElementById('AddCheckListItemINP');
         ListItemElement.value = "";
         const cardAddChecklistSection = document.getElementById('CardAddChecklistsection');
@@ -448,25 +467,80 @@
             form.action = `/cardUpdated/${cardId}`;
             submitButton.value = "Save card";
         }
+    }*/
+
+
+
+
+
+    function checkForConfirmation(cardID) {
+        console.log("Check cardID: ", cardID);
+        let AllCards = State.AllCards;
+        let Card;
+
+        for (let i = 0; i < AllCards.length; i++) {
+            if (AllCards[i].id == cardID) {
+                card = AllCards[i];
+                showPopup(card);
+                //  break;
+            }
+        }
+
+
+
+        return false;
     }
 
 
 
+    // Function to show the popup
+    function showPopup(card) {
+        var cofirmTitle = document.getElementById('cofirmTitle');
+        var cofirmdescription = document.getElementById('cofirmdescription');
+        var ConfirmHiddenID = document.getElementById('ConfirmHiddenID');
+        console.log(card);
+
+        var checkItems = card.checkItems;
+        var itemsForMessage = ' ';
+
+        if (checkItems.length > 0) {
+            itemsForMessage = 'Items: ';
+            checkItems.forEach((EachItem, index) => {
+                itemsForMessage += EachItem.name;
+                if (index < checkItems.length - 1) {
+                    itemsForMessage += ", ";
+                }
+            });
+        }
+
+        cofirmTitle.innerText = `Order ID: ${card.name}`;
+        cofirmdescription.innerText = itemsForMessage;
+        ConfirmHiddenID.value = card.id;
+
+        var popup = document.getElementById("myPopup");
+        popup.style.display = "block";
+    }
 
 
+    // Function to hide the popup
+    function closePopupConfirm() {
+        var popup = document.getElementById("myPopup");
+        popup.style.display = "none";
+    }
 
-    //function MoveCardToDriver(CardID) {
-    // open POP up for move card to driver
 
-    //}
+    function sendWhatsAppMessage() {
+        var cardID = document.getElementById('ConfirmHiddenID').value;
+        var DeliveredLocation = document.getElementById('DeliveredLocation').value;
 
-
-    /*
-    
-        const cardAddChecklistSection = document.getElementById('CardAddChecklistsection');
-    cardAddChecklistSection.setAttribute('hidden', true);
-    
-    */
+        if (DeliveredLocation) {
+            window.location.href = `/dispatcher/api/OrderDeliver/whatsapp/${cardID}/${DeliveredLocation}`;
+        } else {
+            alert('Please enter location!');
+            var popup = document.getElementById("myPopup");
+            popup.style.display = "block";
+        }
+    }
 
 </script>
 
@@ -963,5 +1037,99 @@
         display: flex;
         align-items: center;
         padding-left: 3rem;
+    }
+
+
+
+
+
+
+    /* Style for the popup confirm */
+    .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 9999;
+    }
+
+    /* Style for the popup content */
+    .popup-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #606c88;
+        background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
+        background: linear-gradient(to right, #3f4c6b, #606c88);
+        padding: 20px;
+    }
+
+    .forms {
+        display: flex;
+        flex-direction: column;
+        background: #606c88;
+        background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
+        background: linear-gradient(to right, #3f4c6b, #606c88);
+        padding: 20px;
+        border-radius: 10px;
+        /*max-width: 350px;*/
+    }
+
+    .title {
+        font-size: 1.5rem;
+        line-height: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: #fff;
+    }
+
+    .description {
+        line-height: 1.5rem;
+        font-size: 1rem;
+        margin-top: 1rem;
+        color: rgb(209 213 219);
+    }
+
+    .forms div {
+        display: flex;
+        max-width: 28rem;
+        margin-top: 1rem;
+        column-gap: 0.5rem;
+    }
+
+    .forms div input {
+        outline: none;
+        line-height: 1.5rem;
+        font-size: 0.875rem;
+        color: rgb(255 255 255);
+        padding: 0.5rem 0.875rem;
+        background-color: rgb(255 255 255 / 0.05);
+        border: 1px solid rgba(253, 253, 253, 0.363);
+        border-radius: 0.375rem;
+        flex: 1 1 auto;
+    }
+
+    .forms div input::placeholder {
+        color: rgb(216, 212, 212);
+    }
+
+    .forms div input:focus {
+        border: 1px solid rgb(99 102 241);
+    }
+
+    .forms div button {
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        padding: 0.625rem 0.875rem;
+        background-color: rgb(99 102 241);
+        border-radius: 0.375rem;
+        border: none;
+        outline: none;
     }
 </style>

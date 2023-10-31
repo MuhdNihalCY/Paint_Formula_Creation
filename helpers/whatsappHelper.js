@@ -1,30 +1,52 @@
 const axios = require('axios');
-const accountSid = 'ACb08be145ac36f2969017160d4c518971';
-const authToken = 'c0ae95489719bb3962e715ae1d1701ab';
+require('dotenv').config();
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+
 const client = require('twilio')(accountSid, authToken);
 
 module.exports = {
-    sendTestMessage: () => {
+    sendDeliveyMessage: (cardData, Location) => {
         return new Promise(async (resolve, reject) => {
-            const accountSid = process.env.TWILIO_ACCOUNT_SID;
-            const authToken = process.env.TWILIO_AUTH_TOKEN;
-            // const client = require('twilio')(accountSid, authToken);
-            var OrderID = '23-25-878-SampleName'
-            var DeliveryTO = "MR. Office"
-            var Items =    `*FT 34912 VIC - 1 ltr,   2K 10% gloss clear - 1 ltr,   MS 25 - 500ml,  142 - 1 can*`;
+            var OrderID = cardData.name;
+            var DeliveryTO = Location;
+            var ContactDetails = cardData.ContactDetails;
 
-            var Message = `Your ordered items (Order ID: ${OrderID})\nitems:\n${Items}\nIs delivered to store - ${DeliveryTO}`;
+            var ClientWhatsappNumber = `${ContactDetails.WhatsAppcountrySelect}${ContactDetails.WhatsappNumber}`;
+
+            var checkItems = cardData.checkItems;
+            var itemsForMessage = ' ';
+
+            if (checkItems.length > 0) {
+                itemsForMessage = '';
+                checkItems.forEach((EachItem, index) => {
+                    itemsForMessage += EachItem.name;
+                    if (index < checkItems.length - 1) {
+                        itemsForMessage += ", ";
+                    }
+                });
+            }
+
+
+            var Message = `Your ordered items (Order ID: *${OrderID}*)\n*${itemsForMessage}*\nIs delivered to ${DeliveryTO}`;
+
+            console.log("ClientWhatsappNumber:",ClientWhatsappNumber);
+            console.log("Message:",Message);
+
 
             client.messages
                 .create({
                     from: 'whatsapp:+971528704255',
                     body: Message,
-                    to: 'whatsapp:+918891303280'
+                    to: `whatsapp:${ClientWhatsappNumber}`
                 })
                 .then(message => {
                     console.log(message);
                     resolve(message.sid);
                 })
-        });
-    },
+
+
+
+        })
+    }
 };
