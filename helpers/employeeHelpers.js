@@ -1,9 +1,7 @@
 var db = require('../config/connection');
 var collection = require('../config/collection');
-const { ObjectId, ReturnDocument } = require('mongodb');
-const { use } = require('../routes/employee');
-const { reset } = require('nodemon');
-const res = require('express/lib/response');
+const { ObjectId } = require('mongodb');
+
 
 module.exports = {
     DoLogin: (Data) => {
@@ -1013,10 +1011,10 @@ module.exports = {
             var CardData = {
                 Name: cardName,
                 FileNo: data.FileName,
-                CurrentList: "Orders",
+                CurrentList: "ORDERS",
                 ListArray: [
                     {
-                        ListName: "Orders",
+                        ListName: "ORDERS",
                         InTIme: Date.now(),
                         InEmployeeName: EmployeeData.UserName,
                         InEmployeeDesignation: EmployeeData.Designation
@@ -1029,11 +1027,11 @@ module.exports = {
                 // add this card to 
                 console.log("response", response);
                 const insertedIdString = response.insertedId.toString();
-                var OrderList = await db.get().collection(collection.LIST_COLLECTION).findOne({ "Name": "Orders" });
+                var OrderList = await db.get().collection(collection.LIST_COLLECTION).findOne({ "Name": "ORDERS" });
                 if (!OrderList) {
                     //create an Order List
                     OrderList = {
-                        Name: "Orders",
+                        Name: "ORDERS",
                         OldCards: []
                     }
 
@@ -1041,7 +1039,7 @@ module.exports = {
 
                         resolve();
                     })
-                }else{
+                } else {
                     resolve();
                 }
             })
@@ -1064,10 +1062,45 @@ module.exports = {
             resolve(AllCards);
         })
     },
-    getAllLists:()=>{
-        return new Promise(async(resolve,reject)=>{
+    getAllLists: () => {
+        return new Promise(async (resolve, reject) => {
             let AllList = await db.get().collection(collection.LIST_COLLECTION).find().toArray();
             resolve(AllList);
+        })
+    },
+    getCardByID: (id) => {
+        return new Promise(async (resolve, reject) => {
+            let Card = await db.get().collection(collection.CARD_COLLECTION).findOne({ _id: new     ObjectId(id) });
+            resolve(Card)
+        })
+    },
+    getOfficeSectionList: () => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.LIST_COLLECTION).findOne({ Name: "OFFICE SECTION" }).then(async (OldOfficeSectionList) => {
+                if (OldOfficeSectionList) {
+                    resolve(OldOfficeSectionList)
+                } else {
+                    // create new Office section lits and pass.
+                    //create an Order List
+                    var OfficeSectionList = {
+                        Name: "OFFICE SECTION",
+                        OldCards: []
+                    }
+
+                    await db.get().collection(collection.LIST_COLLECTION).insertOne(OfficeSectionList).then(async () => {
+                        OfficeSectionList = await db.get().collection(collection.LIST_COLLECTION).findOne({ Name: "OFFICE SECTION" });
+                        resolve(OfficeSectionList);
+                    })
+                }
+            })
+
+        })
+    },
+    SaveUpdatedCardBy:(cardData,Id)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.CARD_COLLECTION).updateOne({_id:new ObjectId(Id)},{$set:cardData}).then(()=>{
+                resolve();
+            })
         })
     }
 

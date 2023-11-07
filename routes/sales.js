@@ -33,8 +33,8 @@ router.get('/getAllCardsFromOrders', SalesVerifyLogin, (req, res) => {
     //     })
     // })
 
-    employeeHelpers.GetAllCardsByListName("Orders").then((AllCards) => {
-        console.log(AllCards);
+    employeeHelpers.GetAllCardsByListName("ORDERS").then((AllCards) => {
+        console.log("Orders Cards", AllCards);
         res.json({ AllCards });
     })
 })
@@ -43,20 +43,95 @@ router.post('/cardUpdated/:CardId', SalesVerifyLogin, (req, res) => {
     // console.log(req.body);
     var Card = req.body;
     Card.id = req.params.CardId
-    console.log(Card);
-    trelloHelpers.getCardByID(Card.id).then((CardData) => {
-        // console.log("CardData: ", CardData);
-        trelloHelpers.UpdateCardNameandDescriptionAndMoveToOffice(Card, CardData).then((updatedCard) => {
-            // console.log("updatedCard: ", updatedCard);
-            trelloHelpers.createNewChecklistAndItems(Card).then((response) => {
-                // console.log("CheckList Added: respose: ",response);
-                employeeHelpers.StoreModifiedCardBySales(Card).then(() => {
-                    res.redirect('/sales');
-                })
-            })
-        })
+    // console.log(Card);
 
+    employeeHelpers.getOfficeSectionList().then((OfficeSectionList) => {
+
+
+        employeeHelpers.getCardByID(Card.id).then((OldCardData) => {
+            // console.log("Old Card Data: ", OldCardData);
+            var UpdatedCard = OldCardData;
+            UpdatedCard.CustomerName = Card.CustomerName;
+            UpdatedCard.description = Card.description;
+            UpdatedCard.ContactcountrySelect = Card.ContactcountrySelect;
+            UpdatedCard.ContactNumber = Card.ContactNumber;
+            UpdatedCard.WhatsAppcountrySelect = Card.WhatsAppcountrySelect;
+            UpdatedCard.WhatsappNumber = Card.WhatsappNumber;
+            UpdatedCard.AlternateContactcountrySelect = Card.AlternateContactcountrySelect;
+            UpdatedCard.AlternateContactNumber = Card.AlternateContactNumber;
+            UpdatedCard.Name = OldCardData.Name + "-" + Card.CustomerName;
+            UpdatedCard.CurrentList = OfficeSectionList.Name;
+
+            //put new list data
+
+            OfficeSectionList.ListName = OfficeSectionList.Name;
+            OfficeSectionList.InTime = Date.now();
+            OfficeSectionList.InEmployeeName = req.session.SalesData.UserName;
+            OfficeSectionList.InEmployeeDesignation = req.session.SalesData.Designation;
+
+            delete OfficeSectionList.Name;
+            delete OfficeSectionList.OldCards;
+            delete OfficeSectionList._id;
+
+            var OldList = UpdatedCard.ListArray[0];
+
+            console.log("OldList: ",OldList);
+
+            OldList.OutTime = Date.now();
+            OldList.OutEmployeeName = req.session.SalesData.UserName;
+            OldList.OutEmployeeDesignation = req.session.SalesData.Designation;
+
+            //UpdatedCard.ListArray[1] = OldList;
+
+            UpdatedCard.ListArray.unshift(OfficeSectionList);
+
+
+            var CheckListItems = {
+                CardName: UpdatedCard.Name,
+                checkItems: []
+            }
+
+            // var checkItems = []
+
+            // Iterate through the object's properties
+            for (const key in Card) {
+                if (key.startsWith('ChecklistItem')) {
+                    if (Card[key] !== '') {
+                        var oneItem = {
+                            Name: Card[key],
+                            State: "InComplete"
+                        }
+                        CheckListItems.checkItems.push(oneItem);
+                    }
+                }
+            }
+
+            // console.log(CheckListItems);
+
+            UpdatedCard.CheckListItems = CheckListItems;
+
+            console.log("Updated Card Data: ", UpdatedCard);
+
+            employeeHelpers.SaveUpdatedCardBy(UpdatedCard, Card.id).then(() => {
+                console.log("Moved card from ordres to office section by Sales Person.");
+                res.redirect('/sales');
+            })
+
+        })
     })
+    // trelloHelpers.getCardByID(Card.id).then((CardData) => {
+    //     // console.log("CardData: ", CardData);
+    //     trelloHelpers.UpdateCardNameandDescriptionAndMoveToOffice(Card, CardData).then((updatedCard) => {
+    //         // console.log("updatedCard: ", updatedCard);
+    //         trelloHelpers.createNewChecklistAndItems(Card).then((response) => {
+    //             // console.log("CheckList Added: respose: ",response);
+    //             employeeHelpers.StoreModifiedCardBySales(Card).then(() => {
+    //                 res.redirect('/sales');
+    //             })
+    //         })
+    //     })
+
+    // })
 })
 
 

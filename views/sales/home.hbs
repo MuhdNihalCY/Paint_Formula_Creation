@@ -149,24 +149,25 @@
 
         } else {
             AllCards.forEach((card, index) => {
+                console.log('card: ', card);
                 if (card.ImageUrl) {
                     //console.log("Have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
+                        <p class="Cardname">${card.Name}</p>
                         <img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">
                     </div>
                     <div class="cardImagesection">
-                        <img src="${card.ImageUrl}" class="cardImg">
+                        <img src="/images/RefImages/${FileNo}.jpg" class="cardImg">
                     </div>
                 </div>`;
                 } else {
                     //console.log("Didn't have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
+                        <p class="Cardname">${card.Name}</p>
                         <img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">
                     </div>
                     <div class="cardImagesection">
@@ -208,32 +209,33 @@
 
         } else {
             AllCards.forEach((card, index) => {
+
                 if (card.ImageUrl) {
                     //console.log("Have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
-                        ${card.List.name === "Order" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                        <p class="Cardname">${card.Name}</p>
+                        ${card.List.Name === "Order" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
                     </div>
                     <div class="cardNamesection">
-                        <p class="Cardname">Current List: ${card.List.name}</p>
+                        <p class="Cardname">Current List: ${card.List.Name}</p>
                     </div>
                     
                     <div class="cardImagesection">
-                        <img src="${card.ImageUrl}" class="cardImg">
+                        <img src="/images/RefImages/${FileNo}.jpg" class="cardImg">
                     </div>
                 </div>`;
                 } else {
                     //console.log("Didn't have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
-                           ${card.List.name === "Order" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                        <p class="Cardname">${card.Name}</p>
+                           ${card.List.Name === "Order" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
                     </div>
                     <div class="cardNamesection">
-                        <p class="Cardname">Current List: ${card.List.name}</p>
+                        <p class="Cardname">Current List: ${card.List.Name}</p>
                     </div>
                     <div class="cardImagesection">
                     </div>
@@ -297,11 +299,13 @@
     function SelectaCard(id) {
         console.log("card ID: ", id)
         let AllCards = State.AllCards;
+        console.log('State allcards:', State.AllCards);
         let Card;
 
         for (let i = 0; i < AllCards.length; i++) {
-            if (AllCards[i].id == id) {
+            if (AllCards[i]._id == id) {
                 card = AllCards[i];
+                console.log("card: ", Card)
 
                 showCardPopup(card)
                 break;
@@ -320,7 +324,7 @@
         popup.id = 'popup';
 
         var popupContent = `
-            <form action="/sales/cardUpdated/${card.id}" method="post">
+            <form action="/sales/cardUpdated/${card._id}" method="post">
                 <div class="CloseBTNsection">
                     <p class="CardTitle">Card Details</p>
                     <div onclick="closeCardPopup()" id="closeButton">X</div>
@@ -328,7 +332,7 @@
                 <div id="popupContent">
                     <div class="CardNameSection">
                         <img src="/images/Icons/CardName.png" class="CardnameIcon" alt="">
-                        <p class="CardNameStatic">${card.name}-</p>
+                        <p class="CardNameStatic">${card.Name}-</p>
                         <input type="text" name="CustomerName" class="CardCustomerName" placeholder="Customer name"
                             required>
                     </div>
@@ -338,7 +342,7 @@
                             <p class="CardDescriptionHeadername">Description</p>
                         </div>
                         <textarea id="description" class="CardDescription" name="description" required
-                            placeholder="Enter card description...">${card.desc}</textarea>
+                            placeholder="Enter card description...">${card.description ? card.description : ""}</textarea>
                     </div>
                     <div class="CardChecklistSection">
                         <div class="CardChecklistSectionHeader">
