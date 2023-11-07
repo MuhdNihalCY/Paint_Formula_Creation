@@ -1012,11 +1012,13 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
       employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
         // Rest of the code...
         //  console.log("Bulk Updated!");
-        trelloHelpers.addTrelloCard(orderFile).then((CardId) => {
+        // employeeHelpers.CreateNewCard(orderFile).then((CardId) => {
+        employeeHelpers.CreateNewCard(orderFile,req.session.EmployeeData).then((CardId) => {
           employeeHelpers.SaveCardIDToOrder(orderFile.FileName, CardId).then(() => {
             res.redirect('/Orders');
           })
         })
+        // })
       });
     }
 
@@ -1768,7 +1770,7 @@ router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
       employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
         // Rest of the code...
         //  console.log("Bulk Updated!");
-        trelloHelpers.addTrelloCard(orderFile).then((CardId) => {
+        employeeHelpers.CreateNewCard(orderFile).then((CardId) => {
           employeeHelpers.SaveCardIDToOrder(orderFile.FileName, CardId).then(() => {
             res.redirect('/Orders');
           })
@@ -2134,6 +2136,24 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', EmployeeVerif
 
     })
 
+  })
+})
+
+router.get('/CustomTrello',(req,res)=>{
+  res.render('employee/CustomTrello')
+})
+
+
+router.get('/getAllCardAndListsToManagement',(req,res)=>{
+  employeeHelpers.GetAllCards().then((AllCards)=>{
+    console.log(AllCards);
+    employeeHelpers.getAllLists().then((AllLists)=>{
+      var data ={
+        AllCards:AllCards,
+        AllLists:AllLists
+      }
+      res.json(data);
+    })
   })
 })
 

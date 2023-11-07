@@ -993,8 +993,83 @@ module.exports = {
             var Driver = await db.get().collection(collection.USERS_COLLECTION).find({ Designation: "Driver" }).project({ Password: 0 }).toArray();
             resolve(Driver);
         })
-    }
+    },
 
+
+
+    // Management Tool
+    CreateNewCard: (data, EmployeeData) => {
+        return new Promise(async (resolve, reject) => {
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0, so add 1
+            var yy = String(today.getFullYear()).slice(-2); // Get the last 2 digits of the year
+
+            var cardName = `${dd}-${mm}-${yy}-${data.InsertedTime}`;
+            console.log("card Name: ", cardName);
+
+
+            var CardData = {
+                Name: cardName,
+                FileNo: data.FileName,
+                CurrentList: "Orders",
+                ListArray: [
+                    {
+                        ListName: "Orders",
+                        InTIme: Date.now(),
+                        InEmployeeName: EmployeeData.UserName,
+                        InEmployeeDesignation: EmployeeData.Designation
+                    }
+
+                ]
+            }
+
+            await db.get().collection(collection.CARD_COLLECTION).insertOne(CardData).then(async (response) => {
+                // add this card to 
+                console.log("response", response);
+                const insertedIdString = response.insertedId.toString();
+                var OrderList = await db.get().collection(collection.LIST_COLLECTION).findOne({ "Name": "Orders" });
+                if (!OrderList) {
+                    //create an Order List
+                    OrderList = {
+                        Name: "Orders",
+                        OldCards: []
+                    }
+
+                    await db.get().collection(collection.LIST_COLLECTION).insertOne(OrderList).then((OrderResponse) => {
+
+                        resolve();
+                    })
+                }else{
+                    resolve();
+                }
+            })
+
+
+
+
+        })
+    },
+
+    GetAllCardsByListName: (ListName) => {
+        return new Promise(async (resolve, reject) => {
+            let Cards = await db.get().collection(collection.CARD_COLLECTION).find({ CurrentList: ListName }).toArray();
+            resolve(Cards);
+        })
+    },
+    GetAllCards: () => {
+        return new Promise(async (resolve, reject) => {
+            let AllCards = await db.get().collection(collection.CARD_COLLECTION).find().toArray();
+            resolve(AllCards);
+        })
+    },
+    getAllLists:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let AllList = await db.get().collection(collection.LIST_COLLECTION).find().toArray();
+            resolve(AllList);
+        })
+    }
 
 
 }

@@ -25,12 +25,17 @@ router.get('/logout', SalesVerifyLogin, (req, res) => {
 })
 
 router.get('/getAllCardsFromOrders', SalesVerifyLogin, (req, res) => {
-    trelloHelpers.getAllCardsFromOrders().then((Cards) => {
-        // console.table(Cards);
-        trelloHelpers.addImageToCardsInArray(Cards).then((AllCards) => {
-            // console.log(AllCards);
-            res.json({ AllCards });
-        })
+    // trelloHelpers.getAllCardsFromOrders().then((Cards) => {
+    //     // console.table(Cards);
+    //     trelloHelpers.addImageToCardsInArray(Cards).then((AllCards) => {
+    //         // console.log(AllCards);
+    //         res.json({ AllCards });
+    //     })
+    // })
+
+    employeeHelpers.GetAllCardsByListName("Orders").then((AllCards) => {
+        console.log(AllCards);
+        res.json({ AllCards });
     })
 })
 
@@ -104,20 +109,23 @@ router.get('/getAllCardsFromCustomerCollection', SalesVerifyLogin, async (req, r
 
 
 router.get('/getAllCardsFromBoard', SalesVerifyLogin, (req, res) => {
-    trelloHelpers.getAllCardsFromBoard().then((Cards) => {
-        // console.table(Cards);
-        trelloHelpers.addImageToCardsInArray(Cards).then((AllCard) => {
-            trelloHelpers.AddListToCards(AllCard).then((AllCards)=>{
-                // console.log(AllCards);
-                res.json({ AllCards });
-            })
-        })
+    // trelloHelpers.getAllCardsFromBoard().then((Cards) => {
+    //     // console.table(Cards);
+    //     trelloHelpers.addImageToCardsInArray(Cards).then((AllCard) => {
+    //         trelloHelpers.AddListToCards(AllCard).then((AllCards) => {
+    //             // console.log(AllCards);
+    //             res.json({ AllCards });
+    //         })
+    //     })
+    // })
+    employeeHelpers.GetAllCards().then((AllCards) => {
+        res.json({ AllCards });
     })
 })
 
 
-router.get('/AllFormula',SalesVerifyLogin,(req,res)=>{
-    employeeHelpers.GetAllFormulations().then((Formula)=>{
+router.get('/AllFormula', SalesVerifyLogin, (req, res) => {
+    employeeHelpers.GetAllFormulations().then((Formula) => {
         console.log(Formula);
     })
 })
@@ -129,29 +137,29 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', SalesVerifyLo
     var DeliveryLocation = req.params.DeliveryLocation;
     console.log("cardID: ", cardID);
     trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
-      trelloHelpers.getCardByID(cardID).then(async (Card) => {
-        if (Card.idChecklists.length > 0) {
-          const cardChecklistIDArray = Card.idChecklists;
-          console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
-          const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
-          Card.checkItems = checkItems;
-          console.log("Check Items: ", checkItems);
-        }
-        const ContactDetails = await employeeHelpers.getCardContactDetails(Card.id);
-        Card.ContactDetails = ContactDetails;
-        console.log("ContactDetails: ", ContactDetails);
-  
-        console.log("Card: ", Card);
-  
-        whatsappHelper.sendDeliveyMessage(Card, DeliveryLocation).then(() => {
-  
-          res.redirect('/sales/CustomerCollection')
+        trelloHelpers.getCardByID(cardID).then(async (Card) => {
+            if (Card.idChecklists.length > 0) {
+                const cardChecklistIDArray = Card.idChecklists;
+                console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
+                const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
+                Card.checkItems = checkItems;
+                console.log("Check Items: ", checkItems);
+            }
+            const ContactDetails = await employeeHelpers.getCardContactDetails(Card.id);
+            Card.ContactDetails = ContactDetails;
+            console.log("ContactDetails: ", ContactDetails);
+
+            console.log("Card: ", Card);
+
+            whatsappHelper.sendDeliveyMessage(Card, DeliveryLocation).then(() => {
+
+                res.redirect('/sales/CustomerCollection')
+            })
+
         })
-  
-      })
-  
+
     })
-  })
+})
 
 
 

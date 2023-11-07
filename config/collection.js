@@ -13,5 +13,6 @@ module.exports={
     EDITED_FROMULA_COLLECTION: 'Updated_Fromula_Collection',
     USERS_COLLECTION:'Users_Collection',
     CARD_COLLECTION:'Card_Collection',
-    SALES_MODIFIED_CARDS:'Sales_Modified_Cards'
+    SALES_MODIFIED_CARDS:'Sales_Modified_Cards',
+    LIST_COLLECTION:'List_Collection',
 };

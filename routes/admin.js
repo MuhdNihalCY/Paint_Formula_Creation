@@ -235,7 +235,7 @@ router.get('/edit-subcategory/:id', verifyLogin, (req, res) => {
           Rosner = true;
         }
 
-       
+
 
         // console.log(Gram, Liter, Matt, Gloss);
 
@@ -631,9 +631,12 @@ router.post('/addUser', verifyLogin, (req, res) => {
     if (!State.Err) {
       var User = req.body;
       if (User.Designation === "Production" || User.Designation === "Driver") {
-        trelloHelpers.AddListForPeople(User.UserName).then(() => {
+
+        adminHelpers.CreateNewList(User.UserName).then((respone) => {
           res.redirect('/admin/Users');
-        });
+        })
+        // trelloHelpers.AddListForPeople(User.UserName).then(() => {
+        // });
       } else {
         res.redirect('/admin/Users');
       }

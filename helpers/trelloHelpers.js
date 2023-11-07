@@ -6,6 +6,8 @@ const FormData = require('form-data');
 const fs = require('fs');
 var app = express();
 var path = require('path');
+const db = require('mongodb');
+const adminHelpers = require('./adminHelpers');
 
 
 const ApiKey = process.env.TrelloApiKey;
@@ -612,26 +614,28 @@ module.exports = {
         })
     },
 
-    //admin
+    // //admin
 
-    AddListForPeople: (UserName) => {
-        return new Promise(async (resolve, reject) => {
-            await axios.post(
-                `https://api.trello.com/1/lists`,
-                null,
-                {
-                    params: {
-                        name: UserName.toString(),
-                        idBoard: BoardID,
-                        key: ApiKey, // Replace with your API key
-                        token: Token, // Replace with your API token
-                    },
-                }
-            ).then((response) => {
-                resolve(response);
-            })
-        })
-    },
+    // AddListForPeople: (UserName) => {
+    //     return new Promise(async (resolve, reject) => {
+    //         await axios.post(
+    //             `https://api.trello.com/1/lists`,
+    //             null,
+    //             {
+    //                 params: {
+    //                     name: UserName.toString(),
+    //                     idBoard: BoardID,
+    //                     key: ApiKey, // Replace with your API key
+    //                     token: Token, // Replace with your API token
+    //                 },
+    //             }
+    //         ).then((response) => {
+    //             resolve(response);
+    //         })
+
+            
+    //     })
+    // },
 
 
     //Dispatcher

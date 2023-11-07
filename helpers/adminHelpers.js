@@ -874,12 +874,34 @@ module.exports = {
     },
     updateUser: (UserData) => {
         return new Promise(async (resolve, reject) => {
-           await db.get().collection(collection.USERS_COLLECTION).updateOne({UserID : UserData.UserID},{$set:UserData}).then((response)=>{
-            console.log(response);
-            resolve(response);
-           })
+            await db.get().collection(collection.USERS_COLLECTION).updateOne({ UserID: UserData.UserID }, { $set: UserData }).then((response) => {
+                console.log(response);
+                resolve(response);
+            })
         })
     },
+
+    //Management Tool
+    CreateNewList: (UserName) => {
+        return new Promise(async (resolve, reject) => {
+            var ListData = {
+                Name: UserName,
+                OldCards:[]
+            }
+            await db.get().collection(collection.LIST_COLLECTION).insertOne(ListData).then((respose)=>{
+                resolve(respose);
+            })
+        })
+    },
+
+
+
+
+
+
+
+
+
 
 
 
