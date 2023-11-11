@@ -81,17 +81,12 @@ router.post('/cardUpdated/:CardId', SalesVerifyLogin, (req, res) => {
             OldList.OutEmployeeName = req.session.SalesData.UserName;
             OldList.OutEmployeeDesignation = req.session.SalesData.Designation;
 
-            //UpdatedCard.ListArray[1] = OldList;
-
             UpdatedCard.ListArray.unshift(OfficeSectionList);
-
 
             var CheckListItems = {
                 CardName: UpdatedCard.Name,
                 checkItems: []
             }
-
-            // var checkItems = []
 
             // Iterate through the object's properties
             for (const key in Card) {
@@ -119,19 +114,6 @@ router.post('/cardUpdated/:CardId', SalesVerifyLogin, (req, res) => {
 
         })
     })
-    // trelloHelpers.getCardByID(Card.id).then((CardData) => {
-    //     // console.log("CardData: ", CardData);
-    //     trelloHelpers.UpdateCardNameandDescriptionAndMoveToOffice(Card, CardData).then((updatedCard) => {
-    //         // console.log("updatedCard: ", updatedCard);
-    //         trelloHelpers.createNewChecklistAndItems(Card).then((response) => {
-    //             // console.log("CheckList Added: respose: ",response);
-    //             employeeHelpers.StoreModifiedCardBySales(Card).then(() => {
-    //                 res.redirect('/sales');
-    //             })
-    //         })
-    //     })
-
-    // })
 })
 
 

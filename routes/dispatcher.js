@@ -29,7 +29,18 @@ router.get('/logout', DispatcherVerifyLogin, (req, res) => {
 })
 
 router.get('/getAllCardsFromDispatcherSection', DispatcherVerifyLogin, async (req, res) => {
-    try {
+    employeeHelpers.GetAllCardsByListName("FOR DISPATCH").then(async (AllCards) => {
+
+        const Driver = await employeeHelpers.getAllDriverPeople();
+        AllCards.forEach(async (card) => {
+            console.log("Driver Peoplae: ", Driver);
+            card.Driver = Driver
+        })
+
+        console.log("FOR DISPATCH sectionCards", AllCards);
+        res.json({ AllCards });
+    })
+    /* try {
         var Cards = await trelloHelpers.getAllCardsFromDispatcherSection();
         Cards = await trelloHelpers.addImageToCardsInArray(Cards)
         console.log(Cards);
@@ -59,16 +70,21 @@ router.get('/getAllCardsFromDispatcherSection', DispatcherVerifyLogin, async (re
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
-    }
+    }*/
 })
 
 
 router.get('/moveToCustomerCollection/:cardID', DispatcherVerifyLogin, (req, res) => {
     var cardID = req.params.cardID;
     console.log("cardID: ", cardID);
-    trelloHelpers.moveCardtoCustomerCollectionByCardID(cardID).then((response) => {
-        res.redirect('/dispatcher')
+    
+    employeeHelpers.moveCardToCustomerCollectionByCardIDAndMovedUser(cardID,req.session.DispatcherData).then(()=>{
+        res.redirect('/dispatcher/CustomerCollection');
     })
+   
+    // trelloHelpers.moveCardtoCustomerCollectionByCardID(cardID).then((response) => {
+    //     res.redirect('/dispatcher')
+    // })
 })
 
 router.post('/cardUpdated/:CardID', DispatcherVerifyLogin, (req, res) => {
@@ -135,15 +151,19 @@ router.get('/moveToDoneToday/:cardId', DispatcherVerifyLogin, (req, res) => {
 
 
 router.get('/getAllCardsFromBoard', DispatcherVerifyLogin, (req, res) => {
-    trelloHelpers.getAllCardsFromBoard().then((Cards) => {
+    employeeHelpers.GetAllCards().then((AllCards) => {
+        console.log("Global cards: ", AllCards);
+        res.json({ AllCards });
+    })
+    /*trelloHelpers.getAllCardsFromBoard().then((Cards) => {
         // console.table(Cards);
         trelloHelpers.addImageToCardsInArray(Cards).then((AllCard) => {
-            trelloHelpers.AddListToCards(AllCard).then((AllCards)=>{
+            trelloHelpers.AddListToCards(AllCard).then((AllCards) => {
                 // console.log(AllCards);
                 res.json({ AllCards });
             })
         })
-    })
+    })*/
 })
 
 
@@ -153,28 +173,28 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', DispatcherVer
     var DeliveryLocation = req.params.DeliveryLocation;
     console.log("cardID: ", cardID);
     trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
-      trelloHelpers.getCardByID(cardID).then(async (Card) => {
-        if (Card.idChecklists.length > 0) {
-          const cardChecklistIDArray = Card.idChecklists;
-          console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
-          const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
-          Card.checkItems = checkItems;
-          console.log("Check Items: ", checkItems);
-        }
-        const ContactDetails = await employeeHelpers.getCardContactDetails(Card.id);
-        Card.ContactDetails = ContactDetails;
-        console.log("ContactDetails: ", ContactDetails);
-  
-        console.log("Card: ", Card);
-  
-        whatsappHelper.sendDeliveyMessage(Card, DeliveryLocation).then(() => {
-  
-          res.redirect('/dispatcher/CustomerCollection')
+        trelloHelpers.getCardByID(cardID).then(async (Card) => {
+            if (Card.idChecklists.length > 0) {
+                const cardChecklistIDArray = Card.idChecklists;
+                console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
+                const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
+                Card.checkItems = checkItems;
+                console.log("Check Items: ", checkItems);
+            }
+            const ContactDetails = await employeeHelpers.getCardContactDetails(Card.id);
+            Card.ContactDetails = ContactDetails;
+            console.log("ContactDetails: ", ContactDetails);
+
+            console.log("Card: ", Card);
+
+            whatsappHelper.sendDeliveyMessage(Card, DeliveryLocation).then(() => {
+
+                res.redirect('/dispatcher/CustomerCollection')
+            })
+
         })
-  
-      })
-  
+
     })
-  })
+})
 
 module.exports = router;

@@ -5,7 +5,7 @@
     <div id="overlay"></div>
 
 
-    <div id="fullscreen-popup">
+    <div id="fullscreen-popup"> 
         <!-- Popup content -->
         <div class="popupContent">
             <div class="PopHeaderDiv">
@@ -148,21 +148,21 @@
                 if (card.ImageUrl) {
                     //console.log("Have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
+                        <p class="Cardname">${card.Name}</p>
                         <img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">
                     </div>
                     <div class="cardImagesection">
-                        <img src="${card.ImageUrl}" class="cardImg">
+                        <img src="/images/RefImages/${card.FileNo}.jpg" class="cardImg">
                     </div>
                 </div>`;
                 } else {
                     //console.log("Didn't have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
+                        <p class="Cardname">${card.Name}</p>
                         <img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">
                     </div>
                     <div class="cardImagesection">
@@ -208,29 +208,29 @@
                 if (card.ImageUrl) {
                     //console.log("Have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
-                        ${card.List.name === "OFFICE SECTION" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                        <p class="Cardname">${card.Name}</p>
+                        ${card.CurrentList === "OFFICE SECTION" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
                     </div>
                     <div class="cardNamesection">
-                        <p class="Cardname">Current List: ${card.List.name}</p>
+                        <p class="Cardname">Current List: ${card.CurrentList}</p>
                     </div>
                     
                     <div class="cardImagesection">
-                        <img src="${card.ImageUrl}" class="cardImg">
+                        <img src="/images/RefImages/${card.FileNo}.jpg" class="cardImg">
                     </div>
                 </div>`;
                 } else {
                     //console.log("Didn't have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
-                           ${card.List.name === "OFFICE SECTION" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                        <p class="Cardname">${card.Name}</p>
+                           ${card.CurrentList === "OFFICE SECTION" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
                     </div>
                     <div class="cardNamesection">
-                        <p class="Cardname">Current List: ${card.List.name}</p>
+                        <p class="Cardname">Current List: ${card.CurrentList}</p>
                     </div>
                     <div class="cardImagesection">
                     </div>
@@ -297,7 +297,7 @@
         let Card;
 
         for (let i = 0; i < AllCards.length; i++) {
-            if (AllCards[i].id == id) {
+            if (AllCards[i]._id == id) {
                 card = AllCards[i];
 
                 showCardPopup(card)
@@ -317,7 +317,7 @@
         popup.id = 'popup';
 
         var popupContent = `
-            <form action="/office/cardUpdated/${card.id}" method="post">
+            <form action="/office/cardUpdated/${card._id}" method="post">
                 <div class="CloseBTNsection">
                     <p class="CardTitle">Card Details</p>
                     <div onclick="closeCardPopup()" id="closeButton">X</div>
@@ -325,7 +325,7 @@
                 <div id="popupContent">
                     <div class="CardNameSection">
                         <img src="/images/Icons/CardName.png" class="CardnameIcon" alt="">
-                        <p class="CardNameStatic">${card.name}</p>
+                        <p class="CardNameStatic">${card.Name}</p>
                         
                     </div>
                     <div class="CardDiscriptionSection">
@@ -334,7 +334,7 @@
                             <p class="CardDescriptionHeadername">Description</p>
                         </div>
                         <textarea id="description" class="CardDescription" name="description" required
-                            placeholder="Enter card description..." readonly>${card.desc}</textarea>
+                            placeholder="Enter card description..." readonly>${card.description}</textarea>
                     </div>
                     <div class="CardChecklistSection">
                         <div class="CardChecklistSectionHeader">
@@ -342,8 +342,8 @@
                             <p class="cardChecklistHeaderName">Checklist</p>
                         </div>
                         <div class="ChecklistItemsParent">
-    ${card.checkItems.map((checkItem, index) => `
-        <input type="text" class="checklistItem" name="ChecklistItem${index}" value="${checkItem.name}" placeholder="Checklist Item" readonly>
+    ${card.CheckListItems.checkItems.map((checkItem, index) => `
+        <input type="text" class="checklistItem" name="ChecklistItem${index}" value="${checkItem.Name}" placeholder="Checklist Item" readonly>
     `).join('')}
 </div>
                     </div>
@@ -353,9 +353,9 @@
                             <p class="cardContactHeaderName">Contact number</p>
                         </div>
                         <div class="cardContactNumberDiv">
-                             <input type="text" name="ContactcountrySelect" id="ContactcountrySelect " required readonly value="${card.ContactDetails.ContactcountrySelect}"
+                             <input type="text" name="ContactcountrySelect" id="ContactcountrySelect " required readonly value="${card.ContactcountrySelect}"
                                 class="CountryCodeselecte">
-                            <input type="text" class="ContactNumber" id="ContactNumber" name="ContactNumber" oninput="validateContactNumber()" readonly value="${card.ContactDetails.ContactNumber}"
+                            <input type="text" class="ContactNumber" id="ContactNumber" name="ContactNumber" oninput="validateContactNumber()" readonly value="${card.ContactNumber}"
                                 placeholder="Contact number" required>
                         </div>
                     </div>
@@ -365,9 +365,9 @@
                             <p class="cardContactHeaderName">WhatsApp number</p>
                         </div>
                         <div class="cardWhatsappNumberDiv">
-                             <input type="text" name="WhatsAppcountrySelect" id="WhatsAppcountrySelect" required readonly value="${card.ContactDetails.WhatsAppcountrySelect}"
+                             <input type="text" name="WhatsAppcountrySelect" id="WhatsAppcountrySelect" required readonly value="${card.WhatsAppcountrySelect}"
                                 class="CountryCodeselecte">
-                            <input type="text" name="WhatsappNumber" class="WhatsappNumber" id="WhatsappNumber" oninput="validateWhatsapptNumber()" readonly  value="${card.ContactDetails.WhatsappNumber}"
+                            <input type="text" name="WhatsappNumber" class="WhatsappNumber" id="WhatsappNumber" oninput="validateWhatsapptNumber()" readonly  value="${card.WhatsappNumber}"
                                 placeholder="Whatsapp number" required>
                         </div>
                         {{!-- <div class="SameAsContactCheckSection">
@@ -381,9 +381,9 @@
                             <p class="cardContactHeaderName">Contact number</p>
                         </div>
                         <div class="cardAlternateContactNumberDiv">
-                             <input type="text" name="AlternateContactcountrySelect" id="AlternateContactcountrySelect " readonly value="${card.ContactDetails.AlternateContactcountrySelect}"
+                             <input type="text" name="AlternateContactcountrySelect" id="AlternateContactcountrySelect " readonly value="${card.AlternateContactcountrySelect}"
                                 class="CountryCodeselecte">
-                            <input type="text" class="AltenateContactNumber" id="AlternateContactNumber" oninput="validateAlternateContactNumber" readonly value="${card.ContactDetails.AlternateContactNumber}"
+                            <input type="text" class="AltenateContactNumber" id="AlternateContactNumber" oninput="validateAlternateContactNumber" readonly value="${card.AlternateContactNumber}"
                                 name="AlternateContactNumber" placeholder="Alternate Contact number">
                         </div>
                     </div>
@@ -393,7 +393,7 @@
                             <p class="cardContactHeaderName">Attachment</p>
                         </div>
                         <div class="AttachmentImageDiv">
-                            <img src="${card.ImageUrl}" class="AttachmentIMG" alt="">
+                            <img src="/images/RefImages/${card.FileNo}.jpg" class="AttachmentIMG" alt="">
                         </div>
                     </div>
                      <div class="CardAttachmentSEction">
@@ -411,9 +411,9 @@
                     <div class="CardPrintLabelDiv" >
                     </div>
                     <div class="CardSaveBTNSEction">
-                         <a href="/Office/Printlabel/${card.id}" class="btn PrintBtn" target="_blank">Print label</a>
+                         <a href="/Office/Printlabel/${card.FileNo}" class="btn PrintBtn" target="_blank">Print label</a>
                         <input type="submit" value="Save card and Move to Production" class="btn SaveBTN">
-                         <a href="/Office/moveCardtoReadyToDispatch/${card.id}" class="btn SaveBTN">Move card to Ready To Dispatch</a>
+                         <a href="/Office/moveCardtoReadyToDispatch/${card._id}" class="btn SaveBTN">Move card to Ready To Dispatch</a>
                     </div>
                 </div>
             </form>
@@ -729,8 +729,8 @@
             const matchingCards = allcards.filter(card => {
                 // Check if the search term exists in the card's name or description
                 return (
-                    card.name.toLowerCase().includes(searchTerm) ||
-                    card.desc.toLowerCase().includes(searchTerm)
+                    card.Name.toLowerCase().includes(searchTerm) ||
+                    card.description.toLowerCase().includes(searchTerm)
                 );
             });
 

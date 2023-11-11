@@ -152,27 +152,27 @@
                     //console.log("Have attachment image Url" + card.id);
                     NewCard = `
 
-                    <div class="EachCard " onclick="SelectaCard('${card.id}')" >
+                    <div class="EachCard " onclick="SelectaCard('${card._id}')" >
                         <div class="cardNamesection">
-                            <p class="Cardname">${card.name}</p>
+                            <p class="Cardname">${card.Name}</p>
                         </div>
                         <div class="cardImagesection">
-                            <img src="${card.ImageUrl}" class="cardImg">
+                            <img src="/images/RefImages/${card.FileNo}.jpg" class="cardImg">
                         </div>
                         <div class="cardActionBTNSEction">
-                            {{!-- <button class="ViewCardBtn" onclick="SelectaCard('${card.id}')">View Card</button> --}}
-                            {{!-- <button class="ActionCardBtn" onclick="MoveCardToDriver('${card.id}')" >Move card to Driver</button> --}}
-                              {{!-- <a href="/dispatcher/moveToCustomerCollection/${card.id}" class="btn ActionCardBtn">Move Card to Customer Collection</a> --}}
-                            {{!-- <button class="ActionCardBtn" onclick="moveToCustomerCollection('${card.id}')" >Move Card to Customer Collection</button> --}}
+                            {{!-- <button class="ViewCardBtn" onclick="SelectaCard('${card._id}')">View Card</button> --}}
+                            {{!-- <button class="ActionCardBtn" onclick="MoveCardToDriver('${card._id}')" >Move card to Driver</button> --}}
+                              {{!-- <a href="/dispatcher/moveToCustomerCollection/${card._id}" class="btn ActionCardBtn">Move Card to Customer Collection</a> --}}
+                            {{!-- <button class="ActionCardBtn" onclick="moveToCustomerCollection('${card._id}')" >Move Card to Customer Collection</button> --}}
                         </div>
                     </div>`;
 
                 } else {
                     //console.log("Didn't have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
+                        <p class="Cardname">${card.Name}</p>
                     </div>
                     <div class="cardImagesection">
                     </div>
@@ -216,29 +216,29 @@
                 if (card.ImageUrl) {
                     console.log("DriverName" + card.DriverName);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
-                        ${card.List.name === card.ProductionName ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                        <p class="Cardname">${card.Name}</p>
+                        ${card.CurrentList === card.ProductionName ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
                     </div>
                     <div class="cardNamesection">
-                        <p class="Cardname">Current List: ${card.List.name}</p>
+                        <p class="Cardname">Current List: ${card.CurrentList}</p>
                     </div>
                     
                     <div class="cardImagesection">
-                        <img src="${card.ImageUrl}" class="cardImg">
+                        <img src="/images/RefImages/${card.FileNo}.jpg" class="cardImg">
                     </div>
                 </div>`;
                 } else {
                     //console.log("Didn't have attachment image Url" + card.id);
                     NewCard = `
-                <div class="EachCard " onclick="SelectaCard('${card.id}')">
+                <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
-                        <p class="Cardname">${card.name}</p>
-                           ${card.List.name === card.DriverName ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                        <p class="Cardname">${card.Name}</p>
+                           ${card.CurrentList === card.ProductionName ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
                     </div>
                     <div class="cardNamesection">
-                        <p class="Cardname">Current List: ${card.List.name}</p>
+                        <p class="Cardname">Current List: ${card.CurrentList}</p>
                     </div>
                     <div class="cardImagesection">
                     </div>
@@ -301,7 +301,7 @@
         let Card;
 
         for (let i = 0; i < AllCards.length; i++) {
-            if (AllCards[i].id == id) {
+            if (AllCards[i]._id == id) {
                 card = AllCards[i];
 
                 showCardPopup(card)
@@ -321,7 +321,7 @@
         popup.id = 'popup';
 
         var popupContent = `
-            <form action="/cardUpdated/${card.id}" id="EmployeeCardUpdate" method="post">
+            <form action="/cardUpdated/${card._id}" id="EmployeeCardUpdate" method="post">
                 <div class="CloseBTNsection">
                     <p class="CardTitle">Card Details</p>
                     <div onclick="closeCardPopup()" id="closeButton">X</div>
@@ -329,7 +329,7 @@
                 <div id="popupContent">
                     <div class="CardNameSection">
                         <img src="/images/Icons/CardName.png" class="CardnameIcon" alt="">
-                        <p class="CardNameStatic">${card.name}</p>
+                        <p class="CardNameStatic">${card.Name}</p>
                     </div>
                     <div class="CardDiscriptionSection">
                         <div class="CardDiscriptionHeader">
@@ -337,7 +337,7 @@
                             <p class="CardDescriptionHeadername">Description</p>
                         </div>
                         <textarea id="description" class="CardDescription" name="description" required
-                            placeholder="Enter card description..." readonly>${card.desc}</textarea>
+                            placeholder="Enter card description..." readonly>${card.description}</textarea>
                     </div>
                     <div class="CardChecklistSection">
                         <div class="CardChecklistSectionHeader">
@@ -345,13 +345,13 @@
                             <p class="cardChecklistHeaderName">Checklist</p>
                         </div>
                       <div class="ChecklistItemsParent">
-                        <input type="text" name="ChecklistID" value="${card.idChecklists[0]}" hidden readonly>  
-    ${card.checkItems ? card.checkItems.map((checkItem, index) => `
+                        {{!-- <input type="text" name="ChecklistID" value="${card.idChecklists[0]}" hidden readonly>   --}}
+    ${card.CheckListItems.checkItems ? card.CheckListItems.checkItems.map((checkItem, index) => `
         <div class="CheckEachItem">
             <input type="checkbox" id="ChecklistItem${index}" name="ChecklistItemCheck${index}" class="ChecklistItem"
-                   onchange="toggleTextDecoration(this, 'checklistItem${index}', '${card.id}')" ${checkItem.state === "complete" ? `checked` : ''} />
-            <input type="text" class="checklistItem${index} checklistItem" ${checkItem.state === "complete" ? `style="text-decoration: line-through;"` : ''}
-                   name="ChecklistItem${index}" value="${checkItem.name}" placeholder="Checklist Item" readonly>
+                   onchange="toggleTextDecoration(this, 'checklistItem${index}', '${card._id}')" ${checkItem.State === "Complete" ? `checked` : ''} />
+            <input type="text" class="checklistItem${index} checklistItem" ${checkItem.State === "Complete" ? `style="text-decoration: line-through;"` : ''}
+                   name="ChecklistItem${index}" value="${checkItem.Name}" placeholder="Checklist Item" readonly>
         </div>
     `).join('') : ''}
 </div>
@@ -363,9 +363,9 @@
                     <p class="cardContactHeaderName">Contact number</p>
             </div>
             <div class="cardContactNumberDiv">
-                <input type="text" name="ContactcountrySelect" id="ContactcountrySelect " required readonly value="${card.ContactDetails.ContactcountrySelect}"
+                <input type="text" name="ContactcountrySelect" id="ContactcountrySelect " required readonly value="${card.ContactcountrySelect}"
                     class="CountryCodeselecte">
-                    <input type="text" class="ContactNumber" id="ContactNumber" name="ContactNumber" oninput="validateContactNumber()" readonly value="${card.ContactDetails.ContactNumber}"
+                    <input type="text" class="ContactNumber" id="ContactNumber" name="ContactNumber" oninput="validateContactNumber()" readonly value="${card.ContactNumber}"
                         placeholder="Contact number" required>
                     </div>
             </div>
@@ -375,9 +375,9 @@
                         <p class="cardContactHeaderName">WhatsApp number</p>
                 </div>
                 <div class="cardWhatsappNumberDiv">
-                    <input type="text" name="WhatsAppcountrySelect" id="WhatsAppcountrySelect" required readonly value="${card.ContactDetails.WhatsAppcountrySelect}"
+                    <input type="text" name="WhatsAppcountrySelect" id="WhatsAppcountrySelect" required readonly value="${card.WhatsAppcountrySelect}"
                         class="CountryCodeselecte">
-                        <input type="text" name="WhatsappNumber" class="WhatsappNumber" id="WhatsappNumber" oninput="validateWhatsapptNumber()" readonly value="${card.ContactDetails.WhatsappNumber}"
+                        <input type="text" name="WhatsappNumber" class="WhatsappNumber" id="WhatsappNumber" oninput="validateWhatsapptNumber()" readonly value="${card.WhatsappNumber}"
                             placeholder="Whatsapp number" required>
                         </div>
                         {{!-- < div class="SameAsContactCheckSection">
@@ -391,9 +391,9 @@
                             <p class="cardContactHeaderName">Contact number</p>
                     </div>
                     <div class="cardAlternateContactNumberDiv">
-                        <input type="text" name="AlternateContactcountrySelect" id="AlternateContactcountrySelect " readonly value="${card.ContactDetails.AlternateContactcountrySelect}"
+                        <input type="text" name="AlternateContactcountrySelect" id="AlternateContactcountrySelect " readonly value="${card.AlternateContactcountrySelect}"
                             class="CountryCodeselecte">
-                            <input type="text" class="AltenateContactNumber" id="AlternateContactNumber" oninput="validateAlternateContactNumber" readonly value="${card.ContactDetails.AlternateContactNumber}"
+                            <input type="text" class="AltenateContactNumber" id="AlternateContactNumber" oninput="validateAlternateContactNumber" readonly value="${card.AlternateContactNumber}"
                                 name="AlternateContactNumber" placeholder="Alternate Contact number">
                             </div>
                     </div>
@@ -403,7 +403,7 @@
                                 <p class="cardContactHeaderName">Attachment</p>
                         </div>
                         <div class="AttachmentImageDiv">
-                            <img src="${card.ImageUrl}" class="AttachmentIMG" alt="">
+                            <img src="/images/RefImages/${card.FileNo}.jpg" class="AttachmentIMG" alt="">
                         </div>
                     </div>
                     
@@ -411,7 +411,7 @@
                     </div>
                     <div class="CardSaveBTNSEction">
                         <input type="submit" value="Save card" id="SaveBTN" class="btn SaveBTN">
-                            {{!-- <a href="/dispatcher/moveToCustomerCollection/${card.id}" class="btn SaveBTN">Move card to Customer Collection</a> --}}
+                            {{!-- <a href="/dispatcher/moveToCustomerCollection/${card._id}" class="btn SaveBTN">Move card to Customer Collection</a> --}}
                     </div>
                 </div>
             </form>

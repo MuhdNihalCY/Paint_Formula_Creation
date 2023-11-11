@@ -159,7 +159,7 @@
                         <img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">
                     </div>
                     <div class="cardImagesection">
-                        <img src="/images/RefImages/${FileNo}.jpg" class="cardImg">
+                        <img src="/images/RefImages/${card.FileNo}.jpg" class="cardImg">
                     </div>
                 </div>`;
                 } else {
@@ -216,14 +216,14 @@
                 <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
                         <p class="Cardname">${card.Name}</p>
-                        ${card.List.Name === "Order" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                        ${card.CurrentList === "ORDERS" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
                     </div>
                     <div class="cardNamesection">
-                        <p class="Cardname">Current List: ${card.List.Name}</p>
+                        <p class="Cardname">Current List: ${card.CurrentList}</p>
                     </div>
                     
                     <div class="cardImagesection">
-                        <img src="/images/RefImages/${FileNo}.jpg" class="cardImg">
+                        <img src="/images/RefImages/${card.FileNo}.jpg" class="cardImg">
                     </div>
                 </div>`;
                 } else {
@@ -232,10 +232,10 @@
                 <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
                         <p class="Cardname">${card.Name}</p>
-                           ${card.List.Name === "Order" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
+                           ${card.CurrentList === "ORDERS" ? `<img src="/images/Icons/Edit.jpg" class="CardEditIcon" alt="">` : ``}
                     </div>
                     <div class="cardNamesection">
-                        <p class="Cardname">Current List: ${card.List.Name}</p>
+                        <p class="Cardname">Current List: ${card.CurrentList}</p>
                     </div>
                     <div class="cardImagesection">
                     </div>
@@ -887,8 +887,8 @@
             const matchingCards = allcards.filter(card => {
                 // Check if the search term exists in the card's name or description
                 return (
-                    card.name.toLowerCase().includes(searchTerm) ||
-                    card.desc.toLowerCase().includes(searchTerm)
+                    card.Name.toLowerCase().includes(searchTerm) 
+                    //|| card.description.toLowerCase().includes(searchTerm)
                 );
             });
 

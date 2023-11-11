@@ -1,6 +1,8 @@
 var db = require('../config/connection');
 var collection = require('../config/collection');
-const { ObjectId } = require('mongodb');
+const { ObjectId, ReturnDocument } = require('mongodb');
+const { ReservationListInstance } = require('twilio/lib/rest/taskrouter/v1/workspace/task/reservation');
+const { response } = require('express');
 
 
 module.exports = {
@@ -1070,7 +1072,7 @@ module.exports = {
     },
     getCardByID: (id) => {
         return new Promise(async (resolve, reject) => {
-            let Card = await db.get().collection(collection.CARD_COLLECTION).findOne({ _id: new     ObjectId(id) });
+            let Card = await db.get().collection(collection.CARD_COLLECTION).findOne({ _id: new ObjectId(id) });
             resolve(Card)
         })
     },
@@ -1096,10 +1098,91 @@ module.exports = {
 
         })
     },
-    SaveUpdatedCardBy:(cardData,Id)=>{
-        return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.CARD_COLLECTION).updateOne({_id:new ObjectId(Id)},{$set:cardData}).then(()=>{
+    SaveUpdatedCardBy: (cardData, Id) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CARD_COLLECTION).updateOne({ _id: new ObjectId(Id) }, { $set: cardData }).then((response) => {
+                console.log("Card Update Status: ", response);
                 resolve();
+            })
+        })
+    },
+    getBulkOrderInsertedTime: (Fileno) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.BULK_ORDER_COLLECTION).findOne({ FileName: Fileno }).then((BulkOrder) => {
+                resolve(BulkOrder.InsertedTime);
+            })
+        })
+    },
+    CreateForDispatchListIfNot: () => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.LIST_COLLECTION).findOne({ Name: "FOR DISPATCH" }).then(async (List) => {
+                if (!List) {
+                    List = {
+                        Name: "FOR DISPATCH",
+                        OldCards: []
+                    }
+                    await db.get().collection(collection.LIST_COLLECTION).insertOne(List).then(() => {
+                        resolve();
+                    })
+                } else {
+                    resolve();
+                }
+            })
+        })
+    },
+    moveCardToCustomerCollectionByCardIDAndMovedUser: (CardID, UserData) => {
+        return new Promise(async (resolve, reject) => {
+            //create a new Customer COllectio if not exist.
+
+            var CustomerCollectionList = await db.get().collection(collection.LIST_COLLECTION).findOne({ Name: "FOR CUSTOMER COLLECTION" });
+            if (!CustomerCollectionList) {
+                // create a list
+                let NewCustomerCollectonList = {
+                    Name: `FOR CUSTOMER COLLECTION`,
+                    OldCards: [],
+                };
+                await db.get().collection(collection.LIST_COLLECTION).insertOne(NewCustomerCollectonList);
+            }
+
+            var Card = await db.get().collection(collection.CARD_COLLECTION).findOne({ _id: new ObjectId(CardID) });
+            Card.CurrentList = "FOR CUSTOMER COLLECTION";
+            var OldListArray = Card.ListArray[0];
+            OldListArray.OutTime = Date.now();
+            OldListArray.OutEmployeeName = UserData.UserName;
+            OldListArray.OutEmployeeDesignation = UserData.Designation;
+
+            var NewListArray = {
+                ListName: "FOR CUSTOMER COLLECTION",
+                InTime: Date.now(),
+                InEmployeeName: UserData.UserName,
+                InEmployeeDesignation: UserData.Designation
+            }
+
+            Card.ListArray.unshift(NewListArray);
+
+            await db.get().collection(collection.CARD_COLLECTION).updateOne({ _id: new ObjectId(CardID) }, { $set: Card }).then((response) => {
+                console.log("Card Update Status: ", response);
+                resolve();
+            })
+
+        })
+    },
+    getAllUsers: () => {
+        return new Promise(async (resolve, reject) => {
+            var Users = await db.get().collection(collection.USERS_COLLECTION).find().toArray();
+            Users.forEach(user => {
+                delete user.Password;
+            });
+
+            resolve(Users);
+        })
+
+    },
+    SaveCustomer:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+            data.InsertedTime = Date.now();
+            await db.get().collection(collection.CUSTOMER_COLLECTION).insertOne(data).then((response)=>{
+                resolve(response.insertedId);
             })
         })
     }
