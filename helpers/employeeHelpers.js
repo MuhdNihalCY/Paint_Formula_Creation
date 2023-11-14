@@ -1178,11 +1178,47 @@ module.exports = {
         })
 
     },
-    SaveCustomer:(data)=>{
-        return new Promise(async(resolve,reject)=>{
+    SaveCustomer: (data) => {
+        return new Promise(async (resolve, reject) => {
             data.InsertedTime = Date.now();
-            await db.get().collection(collection.CUSTOMER_COLLECTION).insertOne(data).then((response)=>{
+            await db.get().collection(collection.CUSTOMER_COLLECTION).insertOne(data).then((response) => {
                 resolve(response.insertedId);
+            })
+        })
+    },
+    getAllCustomers: () => {
+        return new Promise(async (resolve, reject) => {
+            let Customers = await db.get().collection(collection.CUSTOMER_COLLECTION).find().toArray();
+            resolve(Customers);
+        })
+    },
+    getAllMeasuringUnitOfAllFormulas: (Formulas) => {
+        return new Promise(async (resolve, reject) => {
+            for (let i = 0; i < Formulas.length; i++) {
+                const Formula = Formulas[i];
+               // console.log("Formula: ", Formula);
+
+                // this takes a bit of time
+                const Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION)
+                    .findOne({ SubCategory: Formula.SubCategoryName });
+
+                    
+                    if (Subcategory.Liter) {
+                        Formula.Unit = "Liter";
+                    } else {
+                        Formula.Unit = "Kilogram";
+                    }
+                    console.log(Formula);
+            }
+
+            // do this after the loop ends 
+            resolve(Formulas)
+        })
+    },
+    InsertNewCard:(NewCard)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.CARD_COLLECTION).insertOne(NewCard).then((response)=>{
+                resolve();
             })
         })
     }

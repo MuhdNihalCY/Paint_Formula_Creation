@@ -2228,23 +2228,34 @@ router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
     console.log(AllCards);
     employeeHelpers.getAllLists().then((AllLists) => {
       employeeHelpers.getAllUsers().then((AllUsers) => {
+        employeeHelpers.getAllCustomers().then((AllCustomers) => {
+          employeeHelpers.GetAllFormulations().then((Formulas) => {
+            employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas).then((UpdatedFromuls) => {
 
-        var data = {
-          AllCards: AllCards,
-          AllLists: AllLists,
-          AllUsers:AllUsers
-        }
-        res.json(data);
+              console.log("Formulas = ", Formulas[2]);
+
+              var data = {
+                AllCards: AllCards,
+                AllLists: AllLists,
+                AllUsers: AllUsers,
+                Customers: AllCustomers,
+                Formulas: UpdatedFromuls
+              }
+              res.json(data);
+            })
+          })
+
+        })
       })
     })
   })
 })
 
-router.post('/saveCustomer',(req,res)=>{
-  employeeHelpers.SaveCustomer(req.body).then((id)=>{
+router.post('/saveCustomer', (req, res) => {
+  employeeHelpers.SaveCustomer(req.body).then((id) => {
     var data = req.body
     data._id = id;
-    res.json({data});
+    res.json({ data });
   })
 })
 

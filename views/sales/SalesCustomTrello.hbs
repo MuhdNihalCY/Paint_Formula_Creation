@@ -1,0 +1,4324 @@
+<section>
+
+    <div id="mainPopup" class="popupWrapper">
+        <div id="" class="popup mainPopup">
+            <div class="MainPopupTopsection">
+                <img onclick="CloseMainPopup()" class="MainPopupCloseIcon" src="/images/Icons/x.png" alt="">
+            </div>
+            <div class="PopupCardNameSection">
+                <p class="popCardHeaderText">13-10-2023-125447893-Aero Head</p>
+                <div class="PopupCardListNameSection">
+                    <p class="popCardList">in list</p>
+                    <p class="PopcardListName">ORDERS</p>
+                </div>
+            </div>
+            <div class="PopCustomerLabelBtnsSection">
+                <div class="PopCustomerAndLabelSection">
+                    <div class="PopCustomerSections">
+                        <p class="popCustomerName">Customer contact: Mr.Niyad</p>
+                        <div class="popCustomerCallNumberSection">
+                            <img src="/images/Icons/Call.png" class="CallIcon" alt="">
+                            <p class="PopCustomerMobileNumber">Mobile no: +971 50 22223</p>
+                        </div>
+                        <div class="popCustomerCallNumberSection">
+                            <img src="/images/Icons/WhatsApp_out.png" class="CallIcon" alt="">
+                            <p class="PopCustomerMobileNumber">WhatsApp no: +971 50 22223</p>
+                        </div>
+                    </div>
+                    <div class="popCardLabelSection">
+                        <p class="popCardHeaderText">Labels</p>
+                        <div class="popLabelCollections">
+                            <div class="popCardAllLabel">
+                                <div class="popLabel">
+                                </div>
+                            </div>
+                            <div class="AddBtnSection">
+                                <div class="AddLableBTN" onclick="openColorModal()">
+                                    <p>+</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="PopActionBtnSection">
+                    <button>Move</button>
+                    <Button>Copy</Button>
+                    <Button>Archive</Button>
+                </div>
+            </div>
+            <div class="poplastUpdateTimeSection">
+                <p>Last update : 3 hours ago</p>
+            </div>
+
+            <div class="popReadyProductsSection">
+                <p class="popCardHeaderText">Ready Products</p>
+                <div class="popReadyProductsCollectiosn">
+                    <div class="popEachReadyProducts">
+                        <p>Mipa 2K C85 Clearcoat</p>
+                        <p>100.00 Ltr</p>
+                    </div>
+                    <div class="popEachReadyProducts">
+                        <p>Mipa 2K C85 Clearcoat</p>
+                        <p>100.00 Ltr</p>
+                    </div>
+                    <div class="popEachReadyProducts">
+                        <p>Mipa 2K C85 Clearcoat</p>
+                        <p>100.00 Ltr</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popProductsItemsSection">
+                <p class="popCardHeaderText">Productions Items</p>
+                <div class="popProductsItemsCollectiosn">
+                    <div class="popEachProductsItems">
+                        <p>Mipa 2K C85 Clearcoat</p>
+                        <p>100.00 Ltr</p>
+                    </div>
+                </div>
+                <div class="PopProctionItemsActionsSections">
+                    <div class="popSeachMixingDiv">
+                        <i class="fas fa-search search-icon MixingSeachIcon"></i>
+                        <input type="text" class="popSeachMixingInput-field" placeholder="Search">
+                    </div>
+                    <a href="/createFormula" class="btn popNewFormulaBtn ">Create New Formula</a>
+                </div>
+            </div>
+
+
+            <div class="popCommentsSections">
+                <p class="popCardHeaderText">Comments</p>
+                <div class="popCommentsCollection">
+                    <div class="popEachComment">
+                        <p class="popCommentSender">REHMAN</p>
+                        <div class="popCommentSended">
+                            <p class="popComment">@someOne do something</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="popAddCommentSection">
+                    <p class="popAddCommentsTex">Add Comments</p>
+                    <textarea name="commentBox" placeholder="Add your comments" class="commentBox" id="comment"
+                        rows="10"></textarea>
+                    <div class="popCommentSaveBtnSection">
+                        <button>Post Comment</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popCardActivity">
+                <p class="popCardHeaderText">Activity</p>
+                <div class="popActivityCollections">
+                    <ul>
+                        <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
+                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
+                        </li>
+                        <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
+                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {{!-- <div class="popSaveBtnSection">
+                <button>Save card</button>
+            </div> --}}
+
+        </div>
+    </div>
+
+
+    <div id="CreateOrderPopup" class="CreateOderPopupWrapper">
+        <div id="" class="popup mainPopup">
+            <div class="MainPopupTopsection">
+                <img onclick="CloseCreateOrderPopup()" class="MainPopupCloseIcon" src="/images/Icons/x.png" alt="">
+            </div>
+            <div class="PopupCardNameSection">
+                {{!-- <p class="popCardHeaderText">13-10-2023-125447893-Aero Head</p> --}}
+                <div class="PopNewOrderCustomerNameSection">
+                    <input type="text" id="OrderIDNumber" class="popCardHeaderText"
+                        placeholder="Order Name will generate Automatically">
+
+                    <select name="CustomerName" id="OrderName" onchange="handleCustomerChange()">
+
+                    </select>
+
+                </div>
+                <div class="PopupCardListNameSection">
+                    <p class="popCardList">in list</p>
+                    <p class="PopcardListName">ORDERS</p>
+                </div>
+            </div>
+            <div class="PopCustomerLabelBtnsSection">
+                <div class="PopCustomerAndLabelSection">
+                    <div class="PopCustomerSections">
+                        <div class="PopSelectCustomerContact">
+                            <p class="popCustomerName">Customer contact: </p>
+                            <select name="customer_contact" onchange="HnadleContactChange()" id="customer_contact">
+                                <option value="">Select a Customer</option>
+                            </select>
+
+                        </div>
+                        <div class="popCustomerCallNumberSection">
+                            <img src="/images/Icons/Call.png" class="CallIcon" alt="">
+                            <p id="ContactMobileno" class="PopCustomerMobileNumber">Mobile no: </p>
+                        </div>
+                        <div class="popCustomerCallNumberSection">
+                            <img src="/images/Icons/WhatsApp_out.png" class="CallIcon" alt="">
+                            <p id="ContactWhatsAppNumber" class="PopCustomerMobileNumber">WhatsApp no: </p>
+                        </div>
+                    </div>
+                    <div class="popCardLabelSection">
+                        <p class="popCardHeaderText">Labels</p>
+                        <div class="popLabelCollections">
+                            <div id="popCardAllLabelCreateOrder" class="popCardAllLabelCreateOrder">
+                                {{!-- <div class="popLabel">
+                                    <input type="text" class="LabelData" id="Label1" readonly value="DO">
+                                </div> --}}
+
+                            </div>
+
+
+                            <div class="AddBtnSection" onclick="CreateOrderopenColorModal()">
+                                <div class="AddLableBTN">
+                                    <p>+</p>
+                                </div>
+                            </div>
+                            <div id="colorModal" class="colorModal">
+                                <div class="colorOption" style="background-color: red;"
+                                    onclick="CreateOrderselectColor('DO','red')">
+                                    <p>
+                                        DO
+                                    </p>
+                                </div>
+                                <div class="colorOption" style="background-color: orange;"
+                                    onclick="CreateOrderselectColor('DELIVERD','orange')">
+                                    <p>
+                                        DELIVERD
+                                    </p>
+                                </div>
+                                <div class="colorOption" style="background-color: yellow;"
+                                    onclick="CreateOrderselectColor('CHECK COLLECTION','yellow')">
+                                    <p>
+                                        CHECK COLLECTION
+                                    </p>
+                                </div>
+
+                                <div class="colorOption" style="background-color: green;"
+                                    onclick="CreateOrderselectColor('OLD PAYMENT COLLECTION','green')">
+                                    <p>
+                                        OLD PAYMENT COLLECTION
+
+                                    </p>
+                                </div>
+                                <div class="colorOption" style="background-color: purple;"
+                                    onclick="CreateOrderselectColor('URGENT','purple')">
+                                    <p>
+                                        URGENT
+                                    </p>
+                                </div>
+                                <div class="colorOption" style="background-color: blue;"
+                                    onclick="CreateOrderselectColor('RETURN','blue')">
+                                    <p>RETURN</p>
+                                </div>
+                                <div class="colorOption" style="background-color: indigo;"
+                                    onclick="CreateOrderselectColor('SAMPLE COLLECTION','indigo')">
+                                    <p>SAMPLE COLLECTION</p>
+                                </div>
+                                <div class="colorOption" style="background-color: violet;"
+                                    onclick="CreateOrderselectColor('CUSTOMER COLLECTION','violet')">
+                                    <p>CUSTOMER COLLECTION</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="PopActionBtnSection">
+                    {{!-- <button>Move</button>
+                    <Button>Copy</Button>
+                    <Button>Archive</Button> --}}
+                </div>
+            </div>
+            <div class="poplastUpdateTimeSection">
+                {{!-- <p>Last update : 3 hours ago</p> --}}
+            </div>
+
+            {{!-- <div class="popReadyProductsSection">
+                <p class="popCardHeaderText">Ready Products</p>
+                <div class="popReadyProductsCollectiosn">
+                    <div class="popEachReadyProducts">
+                        <p>Mipa 2K C85 Clearcoat</p>
+                        <p>100.00 Ltr</p>
+                    </div>
+                    <div class="popEachReadyProducts">
+                        <p>Mipa 2K C85 Clearcoat</p>
+                        <p>100.00 Ltr</p>
+                    </div>
+                    <div class="popEachReadyProducts">
+                        <p>Mipa 2K C85 Clearcoat</p>
+                        <p>100.00 Ltr</p>
+                    </div>
+                </div>
+            </div> --}}
+
+            <div class="popProductsItemsSection">
+                <p class="popCardHeaderText">Productions Items</p>
+                <div id="popProductsItemsCollectiosns" class="popProductsItemsCollectiosn">
+                    {{!-- <div class="popEachProductsItems">
+                        <p>Mipa 2K C85 Clearcoat</p>
+                        <div class="QtyOfFormula">
+                            <input type="text" placeholder="0.00" class="FormulaQty" id="FormulaQty1">
+                            <p>100Ltr</p>
+                        </div>
+                        <button onclick="RemoveOneFormula('Mipa 2K C85 Clearcoat')"
+                            class="btn btn-danger">Delete</button>
+                    </div> --}}
+                </div>
+                <div class="NewOrderPopProctionItemsActionsSections">
+                    <div class="popSeachMixingDiv">
+                        <i class="fas fa-search search-icon MixingSeachIcon"></i>
+                        <input type="search" class="popSeachMixingInput-field" placeholder="Search"
+                            oninput="searchFormulas(this.value)">
+                    </div>
+                    <div class="SearchResultsDiv">
+                        <ul class="search-results" id="searchResults"></ul>
+                    </div>
+                    {{!-- <a href="/createFormula" class="btn popNewFormulaBtn ">Create New Formula</a> --}}
+                </div>
+                <div class="NewOrderNewFormulaNameSection">
+                    <input placeholder="Product Name" type="text" id="NewFormulaNameInput">
+                    <input placeholder="0.00" type="text" oninput="OnlyNumber(this)" id="NewFromulaQtyInput">
+                    <select name="" id="NewProductUnit">
+                        <option value="Liter">Liter</option>
+                        <option value="Kilogram">Kilogram</option>
+                    </select>
+                    <button onclick="AddNewProductMannully()">Add</button>
+                </div>
+            </div>
+
+
+            <div class="popCommentsSections">
+                <p class="popCardHeaderText">Comments</p>
+                <div id="newOrderpopCommentsCollection" class="popCommentsCollection newOrderpopCommentsCollection">
+                    {{!--
+                    <div class="popEachComment ">
+                        <p class="popCommentSender">REHMAN</p>
+                        <div class="popCommentSended">
+                            <p class="popComment">@someOne do something</p>
+                        </div>
+                    </div>
+                    --}}
+                </div>
+                <div class="popAddCommentSection">
+                    <p class="popAddCommentsTex">Add Comments</p>
+                    {{!-- <textarea oninput="CheckForMention" name="commentBox" placeholder="Add your comments"
+                        class="commentBox" id="newOrderComment" rows="10"></textarea> --}}
+                    <textarea oninput="checkForMention()" name="commentBox" placeholder="Add your comments"
+                        class="commentBox" id="newOrderComment" rows="10"></textarea>
+                    <div id="mentionList"></div>
+                    <div class="popCommentSaveBtnSection">
+                        <button onclick="AddNewComment('newOrderComment')">Post Comment</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popCardActivity">
+                <p class="popCardHeaderText">Activity</p>
+                <div class="popActivityCollections">
+                    <ul>
+                        {{!-- <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
+                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
+                        </li>
+                        <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
+                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
+                        </li> --}}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="popSaveBtnSection">
+                <button onclick="CreateNewOrder()">Create Order</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="CustomerCreationPopup" class="CustomerCreationPopup">
+        <div id="" class="popup CCPopup">
+            <div class="MainPopupTopsection">
+                <img onclick="CloseCustomerCreationPopup()" class="MainPopupCloseIcon" src="/images/Icons/x.png" alt="">
+            </div>
+            <div class="CreateCustomerHeaderDiv">
+                <p class="popCardHeaderText">Create Customer</p>
+            </div>
+            <div class="CCMainSection">
+                <div class="CCFirstLeft">
+                    <div class="CCNameSection">
+                        <p class="ccNameText">Customer Name</p>
+                        <input type="text" id="CustomerName" placeholder="Enter name here" class="CCInputname">
+                    </div>
+
+                    <div class="CCAddressSection">
+                        <p class="ccAdressText">Address</p>
+                        <textarea name="" id="CCAddressInput" placeholder="Address here" class="CCAddressInput"
+                            rows="10"></textarea>
+                    </div>
+
+                    <div class="CCLocationSection">
+                        <p class="ccLocationText">Location</p>
+                        <input type="text" id="ccLocation" placeholder="Enter name here" class="CCInputLocations">
+                    </div>
+
+                </div>
+
+                <div class="CcFirstRight">
+                    <div class="CcSalesEXSection">
+                        <p class="ccNameText">Sales Ex.</p>
+                        <input type="text" id="CCSalesEx" name="CCSalesEx" class="CCSalesEx">
+                    </div>
+                    <div class="CcSalesEXSection">
+                        <p class="ccNameText">Co-ordinator</p>
+                        <input type="text" id="CCCo-ordinator" name="CCCo-ordinator" class="CCCo-ordinator">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="ccHR">
+            <div class="CCContactPeronSection">
+                <div class="CreateCustomerHeaderDiv">
+                    <p class="popCardHeaderText">Contact Person</p>
+                </div>
+                <div id="CCContactCollections" class="CCContactCollections">
+                    <div class="ccEachContact">
+                        <div class="ccContactNameSection">
+                            <p class="ccContactNameText">Name</p>
+                            <input type="text" id="ccContactPersonNameInput1" class="ccContactPersonNameInput"
+                                placeholder="Name of contact Person" name="ccContactPersonNameInput1">
+                        </div>
+                        <div class="CCnumberSection">
+                            <div class="ccContactNumberSection">
+                                <img src="/images/Icons/Call.png" class="CallIcon" alt="">
+                                <select name="ccContactPersonCounrtryCodeInput1"
+                                    class="ccContactPersonCounrtryCodeInput" id="ccContactPersonCounrtryCodeInput1">
+                                    <option value="+971">+971</option>
+                                    <option value="+966">+966</option>
+                                    <option value="+91">+91</option>
+                                    <option value="+98">+98</option>
+                                    <option value="+86">+86</option>
+                                    <option value="+81">+81</option>
+                                    <option value="+7">+7</option>
+                                    <option value="+60">+60</option>
+                                    <option value="+65">+65</option>
+                                    <option value="+92">+92</option>
+                                    <option value="+880">+880</option>
+                                    <option value="+62">+62</option>
+                                    <option value="+1">+1</option>
+                                    <option value="+27">+27</option>
+                                    <option value="+30">+30</option>
+                                    <option value="+31">+31</option>
+                                    <option value="+32">+32</option>
+                                    <option value="+33">+33</option>
+                                    <option value="+34">+34</option>
+                                    <option value="+351">+351</option>
+                                    <option value="+358">+358</option>
+                                    <option value="+39">+39</option>
+                                    <option value="+40">+40</option>
+                                    <option value="+41">+41</option>
+                                    <option value="+420">+420</option>
+                                    <option value="+43">+43</option>
+                                    <option value="+44">+44</option>
+                                    <option value="+45">+45</option>
+                                    <option value="+46">+46</option>
+                                    <option value="+47">+47</option>
+                                    <option value="+48">+48</option>
+                                    <option value="+49">+49</option>
+                                    <option value="+51">+51</option>
+                                    <option value="+52">+52</option>
+                                    <option value="+53">+53</option>
+                                    <option value="+54">+54</option>
+                                    <option value="+55">+55</option>
+                                    <option value="+56">+56</option>
+                                    <option value="+57">+57</option>
+                                    <option value="+58">+58</option>
+                                    <option value="+61">+61</option>
+                                    <option value="+64">+64</option>
+                                    <option value="+66">+66</option>
+                                    <option value="+673">+673</option>
+                                    <option value="+82">+82</option>
+                                    <option value="+84">+84</option>
+                                    <option value="+90">+90</option>
+                                    <option value="+93">+93</option>
+                                    <option value="+94">+94</option>
+                                    <option value="+95">+95</option>
+                                </select>
+                                <input type="text" id="ccContactPersonNumberInput1" class="ccContactPersonNumberInput"
+                                    placeholder="Contact number" oninput="validateInput(this)"
+                                    name="ccContactPersonNumberInput1">
+                            </div>
+                            <div class="ccContactNumberSection">
+                                <img src="/images/Icons/WhatsApp_out.png" class="CallIcon" alt="">
+                                <select name="ccContactPersonWhatsAppCounrtryCodeInput1"
+                                    class="ccContactPersonWhatsAppCounrtryCodeInput"
+                                    id="ccContactPersonWhatsAppCounrtryCodeInput1">
+                                    <option value="+971">+971</option>
+                                    <option value="+966">+966</option>
+                                    <option value="+91">+91</option>
+                                    <option value="+98">+98</option>
+                                    <option value="+86">+86</option>
+                                    <option value="+81">+81</option>
+                                    <option value="+7">+7</option>
+                                    <option value="+60">+60</option>
+                                    <option value="+65">+65</option>
+                                    <option value="+92">+92</option>
+                                    <option value="+880">+880</option>
+                                    <option value="+62">+62</option>
+                                    <option value="+1">+1</option>
+                                    <option value="+27">+27</option>
+                                    <option value="+30">+30</option>
+                                    <option value="+31">+31</option>
+                                    <option value="+32">+32</option>
+                                    <option value="+33">+33</option>
+                                    <option value="+34">+34</option>
+                                    <option value="+351">+351</option>
+                                    <option value="+358">+358</option>
+                                    <option value="+39">+39</option>
+                                    <option value="+40">+40</option>
+                                    <option value="+41">+41</option>
+                                    <option value="+420">+420</option>
+                                    <option value="+43">+43</option>
+                                    <option value="+44">+44</option>
+                                    <option value="+45">+45</option>
+                                    <option value="+46">+46</option>
+                                    <option value="+47">+47</option>
+                                    <option value="+48">+48</option>
+                                    <option value="+49">+49</option>
+                                    <option value="+51">+51</option>
+                                    <option value="+52">+52</option>
+                                    <option value="+53">+53</option>
+                                    <option value="+54">+54</option>
+                                    <option value="+55">+55</option>
+                                    <option value="+56">+56</option>
+                                    <option value="+57">+57</option>
+                                    <option value="+58">+58</option>
+                                    <option value="+61">+61</option>
+                                    <option value="+64">+64</option>
+                                    <option value="+66">+66</option>
+                                    <option value="+673">+673</option>
+                                    <option value="+82">+82</option>
+                                    <option value="+84">+84</option>
+                                    <option value="+90">+90</option>
+                                    <option value="+93">+93</option>
+                                    <option value="+94">+94</option>
+                                    <option value="+95">+95</option>
+                                </select>
+                                <input type="text" id="ccContactPersonWhatsappNumberInput1"
+                                    oninput="validateInput(this)" class="ccContactPersonWhatsappNumberInput"
+                                    placeholder="Contact WhatsApp number" name="ccContactPersonWhatsappNumberInput1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div onclick="ccAddNewContact()" class="ccAddNewContact">
+                    <div class="CCAddnewcontactBtn">
+                        <p>+</p>
+                    </div>
+                    <p class="CcAddNewContactText">Add more contact</p>
+                </div>
+
+                <div class="popSaveBtnSection">
+                    <button onclick="SaveCustomerDetails()">Save card</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+
+
+
+    <div class="KanbanMainDivArea">
+        <div class="CustomContainer">
+            <div class="KanbanHeaderMainDivArea">
+                <div class="KanbanHeaderMainDivAreaRight">
+                    <input type="text" hidden id="UserName" value="{{SalesLogged.UserName}}">
+                    <p class="KanbanHeaderText">MEGA PAINTS ACTIVITY BOARD</p>
+                </div>
+                <div class="KanbanHeaderMainDivAreaLeft">
+                    <div class="search-input">
+                        <i class="fas fa-search search-icon globalSeaarch"></i>
+                        <input type="text" class="input-field" placeholder="Search">
+                        <i class="fas fa-bars menu-icon"></i>
+                    </div>
+                    <input type="button" class="CreateCustomerBTN btn" onclick="OpenCustomerCreationPopup()"
+                        value="Create Customer">
+                    <div class="input-button userBTN">
+                        <input type="button" value="User" class="input-field  InputBTNField btn">
+                        <i class="fas fa-user user-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="KanbanBoard">
+            <div id="moveableContainer" class="ListsCollections">
+                {{!-- Order section --}}
+                <div class="OrdersList">
+                    <div class="OrdersListHeader" dropzone="false">
+                        <p class="ListHeaderText">ORDERS</p>
+                    </div>
+                    <div id="OrdersCardsCollection" class="OrdersCardsCollection">
+
+
+                    </div>
+                    <div onclick="OpenPopUpforNewOrder()" class="AddSmCardDiv">
+                        <p class="AddCardIconText">+</p>
+                        <p class="AddCardText">Add new card</p>
+                    </div>
+                </div>
+
+                {{!-- Office section --}}
+                <div class="OfficeSectionList">
+                    <div class="OfficeSectionListHeader" dropzone="false">
+                        <p class="ListHeaderText">OFFICE SECTION</p>
+                    </div>
+                    <div id="OfficeCardsCollection" class="OfficeCardsCollection">
+
+                    </div>
+                </div>
+
+                {{!-- Production Sections --}}
+                <div class="ProductionSectionCollection">
+                    <div class="ProductionSectionMainHeader" dropzone="false">
+                        <p class="ProdctionSectionHeaderText">PRODUCTION</p>
+                    </div>
+                    <div id="ProductionListCollections" class="ProductionListCollections">
+
+
+                    </div>
+                </div>
+
+
+                {{!-- Ready Sections --}}
+                <div class="ReadySectionCollection">
+                    <div class="ReadySectionMainHeader" dropzone="false">
+                        <p class="ReadySectionHeaderText">Ready</p>
+                    </div>
+                    <div class="ReadyListCollections">
+                        <div class="ReadyColumn">
+                            <div class="ReadyColumnHeader" dropzone="false">
+                                <p class="ReadySectionHeaderText">for Dispatch</p>
+                            </div>
+                            <div id="ForDispatchCardsCollections" class="ForDispatchCardsCollections">
+
+                            </div>
+                        </div>
+                        <div class="ReadyColumn">
+                            <div class="ReadyColumnHeader">
+                                <p class="ReadySectionHeaderText" dropzone="false">for Customer collection</p>
+                            </div>
+                            <div id="ForCustomerCollectionCards" class="ReadyCardsCollections">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                {{!-- Driver Sections --}}
+                <div class="DriverSectionCollection">
+                    <div class="DriverSectionMainHeader" dropzone="false">
+                        <p class="DriverSectionHeaderText">Drivers</p>
+                    </div>
+                    <div id="DriverListCollections" class="DriverListCollections">
+
+                    </div>
+                </div>
+
+
+                {{!-- Done Sections --}}
+                <div class="DoneSectionCollection">
+                    <div class="DoneSectionMainHeader">
+                        <div class="centered-section" dropzone="false">
+                            <p class="DoneSectionHeaderText">Done</p>
+                        </div>
+                        <div class="search-input">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="input-field" placeholder="Search">
+                        </div>
+
+                    </div>
+                    <div class="DoneListCollections">
+                        <div class="DoneColumn">
+                            <div class="DoneColumnHeader" dropzone="false">
+                                <p class="DoneSectionHeaderText">Today</p>
+                            </div>
+                            <div class="DoneCardsCollections">
+
+                            </div>
+                        </div>
+                        <div class="DoneColumn">
+                            <div class="DoneColumnHeader" dropzone="false">
+                                <p class="DoneSectionHeaderText">
+                                    < 7 Days</p>
+                            </div>
+                            <div class="DoneCardsCollections">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+{{!-- <div class="kanban-board" id="kanbanBoard">
+</div> --}}
+
+
+
+{{!-- <div class="kanban-board" id="kanbanBoard">
+    <div class="column">
+        <div class="InsideColumn">
+            <h3>To Do</h3>
+            <div class="cards" ondrop="drop(event)" ondragover="allowDrop(event)" data-column="0">
+                <div class="carde" draggable="true" ondragstart="drag(event)" id="task-0-0">
+                    <p class="CardText">
+                        Feature A Task 1
+                        asfasdfasfdsfdsfasdfdsfdasfasdfdsfsfafdsfasfdfasfdsfdsfasdfdsfdasfasdfdsfsfafddfasfdsfdsfasdfdsfdasfasdfdsfsfafddfasfdsfdsfasdfdsfdasfasdfdsfsfafddfasfdsfdsfasdfdsfdasfasdfdsfsfafd
+                    </p>
+                </div>
+                <div class="carde" draggable="true" ondragstart="drag(event)" id="task-0-1">Task 2</div>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <h3>In Progress</h3>
+        <div class="cards" ondrop="drop(event)" ondragover="allowDrop(event)" data-column="1">
+            <div class="carde" draggable="true" ondragstart="drag(event)" id="task-1-0">Task 3</div>
+            <div class="carde" draggable="true" ondragstart="drag(event)" id="task-1-1">Task 4</div>
+        </div>
+    </div>
+
+    <!-- Add more columns here -->
+</div> --}}
+
+
+
+
+
+<script>
+
+    // Get the reference to the image element by its ID
+    var logoImg = document.getElementById('LogoImg');
+
+    // Set the new image source (URL)
+    logoImg.src = '/images/Logo/MegaPaintsLogo.png';
+
+
+
+    // JavaScript to enable moving the container
+    const container = document.getElementById('moveableContainer');
+
+    let isDragging = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    container.addEventListener('mousedown', (e) => {
+        if (e.target === container) {
+            isDragging = true;
+            startX = e.pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+            container.classList.add('grabbing');
+        }
+    });
+
+    container.addEventListener('mouseup', () => {
+        isDragging = false;
+        container.classList.remove('grabbing');
+    });
+
+    container.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const walk = (x - startX) * 1;
+            container.scrollLeft = scrollLeft - walk;
+        }
+    });
+
+    container.addEventListener('mouseleave', () => {
+        isDragging = false;
+        container.classList.remove('grabbing');
+    });
+
+
+
+
+
+
+
+
+
+
+
+    var columns = [
+        {
+            id: '6472429fde9d77f912facae6',
+            name: '13-23-98-nihaldfs',
+            status: 'InComplete',
+            description: '',
+            isAttachment: false,
+            fileNo: '785412',
+            contactDetails: {
+                contactCountryCode: '+971',
+                ContactNumber: '9078654321',
+                WhatsappCountryCode: '+971',
+                WhatsappContactNumber: '09876654331',
+                AlternateContactCountryCode: '+971',
+                AlternateContactNumber: '3216549870'
+
+            },
+            ListArray: [
+                {
+                    ListId: '6472429fde9d77f912facae6',
+                    ListName: 'Orders',
+                    InTIme: '32165498',
+                    OutTime: '987654321',
+                    InEmployeeName: 'SampleName',
+                    InEmployeeDesignation: 'SampleDesignation',
+                    OutEmployeeName: 'SampleName',
+                    OutEmployeeDesignation: 'SampleDesignation'
+                }
+            ]
+        }
+    ]
+
+    // Initial State object with dynamic columns
+    let State = {
+        columns: {
+            ORDERS: [],
+            OFFICE_SECTION: [],
+            PRODUCTION: [],
+            READY: {
+                FOR_DISPATCH: [],
+                FOR_CUSTOMER_COLLECTION: []
+            },
+            DRIVERS: [],
+            DONE: {
+                AllDone: [],
+                DONE_TODAY: [],
+                IN_A_WEEK: []
+            }
+        },
+        Customers: [],
+        Formulas: [],
+        NewOrders: [],
+        UserNow: false
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        //console.log('DOMContentLoaded event fired');
+        fetchAllCards();
+    });
+
+
+
+    async function fetchAllCards() {
+        try {
+            const backendURL = '/getAllCardAndListsAndUsersToManagement';
+            //console.log("Called Fetch api")
+            const response = await fetch(backendURL);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json(); // Parse the response as JSON.
+            // console.log("data", data); // Log the entire data object
+            // console.log("AllCards", data.AllCards); // Log a specific property
+            State.AllCards = data.AllCards;
+            State.AllLists = data.AllLists;
+            State.AllUsers = data.AllUsers;
+            State.Customers = data.Customers;
+            State.Formulas = data.Formulas;
+            UpdateStateWithCards();
+
+            // Rest of your code
+        } catch (error) {
+            // Handle any errors that occurred during the fetch.
+            console.error('Fetch error:', error);
+        }
+    }
+
+
+    async function UpdateStateWithCards() {
+
+        var AllCards = State.AllCards;
+        var AllLists = State.AllLists;
+
+        // console.log("State: ", State);
+        var AllProductionLists = [];
+        var AllDriverLists = [];
+
+        async function processUserData() {
+
+            for (let i = 0; i < State.AllUsers.length; i++) {
+                var User = State.AllUsers[i];
+
+                if (User.Designation === "Production") {
+                    AllProductionLists.push({
+                        Name: User.UserName,
+                        Cards: []  // Add an array to store cards for each user
+                    });
+                } else if (User.Designation === "Driver") {
+                    AllDriverLists.push({
+                        Name: User.UserName,
+                        Cards: []  // Add an array to store cards for each user
+                    });
+                }
+            }
+
+            // Resolve the promise after the loop is finished
+            State.columns.PRODUCTION = AllProductionLists;
+            State.columns.DRIVERS = AllDriverLists;
+
+        }
+
+
+
+        await processUserData();
+
+        for (i = 0; i < AllCards.length; i++) {
+            var CardList = AllCards[i].CurrentList;
+            //console.log("CardList: ", CardList);
+
+            AllLists.forEach((Onelist) => {
+                if (CardList === Onelist.Name) {
+                    //console.log("Onelist: ", Onelist);
+
+                    if ("ORDERS" === Onelist.Name) {
+                        State.columns['ORDERS'].push(AllCards[i]);
+                    } else if ("OFFICE SECTION" === Onelist.Name) {
+                        State.columns['OFFICE_SECTION'].push(AllCards[i]);
+                    } else if ("FOR DISPATCH" === Onelist.Name) {
+                        State.columns.READY.FOR_DISPATCH.push(AllCards[i]);
+                    } else if ("FOR CUSTOMER COLLECTION" === Onelist.Name) {
+                        State.columns.READY.FOR_CUSTOMER_COLLECTION.push(AllCards[i]);
+                    } else if ("DONE TODAY" === Onelist.Name) {
+                        State.columns.DONE.AllDone.push(AllCards[i]);
+                        console.log("AllCards[i] done all ", AllCards[i]);
+                        //   State.columns.READY.FOR_CUSTOMER_COLLECTION.push(AllCards[i]);
+                    } else {
+                        // this is for productions and drivers,
+                        if (AllCards[i].ProductionPerson === AllCards[i].CurrentList) {
+                            // for Productions
+                            var ProductionArray = State.columns.PRODUCTION;
+                            if (ProductionArray.length > 0) {
+                                // search for same list and push or create a list and push
+                                var ListFound = false;
+
+                                ProductionArray.forEach((SingleList) => {
+                                    if (SingleList.Name == AllCards[i].ProductionPerson) {
+                                        ListFound = true;
+                                        if (!SingleList.Cards) {
+                                            SingleList.Cards = [];
+                                            SingleList.Cards.push(AllCards[i]);
+                                        } else {
+                                            SingleList.Cards.push(AllCards[i]);
+                                        }
+                                    }
+                                })
+
+                                if (ListFound === false) {
+                                    // create a new List
+                                    var NewList = {};
+                                    NewList.Name = AllCards[i].ProductionPerson;
+                                    NewList.Cards = [AllCards[i]];
+                                    ProductionArray.push(NewList);
+                                }
+                            } else {
+                                // Create a list and push
+                                var NewList = {};
+                                NewList.Name = AllCards[i].ProductionPerson;
+                                NewList.Cards = [AllCards[i]];
+                                ProductionArray.push(NewList);
+
+                            }
+
+                        } else {
+                            // try for drivers
+                            var DriverArray = State.columns.DRIVERS;
+                            if (DriverArray.length > 0) {
+                                // search for same list and push or create a list and push
+                                var ListFound = false;
+
+                                DriverArray.forEach((SingleList) => {
+                                    if (SingleList.Name == AllCards[i].ProductionPerson) {
+                                        ListFound = true;
+                                        if (!SingleList.Cards) {
+                                            SingleList.Cards = [];
+                                            SingleList.Cards.push(AllCards[i]);
+                                        } else {
+                                            SingleList.Cards.push(AllCards[i]);
+                                        }
+                                    }
+                                })
+
+                                if (ListFound === false) {
+                                    // create a new List
+                                    var NewList = {};
+                                    NewList.Name = AllCards[i].ProductionPerson;
+                                    NewList.Cards = [AllCards[i]];
+                                    DriverArray.push(NewList);
+                                }
+                            } else {
+                                // Create a list and push
+                                var NewList = {};
+                                NewList.Name = AllCards[i].ProductionPerson;
+                                NewList.Cards = [AllCards[i]];
+                                DriverArray.push(NewList);
+
+                            }
+                        }
+                        //State.columns[Onelist.Name].push(AllCards[i]);
+                    }
+                }
+            })
+        }
+
+        console.log("New Updated State: ", State);
+        updateBoardUsingState()
+    }
+
+
+
+    function updateBoardUsingState() {
+        var columnIndex = 0;
+
+        loadOrdersListCards();
+        loadOfficeSectionListCards();
+        loadProductionSectionListAndCards();
+        loadForDispatchSectionCards();
+        loadForCustomerCollectionCards();
+        loadDriversSectionListCards();
+
+
+        function loadOrdersListCards() {
+            columnIndex = 0;
+            var OrdersCardsCollection = document.getElementById('OrdersCardsCollection');
+            OrdersCardsCollection.innerHTML = '';
+            OrdersCardsCollection.setAttribute('ondrop', 'drop(event)');
+            OrdersCardsCollection.setAttribute('ondragover', 'allowDrop(event)');
+            OrdersCardsCollection.setAttribute('data-column', columnIndex);
+            OrdersCardsCollection.classList.add('cardsCollections');
+
+
+
+            var OrderCards = State.columns.ORDERS;
+
+            var virtualOrderCardCollection;
+
+            OrderCards.forEach((OneCard, taskIndex) => {
+
+                var checklistItems = OneCard.CheckListItems;
+                var ChecklistCompleted = 0;
+                var TotalChecklist = 0;
+
+                if (OneCard.CheckListItems) {
+                    var checklistItems = OneCard.CheckListItems.checkItems;
+                    ChecklistCompleted = 0;
+                    TotalChecklist = checklistItems.length;
+
+                    checklistItems.forEach((checkItem) => {
+                        if (checkItem.State === 'Complete') {
+                            ChecklistCompleted = ChecklistCompleted + 1;
+                        }
+                    })
+
+                }
+
+                // Create the main div with class "Card"
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card Card';
+
+                cardDiv.setAttribute('draggable', 'true');
+                cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                const cardImgDiv = document.createElement('div');
+                cardImgDiv.className = 'CardImgDiv';
+
+
+
+                // Create the paragraph element with class "cardText" and set its text content
+                const cardText = document.createElement('p');
+                cardText.className = 'cardText';
+                cardText.textContent = OneCard.Name;
+
+                // Create the div with class "CardSub"
+                const cardSubDiv = document.createElement('div');
+                cardSubDiv.className = 'CardSub';
+
+                // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                const descriptionIcon = document.createElement('img');
+                descriptionIcon.className = 'DescriptionSmIcon';
+                descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                descriptionIcon.alt = '';
+
+                // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                const checkBoxIcon = document.createElement('img');
+                checkBoxIcon.className = 'checkBoxSMIcon';
+                checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                checkBoxIcon.alt = '';
+
+                // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                const cardSMCheckNum = document.createElement('p');
+                cardSMCheckNum.className = 'CardSMCheckNum';
+                cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                // Check if the image file exists, and only create the image element if it does
+                const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                const cardImg = new Image();
+                cardImg.className = 'CardImg';
+                cardImg.alt = 'No Attachments';
+                cardImg.src = imageSrc;
+                cardImg.setAttribute('draggable', 'false');
+
+                cardImg.onload = function () {
+                    // The image exists, so set the src attribute
+                    cardImgDiv.appendChild(cardImg);
+                };
+                cardDiv.appendChild(cardImgDiv);
+
+                cardDiv.appendChild(cardText);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the child elements to their respective parent elements
+                cardSubDiv.appendChild(descriptionIcon);
+                cardSubDiv.appendChild(checkBoxIcon);
+                cardSubDiv.appendChild(cardSMCheckNum);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the "cardDiv" to the parent element in your HTML document
+                OrdersCardsCollection.appendChild(cardDiv);
+            });
+        }
+
+
+        function loadOfficeSectionListCards() {
+            columnIndex = 1;
+            var OfficeSectionsCardsCollection = document.getElementById('OfficeCardsCollection');
+            OfficeSectionsCardsCollection.innerHTML = '';
+            OfficeSectionsCardsCollection.setAttribute('ondrop', 'drop(event)');
+            OfficeSectionsCardsCollection.setAttribute('ondragover', 'allowDrop(event)');
+            OfficeSectionsCardsCollection.setAttribute('data-column', columnIndex);
+            OfficeSectionsCardsCollection.classList.add('cardsCollections');
+
+
+            var OfficeSectionCards = State.columns.OFFICE_SECTION;
+
+            var virtualOfficeSectionCardCollection;
+
+            OfficeSectionCards.forEach((OneCard, taskIndex) => {
+
+                var checklistItems = OneCard.CheckListItems;
+                var ChecklistCompleted = 0;
+                var TotalChecklist = 0;
+
+                if (OneCard.CheckListItems) {
+                    var checklistItems = OneCard.CheckListItems.checkItems;
+                    ChecklistCompleted = 0;
+                    TotalChecklist = checklistItems.length;
+
+                    checklistItems.forEach((checkItem) => {
+                        if (checkItem.State === 'Complete') {
+                            ChecklistCompleted = ChecklistCompleted + 1;
+                        }
+                    })
+
+                }
+
+                // Create the main div with class "Card"
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card Card';
+
+                cardDiv.setAttribute('draggable', 'true');
+                cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                const cardImgDiv = document.createElement('div');
+                cardImgDiv.className = 'CardImgDiv';
+
+
+                // Create the paragraph element with class "cardText" and set its text content
+                const cardText = document.createElement('p');
+                cardText.className = 'cardText';
+                cardText.textContent = OneCard.Name;
+
+                // Create the div with class "CardSub"
+                const cardSubDiv = document.createElement('div');
+                cardSubDiv.className = 'CardSub';
+
+                // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                const descriptionIcon = document.createElement('img');
+                descriptionIcon.className = 'DescriptionSmIcon';
+                descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                descriptionIcon.alt = '';
+
+                // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                const checkBoxIcon = document.createElement('img');
+                checkBoxIcon.className = 'checkBoxSMIcon';
+                checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                checkBoxIcon.alt = '';
+
+                // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                const cardSMCheckNum = document.createElement('p');
+                cardSMCheckNum.className = 'CardSMCheckNum';
+                cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                // Check if the image file exists, and only create the image element if it does
+                const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                const cardImg = new Image();
+                cardImg.className = 'CardImg';
+                cardImg.alt = 'No Attachments';
+                cardImg.src = imageSrc;
+                cardImg.setAttribute('draggable', 'false');
+
+                cardImg.onload = function () {
+                    // The image exists, so set the src attribute
+                    cardImgDiv.appendChild(cardImg);
+                };
+                cardDiv.appendChild(cardImgDiv);
+
+                cardDiv.appendChild(cardText);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the child elements to their respective parent elements
+                cardSubDiv.appendChild(descriptionIcon);
+                cardSubDiv.appendChild(checkBoxIcon);
+                cardSubDiv.appendChild(cardSMCheckNum);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the "cardDiv" to the parent element in your HTML document
+                OfficeSectionsCardsCollection.appendChild(cardDiv);
+            });
+        }
+
+        function loadProductionSectionListAndCards() {
+            var ProductionListCollections = document.getElementById('ProductionListCollections');
+            ProductionListCollections.innerHTML = '';
+
+
+            var ProductionSectionLists = State.columns.PRODUCTION;
+
+            ProductionSectionLists.forEach((OneList, Index) => {
+                columnIndex = parseInt(Index) + 2;
+
+                var ProductionSectionCards = OneList;
+
+                console.log("ProductionSectionCards: ", ProductionSectionCards);
+
+
+                // Create the div with class "ProductionCardsCollections"
+                const productionCardsCollectionsDiv = document.createElement('div');
+                productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
+                productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
+                productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
+                productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
+                productionCardsCollectionsDiv.classList.add('cardsCollections');
+
+
+                // Create the main div with class "ProductionColumn"
+                const productionColumnDiv = document.createElement('div');
+                productionColumnDiv.className = 'ProductionColumn';
+
+                // Create the div with class "ProductionColumnHeader"
+                const productionColumnHeaderDiv = document.createElement('div');
+                productionColumnHeaderDiv.className = 'ProductionColumnHeader';
+
+                // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
+                const sectionHeaderText = document.createElement('p');
+                sectionHeaderText.className = 'ProdctionSectionHeaderText';
+                sectionHeaderText.textContent = ProductionSectionCards.Name;
+
+                // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
+                const checkboxInput = document.createElement('input');
+                checkboxInput.type = 'checkbox';
+                checkboxInput.className = 'ProductionCheckBox';
+                checkboxInput.id = '';
+                checkboxInput.checked = true;
+
+
+
+
+                // add cards to all user.
+
+
+                ProductionSectionCards.Cards.forEach((OneCard, taskIndex) => {
+
+                    var checklistItems = OneCard.CheckListItems;
+                    var ChecklistCompleted = 0;
+                    var TotalChecklist = 0;
+
+                    if (OneCard.CheckListItems) {
+                        var checklistItems = OneCard.CheckListItems.checkItems;
+                        ChecklistCompleted = 0;
+                        TotalChecklist = checklistItems.length;
+
+                        checklistItems.forEach((checkItem) => {
+                            if (checkItem.State === 'Complete') {
+                                ChecklistCompleted = ChecklistCompleted + 1;
+                            }
+                        })
+
+                    }
+
+                    // Create the main div with class "Card"
+                    const cardDiv = document.createElement('div');
+                    cardDiv.className = 'card Card';
+
+                    cardDiv.setAttribute('draggable', 'true');
+                    cardDiv.setAttribute('ondragstart', 'drag(event)');
+                    cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                    const cardImgDiv = document.createElement('div');
+                    cardImgDiv.className = 'CardImgDiv';
+
+
+
+                    // Create the paragraph element with class "cardText" and set its text content
+                    const cardText = document.createElement('p');
+                    cardText.className = 'cardText';
+                    cardText.textContent = OneCard.Name;
+
+                    // Create the div with class "CardSub"
+                    const cardSubDiv = document.createElement('div');
+                    cardSubDiv.className = 'CardSub';
+
+                    // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                    const descriptionIcon = document.createElement('img');
+                    descriptionIcon.className = 'DescriptionSmIcon';
+                    descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                    descriptionIcon.alt = '';
+
+                    // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                    const checkBoxIcon = document.createElement('img');
+                    checkBoxIcon.className = 'checkBoxSMIcon';
+                    checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                    checkBoxIcon.alt = '';
+
+                    // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                    const cardSMCheckNum = document.createElement('p');
+                    cardSMCheckNum.className = 'CardSMCheckNum';
+                    cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                    // Check if the image file exists, and only create the image element if it does
+                    const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                    const cardImg = new Image();
+                    cardImg.className = 'CardImg';
+                    cardImg.alt = 'No Attachments';
+                    cardImg.src = imageSrc;
+                    cardImg.setAttribute('draggable', 'false');
+
+                    cardImg.onload = function () {
+                        // The image exists, so set the src attribute
+                        cardImgDiv.appendChild(cardImg);
+                    };
+                    cardDiv.appendChild(cardImgDiv);
+
+                    cardDiv.appendChild(cardText);
+                    cardDiv.appendChild(cardSubDiv);
+
+                    // Append the child elements to their respective parent elements
+                    cardSubDiv.appendChild(descriptionIcon);
+                    cardSubDiv.appendChild(checkBoxIcon);
+                    cardSubDiv.appendChild(cardSMCheckNum);
+                    cardDiv.appendChild(cardSubDiv);
+
+
+                    // Append the "cardDiv" to the parent element in your HTML document
+                    productionCardsCollectionsDiv.appendChild(cardDiv);
+
+
+
+
+
+                })
+                // Append the child elements to their respective parent elements
+                productionColumnHeaderDiv.appendChild(sectionHeaderText);
+                productionColumnHeaderDiv.appendChild(checkboxInput);
+
+                productionColumnDiv.appendChild(productionColumnHeaderDiv);
+                productionColumnDiv.appendChild(productionCardsCollectionsDiv);
+
+                // Append the "productionColumnDiv" to a parent div in your HTML document
+                //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
+                ProductionListCollections.appendChild(productionColumnDiv);
+
+            });
+
+
+        }
+
+        function loadForDispatchSectionCards() {
+            columnIndex = columnIndex + 1;
+            var ForDispatchCardsCollections = document.getElementById('ForDispatchCardsCollections');
+            ForDispatchCardsCollections.innerHTML = '';
+            ForDispatchCardsCollections.setAttribute('ondrop', 'drop(event)');
+            ForDispatchCardsCollections.setAttribute('ondragover', 'allowDrop(event)');
+            ForDispatchCardsCollections.setAttribute('data-column', columnIndex);
+            ForDispatchCardsCollections.classList.add('cardsCollections');
+
+
+
+            var OrderCards = State.columns.READY.FOR_DISPATCH;
+
+            var virtualOrderCardCollection;
+
+            OrderCards.forEach((OneCard, taskIndex) => {
+
+                var checklistItems = OneCard.CheckListItems;
+                var ChecklistCompleted = 0;
+                var TotalChecklist = 0;
+
+                if (OneCard.CheckListItems) {
+                    var checklistItems = OneCard.CheckListItems.checkItems;
+                    ChecklistCompleted = 0;
+                    TotalChecklist = checklistItems.length;
+
+                    checklistItems.forEach((checkItem) => {
+                        if (checkItem.State === 'Complete') {
+                            ChecklistCompleted = ChecklistCompleted + 1;
+                        }
+                    })
+
+                }
+
+                // Create the main div with class "Card"
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card Card';
+
+                cardDiv.setAttribute('draggable', 'true');
+                cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                const cardImgDiv = document.createElement('div');
+                cardImgDiv.className = 'CardImgDiv';
+
+
+
+                // Create the paragraph element with class "cardText" and set its text content
+                const cardText = document.createElement('p');
+                cardText.className = 'cardText';
+                cardText.textContent = OneCard.Name;
+
+                // Create the div with class "CardSub"
+                const cardSubDiv = document.createElement('div');
+                cardSubDiv.className = 'CardSub';
+
+                // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                const descriptionIcon = document.createElement('img');
+                descriptionIcon.className = 'DescriptionSmIcon';
+                descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                descriptionIcon.alt = '';
+
+                // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                const checkBoxIcon = document.createElement('img');
+                checkBoxIcon.className = 'checkBoxSMIcon';
+                checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                checkBoxIcon.alt = '';
+
+                // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                const cardSMCheckNum = document.createElement('p');
+                cardSMCheckNum.className = 'CardSMCheckNum';
+                cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                // Check if the image file exists, and only create the image element if it does
+                const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                const cardImg = new Image();
+                cardImg.className = 'CardImg';
+                cardImg.alt = 'No Attachments';
+                cardImg.src = imageSrc;
+                cardImg.setAttribute('draggable', 'false');
+
+                cardImg.onload = function () {
+                    // The image exists, so set the src attribute
+                    cardImgDiv.appendChild(cardImg);
+                };
+                cardDiv.appendChild(cardImgDiv);
+
+                cardDiv.appendChild(cardText);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the child elements to their respective parent elements
+                cardSubDiv.appendChild(descriptionIcon);
+                cardSubDiv.appendChild(checkBoxIcon);
+                cardSubDiv.appendChild(cardSMCheckNum);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the "cardDiv" to the parent element in your HTML document
+                ForDispatchCardsCollections.appendChild(cardDiv);
+            });
+        }
+
+        function loadForCustomerCollectionCards() {
+            columnIndex = columnIndex + 1;
+            var ForCustomerCollectionCards = document.getElementById('ForCustomerCollectionCards');
+            ForCustomerCollectionCards.innerHTML = '';
+            ForCustomerCollectionCards.setAttribute('ondrop', 'drop(event)');
+            ForCustomerCollectionCards.setAttribute('ondragover', 'allowDrop(event)');
+            ForCustomerCollectionCards.setAttribute('data-column', columnIndex);
+            ForCustomerCollectionCards.classList.add('cardsCollections');
+
+
+
+            var OrderCards = State.columns.READY.FOR_CUSTOMER_COLLECTION;
+
+            var virtualOrderCardCollection;
+
+            OrderCards.forEach((OneCard, taskIndex) => {
+
+                var checklistItems = OneCard.CheckListItems;
+                var ChecklistCompleted = 0;
+                var TotalChecklist = 0;
+
+                if (OneCard.CheckListItems) {
+                    var checklistItems = OneCard.CheckListItems.checkItems;
+                    ChecklistCompleted = 0;
+                    TotalChecklist = checklistItems.length;
+
+                    checklistItems.forEach((checkItem) => {
+                        if (checkItem.State === 'Complete') {
+                            ChecklistCompleted = ChecklistCompleted + 1;
+                        }
+                    })
+
+                }
+
+                // Create the main div with class "Card"
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card Card';
+
+                cardDiv.setAttribute('draggable', 'true');
+                cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                const cardImgDiv = document.createElement('div');
+                cardImgDiv.className = 'CardImgDiv';
+
+
+
+                // Create the paragraph element with class "cardText" and set its text content
+                const cardText = document.createElement('p');
+                cardText.className = 'cardText';
+                cardText.textContent = OneCard.Name;
+
+                // Create the div with class "CardSub"
+                const cardSubDiv = document.createElement('div');
+                cardSubDiv.className = 'CardSub';
+
+                // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                const descriptionIcon = document.createElement('img');
+                descriptionIcon.className = 'DescriptionSmIcon';
+                descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                descriptionIcon.alt = '';
+
+                // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                const checkBoxIcon = document.createElement('img');
+                checkBoxIcon.className = 'checkBoxSMIcon';
+                checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                checkBoxIcon.alt = '';
+
+                // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                const cardSMCheckNum = document.createElement('p');
+                cardSMCheckNum.className = 'CardSMCheckNum';
+                cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                // Check if the image file exists, and only create the image element if it does
+                const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                const cardImg = new Image();
+                cardImg.className = 'CardImg';
+                cardImg.alt = 'No Attachments';
+                cardImg.src = imageSrc;
+                cardImg.setAttribute('draggable', 'false');
+
+                cardImg.onload = function () {
+                    // The image exists, so set the src attribute
+                    cardImgDiv.appendChild(cardImg);
+                };
+                cardDiv.appendChild(cardImgDiv);
+
+                cardDiv.appendChild(cardText);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the child elements to their respective parent elements
+                cardSubDiv.appendChild(descriptionIcon);
+                cardSubDiv.appendChild(checkBoxIcon);
+                cardSubDiv.appendChild(cardSMCheckNum);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the "cardDiv" to the parent element in your HTML document
+                ForCustomerCollectionCards.appendChild(cardDiv);
+            });
+        }
+
+        function loadDriversSectionListCards() {
+            var DriverListCollections = document.getElementById('DriverListCollections');
+            DriverListCollections.innerHTML = '';
+
+
+            var DriverSectionLists = State.columns.DRIVERS;
+
+
+
+
+
+
+            DriverSectionLists.forEach((OneList, Index) => {
+                columnIndex = parseInt(Index) + 2;
+
+                var DriverSectionCards = OneList;
+
+                console.log("DriverSectionCards: ", DriverSectionCards);
+
+
+                // Create the div with class "ProductionCardsCollections"
+                const productionCardsCollectionsDiv = document.createElement('div');
+                productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
+                productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
+                productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
+                productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
+                productionCardsCollectionsDiv.classList.add('cardsCollections');
+
+
+                // Create the main div with class "ProductionColumn"
+                const productionColumnDiv = document.createElement('div');
+                productionColumnDiv.className = 'ProductionColumn';
+
+                // Create the div with class "ProductionColumnHeader"
+                const productionColumnHeaderDiv = document.createElement('div');
+                productionColumnHeaderDiv.className = 'ProductionColumnHeader';
+
+                // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
+                const sectionHeaderText = document.createElement('p');
+                sectionHeaderText.className = 'ProdctionSectionHeaderText';
+                sectionHeaderText.textContent = DriverSectionCards.Name;
+
+                // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
+                const checkboxInput = document.createElement('input');
+                checkboxInput.type = 'checkbox';
+                checkboxInput.className = 'ProductionCheckBox';
+                checkboxInput.id = '';
+                checkboxInput.checked = true;
+
+
+
+
+                // add cards to all user.
+
+
+                DriverSectionCards.Cards.forEach((OneCard, taskIndex) => {
+
+                    var checklistItems = OneCard.CheckListItems;
+                    var ChecklistCompleted = 0;
+                    var TotalChecklist = 0;
+
+                    if (OneCard.CheckListItems) {
+                        var checklistItems = OneCard.CheckListItems.checkItems;
+                        ChecklistCompleted = 0;
+                        TotalChecklist = checklistItems.length;
+
+                        checklistItems.forEach((checkItem) => {
+                            if (checkItem.State === 'Complete') {
+                                ChecklistCompleted = ChecklistCompleted + 1;
+                            }
+                        })
+
+                    }
+
+                    // Create the main div with class "Card"
+                    const cardDiv = document.createElement('div');
+                    cardDiv.className = 'card Card';
+
+                    cardDiv.setAttribute('draggable', 'true');
+                    cardDiv.setAttribute('ondragstart', 'drag(event)');
+                    cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                    const cardImgDiv = document.createElement('div');
+                    cardImgDiv.className = 'CardImgDiv';
+
+
+
+                    // Create the paragraph element with class "cardText" and set its text content
+                    const cardText = document.createElement('p');
+                    cardText.className = 'cardText';
+                    cardText.textContent = OneCard.Name;
+
+                    // Create the div with class "CardSub"
+                    const cardSubDiv = document.createElement('div');
+                    cardSubDiv.className = 'CardSub';
+
+                    // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                    const descriptionIcon = document.createElement('img');
+                    descriptionIcon.className = 'DescriptionSmIcon';
+                    descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                    descriptionIcon.alt = '';
+
+                    // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                    const checkBoxIcon = document.createElement('img');
+                    checkBoxIcon.className = 'checkBoxSMIcon';
+                    checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                    checkBoxIcon.alt = '';
+
+                    // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                    const cardSMCheckNum = document.createElement('p');
+                    cardSMCheckNum.className = 'CardSMCheckNum';
+                    cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                    // Check if the image file exists, and only create the image element if it does
+                    const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                    const cardImg = new Image();
+                    cardImg.className = 'CardImg';
+                    cardImg.alt = 'No Attachments';
+                    cardImg.src = imageSrc;
+                    cardImg.setAttribute('draggable', 'false');
+
+                    cardImg.onload = function () {
+                        // The image exists, so set the src attribute
+                        cardImgDiv.appendChild(cardImg);
+                    };
+                    cardDiv.appendChild(cardImgDiv);
+
+                    cardDiv.appendChild(cardText);
+                    cardDiv.appendChild(cardSubDiv);
+
+                    // Append the child elements to their respective parent elements
+                    cardSubDiv.appendChild(descriptionIcon);
+                    cardSubDiv.appendChild(checkBoxIcon);
+                    cardSubDiv.appendChild(cardSMCheckNum);
+                    cardDiv.appendChild(cardSubDiv);
+
+
+                    // Append the "cardDiv" to the parent element in your HTML document
+                    productionCardsCollectionsDiv.appendChild(cardDiv);
+
+
+
+
+
+                })
+                // Append the child elements to their respective parent elements
+                productionColumnHeaderDiv.appendChild(sectionHeaderText);
+                productionColumnHeaderDiv.appendChild(checkboxInput);
+
+                productionColumnDiv.appendChild(productionColumnHeaderDiv);
+                productionColumnDiv.appendChild(productionCardsCollectionsDiv);
+
+                // Append the "productionColumnDiv" to a parent div in your HTML document
+                //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
+                DriverListCollections.appendChild(productionColumnDiv);
+
+            });
+        }
+    }
+
+
+
+
+
+
+    /*function renderKanban() {
+        var kanbanBoard = document.getElementById('kanbanBoard');
+        kanbanBoard.innerHTML = '';
+
+        //var ListCollection = document.getElementById('ListCollections');
+
+
+        State.columns.forEach(function (column, columnIndex) {
+            var columnDiv = document.createElement('div');
+            columnDiv.className = 'column';
+            var columnInsideDiv = document.createElement('div');
+            columnInsideDiv.className = 'InsideColumn';
+
+
+
+            columnInsideDiv.innerHTML = '<h3>' + column.title + '</h3>';
+            var cardsDiv = document.createElement('div');
+            cardsDiv.className = 'cards';
+            cardsDiv.setAttribute('ondrop', 'drop(event)');
+            cardsDiv.setAttribute('ondragover', 'allowDrop(event)');
+            cardsDiv.setAttribute('data-column', columnIndex);
+
+            column.tasks.forEach(function (task, taskIndex) {
+                var cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                cardDiv.setAttribute('draggable', 'true');
+                cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+                cardDiv.innerText = task;
+
+                cardsDiv.appendChild(cardDiv);
+            });
+
+            columnInsideDiv.appendChild(cardsDiv);
+            columnDiv.appendChild(columnInsideDiv);
+            kanbanBoard.appendChild(columnDiv);
+        });
+    }
+
+    renderKanban();*/
+
+    /*function updateState(sourceColumn, destinationColumn, taskId) {
+        const source = State.columns[sourceColumn];
+        const destination = State.columns[destinationColumn];
+
+        if (source && destination) {
+            const taskIndex = taskId.split('-')[2];
+            const taskToMove = source.tasks[taskIndex];
+
+            if (taskToMove) {
+                source.tasks.splice(taskIndex, 1);
+                destination.tasks.push(taskToMove);
+            }
+        }
+    }*/
+
+    function updateState(sourceColumn, destinationColumn, taskId) {
+        const source = State.columns[sourceColumn];
+        const destination = State.columns[destinationColumn];
+
+        if (source && destination) {
+            const taskIndex = taskId.split('-')[2];
+            const taskToMove = source.tasks[taskIndex];
+
+            if (taskToMove) {
+                source.tasks.splice(taskIndex, 1);
+                destination.tasks.push(taskToMove);
+            }
+        }
+    }
+
+
+    /*document.addEventListener('drop', function (event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const sourceColumn = data.split('-')[1];
+        const destinationColumn = event.target.getAttribute('data-column');
+
+        if (sourceColumn !== destinationColumn) {
+            updateState(sourceColumn, destinationColumn, data);
+            renderKanban();
+        }
+        console.log(State.columns);
+    });*/
+
+
+    document.addEventListener('dragstart', function (event) {
+        event.dataTransfer.setData('text/plain', event.target.id);
+    });
+
+
+
+
+
+
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drag(event) {
+        event.dataTransfer.setData("text/plain", event.target.id);
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        var data = event.dataTransfer.getData("text/plain");
+        var target = event.target;
+
+        if (target.classList.contains("cardsCollections")) {
+            target.appendChild(document.getElementById(data));
+        }
+
+
+    }
+
+    // Attach event listeners to cards
+    var cards = document.querySelectorAll(".card");
+
+    cards.forEach(function (card) {
+        card.addEventListener("dragstart", drag);
+    });
+
+
+    document.addEventListener('dragstart', function (event) {
+        event.dataTransfer.setData('text/plain', event.target.id);
+        event.dataTransfer.dropEffect = 'move'; // Specify the type of drag operation
+    });
+
+    /*
+       // Modify the drop event to handle both inter-column and intra-column drops
+       document.addEventListener('drop', function (event) {
+           event.preventDefault();
+           const data = event.dataTransfer.getData('text/plain');
+   
+           const sourceElement = document.getElementById(data);
+   
+           // Check if the drop target is a card or a column
+           if (event.target.classList.contains('card')) {
+               // Reordering within the same column
+               const destinationCard = event.target;
+               const sourceCard = sourceElement;
+   
+               if (destinationCard && sourceCard) {
+                   // Swap the positions of the cards in the DOM
+                   const destinationIndex = Array.from(destinationCard.parentElement.children).indexOf(destinationCard);
+                   const sourceIndex = Array.from(sourceCard.parentElement.children).indexOf(sourceCard);
+   
+                   if (destinationIndex !== -1 && sourceIndex !== -1) {
+                       destinationCard.parentElement.insertBefore(sourceCard, destinationCard);
+                       // Update the State object to reflect the reordering
+                       const sourceColumnIndex = sourceCard.getAttribute('id').split('-')[1];
+                       const sourceTaskIndex = sourceCard.getAttribute('id').split('-')[2];
+                       const destinationColumnIndex = destinationCard.getAttribute('id').split('-')[1];
+                       const destinationTaskIndex = destinationCard.getAttribute('id').split('-')[2];
+   
+                       const sourceColumn = State.columns[sourceColumnIndex];
+                       const destinationColumn = State.columns[destinationColumnIndex];
+   
+                       if (sourceColumn && destinationColumn) {
+                           const taskToMove = sourceColumn.tasks[sourceTaskIndex];
+                           if (taskToMove) {
+                               sourceColumn.tasks.splice(sourceTaskIndex, 1);
+                               destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
+                           }
+   
+                           console.log('Task reordered within column ' + sourceColumn.title);
+                           console.log(State.columns);
+                       }
+   
+   
+                   }
+               }
+           } else if (event.target.classList.contains('cards')) {
+               // Moving a card to a different column (same logic as before)
+               const sourceColumn = sourceElement.getAttribute('id').split('-')[1];
+               const destinationColumn = event.target.getAttribute('data-column');
+   
+               if (sourceColumn !== destinationColumn) {
+                   updateState(sourceColumn, destinationColumn, data);
+                   renderKanban();
+               }
+   
+             
+               console.log(State.columns);
+           }
+   
+           // Re-enable the card's draggable attribute
+           sourceElement.draggable = true;
+       });
+   
+   */
+
+    document.addEventListener('drop', function (event) {
+        console.log("Drop event occur")
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const sourceElement = document.getElementById(data);
+
+        console.log("event.target.classList.contains('CardImg'): ", event.target.classList.contains('CardImg'));
+        console.log("Drop Target: ", event.target.classList);
+        if (event.target.classList.contains('card')) {
+            // If the drop target is a card, insert the dragged card immediately after the target card
+            /*const destinationCard = event.target;
+            const sourceCard = sourceElement;
+
+            if (destinationCard && sourceCard) {
+                // Insert the sourceCard after the destinationCard
+                destinationCard.parentElement.insertBefore(sourceCard, destinationCard.nextSibling);
+
+                // Update the State object to reflect the reordering
+                const sourceColumnIndex = sourceCard.getAttribute('data-column');
+                const sourceTaskIndex = sourceCard.getAttribute('data-task');
+                const destinationColumnIndex = destinationCard.getAttribute('data-column');
+                const destinationTaskIndex = destinationCard.getAttribute('data-task');
+
+                const sourceColumn = State.columns[sourceColumnIndex];
+                const destinationColumn = State.columns[destinationColumnIndex];
+
+                if (sourceColumn && destinationColumn) {
+                    const taskToMove = sourceColumn.tasks[sourceTaskIndex];
+                    if (taskToMove) {
+                        sourceColumn.tasks.splice(sourceTaskIndex, 1);
+                        destinationColumn.tasks.splice(destinationTaskIndex + 1, 0, taskToMove);
+                    }
+
+                    console.log('Task reordered within column ' + sourceColumn.title);
+                    console.log(State.columns);
+                }
+            }*/
+
+            // If the drop target is a card, insert the dragged card immediately before the target card
+            const destinationCard = destinationAddress.parentNode;
+            const sourceCard = sourceElement;
+
+            if (destinationCard && sourceCard) {
+                // Insert the sourceCard before the destinationCard
+                destinationCard.parentElement.insertBefore(sourceCard, destinationCard);
+
+                // Update the State object to reflect the reordering
+                const sourceColumnIndex = sourceCard.getAttribute('data-column');
+                const sourceTaskIndex = sourceCard.getAttribute('data-task');
+                const destinationColumnIndex = destinationCard.getAttribute('data-column');
+                const destinationTaskIndex = destinationCard.getAttribute('data-task');
+
+                const sourceColumn = State.columns[sourceColumnIndex];
+                const destinationColumn = State.columns[destinationColumnIndex];
+
+                if (sourceColumn && destinationColumn) {
+                    const taskToMove = sourceColumn.tasks[sourceTaskIndex];
+                    if (taskToMove) {
+                        sourceColumn.tasks.splice(sourceTaskIndex, 1);
+                        destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
+                    }
+
+                    console.log('Task reordered within column ' + sourceColumn.title);
+                    console.log(State.columns);
+                }
+            }
+
+        } else if (event.target.classList.contains('cards')) {
+            // Handle moving a card to a different column (same logic as before)
+            const sourceColumn = sourceElement.getAttribute('data-column');
+            const destinationColumn = event.target.getAttribute('data-column');
+
+            if (sourceColumn !== destinationColumn) {
+                updateState(sourceColumn, destinationColumn, data);
+                renderKanban();
+            }
+            console.log(State.columns);
+        } else {
+
+            var destinationAddress = event.target.parentNode
+
+            if (destinationAddress.classList.contains('card')) {
+                console.log("destinationAddress.classList.contains('card'): ", destinationAddress.classList.contains('card'))
+                // If the drop target is a card, insert the dragged card immediately after the target card
+                /*const destinationCard = destinationAddress;
+                const sourceCard = sourceElement;
+
+                if (destinationCard && sourceCard) {
+                    // Insert the sourceCard after the destinationCard
+                    destinationCard.parentElement.insertBefore(sourceCard, destinationCard.nextSibling);
+
+                    // Update the State object to reflect the reordering
+                    const sourceColumnIndex = sourceCard.getAttribute('data-column');
+                    const sourceTaskIndex = sourceCard.getAttribute('data-task');
+                    const destinationColumnIndex = destinationCard.getAttribute('data-column');
+                    const destinationTaskIndex = destinationCard.getAttribute('data-task');
+
+                    const sourceColumn = State.columns[sourceColumnIndex];
+                    const destinationColumn = State.columns[destinationColumnIndex];
+
+                    if (sourceColumn && destinationColumn) {
+                        const taskToMove = sourceColumn.tasks[sourceTaskIndex];
+                        if (taskToMove) {
+                            sourceColumn.tasks.splice(sourceTaskIndex, 1);
+                            destinationColumn.tasks.splice(destinationTaskIndex + 1, 0, taskToMove);
+                        }
+
+                        console.log('Task reordered within column ' + sourceColumn.title);
+                        console.log(State.columns);
+                    }
+                }*/
+                // If the drop target is a card, insert the dragged card immediately before the target card
+                const destinationCard = destinationAddress.parentNode;
+                const sourceCard = sourceElement;
+
+                if (destinationCard && sourceCard) {
+                    // Insert the sourceCard before the destinationCard
+                    destinationCard.parentElement.insertBefore(sourceCard, destinationCard);
+
+                    // Update the State object to reflect the reordering
+                    const sourceColumnIndex = sourceCard.getAttribute('data-column');
+                    const sourceTaskIndex = sourceCard.getAttribute('data-task');
+                    const destinationColumnIndex = destinationCard.getAttribute('data-column');
+                    const destinationTaskIndex = destinationCard.getAttribute('data-task');
+
+                    const sourceColumn = State.columns[sourceColumnIndex];
+                    const destinationColumn = State.columns[destinationColumnIndex];
+
+                    if (sourceColumn && destinationColumn) {
+                        const taskToMove = sourceColumn.tasks[sourceTaskIndex];
+                        if (taskToMove) {
+                            sourceColumn.tasks.splice(sourceTaskIndex, 1);
+                            destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
+                        }
+
+                        console.log('Task reordered within column ' + sourceColumn.title);
+                        console.log(State.columns);
+                    }
+                }
+
+            } else if (destinationAddress.parentNode.classList.contains('card')) {
+                console.log("destinationAddress.parentNode.classList.contains('card'): ", destinationAddress.parentNode.classList.contains('card'))
+                // If the drop target is a card, insert the dragged card immediately after the target card
+                /*const destinationCard = destinationAddress.parentNode;
+                const sourceCard = sourceElement;
+
+                if (destinationCard && sourceCard) {
+                    // Insert the sourceCard after the destinationCard
+                    destinationCard.parentElement.insertBefore(sourceCard, destinationCard.nextSibling);
+
+                    // Update the State object to reflect the reordering
+                    const sourceColumnIndex = sourceCard.getAttribute('data-column');
+                    const sourceTaskIndex = sourceCard.getAttribute('data-task');
+                    const destinationColumnIndex = destinationCard.getAttribute('data-column');
+                    const destinationTaskIndex = destinationCard.getAttribute('data-task');
+
+                    const sourceColumn = State.columns[sourceColumnIndex];
+                    const destinationColumn = State.columns[destinationColumnIndex];
+
+                    if (sourceColumn && destinationColumn) {
+                        const taskToMove = sourceColumn.tasks[sourceTaskIndex];
+                        if (taskToMove) {
+                            sourceColumn.tasks.splice(sourceTaskIndex, 1);
+                            destinationColumn.tasks.splice(destinationTaskIndex + 1, 0, taskToMove);
+                        }
+
+                        console.log('Task reordered within column ' + sourceColumn.title);
+                        console.log(State.columns);
+                    }
+                }*/
+                // If the drop target is a card, insert the dragged card immediately before the target card
+                const destinationCard = destinationAddress.parentNode;
+                const sourceCard = sourceElement;
+
+                if (destinationCard && sourceCard) {
+                    // Insert the sourceCard before the destinationCard
+                    destinationCard.parentElement.insertBefore(sourceCard, destinationCard);
+
+                    // Update the State object to reflect the reordering
+                    const sourceColumnIndex = sourceCard.getAttribute('data-column');
+                    const sourceTaskIndex = sourceCard.getAttribute('data-task');
+                    const destinationColumnIndex = destinationCard.getAttribute('data-column');
+                    const destinationTaskIndex = destinationCard.getAttribute('data-task');
+
+                    const sourceColumn = State.columns[sourceColumnIndex];
+                    const destinationColumn = State.columns[destinationColumnIndex];
+
+                    if (sourceColumn && destinationColumn) {
+                        const taskToMove = sourceColumn.tasks[sourceTaskIndex];
+                        if (taskToMove) {
+                            sourceColumn.tasks.splice(sourceTaskIndex, 1);
+                            destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
+                        }
+
+                        console.log('Task reordered within column ' + sourceColumn.title);
+                        console.log(State.columns);
+                    }
+                }
+
+            }
+
+        }
+
+        // Re-enable the card's draggable attribute
+        sourceElement.draggable = true;
+    });
+
+
+
+
+    function CloseMainPopup() {
+        var mainPopup = document.getElementById('mainPopup');
+        mainPopup.style.display = "none";
+    }
+
+    function OpenMainPopup() {
+        var mainPopup = document.getElementById('mainPopup');
+        mainPopup.style.display = "flex";
+    }
+
+
+    function CloseCustomerCreationPopup() {
+        var CustomerCreationPopup = document.getElementById('CustomerCreationPopup');
+        CustomerCreationPopup.style.display = "none";
+    }
+
+    function OpenCustomerCreationPopup() {
+        var CustomerCreationPopup = document.getElementById('CustomerCreationPopup');
+        CustomerCreationPopup.style.display = "flex";
+    }
+
+    function validateInput(input) {
+        // Remove non-numeric characters using a regular expression
+        input.value = input.value.replace(/\D/g, '');
+    }
+
+    function ccAddNewContact() {
+        var CCContactCollections = document.getElementById('CCContactCollections');
+        console.log("Contact Count: ", CCContactCollections)
+        createContact(CCContactCollections);
+    }
+
+
+    function createContact(CCContactCollections) {
+
+
+        // Get the parent div by its id
+        var parentDiv = document.getElementById('CCContactCollections');
+        var ccEachContactCount = parentDiv.getElementsByClassName('ccEachContact').length;
+
+        ccEachContactCount = parseInt(ccEachContactCount) + 1;
+
+
+
+
+        // Create main contact div
+        var contactDiv = document.createElement('div');
+        contactDiv.classList.add('ccEachContact');
+
+        // Create name section
+        var nameSectionDiv = document.createElement('div');
+        nameSectionDiv.classList.add('ccContactNameSection');
+
+        // Create a paragraph element
+        var nameText = document.createElement('p');
+        nameText.classList.add('ccContactNameText');
+        nameText.textContent = 'Name';
+
+        // Create name input
+        var nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.classList.add('ccContactPersonNameInput');
+        nameInput.placeholder = 'Name of contact Person';
+        /* nameInput.setAttribute('oninput', 'validateInput(this)');*/
+        nameInput.name = 'ccContactPersonNameInput';
+        nameInput.id = `ccContactPersonNameInput${ccEachContactCount}`
+
+        // Append name input to name section
+        nameSectionDiv.appendChild(nameText);
+        nameSectionDiv.appendChild(nameInput);
+
+        // Create number section
+        var numberSectionDiv = document.createElement('div');
+        numberSectionDiv.classList.add('CCnumberSection');
+
+        // Create contact number section
+        var contactNumberSectionDiv = document.createElement('div');
+        contactNumberSectionDiv.classList.add('ccContactNumberSection');
+
+        // Create Call icon
+        var callIcon = document.createElement('img');
+        callIcon.src = '/images/Icons/Call.png';
+        callIcon.classList.add('CallIcon');
+        callIcon.alt = '';
+
+        // Create country code input for contact number
+        var countryCodeInput = document.createElement('select');
+        countryCodeInput.name = 'ccContactPersonCounrtryCodeInput';
+        countryCodeInput.classList.add('ccContactPersonCounrtryCodeInput');
+        countryCodeInput.id = `ccContactPersonCounrtryCodeInput${ccEachContactCount}`;
+
+        // Add options to country code input
+        var countryCodes = ["+971", "+966", "+91", "+98", "+86", "+81", "+7", "+60", "+65", "+92",
+            "+880", "+62", "+1", "+27", "+30", "+31", "+32", "+33", "+34", "+351",
+            "+358", "+39", "+40", "+41", "+420", "+43", "+44", "+45", "+46", "+47",
+            "+48", "+49", "+51", "+52", "+53", "+54", "+55", "+56", "+57", "+58",
+            "+61", "+64", "+66", "+673", "+82", "+84", "+90", "+93", "+94", "+95"];
+
+        for (var i = 0; i < countryCodes.length; i++) {
+            var option = document.createElement('option');
+            option.value = countryCodes[i];
+            option.text = countryCodes[i];
+            countryCodeInput.appendChild(option);
+        }
+
+        // Create contact number input
+        var contactNumberInput = document.createElement('input');
+        contactNumberInput.type = 'text';
+        contactNumberInput.id = `ccContactPersonNumberInput${ccEachContactCount}`;
+        contactNumberInput.classList.add('ccContactPersonNumberInput');
+        contactNumberInput.placeholder = 'Contact number';
+        contactNumberInput.setAttribute('oninput', 'validateInput(this)');
+        contactNumberInput.name = 'ccContactPersonNumberInput';
+
+        // Append Call icon, country code input, and contact number input to contact number section
+        contactNumberSectionDiv.appendChild(callIcon);
+        contactNumberSectionDiv.appendChild(countryCodeInput);
+        contactNumberSectionDiv.appendChild(contactNumberInput);
+
+        // Create WhatsApp number section
+        var whatsappNumberSectionDiv = document.createElement('div');
+        whatsappNumberSectionDiv.classList.add('ccContactNumberSection');
+
+        // Create WhatsApp icon
+        var whatsappIcon = document.createElement('img');
+        whatsappIcon.src = '/images/Icons/WhatsApp_out.png';
+        whatsappIcon.classList.add('CallIcon');
+        whatsappIcon.alt = '';
+
+        // Create country code input for WhatsApp number
+        var whatsappCountryCodeInput = document.createElement('select');
+        whatsappCountryCodeInput.name = 'ccContactPersonWhatsAppCounrtryCodeInput';
+        whatsappCountryCodeInput.classList.add('ccContactPersonWhatsAppCounrtryCodeInput');
+        whatsappCountryCodeInput.id = `ccContactPersonWhatsAppCounrtryCodeInput${ccEachContactCount}`;
+
+        // Add options to WhatsApp country code input
+        for (var j = 0; j < countryCodes.length; j++) {
+            var optionWhatsApp = document.createElement('option');
+            optionWhatsApp.value = countryCodes[j];
+            optionWhatsApp.text = countryCodes[j];
+            whatsappCountryCodeInput.appendChild(optionWhatsApp);
+        }
+
+        // Create WhatsApp number input
+        var whatsappNumberInput = document.createElement('input');
+        whatsappNumberInput.type = 'text';
+        whatsappNumberInput.id = `ccContactPersonWhatsappNumberInput${ccEachContactCount}`;
+        whatsappNumberInput.setAttribute('oninput', 'validateInput(this)');
+        whatsappNumberInput.classList.add('ccContactPersonWhatsappNumberInput');
+        whatsappNumberInput.placeholder = 'Contact WhatsApp number';
+        whatsappNumberInput.name = 'ccContactPersonWhatsappNumberInput';
+
+        // Append WhatsApp icon, WhatsApp country code input, and WhatsApp number input to WhatsApp number section
+        whatsappNumberSectionDiv.appendChild(whatsappIcon);
+        whatsappNumberSectionDiv.appendChild(whatsappCountryCodeInput);
+        whatsappNumberSectionDiv.appendChild(whatsappNumberInput);
+
+        // Append name section, contact number section, and WhatsApp number section to main contact div
+        contactDiv.appendChild(nameSectionDiv);
+        contactDiv.appendChild(numberSectionDiv);
+        numberSectionDiv.appendChild(contactNumberSectionDiv);
+        numberSectionDiv.appendChild(whatsappNumberSectionDiv);
+
+        // Append the created contact div to the contacts container
+        CCContactCollections.appendChild(contactDiv);
+    }
+
+
+    function SaveCustomerDetails() {
+        var Customername, Address, Loaction, SalesEx, Co_ordinator, Contact
+
+        Customername = document.getElementById('CustomerName').value;
+        Address = document.getElementById('CCAddressInput').value;
+        Loaction = document.getElementById('ccLocation').value;
+        SalesEx = document.getElementById('CCSalesEx').value;
+        Co_ordinator = document.getElementById('CCCo-ordinator').value;
+
+        // Get the contact people
+        var ContactCollections = document.getElementById('CCContactCollections');
+        var ccEachContactCount = parseInt(ContactCollections.getElementsByClassName('ccEachContact').length);
+        Contact = [];
+
+        for (i = 1; i <= ccEachContactCount; i++) {
+            console.log(document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`));
+            if (document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`)) {
+                var OneContact = {
+                    Name: document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`).value,
+                    CallCountryCode: document.getElementById(`ccContactPersonCounrtryCodeInput${ccEachContactCount}`).value,
+                    CallNumber: document.getElementById(`ccContactPersonNumberInput${ccEachContactCount}`).value,
+                    WhatsappCountryCode: document.getElementById(`ccContactPersonWhatsAppCounrtryCodeInput${ccEachContactCount}`).value,
+                    WhatsappNumber: document.getElementById(`ccContactPersonWhatsappNumberInput${ccEachContactCount}`).value,
+                }
+                Contact.push(OneContact);
+            }
+        }
+
+        if (!Customername || !Address || !Loaction || !SalesEx || !Co_ordinator || Contact.length === 0) {
+            alert("Please fill all fields");
+        } else {
+            // URL of your backend API endpoint
+            var apiUrl = '/sales/saveCustomer/';
+
+            // Data to be sent in the POST request (adjust as needed)
+            var postData = {
+                Customername: Customername,
+                Address: Address,
+                Loaction: Loaction,
+                SalesEx: SalesEx,
+                Co_ordinator: Co_ordinator,
+                Contact: Contact
+            };
+
+            // Convert the data object to a JSON string
+            var jsonData = JSON.stringify(postData);
+
+            // Set up the fetch options
+            var fetchOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any additional headers if needed
+                },
+                body: jsonData,
+            };
+
+            // Make the fetch request
+            fetch(apiUrl, fetchOptions)
+                .then(response => response.json()) // Parse the JSON response
+                .then(data => {
+                    // Handle the data from the server
+                    console.log('Response from server:', data);
+                    CloseCustomerCreationPopup();
+                    resetCustomerValues();
+                    fetchAllCards();
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error('Error:', error);
+                });
+
+        }
+
+    }
+
+    function resetCustomerValues() {
+        document.getElementById('CustomerName').value = '';
+        document.getElementById('CCAddressInput').value = '';
+        document.getElementById('ccLocation').value = '';
+        document.getElementById('CCSalesEx').value = '';
+        document.getElementById('CCCo-ordinator').value = '';
+
+        var ContactCollections = document.getElementById('CCContactCollections');
+        var ccEachContactCount = parseInt(ContactCollections.getElementsByClassName('ccEachContact').length);
+
+        for (i = 1; i <= ccEachContactCount; i++) {
+            document.getElementById(`ccContactPersonNameInput${i}`).value = '';
+            document.getElementById(`ccContactPersonCounrtryCodeInput${i}`).value = '';
+            document.getElementById(`ccContactPersonNumberInput${i}`).value = '';
+            document.getElementById(`ccContactPersonWhatsAppCounrtryCodeInput${i}`).value = '';
+            document.getElementById(`ccContactPersonWhatsappNumberInput${i}`).value = '';
+        }
+    }
+
+
+    function OpenPopUpforNewOrder() {
+        var mainPopup = document.getElementById('CreateOrderPopup');
+        mainPopup.style.display = "flex";
+
+
+
+        var date = new Date();
+        var day = date.getDate().toString().padStart(2, '0');
+        var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+        var year = date.getFullYear();
+        var hours = date.getHours().toString().padStart(2, '0');
+        var minutes = date.getMinutes().toString().padStart(2, '0');
+        var seconds = date.getSeconds().toString().padStart(2, '0');
+        var milliseconds = date.getMilliseconds().toString().padStart(3, '0');
+
+        var TimeNow = `${day}-${month}-${year}-${hours}${minutes}${seconds}${milliseconds}-`;
+
+        document.getElementById('OrderIDNumber').value = TimeNow;
+
+
+
+        // put all customer Name here.
+
+        var OrderNameSelect = document.getElementById('OrderName');
+
+        var customers = State.Customers;
+
+        // Reference to the select element
+        var selectElement = document.getElementById("OrderName");
+
+        // Function to add options to the select element
+        function addOptions() {
+            // Clear existing options
+            selectElement.innerHTML = "<option value=''>Select a Customer</option>";
+
+            // Add new options based on the array of customers
+            customers.forEach(function (customer) {
+                var option = document.createElement("option");
+                option.value = customer.Customername;
+                option.text = customer.Customername;
+                selectElement.appendChild(option);
+            });
+        }
+
+        // Call the function to add options (you can call this function whenever you need to update the options)
+        addOptions();
+
+
+        // show mixing items
+
+
+    }
+
+    function CloseCreateOrderPopup() {
+        var mainPopup = document.getElementById('CreateOrderPopup');
+        mainPopup.style.display = "none";
+    }
+
+    function handleCustomerChange() {
+        var customer_contact = document.getElementById('customer_contact');
+        var CustomerName = document.getElementById('OrderName').value;
+        var customers = State.Customers;
+
+        customer_contact.innerHTML = "<option value=''>Select a Customer</option>";
+
+        // Add new options based on the array of customers
+        customers.forEach(function (customer) {
+            if (customer.Customername === CustomerName) {
+                var Contacts = customer.Contact;
+                Contacts.forEach((EachContact) => {
+                    var option = document.createElement("option");
+                    option.value = EachContact.Name;
+                    option.text = EachContact.Name;
+                    customer_contact.appendChild(option);
+
+                })
+            }
+
+        });
+
+    }
+
+    function HnadleContactChange() {
+        var ContactMobileno = document.getElementById('ContactMobileno');
+        var ContactWhatsAppNumber = document.getElementById('ContactWhatsAppNumber');
+        var CustomerName = document.getElementById('OrderName').value;
+        var customer_contact = document.getElementById('customer_contact').value;
+
+        var Customers = State.Customers;
+
+        outerLoop: for (const customer of Customers) {
+            if (customer.Customername === CustomerName) {
+                const Contacts = customer.Contact;
+                for (const EachContact of Contacts) {
+                    if (EachContact.Name === customer_contact) {
+                        ContactMobileno.innerHTML = "Mobile no: " + EachContact.CallCountryCode + " " + EachContact.CallNumber;
+                        ContactWhatsAppNumber.innerHTML = "WhatsApp no: " + EachContact.WhatsappCountryCode + " " + EachContact.WhatsappNumber;
+                        break outerLoop;
+                    } else {
+                        ContactMobileno.innerHTML = "Mobile no:";
+                        ContactWhatsAppNumber.innerHTML = "WhatsApp no: ";
+                    }
+                }
+                break outerLoop;
+            } else {
+                ContactMobileno.innerHTML = "Mobile no:";
+                ContactWhatsAppNumber.innerHTML = "WhatsApp no: ";
+            }
+        }
+    }
+
+    function CreateOrderopenColorModal() {
+        var colorModal = document.getElementById('colorModal');
+        colorModal.style.display = 'block';
+    }
+
+    function CreateOrderselectColor(label, color) {
+        // Call your function with the selected color
+        console.log('Selected color:', label, color);
+        var popCardAllLabelContainer = document.querySelector('.popCardAllLabelCreateOrder');
+        var LableCount = popCardAllLabelContainer.getElementsByClassName('LabelData').length;
+        console.log(LableCount);
+        // Close the color modal after selecting a color
+        var colorModal = document.getElementById('colorModal');
+        colorModal.style.display = 'none';
+
+
+        // Create the popLabel element
+        var popLabelElement = document.createElement('div');
+        popLabelElement.className = 'popLabel';
+
+        var labelInput = document.createElement('input');
+        labelInput.type = 'text';
+        labelInput.className = 'LabelData';
+        labelInput.id = `Label${LableCount}`;
+        labelInput.readOnly = true;
+        labelInput.value = label;
+        labelInput.style.backgroundColor = color
+
+        // Append the label input to the popLabel element
+        popLabelElement.appendChild(labelInput);
+
+        // Append the popLabel element to the popCardAllLabel container
+        popCardAllLabelContainer.appendChild(popLabelElement);
+    }
+
+
+
+    // Assuming you have the Formulas array
+
+    function searchFormulas(query) {
+        var formulas = State.Formulas;
+        console.log(formulas);
+        const resultsContainer = document.getElementById('searchResults');
+        resultsContainer.innerHTML = ''; // Clear previous results
+
+        const matchingFormulas = formulas.filter(formula => {
+            console.log("Searching in Formula: ", formula)
+            const searchFields = [formula.FileNo, formula.ColorCode, formula.ColorName];
+            return searchFields.some(field => field.toLowerCase().includes(query.toLowerCase()));
+        });
+
+        console.log("matchingFormulas: ", matchingFormulas);
+
+        matchingFormulas.forEach(formula => {
+            const resultItem = document.createElement('li');
+            resultItem.classList.add('search-result-item');
+            resultItem.textContent = `FileNo: ${formula.FileNo}, Color Code: ${formula.ColorCode}, Color Name: ${formula.ColorName}`;
+            resultItem.addEventListener('click', () => handleResultItemClick(formula));
+            resultsContainer.appendChild(resultItem);
+        });
+    }
+
+    function handleResultItemClick(formula) {
+        // Handle what happens when a result item is clicked
+        console.log('Result item clicked:', formula);
+        var popProductsItemsCollectiosn = document.getElementById('popProductsItemsCollectiosns');
+
+        var popEachProductsItemsCollection = document.getElementsByClassName('popEachProductsItemss ');
+
+        var count = popEachProductsItemsCollection.length;
+
+        // console.log('popEachProductsItems: ' + popEachProductsItemsCollection);
+
+        //  console.log('Count of popEachProductsItems: ' + count);
+
+        var NextCount = count + 1;
+
+        var VirtualFormula = `
+                    <div class="popEachProductsItemss">
+                        <p id="FormulaColorName" class='FormulaColorName'>${formula.ColorName}</p>
+                        <div class="QtyOfFormula">
+                            <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo}" hidden>
+                            <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
+                            <p class="FormulaUnit">${formula.Unit}</p>
+                        </div>
+                        <button onclick="RemoveOneFormula('${formula.ColorName}')"
+                            class="btn btn-danger">Delete</button>
+                    </div>
+        `
+        var NewOrders = {
+            ColorName: formula.ColorName,
+            Unit: formula.Unit,
+            FileNo: formula.FileNo
+        }
+
+        State.NewOrders.push(NewOrders);
+
+        popProductsItemsCollectiosn.insertAdjacentHTML('beforeend', VirtualFormula);
+
+
+    }
+
+    function RemoveOneFormula(Name) {
+        // console.log(Name);
+        var popEachProductsItemsCollection = document.getElementsByClassName('popEachProductsItemss ');
+
+        // Convert HTMLCollection to array using spread operator
+        var itemsArray = [...popEachProductsItemsCollection];
+
+        // Now you can use forEach
+        itemsArray.forEach((EachProduct) => {
+            //   console.log(EachProduct);
+            var name = EachProduct.querySelector('p').textContent.trim();
+            if (Name === name) {
+                EachProduct.remove();
+            }
+        });
+    }
+
+    function OnlyNumber(input) {
+        // Remove non-numeric characters except for a single dot
+        input.value = input.value.replace(/[^0-9.]/g, '');
+
+        // If there are multiple dots, keep only the first one
+        const dotIndex = input.value.indexOf('.');
+        if (dotIndex !== -1) {
+            const afterDot = input.value.substring(dotIndex + 1);
+            if (afterDot.indexOf('.') !== -1) {
+                input.value = input.value.substring(0, dotIndex + 1) + afterDot.replace('.', '');
+            }
+        }
+    }
+
+    function AddNewComment(id) {
+        let comment_content = document.getElementById(id).value;
+        var UserName;
+
+        if (State.UserNow) {
+            UserName = State.UserNow;
+        } else {
+            UserName = document.getElementById('UserName').value;
+            console.log(UserName);
+            State.UserNow = UserName;
+        }
+
+
+        var newOrderpopCommentsCollection = document.getElementById('newOrderpopCommentsCollection');
+
+        var VirtualOneComment = `
+                    <div class="popEachComment ">
+                        <p class="popCommentSender" id="UserName">${UserName}</p>
+                        <div class="popCommentSended">
+                            <p class="popComment" id="UserComment" >${comment_content}</p>
+                        </div>
+                    </div>
+        `
+
+        newOrderpopCommentsCollection.insertAdjacentHTML('beforeend', VirtualOneComment);
+        document.getElementById(id).value = "";
+    }
+
+
+
+    function checkForMention() {
+        var textarea = document.getElementById('newOrderComment');
+        var mentionList = document.getElementById('mentionList');
+
+        // Clear previous mention list
+        mentionList.innerHTML = '';
+
+        // Check if '@' sign is present
+        if (textarea.value.includes('@')) {
+            // Get the text after '@'
+            var searchText = textarea.value.split('@').pop().toLowerCase();
+
+
+            var names = [];
+            State.AllUsers.forEach((User) => {
+                names.push(User.UserName);
+            })
+
+            // Filter names that match the input
+            var matchedNames = names.filter(name => name.toLowerCase().includes(searchText));
+
+            // Display the mention list
+            if (matchedNames.length > 0) {
+                mentionList.style.display = 'block';
+
+                // Position the mention list below the cursor
+                var cursorPos = getCaretCoordinates(textarea, textarea.selectionEnd);
+                mentionList.style.top = (cursorPos.top + 20) + 'px'; // Adjust the offset as needed
+
+                // Create list items for each matched name
+                matchedNames.forEach(name => {
+                    var listItem = document.createElement('div');
+                    listItem.textContent = name;
+                    listItem.addEventListener('click', function () {
+                        insertMention(name);
+                        mentionList.style.display = 'none';
+                    });
+                    mentionList.appendChild(listItem);
+                });
+            } else {
+                mentionList.style.display = 'none';
+            }
+        } else {
+            mentionList.style.display = 'none';
+        }
+    }
+
+    function insertMention(mention) {
+        var textarea = document.getElementById('newOrderComment');
+        var cursorPos = textarea.selectionStart;
+        var textBefore = textarea.value.substring(0, cursorPos);
+        var textAfter = textarea.value.substring(cursorPos);
+        textarea.value = textBefore + mention + ' ' + textAfter;
+        textarea.focus();
+    }
+
+    // Function to get the cursor position
+    function getCaretCoordinates(element, position) {
+        var div = document.createElement('div');
+        var style = getComputedStyle(element);
+
+        div.style.position = 'absolute';
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.fontSize = style.fontSize;
+        div.style.fontFamily = style.fontFamily;
+        div.style.left = '-9999px';
+        div.textContent = element.value.substring(0, position);
+
+        document.body.appendChild(div);
+        var coordinates = {
+            top: div.offsetTop,
+            left: div.offsetWidth
+        };
+        document.body.removeChild(div);
+
+        return coordinates;
+    }
+
+    function resetAllDataFromNewOrder() {
+        document.getElementById('OrderIDNumber').value = "";
+        document.getElementById('OrderName').value = "";
+        document.getElementById('customer_contact').value = "";
+        document.getElementById('popCardAllLabelCreateOrder') = "";
+        document.getElementById('popProductsItemsCollectiosns') = "";
+        document.getElementById('newOrderpopCommentsCollection') = "";
+    }
+
+
+    function CreateNewOrder() {
+
+        function validateNewOrderInput() {
+
+            var flag = false;
+
+            var OrderIDNumber = document.getElementById('OrderIDNumber').value;
+            var OrderName = document.getElementById('OrderName').value;
+            var customer_contact = document.getElementById('customer_contact').value;
+
+            if (OrderIDNumber && OrderName && customer_contact) {
+
+            } else {
+                flag = true;
+                NotValidNewOrderInput()
+            }
+
+            var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
+            //  console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
+
+            proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+            var ProItemsDivArray = [...proItems];
+
+            ProItemsDivArray.forEach((OneItem) => {
+                var colorNameElement = OneItem.getElementsByClassName('FormulaColorName')[0];
+                var qtyElement = OneItem.getElementsByClassName('FormulaQty')[0];
+                var unitElement = OneItem.getElementsByClassName('FormulaUnit')[0];
+
+                if (
+                    colorNameElement &&
+                    qtyElement && qtyElement.value &&
+                    unitElement
+                ) {
+                    // Code to execute if all three conditions are truthy
+                    confirm("sdfasdf");
+                } else {
+                    // Code to execute if any of the conditions is falsy
+                    flag = true;
+                    NotValidNewOrderInput()
+                }
+            });
+
+
+            if (!flag) {
+                ValidnewOrderInput()
+            }
+
+
+            function NotValidNewOrderInput() {
+                alert('Please fill all the fields!');
+            }
+
+            function ValidnewOrderInput() {
+                var OrderIDNumber = document.getElementById('OrderIDNumber').value;
+                var OrderName = document.getElementById('OrderName').value;
+                //OrderName
+                var FinalOrderName = OrderIDNumber + OrderName;
+
+                //CustomerContact
+                var customer_contact = document.getElementById('customer_contact').value;
+
+                // final Contact Details
+                var ContactDetails;
+
+                State.Customers.forEach((Customers) => {
+                    if (Customers.Customername === OrderName) {
+                        Customers.Contact.forEach((OneContact) => {
+                            if (OneContact.Name === customer_contact) {
+                                ContactDetails = OneContact;
+                            }
+                        })
+                    }
+                })
+
+
+
+                var popCardAllLabelCreateOrder = document.getElementById('popCardAllLabelCreateOrder')
+                console.log("LabelsDivs", popCardAllLabelCreateOrder);
+
+                var labelsDiv = popCardAllLabelCreateOrder.getElementsByClassName('popLabel');
+
+                // Alternatively, you can use the spread operator
+                var LabelsDivArray = [...labelsDiv];
+
+                var Labels = [];
+
+                LabelsDivArray.forEach((OneLabel) => {
+                    console.log("OneLabel: ", OneLabel);
+                    console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
+                    console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
+
+                    var Label = {
+                        Name: OneLabel.getElementsByClassName('LabelData')[0].value,
+                        Color: OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor
+                    }
+
+                    Labels.push(Label);
+                });
+
+                console.log("Labels: ", Labels);
+
+
+                // productions items
+
+                var ProductionsItems = [];
+
+                var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
+                console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
+
+                proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+
+                console.log('proItems: ', proItems);
+
+
+                // Alternatively, you can use the spread operator
+                var ProItemsDivArray = [...proItems];
+
+
+                ProItemsDivArray.forEach((OneItem) => {
+                    // make changes 
+                    var item = {
+                        Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
+                        Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
+                        FileNo: OneItem.getElementsByClassName('HiddenFileNo')[0].value,
+                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent
+                    }
+
+                    console.log("Proitem: ", item);
+
+                    ProductionsItems.push(item);
+                });
+
+                // get all Comment
+                var comments = [];
+                var newOrderpopCommentsCollection = document.getElementById('newOrderpopCommentsCollection');
+                console.log("newOrderpopCommentsCollection: ", newOrderpopCommentsCollection);
+
+                var popEachCommentsArray = newOrderpopCommentsCollection.getElementsByClassName('popEachComment');
+
+                var CommentsDivArray = [...popEachCommentsArray];
+
+                CommentsDivArray.forEach((OneComment) => {
+                    var comment = {
+                        comment: OneComment.getElementsByClassName('popCommentSender')[0].textContent,
+                        Sender: OneComment.getElementsByClassName('popComment')[0].textContent
+                    }
+
+                    comments.push(comment);
+                })
+
+                var CompleteOrderData = {
+                    OrderName: FinalOrderName,
+                    ContactDetails: ContactDetails,
+                    Labels: Labels,
+                    ProductionsItems: ProductionsItems,
+                    comments: comments
+                }
+
+
+
+                // api call
+                // URL of your backend API endpoint
+                var apiUrl = '/sales/CreateNewOrder/';
+
+                // Convert the data object to a JSON string
+                var jsonData = JSON.stringify(CompleteOrderData);
+
+                // Set up the fetch options
+                var fetchOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add any additional headers if needed
+                    },
+                    body: jsonData,
+                };
+
+                // Make the fetch request
+                fetch(apiUrl, fetchOptions)
+                    .then(response => response.json()) // Parse the JSON response
+                    .then(data => {
+                        // Handle the data from the server
+                        console.log('Response from server:', data.State);
+                        //CloseCustomerCreationPopup();
+                        //resetCustomerValues();
+                        location.reload();
+                        //resetAllDataFromNewOrder()
+                    })
+                    .catch(error => {
+                        // Handle errors
+                        console.error('Error:', error);
+                    });
+
+
+                CloseCreateOrderPopup()
+            }
+
+
+        }
+
+        validateNewOrderInput();
+
+    }
+
+
+    function AddNewProductMannully() {
+        var NewFormulaNameInput = document.getElementById('NewFormulaNameInput').value;
+        var NewFromulaQtyInput = document.getElementById('NewFromulaQtyInput').value;
+        var NewProductUnit = document.getElementById('NewProductUnit').value;
+
+        var formula = {
+            ColorName: NewFormulaNameInput,
+            Unit: NewProductUnit,
+            QTY: NewFromulaQtyInput
+        }
+
+        handleResultItemClick(formula)
+
+        document.getElementById('NewFormulaNameInput').value = "";
+        document.getElementById('NewFromulaQtyInput').value = "";
+        document.getElementById('NewProductUnit').value = "";
+    }
+
+
+
+
+
+
+</script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        width: 100wh;
+
+
+        background-image: url("/images/wall2.jpg");
+        /*KanbanWall.jpg*/
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .Container {
+        padding: 0rem 7rem;
+        overflow: none;
+    }
+
+    .HeaderMainALl {
+        background-color: transparent;
+        margin-bottom: -85px;
+    }
+
+    #LogoImg {
+        height: 70px;
+        width: auto;
+        margin-top: 15px;
+    }
+
+    .CustomContainer {
+        width: 100%;
+        padding: 0 2rem;
+
+    }
+
+    .KanbanMainDivArea {
+        width: 100wh;
+        min-height: 100vh;
+        /*background-image: url("/images/wall2.jpg");
+        
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;*/
+        padding-top: 6.5rem;
+        filter: brightness(75%);
+    }
+
+    .KanbanHeaderMainDivArea {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        width: 100%;
+        border: 1px solid black;
+        background-color: #151919;
+        border-radius: 10px;
+        box-shadow: 9px 7px 11px 0px rgba(0, 0, 0, 1.2);
+    }
+
+    .KanbanHeaderMainDivAreaRight {
+        display: flex;
+        justify-content: start;
+    }
+
+    .KanbanHeaderText {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #ffff;
+        font-size: 35px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .KanbanHeaderMainDivAreaLeft {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .search-input {
+        position: relative;
+        width: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Adjust the width as needed */
+    }
+
+    .search-icon {
+        position: absolute;
+        /* Adjust the position of the menu icon */
+        top: 49%;
+        transform: translateY(-50%);
+        color: #00FDFD;
+        /* Icon color */
+    }
+
+    .globalSeaarch {
+        left: 10px;
+    }
+
+    .menu-icon {
+        position: absolute;
+
+        right: 10px;
+        /* Adjust the position of the search icon */
+        top: 49%;
+        transform: translateY(-50%);
+        color: #00FDFD;
+        /* Icon color */
+    }
+
+    .input-field {
+        padding: 5px 30px;
+        /* Adjust the padding to make room for the icons */
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #00FDFD;
+        border-radius: 5px;
+        font-size: 20px;
+        background-color: transparent;
+        color: #00FDFD;
+    }
+
+    .CreateCustomerBTN,
+    .InputBTNField {
+        margin-left: 1rem;
+        height: 36px;
+        width: 160px;
+        color: #00FDFD;
+        border: 1px solid #00FDFD;
+        transition: color 0.3s, background-color 0.3s;
+    }
+
+
+
+    .input-button {
+        position: relative;
+    }
+
+    .user-icon {
+        position: absolute;
+        right: 29px;
+        /* Adjust the position of the user icon */
+        top: 50%;
+        transform: translateY(-50%);
+        color: #00FDFD;
+        /* Icon color */
+        transition: color 0.3s, background-color 0.3s;
+    }
+
+    .input-BTNfield {
+        padding-right: 30px;
+        /* Adjust the padding to make room for the user icon */
+        width: 200px;
+        /* Adjust the width as needed */
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: color 0.3s, background-color 0.3s;
+    }
+
+    .CreateCustomerBTN:hover,
+    .userBTN:hover .InputBTNField,
+    .userBTN:hover .user-icon {
+        background-color: #00AFAF;
+        color: #064d4d;
+        /* Brighter color on hover */
+        cursor: pointer;
+        font-weight: 600;
+        /* Change the cursor to a pointer on hover */
+    }
+
+    .KanbanBoard {
+        width: 100wh;
+        height: 85vh;
+
+    }
+
+    .ListsCollections {
+        padding-top: 2rem;
+        width: 100%;
+        /* overflow-x: scroll;*/
+        display: flex;
+        justify-content: start;
+        padding-right: 5rem;
+
+        overflow: hidden;
+    }
+
+    /* Add cursor styles for better user experience */
+    .ListsCollections.grabbing {
+        cursor: grabbing;
+    }
+
+    .ListsCollections.grab {
+        cursor: grab;
+    }
+
+
+
+
+    .OrdersList,
+    .OfficeSectionList {
+        min-width: 17rem;
+        background-color: #151919;
+        border-radius: 10px;
+        margin-left: 2rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        /*   border: .5px #00AFAF solid;*/
+        padding: 1rem 0.5rem;
+        height: 100%;
+
+    }
+
+
+
+    .ListHeaderText,
+    .ProdctionSectionHeaderText,
+    .ReadySectionHeaderText,
+    .DriverSectionHeaderText,
+    .DoneSectionHeaderText {
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+        padding-bottom: 0.5rem;
+    }
+
+    .OrdersCardsCollection,
+    .OfficeCardsCollection {
+        padding: 1rem 0;
+        overflow: auto;
+        max-height: 67vh;
+        overflow-x: hidden;
+    }
+
+    .OfficeCardsCollection {
+        max-height: 75vh;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #22272B;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #2a3137;
+        border-radius: 10px;
+    }
+
+    .Card {
+        border-radius: 10px;
+        background-color: #30373d;
+        padding: 1rem 0.5rem;
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 1rem;
+        margin-right: 3px;
+        width: 98%;
+        min-width: 15rem;
+
+    }
+
+    .cardText {
+        margin: 0;
+        color: #A4AFBB;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+    }
+
+    .CardSub {
+        padding-top: 0.5rem;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+    }
+
+    .DescriptionSmIcon {
+        height: 16px;
+        margin-right: 10px;
+    }
+
+    .checkBoxSMIcon {
+        height: 16px;
+        margin-right: 4px;
+    }
+
+    .CardSMCheckNum {
+        margin: 0;
+        color: #A4AFBB;
+        font-weight: 100;
+        font-size: 16px;
+        margin-top: 1px;
+    }
+
+    .CardImgDiv {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .CardImg {
+        margin-bottom: 1rem;
+        width: 100%;
+        max-width: 15rem;
+    }
+
+    .AddSmCardDiv {
+        margin-top: 0.5rem;
+        border: .5px solid #00FDFD;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #00FDFD;
+    }
+
+    .AddCardIconText {
+        font-size: 25px;
+        font-weight: 800;
+        margin: 0;
+        margin-right: 1rem;
+    }
+
+    .AddCardText {
+        font-size: 20px;
+        margin: 0;
+    }
+
+    .ProductionSectionCollection,
+    .ReadySectionCollection,
+    .DriverSectionCollection,
+    .DoneSectionCollection {
+        margin-left: 2rem;
+        /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);*/
+        /*   border: .5px #00AFAF solid;*/
+        /*padding: 1rem 0.5rem;*/
+        height: 100%;
+        width: auto;
+        background-color: transparent;
+    }
+
+    .ProductionSectionMainHeader,
+    .ReadySectionMainHeader,
+    .DriverSectionMainHeader,
+    .DoneSectionMainHeader {
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        padding: 1rem 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #151919;
+    }
+
+    .ProdctionSectionHeaderText,
+    .ReadySectionHeaderText,
+    .DriverSectionHeaderText,
+    .DoneSectionHeaderText {
+        padding: 0;
+    }
+
+    .ProductionListCollections,
+    .ReadyListCollections,
+    .DriverListCollections,
+    .DoneListCollections {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .ProductionColumn,
+    .ReadyColumn,
+    .DriverColumn,
+    .DoneColumn {
+        min-width: 17rem;
+        width: max-content;
+        margin-top: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        padding: 1rem 0.5rem;
+        background-color: #151919;
+        margin: 1rem 0.5rem;
+        height: 100%;
+    }
+
+    .ProductionColumnHeader,
+    .ReadyColumnHeader,
+    .DriverColumnHeader,
+    .DoneColumnHeader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.5rem 0.5rem;
+    }
+
+    .ProductionCheckBox,
+    .DriverCheckBox {
+        margin-left: 2rem;
+
+
+        -webkit-appearance: none;
+        /* Remove default styles (for WebKit browsers) */
+        -moz-appearance: none;
+        /* Remove default styles (for Firefox) */
+        appearance: none;
+        /* Remove default styles (for modern browsers) */
+        width: 25px;
+        /* Adjust the width of the custom checkbox */
+        height: 25px;
+        /* Adjust the height of the custom checkbox */
+        border: 2px solid #00FFFF;
+        /* Set the border color of the checkbox */
+        border-radius: 3px;
+        /* Add rounded corners to the checkbox */
+        background-color: transparent;
+        /* Set the background color of the checkbox */
+        position: relative;
+        /* Position relative to allow absolute positioning of the tick */
+    }
+
+    /* Style the checkbox when it's checked */
+    .ProductionCheckBox:checked,
+    .DriverCheckBox:checked {
+        background-color: transparent;
+        /* Change the background color when checked */
+    }
+
+    /* Create a tick symbol inside the checkbox */
+    .ProductionCheckBox:checked::before,
+    .DriverCheckBox:checked::before {
+        content: '\2713';
+        /* Unicode checkmark character */
+        position: absolute;
+        top: -5px;
+        left: 2px;
+        color: #00FFFF;
+        /* Color of the tick */
+        font-size: 23px;
+        /* Size of the tick */
+    }
+
+    .ProductionCardsCollections,
+    .ForDispatchCardsCollections,
+    .ReadyCardsCollections,
+    .DriverCardsCollections,
+    .DoneCardsCollections {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        padding: 1rem 0;
+        overflow: auto;
+        max-height: 66vh;
+        overflow-x: hidden;
+    }
+
+
+    .DoneSectionMainHeader {
+        display: flex;
+        justify-content: space-between;
+        /* Distribute items along the main axis (horizontally) */
+        align-items: center;
+        /* Vertically center items */
+        padding: 0.6rem 3rem;
+        /* Add 3rem padding to the left and right */
+    }
+
+    .centered-section {
+        flex: 1;
+        /* Allow the centered section to expand and take up available space */
+        display: flex;
+        /* Apply flex layout to the centered section */
+        justify-content: center;
+        /* Center content horizontally within the centered section */
+    }
+
+    .DoneSectionHeaderText {
+        margin: 0;
+        /* Remove default margin for <p> element */
+    }
+
+    /* Add additional styling for the search input if needed */
+    .search-input {
+        /* Additional styling for the search input container */
+    }
+
+
+
+
+    /*Pop up*/
+    /*Pop up screen*/
+
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        /*none*/
+        z-index: 1;
+    }
+
+    .popupWrapper,
+    .CreateOderPopupWrapper {
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        /*flex*/
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+    }
+
+    .CreateOderPopupWrapper {
+        display: none;
+    }
+
+    .popup {
+        background: #EEF0FD;
+        width: 50rem;
+        padding: 20px;
+        border-radius: 10px;
+        position: relative;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .mainPopup {
+        padding: 2rem;
+        background-color: #323940;
+        color: #B3B7BA;
+        font-family: sans-serif;
+    }
+
+    .MainPopupTopsection {
+        display: flex;
+        justify-content: end;
+        align-items: start;
+    }
+
+    .MainPopupCloseIcon {
+        width: 25px;
+    }
+
+    .PopupCardNameSection {}
+
+    .popCardHeaderText {
+        margin: 0;
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .PopupCardListNameSection {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        padding-top: 0.5rem;
+        font-size: 18px;
+    }
+
+    .PopcardListName {
+        text-decoration: underline;
+        font-size: 18px;
+        margin-left: 5px;
+    }
+
+    .PopCustomerLabelBtnsSection {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .PopCustomerLabelBtnsSection p {
+        margin-top: 15px;
+    }
+
+    .PopCustomerAndLabelSection {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .PopCustomerSections {
+        border: solid 1px #B3B7BA;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 2rem;
+    }
+
+    .PopSelectCustomerContact {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .popCustomerName {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0.5rem;
+        margin-top: 8px;
+    }
+
+    .PopCustomerMobileNumber {
+        font-size: 20px;
+        font-weight: 500;
+        padding-left: 10px;
+    }
+
+    .popCustomerCallNumberSection {
+        display: flex;
+        margin: 0.7rem 0;
+    }
+
+    .CallIcon {
+        width: 25px;
+    }
+
+    .popCardLabelSection {
+        margin-top: 2rem;
+    }
+
+    .popLabelCollections {
+        margin-top: 1rem;
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+    }
+
+    .popCardAllLabel {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .popLabel {
+        /*width: 70px;
+        height: 40px;*/
+        border-radius: 10px;
+        border: 1px solid #B3B7BA;
+        /* background-color: red;*/
+        color: #B3B7BA;
+        text-align: center;
+        width: min-content;
+        margin-bottom: 1rem;
+
+    }
+
+    .AddLableBTN {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid #B3B7BA;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 2rem;
+    }
+
+    .AddLableBTN p {
+        font-size: 35px;
+        font-weight: 600;
+    }
+
+
+
+
+    .PopActionBtnSection {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .PopActionBtnSection button {
+        width: 100px;
+        background-color: #3B444C;
+        color: #B3B7BA;
+        margin: 0.5rem;
+        padding: 0.5rem;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .poplastUpdateTimeSection {
+        margin: 2rem 0;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .popReadyProductsCollectiosn,
+    .popProductsItemsCollectiosn {
+        margin: 1rem;
+    }
+
+    .popEachReadyProducts,
+    .popEachProductsItems,
+    .popEachProductsItemss {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 500;
+        margin: 0.5rem 0;
+
+    }
+
+    .popEachProductsItems p,
+    .popEachProductsItemss p {
+        /*margin-top: 5px;*/
+        margin-bottom: 0;
+    }
+
+    .QtyOfFormula {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popProductsItemsSection {
+        margin-top: 2rem;
+    }
+
+    .PopProctionItemsActionsSections {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .popSeachMixingDiv {
+        position: relative;
+        width: 40%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popSeachMixingInput-field,
+    .FormulaQty {
+        padding: 5px 30px;
+        /* Adjust the padding to make room for the icons */
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #B3B7BA;
+        border-radius: 5px;
+        font-size: 20px;
+        background-color: transparent;
+        color: #B3B7BA;
+    }
+
+    .FormulaQty {
+        text-align: end;
+        max-width: 10rem;
+    }
+
+
+
+    .MixingSeachIcon {
+        position: absolute;
+        right: 10px;
+        /* Adjust the position of the menu icon */
+        top: 49%;
+        transform: translateY(-50%);
+        color: #B3B7BA;
+    }
+
+    .popNewFormulaBtn {
+        padding: 0.5rem 1rem;
+        color: #B3B7BA;
+        background-color: #3B444C;
+        border-radius: 10px;
+        width: 40%;
+        font-size: 20px;
+    }
+
+    .popNewFormulaBtn:hover {
+        text-decoration: none;
+        color: #B3B7BA;
+        font-weight: 700;
+    }
+
+    .popEachComment {
+        padding: 1rem;
+    }
+
+    .popCommentSender {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        font
+    }
+
+    .popCommentSended {
+        padding: 1rem;
+        padding-right: 2rem;
+        background-color: #3B444C;
+        width: fit-content;
+        border-radius: 10px;
+    }
+
+    .popComment {
+        color: #B3B7BA;
+        margin: 0;
+    }
+
+    .popAddCommentsTex {
+        font-size: 20px;
+        font-weight: 600;
+        color: #B3B7BA;
+        margin: 0.5rem 1rem;
+    }
+
+    .commentBox {
+        width: 100%;
+        margin: 1rem;
+        background: transparent;
+        border-radius: 15px;
+        font-size: 20px;
+        font-weight: 600;
+        color: #B3B7BA;
+        padding: 1rem;
+    }
+
+    .popCommentSaveBtnSection button {
+        background-color: #3B444C;
+        color: #B3B7BA;
+        border: #B3B7BA 1px solid;
+        border-radius: 10px;
+        padding: 0.5rem 20%;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .popSaveBtnSection,
+    .popCommentSaveBtnSection {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2rem 0;
+    }
+
+    .popSaveBtnSection button {
+        background-color: #3B444C;
+        color: #B3B7BA;
+        border: #B3B7BA 1px solid;
+        border-radius: 10px;
+        padding: 0.5rem 20%;
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .popActivityCollections {
+        margin: 1rem;
+        font-size: 20px;
+        font-weight: 500;
+        color: #B3B7BA;
+    }
+
+    .popActivityTime {
+        font-size: 15px;
+    }
+
+
+    .CustomerCreationPopup {
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        /*none*/
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+    }
+
+
+    .CCPopup {
+        padding: 2rem;
+        background-color: #323940;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        width: 55rem;
+        padding: 20px;
+        border-radius: 10px;
+        position: relative;
+        height: 90vh;
+        overflow-y: auto;
+    }
+
+    .CreateCustomerHeaderDiv {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .CCMainSection {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        width: 100%;
+        padding: 2rem 0;
+    }
+
+    .CCFirstLeft {
+        width: 55%;
+        height: 5rem;
+    }
+
+    .CcFirstRight {
+        width: 43%;
+        height: 5rem;
+    }
+
+    .CCNameSection,
+    .CCAddressSection,
+    .CCLocationSection {
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        margin-top: 1rem;
+    }
+
+    .ccNameText,
+    .ccAdressText,
+    .ccLocationText,
+    .ccContactNameText,
+    .CcAddNewContactText,
+    .OrderIDNumber {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+        word-wrap: normal;
+        margin-top: 8px;
+    }
+
+    .CCInputname,
+    .CCInputLocations,
+    #OrderName,
+    #customer_contact,
+    #NewFormulaNameInput,
+    #NewFromulaQtyInput,
+    #NewProductUnit,
+    .NewOrderNewFormulaNameSection button {
+        background-color: #3B444C;
+        margin: 0 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 15rem;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: 1px solid #B3B7BA;
+    }
+
+    #NewFormulaNameInput {
+        width: 25rem;
+    }
+
+    #NewFromulaQtyInput,
+    #NewProductUnit {
+        width: 7rem;
+    }
+
+    .NewOrderNewFormulaNameSection {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    .NewOrderNewFormulaNameSection button {
+        width: 7rem;
+    }
+
+    .CCAddressInput {
+        background-color: #3B444C;
+        margin: 0 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 19.5rem;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: 1px solid #B3B7BA;
+    }
+
+    .CCInputLocations {
+        width: 19.5rem;
+    }
+
+    .CcSalesEXSection,
+    .ccContactNameSection {
+        display: flex;
+        margin-top: 1rem;
+    }
+
+    .CCSalesEx,
+    .CCCo-ordinator {
+        background-color: #3B444C;
+        margin: 0 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 14rem;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: 1px solid #B3B7BA;
+    }
+
+    .CCCo-ordinator {
+        width: 12rem;
+    }
+
+    .ccHR {
+        background-color: #B3B7BA;
+        margin-top: 330px;
+    }
+
+    .CCContactPeronSection {
+        padding-top: 2rem;
+    }
+
+    .ccEachContact {
+        margin: 3rem 0;
+    }
+
+    .ccContactPersonNameInput {
+        background-color: #3B444C;
+        margin: 0 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 20rem;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: 1px solid #B3B7BA;
+    }
+
+    .CCnumberSection {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1.5rem;
+    }
+
+    .CallIcon {
+        width: 30px;
+        height: 30px;
+        margin-top: 7px;
+    }
+
+    .ccContactNumberSection {
+        display: flex;
+    }
+
+    .ccContactPersonNumberInput,
+    .ccContactPersonWhatsappNumberInput {
+        background-color: #3B444C;
+        margin: 0 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 14rem;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: 1px solid #B3B7BA;
+    }
+
+    .ccAddNewContact {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: start;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .CCAddnewcontactBtn {
+        background-color: #3B444C;
+        color: #B3B7BA;
+        border: 1px solid #B3B7BA;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .CCAddnewcontactBtn p {
+        margin: 0;
+        font-size: 3rem;
+        padding: 0.5rem;
+        font-weight: 800;
+        margin-top: -5px;
+    }
+
+    .CcAddNewContactText {}
+
+    .ccContactPersonCounrtryCodeInput,
+    .ccContactPersonWhatsAppCounrtryCodeInput {
+        background-color: #3B444C;
+        margin: 0 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 6rem;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: 1px solid #B3B7BA;
+    }
+
+    #OrderName {
+        margin: 1rem 0;
+        width: 42rem;
+    }
+
+    .PopNewOrderCustomerNameSection {
+        display: flex;
+        justify-content: start;
+        gap: 0.5rem;
+    }
+
+    #OrderIDNumber {
+        border: none;
+        color: #B3B7BA;
+        background-color: transparent;
+        width: 18rem;
+    }
+
+    /* Styles for the modal */
+    .colorModal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: #323940;
+        border: 1px solid #B3B7BA;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    /* Styles for the color options */
+    .colorOption {
+        display: inline-block;
+        /* width: 64px; */
+        /* height: 30px; */
+        margin: 5px;
+        cursor: pointer;
+        border: 1px solid #B3B7BA;
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+        font-size: 15px;
+        color: #B3B7BA;
+        font-weight: 800;
+        stroke: black 1px solid;
+    }
+
+    .colorOption p {
+        -webkit-text-stroke: 1px #323940;
+        margin: 0;
+    }
+
+    /* Style for the "+" button */
+    .AddLableBTN {
+        cursor: pointer;
+        padding: 10px;
+        border: 1px solid #B3B7BA;
+        border-radius: 4px;
+    }
+
+    .LabelData {
+        background-color: red;
+        padding: 0.5rem 1rem;
+        border: 1px solid #3B444C;
+        border-radius: 10px;
+        font-weight: 900;
+        font-size: 18px;
+        text-align: center;
+        font-family: 'Roboto', sans-serif;
+        /*   -webkit-text-stroke: 0.5px #323940;*/
+        color: #B3B7BA;
+    }
+
+    /* Add your styles here */
+    .search-results {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .search-result-item {
+        border: 1px solid #B3B7BA;
+        margin: 5px;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .SearchResultsDiv {
+        max-height: 0rem;
+        max-height: 6rem;
+        overflow-y: auto;
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    #newOrderCommentContainer {
+        position: relative;
+    }
+
+    #mentionList {
+        display: none;
+        border: 1px solid #B3B7BA;
+        position: absolute;
+        background-color: #3B444C;
+        /*width: 200px;*/
+        /* Set the width as needed */
+        max-height: 200px;
+        /* Set the max height as needed */
+        overflow-y: auto;
+        color: #B3B7BA;
+        padding: 0.5rem 1rem;
+        left: 7rem;
+        top: 1rem;
+    }
+
+    #mentionList div {
+        margin: 0.5rem 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #B3B7BA;
+        cursor: pointer;
+    }
+
+    #mentionList div:hover {
+        color: #dce2e6;
+    }
+
+    #newOrderComment {
+        width: 100%;
+    }
+
+
+
+
+
+
+
+
+
+
+    #kanbanBoard {
+        display: flex;
+        overflow: auto;
+        /*white-space: nowrap;*/
+        /* Allow unlimited horizontal space */
+    }
+
+    .kanban-board {
+        padding: 20px;
+        height: 100%;
+    }
+
+    .column {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        width: 250px;
+        /* Increase the width to make columns wider */
+        margin-right: 20px;
+        height: 100%;
+    }
+
+    .InsideColumn {
+        width: 230px;
+    }
+
+    .cards {
+        /*min-height: 200px;*/
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        word-wrap: break-word;
+    }
+
+    .card {
+        cursor: pointer;
+        word-wrap: break-word;
+    }
+
+    .card:hover {
+        background-color: #3c444a;
+    }
+
+    .CardText {
+        word-wrap: break-word;
+    }
+</style>

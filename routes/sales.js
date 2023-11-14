@@ -14,7 +14,8 @@ const SalesVerifyLogin = (req, res, next) => {
 }
 
 router.get('/', SalesVerifyLogin, (req, res, next) => {
-    res.render('sales/home', { SalesLogged: req.session.SalesData });
+    // res.render('sales/home', { SalesLogged: req.session.SalesData });
+    res.redirect('/sales/home')
 })
 
 router.get('/logout', SalesVerifyLogin, (req, res) => {
@@ -75,7 +76,7 @@ router.post('/cardUpdated/:CardId', SalesVerifyLogin, (req, res) => {
 
             var OldList = UpdatedCard.ListArray[0];
 
-            console.log("OldList: ",OldList);
+            console.log("OldList: ", OldList);
 
             OldList.OutTime = Date.now();
             OldList.OutEmployeeName = req.session.SalesData.UserName;
@@ -217,6 +218,82 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', SalesVerifyLo
 
     })
 })
+
+router.get('/home', SalesVerifyLogin, (req, res) => {
+    res.render('sales/SalesCustomTrello', { SalesLogged: req.session.SalesData });
+});
+
+router.post('/saveCustomer', SalesVerifyLogin, (req, res) => {
+    employeeHelpers.SaveCustomer(req.body).then((id) => {
+        var data = req.body
+        data._id = id;
+        res.json({ data });
+    })
+})
+
+router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
+    console.log("Order Creating", req.body);
+    var data = req.body;
+
+    // ContactDetails: {
+    //     Name: 'dfgdfdf',
+    //     CallCountryCode: '+971',
+    //     CallNumber: '4334534',
+    //     WhatsappCountryCode: '+971',
+    //     WhatsappNumber: '34534'
+    //   }
+
+    var CheckItems = [];
+
+    await data.ProductionsItems.forEach((EachItem) => {
+        CheckItems.push({
+            Name: EachItem.Name,
+            State: "InComplete",
+            Qty: EachItem.Qty,
+            Unit: EachItem.Unit,
+            FileNo: EachItem.FileNo ? EachItem.FileNo : ""
+        })
+    })
+
+
+
+    var NewOrder = {
+        Name: data.OrderName,
+        CurrentList: "ORDERS",
+        ListArray: [
+            {
+                ListName: "ORDERS",
+                InTIme: Date.now(),
+                InEmployeeName: req.session.SalesData.UserName,
+                InEmployeeDesignation: req.session.SalesData.Designation
+            }
+        ],
+        AlternateContactNumber: "",
+        AlternateContactcountrySelect: "",
+        CheckListItems: {
+            CardName: "ORDERS",
+            checkItems: CheckItems
+        },
+        ContactNumber: data.ContactDetails.CallNumber,
+        ContactcountrySelect: data.ContactDetails.CallCountryCode,
+        ContactPersonName: data.ContactDetails.Name,
+        CustomerName: data.ContactDetails.Name,
+        WhatsAppcountrySelect: data.ContactDetails.WhatsappCountryCode,
+        WhatsappNumber: data.ContactDetails.WhatsappNumber,
+        description: "",
+        comments:data.comments,
+        Labels:data.Labels
+    }
+
+    console.log("New Card: ", NewOrder);
+
+    employeeHelpers.InsertNewCard(NewOrder).then(()=>{
+        res.json({State:true});
+    })
+})
+
+
+
 
 
 
