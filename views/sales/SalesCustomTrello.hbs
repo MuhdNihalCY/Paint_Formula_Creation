@@ -14,9 +14,9 @@
             <div class="MainPopupTopsection">
                 <img onclick="CloseMainPopup()" class="MainPopupCloseIcon" src="/images/Icons/x.png" alt="">
             </div>
-            <div class="PopupCardNameSection">
+            {{!-- <div class="PopupCardNameSection">
                 <input type="text" id="CardNameInput" class="CardNameInput popCardHeaderText" placeholder="Card name">
-                {{!-- <p class="popCardHeaderText">13-10-2023-125447893-Aero Head</p> --}}
+                <p class="popCardHeaderText">13-10-2023-125447893-Aero Head</p>
                 <div class="PopupCardListNameSection">
                     <p class="popCardList">in list</p>
                     <p class="PopcardListName">ORDERS</p>
@@ -134,7 +134,7 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> --}}
 
             {{!-- <div class="popSaveBtnSection">
                 <button>Save card</button>
@@ -602,15 +602,50 @@
                     <p class="KanbanHeaderText">MEGA PAINTS ACTIVITY BOARD</p>
                 </div>
                 <div class="KanbanHeaderMainDivAreaLeft">
-                    <div class="search-input">
-                        <i class="fas fa-search search-icon globalSeaarch"></i>
-                        <input type="text" class="input-field" placeholder="Search">
-                        <i class="fas fa-bars menu-icon"></i>
+                    <div class="SearchInputDiv">
+                        <div class="search-input">
+                            <i class="fas fa-search search-icon globalSeaarch"></i>
+                            <input type="search" class="input-field" id="GlobalSearch" onchange="SearchBarInputed()"
+                                oninput="SearchBarInputed()" placeholder="Search">
+                            <i onclick="ChangeSearchSetting()" class="fas fa-bars menu-icon"
+                                style="cursor: pointer;"></i>
+                        </div>
+                        <div id="SearchResultsMainDiv" class="SearchResultsMainDiv">
+                            <div class="SearchResultsHeaderDiv">
+                                <p class="SearchResultsHeaderTitle">Results</p>
+                                <p onclick="CloseSearchResultBox()" class="SearchResusultCloseBTN">x</p>
+                            </div>
+                            <div id="searchResultsCollectins" class="searchResultsCollectins">
+                                {{!-- <div class="EachSearchResult">
+                                    <p class="SearchResultName">18-11-2023-012115209-asfsdf</p>
+                                    <p class="SearchProductionItesmHeaderText">Production Items</p>
+                                    <div class="SearchResultsProductionsCollections">
+                                        <div class="EachSearchResultProductionItems">
+                                            <p class="SearchResultItemName">red-231</p>
+                                            <p class="SearchResultQuantity">4 Liters</p>
+                                        </div>
+                                        <div class="EachSearchResultProductionItems">
+                                            <p class="SearchResultItemName">red-231</p>
+                                            <p class="SearchResultQuantity">4 Liters</p>
+                                        </div>
+                                        <div class="EachSearchResultProductionItems">
+                                            <p class="SearchResultItemName">red-231</p>
+                                            <p class="SearchResultQuantity">4 Liters</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div> --}}
+
+
+
+
+                            </div>
+                        </div>
                     </div>
                     <input type="button" class="CreateCustomerBTN btn" onclick="OpenCustomerCreationPopup()"
                         value="Create Customer">
                     <div class="input-button userBTN">
-                        <input type="button" value="User" class="input-field  InputBTNField btn">
+                        <input type="button" value="{{SalesLogged.UserName}}" class="input-field  InputBTNField btn">
                         <i class="fas fa-user user-icon"></i>
                     </div>
                 </div>
@@ -2582,6 +2617,7 @@
             resultItem.addEventListener('click', () => handleResultItemClick(formula));
             resultsContainer.appendChild(resultItem);
         });
+
     }
 
     function handleResultItemClick(formula) {
@@ -3632,7 +3668,7 @@
                 }
 
 
-              //  // // console.log("CompleteOrderData", CompleteOrderData);
+                //  // // console.log("CompleteOrderData", CompleteOrderData);
 
 
 
@@ -3663,7 +3699,7 @@
                     .then(response => response.json()) // Parse the JSON response
                     .then(data => {
                         // Handle the data from the server
-                    //    // // console.log('Response from server:', data.State);
+                        //    // // console.log('Response from server:', data.State);
                         //CloseCustomerCreationPopup();
                         //resetCustomerValues();
                         //location.reload();
@@ -3740,7 +3776,7 @@
 
     function handleMoveOption(selectedOption) {
         // Implement your logic here based on the selected option
-       // // // console.log('Selected Move Option:', selectedOption);
+        // // // console.log('Selected Move Option:', selectedOption);
     }
 
     async function ChangeList(CardID) {
@@ -3804,11 +3840,209 @@
         document.getElementById('loader-container').style.display = 'none';
     }
 
-    // Example usage:
-    // Call showLoader() before making an asynchronous operation (e.g., API call)
-    // Call hideLoader() when the operation is complete
+    function ChangeSearchSetting() {
+        var GlobalSearch = document.getElementById('GlobalSearch');
+
+        var SearchPlaceholder = GlobalSearch.placeholder;
+        //  console.log("SearchPlaceholder",SearchPlaceholder);
+
+        if (SearchPlaceholder === "Search") {
+            GlobalSearch.placeholder = "Customer name";
+            GlobalSearch.value = "";
+        } else if (SearchPlaceholder === "Customer name") {
+            GlobalSearch.placeholder = "Items";
+            GlobalSearch.value = "";
+        } else {
+            GlobalSearch.placeholder = "Search";
+            GlobalSearch.value = "";
+        }
+    }
+
+    function SearchBarInputed() {
+        var GlobalSearch = document.getElementById('GlobalSearch');
+        var searchValue = GlobalSearch.value;
+        var SearchPlaceholder = GlobalSearch.placeholder;
+
+        console.log(SearchPlaceholder + " : " + searchValue);
+
+        var AllCards = State.AllCards;
+        console.log("all Cards", AllCards);
+        var matchingObjectArray = [];
+
+        if (searchValue !== "") {
+            // do serach based on category seleted
+            if (SearchPlaceholder === "Search") {
+                // search Global
+                matchingObjectArray = globalSearchObjects(searchValue, AllCards);
+                /*AllCards.forEach((eachCard) => {
+                    if (MatchingObjecct) {
+                        matchingObjectArray.push(MatchingObjecct);
+                    }
+                })*/
+            } else if (SearchPlaceholder === "Customer name") {
+                // search in customer name
+                matchingObjectArray = searchByCustomerName(searchValue, AllCards);
+            } else {
+                // Search in Items
+                matchingObjectArray = searchByCheckItems(searchValue, AllCards);
+            }
+        } else {
+            CloseSearchResultBox();
+        }
 
 
+        if (matchingObjectArray) {
+            console.log('Matching Object:', matchingObjectArray);
+        } else {
+            console.log('No matching object found.');
+        }
+
+
+
+        function globalSearchObjects(searchValue, array) {
+            // Convert the search value to lowercase for case-insensitive search
+            const searchLowerCase = searchValue.toLowerCase();
+
+            // Use Array.filter() to find all objects that contain the search value
+            const matchingObjects = array.filter((obj) => {
+                // Define the keys to search on
+                const keysToSearch = ["Name", "OrderIDNumber", "CustomerName"];
+
+                // Check if the search value is present in any of the specified keys
+                const keyMatches = keysToSearch.some((key) => {
+                    return (
+                        obj[key] &&
+                        typeof obj[key] === 'string' &&
+                        obj[key].toLowerCase().includes(searchLowerCase)
+                    );
+                });
+
+                // Check if the search value is present in any of the "checkItems" names
+                const checkItemMatches = obj.CheckListItems && obj.CheckListItems.checkItems && obj.CheckListItems.checkItems.some((checkItem) => {
+                    return (
+                        checkItem.Name &&
+                        typeof checkItem.Name === 'string' &&
+                        checkItem.Name.toLowerCase().includes(searchLowerCase)
+                    );
+                });
+
+                return keyMatches || checkItemMatches;
+            });
+
+            return matchingObjects;
+        }
+
+
+        function searchByCustomerName(searchValue, array) {
+            // Convert the search value to lowercase for case-insensitive search
+            const searchLowerCase = searchValue.toLowerCase();
+
+            // Use Array.filter() to find all objects that contain the search value
+            const matchingObjects = array.filter((obj) => {
+                // Define the keys to search on
+                const keysToSearch = ["Name", "OrderIDNumber", "CustomerName"];
+
+                // Check if the search value is present in any of the specified keys
+                const keyMatches = keysToSearch.some((key) => {
+                    return (
+                        obj[key] &&
+                        typeof obj[key] === 'string' &&
+                        obj[key].toLowerCase().includes(searchLowerCase)
+                    );
+                });
+
+                return keyMatches;
+            });
+
+            return matchingObjects;
+        }
+
+
+        function searchByCheckItems(searchValue, cards) {
+            // Convert the search value to lowercase for case-insensitive search
+            const searchLowerCase = searchValue.toLowerCase();
+
+            // Use Array.filter() to find objects that contain the search value in "checkItems"
+            const matchingObjects = cards.filter((card) => {
+                return (
+                    card.CheckListItems &&
+                    card.CheckListItems.checkItems &&
+                    card.CheckListItems.checkItems.some((checkItem) => {
+                        return (
+                            checkItem.Name &&
+                            typeof checkItem.Name === 'string' &&
+                            checkItem.Name.toLowerCase().includes(searchLowerCase)
+                        );
+                    })
+                );
+            });
+
+            return matchingObjects;
+        }
+
+        // show results 
+        var SearchResultsMainDiv = document.getElementById('SearchResultsMainDiv');
+        SearchResultsMainDiv.style.display = "block"
+        var searchResultsCollectins = document.getElementById('searchResultsCollectins');
+        searchResultsCollectins.innerHTML = "";
+
+        matchingObjectArray.forEach((EachResult) => {
+            const searchResultDiv = document.createElement('div');
+            searchResultDiv.className = 'EachSearchResult';
+            searchResultDiv.onclick = () => {
+                ViewCardDetails(EachResult.Name);
+            }
+
+            // Set the name
+            const nameParagraph = document.createElement('p');
+            nameParagraph.className = 'SearchResultName';
+            nameParagraph.textContent = EachResult.Name;
+            searchResultDiv.appendChild(nameParagraph);
+
+            // Set the Production Items header text
+            const productionItemsHeaderText = document.createElement('p');
+            productionItemsHeaderText.className = 'SearchProductionItemsHeaderText';
+            productionItemsHeaderText.textContent = 'Production Items';
+            searchResultDiv.appendChild(productionItemsHeaderText);
+
+            // Create container for production items
+            const productionItemsContainer = document.createElement('div');
+            productionItemsContainer.className = 'SearchResultsProductionsCollections';
+
+            // Add production items dynamically
+            EachResult.CheckListItems.checkItems.forEach(item => {
+                const productionItemDiv = document.createElement('div');
+                productionItemDiv.className = 'EachSearchResultProductionItems';
+
+                const itemNameParagraph = document.createElement('p');
+                itemNameParagraph.className = 'SearchResultItemName';
+                itemNameParagraph.textContent = item.Name;
+
+                const quantityParagraph = document.createElement('p');
+                quantityParagraph.className = 'SearchResultQuantity';
+                quantityParagraph.textContent = item.Qty + " " + item.Unit;
+
+                productionItemDiv.appendChild(itemNameParagraph);
+                productionItemDiv.appendChild(quantityParagraph);
+
+                productionItemsContainer.appendChild(productionItemDiv);
+            });
+
+            searchResultDiv.appendChild(productionItemsContainer);
+
+            // Add a horizontal line
+            const hr = document.createElement('hr');
+            searchResultDiv.appendChild(hr);
+            searchResultsCollectins.appendChild(searchResultDiv);
+        })
+    }
+
+    function CloseSearchResultBox() {
+        var SearchResultsMainDiv = document.getElementById('SearchResultsMainDiv');
+        SearchResultsMainDiv.style.display = "none";
+        var searchResultsCollectins = document.getElementById('searchResultsCollectins');
+        searchResultsCollectins.innerHTML = "";
+    }
 
 
 </script>
@@ -5214,26 +5448,6 @@
         display: none;
     }
 
-    /*.loader {
-        border: 8px solid #f3f3f3;
-        border-top: 8px solid #3498db;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-*/
-
     .loader {
         display: flex;
         align-items: center;
@@ -5305,6 +5519,56 @@
     }
 
 
+    .SearchResultsMainDiv {
+        position: absolute;
+        width: 35rem;
+        max-height: 15rem;
+        background-color: #151919;
+        overflow-y: auto;
+        margin-top: 1rem;
+        padding: 1rem;
+        z-index: 5;
+        border: 1px solid #494949;
+        border-radius: 10px;
+        color: #B3B7BA;
+        font-size: 18px;
+        font-weight: 600;
+        display: none;
+    }
+
+    .searchResultsCollectins {
+        border: 1px solid gray;
+        border-radius: 10px;
+        padding: 1rem;
+        font-size: 15px;
+    }
+
+    .SearchResultsProductionsCollections {
+        padding: 0 1rem;
+        max-height: 5rem;
+        overflow-y: auto;
+    }
+
+    .SearchResultsHeaderDiv {
+        display: flex;
+        justify-content: space-between;
+
+    }
+
+    .SearchResultsHeaderTitle {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .SearchResusultCloseBTN {
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .EachSearchResult{
+        cursor: pointer;
+    }
 
 
 
