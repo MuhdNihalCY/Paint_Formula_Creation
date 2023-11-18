@@ -1,12 +1,22 @@
 <section>
 
+    <div id="loader-container">
+        {{!-- <div class="loader"></div> --}}
+        <div class="loader">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </div>
+
     <div id="mainPopup" class="popupWrapper">
         <div id="" class="popup mainPopup">
             <div class="MainPopupTopsection">
                 <img onclick="CloseMainPopup()" class="MainPopupCloseIcon" src="/images/Icons/x.png" alt="">
             </div>
             <div class="PopupCardNameSection">
-                <p class="popCardHeaderText">13-10-2023-125447893-Aero Head</p>
+                <input type="text" id="CardNameInput" class="CardNameInput popCardHeaderText" placeholder="Card name">
+                {{!-- <p class="popCardHeaderText">13-10-2023-125447893-Aero Head</p> --}}
                 <div class="PopupCardListNameSection">
                     <p class="popCardList">in list</p>
                     <p class="PopcardListName">ORDERS</p>
@@ -15,7 +25,12 @@
             <div class="PopCustomerLabelBtnsSection">
                 <div class="PopCustomerAndLabelSection">
                     <div class="PopCustomerSections">
-                        <p class="popCustomerName">Customer contact: Mr.Niyad</p>
+                        <div class="popCUstomerSectionDiv">
+                            <p class="popCustomerName">Customer contact: Mr.Niyad</p>
+                            <select name="" class="CustomerContactNameSelect" id="CustomerContactNameSelect">
+
+                            </select>
+                        </div>
                         <div class="popCustomerCallNumberSection">
                             <img src="/images/Icons/Call.png" class="CallIcon" alt="">
                             <p class="PopCustomerMobileNumber">Mobile no: +971 50 22223</p>
@@ -109,7 +124,7 @@
 
             <div class="popCardActivity">
                 <p class="popCardHeaderText">Activity</p>
-                <div class="popActivityCollections">
+                <div id="" class="popActivityCollections">
                     <ul>
                         <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
                             <p class="popActivityTime">@ 14:15 (30 min ago)</p>
@@ -140,7 +155,8 @@
                     <input type="text" id="OrderIDNumber" class="popCardHeaderText"
                         placeholder="Order Name will generate Automatically">
 
-                    <select name="CustomerName" id="OrderName" onchange="handleCustomerChange()">
+                    <select name="CustomerName" class="CustomerNameSelect" id="OrderName"
+                        onchange="handleCustomerChange()">
 
                     </select>
 
@@ -235,10 +251,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="PopActionBtnSection">
-                    {{!-- <button>Move</button>
-                    <Button>Copy</Button>
-                    <Button>Archive</Button> --}}
+                <div id="PopActionBtnSection" class="PopActionBtnSection">
+                    {{!-- <button onclick="openMoveOptions()">Move</button> --}}
+                    <div class="moveSelectDiv">
+                        <button onclick="toggleMoveOptions()">Move</button>
+                        <select id="moveSelect" style="display: none;">
+
+                        </select>
+                    </div>
+                    <Button class="tooltip-btn" data-tooltip="copy this card to new card.">Copy</Button>
+                    <Button>Archive</Button>
                 </div>
             </div>
             <div class="poplastUpdateTimeSection">
@@ -324,9 +346,41 @@
                 </div>
             </div>
 
+            <div class="PopAddAttachments">
+                <p class="popCardHeaderText">Attachments</p>
+                <div class="popAttachements">
+                    <div class="popAttachementsCollections">
+                        <div class="popEachAttachments">
+                            <img id="AttachmentImage" class="AttachmentIMG" src="" alt="">
+                        </div>
+                    </div>
+                    <div class="PopAddAttamentsArea">
+                        <label for="file" class="custum-file-upload">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
+                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                    <g id="SVGRepo_iconCarrier">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z"
+                                            fill=""></path>
+                                    </g>
+                                </svg>
+                            </div>
+                            <div class="text">
+                                <span>Click to upload image</span>
+                            </div>
+                            <input id="file" type="file" onchange="previewAttachmentImage()">
+                        </label>
+
+                    </div>
+                </div>
+
+            </div>
+
             <div class="popCardActivity">
                 <p class="popCardHeaderText">Activity</p>
-                <div class="popActivityCollections">
+                <div id="popActivityCollections" class="popActivityCollections">
                     <ul>
                         {{!-- <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
                             <p class="popActivityTime">@ 14:15 (30 min ago)</p>
@@ -339,7 +393,7 @@
             </div>
 
             <div class="popSaveBtnSection">
-                <button onclick="CreateNewOrder()">Create Order</button>
+                <button id="CreateOrderButton" onclick="CreateNewOrder()">Create Order</button>
             </div>
 
         </div>
@@ -544,7 +598,7 @@
         <div class="CustomContainer">
             <div class="KanbanHeaderMainDivArea">
                 <div class="KanbanHeaderMainDivAreaRight">
-                    <input type="text" hidden id="UserName" value="{{SalesLogged.UserName}}">
+                    <input type="text" hidden id="Username" value="{{SalesLogged.UserName}}">
                     <p class="KanbanHeaderText">MEGA PAINTS ACTIVITY BOARD</p>
                 </div>
                 <div class="KanbanHeaderMainDivAreaLeft">
@@ -566,9 +620,9 @@
         <div class="KanbanBoard">
             <div id="moveableContainer" class="ListsCollections">
                 {{!-- Order section --}}
-                <div class="OrdersList">
+                <div class="OrdersList" dropzone="false">
                     <div class="OrdersListHeader" dropzone="false">
-                        <p class="ListHeaderText">ORDERS</p>
+                        <p class="ListHeaderText ListHeader">ORDERS</p>
                     </div>
                     <div id="OrdersCardsCollection" class="OrdersCardsCollection">
 
@@ -583,7 +637,7 @@
                 {{!-- Office section --}}
                 <div class="OfficeSectionList">
                     <div class="OfficeSectionListHeader" dropzone="false">
-                        <p class="ListHeaderText">OFFICE SECTION</p>
+                        <p class="ListHeaderText ListHeader">OFFICE SECTION</p>
                     </div>
                     <div id="OfficeCardsCollection" class="OfficeCardsCollection">
 
@@ -610,7 +664,7 @@
                     <div class="ReadyListCollections">
                         <div class="ReadyColumn">
                             <div class="ReadyColumnHeader" dropzone="false">
-                                <p class="ReadySectionHeaderText">for Dispatch</p>
+                                <p class="ReadySectionHeaderText ListHeader">for Dispatch</p>
                             </div>
                             <div id="ForDispatchCardsCollections" class="ForDispatchCardsCollections">
 
@@ -618,7 +672,8 @@
                         </div>
                         <div class="ReadyColumn">
                             <div class="ReadyColumnHeader">
-                                <p class="ReadySectionHeaderText" dropzone="false">for Customer collection</p>
+                                <p class="ReadySectionHeaderText ListHeader" dropzone="false">for Customer collection
+                                </p>
                             </div>
                             <div id="ForCustomerCollectionCards" class="ReadyCardsCollections">
 
@@ -655,7 +710,7 @@
                     <div class="DoneListCollections">
                         <div class="DoneColumn">
                             <div class="DoneColumnHeader" dropzone="false">
-                                <p class="DoneSectionHeaderText">Today</p>
+                                <p class="DoneSectionHeaderText ListHeader">Today</p>
                             </div>
                             <div class="DoneCardsCollections">
 
@@ -663,7 +718,7 @@
                         </div>
                         <div class="DoneColumn">
                             <div class="DoneColumnHeader" dropzone="false">
-                                <p class="DoneSectionHeaderText">
+                                <p class="DoneSectionHeaderText ListHeader">
                                     < 7 Days</p>
                             </div>
                             <div class="DoneCardsCollections">
@@ -825,17 +880,35 @@
         UserNow: false
     };
 
+    function initializeState() {
+        State.columns.ORDERS = [];
+        State.columns.OFFICE_SECTION = [];
+        State.columns.PRODUCTION = [];
+        State.columns.READY.FOR_DISPATCH = [];
+        State.columns.READY.FOR_CUSTOMER_COLLECTION = [];
+        State.columns.DRIVERS = [];
+        State.columns.DONE.AllDone = [];
+        State.columns.DONE.DONE_TODAY = [];
+        State.columns.DONE.IN_A_WEEK = [];
+        State.Customers = [];
+        State.Formulas = [];
+        State.NewOrders = [];
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
-        //console.log('DOMContentLoaded event fired');
+        //// // console.log('DOMContentLoaded event fired');
         fetchAllCards();
     });
 
 
 
     async function fetchAllCards() {
+        showLoader();
+        initializeState();
+
         try {
             const backendURL = '/getAllCardAndListsAndUsersToManagement';
-            //console.log("Called Fetch api")
+            //// // console.log("Called Fetch api")
             const response = await fetch(backendURL);
 
             if (!response.ok) {
@@ -843,13 +916,14 @@
             }
 
             const data = await response.json(); // Parse the response as JSON.
-            // console.log("data", data); // Log the entire data object
-            // console.log("AllCards", data.AllCards); // Log a specific property
+            // // // console.log("data", data); // Log the entire data object
+            // // // console.log("AllCards", data.AllCards); // Log a specific property
             State.AllCards = data.AllCards;
             State.AllLists = data.AllLists;
             State.AllUsers = data.AllUsers;
             State.Customers = data.Customers;
             State.Formulas = data.Formulas;
+            // // console.log("Old State:", State);
             UpdateStateWithCards();
 
             // Rest of your code
@@ -865,7 +939,7 @@
         var AllCards = State.AllCards;
         var AllLists = State.AllLists;
 
-        // console.log("State: ", State);
+        // // // console.log("State: ", State);
         var AllProductionLists = [];
         var AllDriverLists = [];
 
@@ -899,28 +973,36 @@
 
         for (i = 0; i < AllCards.length; i++) {
             var CardList = AllCards[i].CurrentList;
-            //console.log("CardList: ", CardList);
+            //// // console.log("CardList: ", CardList);
 
+            // // console.log("One Card: ", AllCards[i])
             AllLists.forEach((Onelist) => {
                 if (CardList === Onelist.Name) {
-                    //console.log("Onelist: ", Onelist);
+                    //// // console.log("Onelist: ", Onelist);
+
 
                     if ("ORDERS" === Onelist.Name) {
                         State.columns['ORDERS'].push(AllCards[i]);
+                        // // console.log("In Orders")
                     } else if ("OFFICE SECTION" === Onelist.Name) {
                         State.columns['OFFICE_SECTION'].push(AllCards[i]);
+                        // // console.log("In Office Section")
                     } else if ("FOR DISPATCH" === Onelist.Name) {
                         State.columns.READY.FOR_DISPATCH.push(AllCards[i]);
+                        // // console.log("In Dispatch")
                     } else if ("FOR CUSTOMER COLLECTION" === Onelist.Name) {
                         State.columns.READY.FOR_CUSTOMER_COLLECTION.push(AllCards[i]);
+                        // // console.log("In Customer Collections")
                     } else if ("DONE TODAY" === Onelist.Name) {
                         State.columns.DONE.AllDone.push(AllCards[i]);
-                        console.log("AllCards[i] done all ", AllCards[i]);
+                        // // console.log("AllCards[i] done all ", AllCards[i]);
                         //   State.columns.READY.FOR_CUSTOMER_COLLECTION.push(AllCards[i]);
                     } else {
                         // this is for productions and drivers,
+                        // // console.log("Checking Cards", AllCards[i])
                         if (AllCards[i].ProductionPerson === AllCards[i].CurrentList) {
                             // for Productions
+                            // // console.log("In Productions")
                             var ProductionArray = State.columns.PRODUCTION;
                             if (ProductionArray.length > 0) {
                                 // search for same list and push or create a list and push
@@ -955,6 +1037,7 @@
                             }
 
                         } else {
+                            // // console.log("In DRivers")
                             // try for drivers
                             var DriverArray = State.columns.DRIVERS;
                             if (DriverArray.length > 0) {
@@ -995,7 +1078,7 @@
             })
         }
 
-        console.log("New Updated State: ", State);
+        // // console.log("New Updated State: ", State);
         updateBoardUsingState()
     }
 
@@ -1004,6 +1087,8 @@
     function updateBoardUsingState() {
         var columnIndex = 0;
 
+
+
         loadOrdersListCards();
         loadOfficeSectionListCards();
         loadProductionSectionListAndCards();
@@ -1011,11 +1096,18 @@
         loadForCustomerCollectionCards();
         loadDriversSectionListCards();
 
+        hideLoader();
+
+
+
 
         function loadOrdersListCards() {
             columnIndex = 0;
-            var OrdersCardsCollection = document.getElementById('OrdersCardsCollection');
+            //      var OrdersCardsCollection = document.getElementById('OrdersCardsCollection');
+            var ordersCardsCollection = document.getElementById('OrdersCardsCollection');
             OrdersCardsCollection.innerHTML = '';
+            // // console.log("OrdersCardsCollection:", ordersCardsCollection);
+
             OrdersCardsCollection.setAttribute('ondrop', 'drop(event)');
             OrdersCardsCollection.setAttribute('ondragover', 'allowDrop(event)');
             OrdersCardsCollection.setAttribute('data-column', columnIndex);
@@ -1049,6 +1141,9 @@
                 // Create the main div with class "Card"
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'card Card';
+                cardDiv.onclick = function () {
+                    ViewCardDetails(OneCard.Name)
+                };
 
                 cardDiv.setAttribute('draggable', 'true');
                 cardDiv.setAttribute('ondragstart', 'drag(event)');
@@ -1086,7 +1181,8 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+
+                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1150,6 +1246,9 @@
                 // Create the main div with class "Card"
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'card Card';
+                cardDiv.onclick = function () {
+                    ViewCardDetails(OneCard.Name)
+                };
 
                 cardDiv.setAttribute('draggable', 'true');
                 cardDiv.setAttribute('ondragstart', 'drag(event)');
@@ -1186,7 +1285,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1225,7 +1324,7 @@
 
                 var ProductionSectionCards = OneList;
 
-                console.log("ProductionSectionCards: ", ProductionSectionCards);
+                // // console.log("ProductionSectionCards: ", ProductionSectionCards);
 
 
                 // Create the div with class "ProductionCardsCollections"
@@ -1247,7 +1346,7 @@
 
                 // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
                 const sectionHeaderText = document.createElement('p');
-                sectionHeaderText.className = 'ProdctionSectionHeaderText';
+                sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
                 sectionHeaderText.textContent = ProductionSectionCards.Name;
 
                 // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
@@ -1285,6 +1384,9 @@
                     // Create the main div with class "Card"
                     const cardDiv = document.createElement('div');
                     cardDiv.className = 'card Card';
+                    cardDiv.onclick = function () {
+                        ViewCardDetails(OneCard.Name)
+                    };
 
                     cardDiv.setAttribute('draggable', 'true');
                     cardDiv.setAttribute('ondragstart', 'drag(event)');
@@ -1322,7 +1424,7 @@
                     cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                     // Check if the image file exists, and only create the image element if it does
-                    const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                    const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
                     const cardImg = new Image();
                     cardImg.className = 'CardImg';
                     cardImg.alt = 'No Attachments';
@@ -1406,6 +1508,9 @@
                 // Create the main div with class "Card"
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'card Card';
+                cardDiv.onclick = function () {
+                    ViewCardDetails(OneCard.Name)
+                };
 
                 cardDiv.setAttribute('draggable', 'true');
                 cardDiv.setAttribute('ondragstart', 'drag(event)');
@@ -1443,7 +1548,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1507,6 +1612,9 @@
                 // Create the main div with class "Card"
                 const cardDiv = document.createElement('div');
                 cardDiv.className = 'card Card';
+                cardDiv.onclick = function () {
+                    ViewCardDetails(OneCard.Name)
+                };
 
                 cardDiv.setAttribute('draggable', 'true');
                 cardDiv.setAttribute('ondragstart', 'drag(event)');
@@ -1544,7 +1652,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1588,7 +1696,7 @@
 
                 var DriverSectionCards = OneList;
 
-                console.log("DriverSectionCards: ", DriverSectionCards);
+                // // console.log("DriverSectionCards: ", DriverSectionCards);
 
 
                 // Create the div with class "ProductionCardsCollections"
@@ -1610,7 +1718,7 @@
 
                 // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
                 const sectionHeaderText = document.createElement('p');
-                sectionHeaderText.className = 'ProdctionSectionHeaderText';
+                sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
                 sectionHeaderText.textContent = DriverSectionCards.Name;
 
                 // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
@@ -1648,6 +1756,9 @@
                     // Create the main div with class "Card"
                     const cardDiv = document.createElement('div');
                     cardDiv.className = 'card Card';
+                    cardDiv.onclick = function () {
+                        ViewCardDetails(OneCard.Name)
+                    };
 
                     cardDiv.setAttribute('draggable', 'true');
                     cardDiv.setAttribute('ondragstart', 'drag(event)');
@@ -1685,7 +1796,7 @@
                     cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                     // Check if the image file exists, and only create the image element if it does
-                    const imageSrc = `/images/RefImages/${OneCard.FileNo}.jpg`;
+                    const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
                     const cardImg = new Image();
                     cardImg.className = 'CardImg';
                     cardImg.alt = 'No Attachments';
@@ -1818,7 +1929,7 @@
             updateState(sourceColumn, destinationColumn, data);
             renderKanban();
         }
-        console.log(State.columns);
+        // // console.log(State.columns);
     });*/
 
 
@@ -1864,107 +1975,20 @@
         event.dataTransfer.dropEffect = 'move'; // Specify the type of drag operation
     });
 
-    /*
-       // Modify the drop event to handle both inter-column and intra-column drops
-       document.addEventListener('drop', function (event) {
-           event.preventDefault();
-           const data = event.dataTransfer.getData('text/plain');
-   
-           const sourceElement = document.getElementById(data);
-   
-           // Check if the drop target is a card or a column
-           if (event.target.classList.contains('card')) {
-               // Reordering within the same column
-               const destinationCard = event.target;
-               const sourceCard = sourceElement;
-   
-               if (destinationCard && sourceCard) {
-                   // Swap the positions of the cards in the DOM
-                   const destinationIndex = Array.from(destinationCard.parentElement.children).indexOf(destinationCard);
-                   const sourceIndex = Array.from(sourceCard.parentElement.children).indexOf(sourceCard);
-   
-                   if (destinationIndex !== -1 && sourceIndex !== -1) {
-                       destinationCard.parentElement.insertBefore(sourceCard, destinationCard);
-                       // Update the State object to reflect the reordering
-                       const sourceColumnIndex = sourceCard.getAttribute('id').split('-')[1];
-                       const sourceTaskIndex = sourceCard.getAttribute('id').split('-')[2];
-                       const destinationColumnIndex = destinationCard.getAttribute('id').split('-')[1];
-                       const destinationTaskIndex = destinationCard.getAttribute('id').split('-')[2];
-   
-                       const sourceColumn = State.columns[sourceColumnIndex];
-                       const destinationColumn = State.columns[destinationColumnIndex];
-   
-                       if (sourceColumn && destinationColumn) {
-                           const taskToMove = sourceColumn.tasks[sourceTaskIndex];
-                           if (taskToMove) {
-                               sourceColumn.tasks.splice(sourceTaskIndex, 1);
-                               destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
-                           }
-   
-                           console.log('Task reordered within column ' + sourceColumn.title);
-                           console.log(State.columns);
-                       }
-   
-   
-                   }
-               }
-           } else if (event.target.classList.contains('cards')) {
-               // Moving a card to a different column (same logic as before)
-               const sourceColumn = sourceElement.getAttribute('id').split('-')[1];
-               const destinationColumn = event.target.getAttribute('data-column');
-   
-               if (sourceColumn !== destinationColumn) {
-                   updateState(sourceColumn, destinationColumn, data);
-                   renderKanban();
-               }
-   
-             
-               console.log(State.columns);
-           }
-   
-           // Re-enable the card's draggable attribute
-           sourceElement.draggable = true;
-       });
-   
-   */
+
 
     document.addEventListener('drop', function (event) {
-        console.log("Drop event occur")
+        // // console.log("Drop event occur")
         event.preventDefault();
         const data = event.dataTransfer.getData('text/plain');
         const sourceElement = document.getElementById(data);
 
-        console.log("event.target.classList.contains('CardImg'): ", event.target.classList.contains('CardImg'));
-        console.log("Drop Target: ", event.target.classList);
+        // // console.log("event.target ", event.target);
+        // // console.log("Drop Target: ", event.target.classList);
         if (event.target.classList.contains('card')) {
+            // // console.log("First If conditions")
             // If the drop target is a card, insert the dragged card immediately after the target card
-            /*const destinationCard = event.target;
-            const sourceCard = sourceElement;
 
-            if (destinationCard && sourceCard) {
-                // Insert the sourceCard after the destinationCard
-                destinationCard.parentElement.insertBefore(sourceCard, destinationCard.nextSibling);
-
-                // Update the State object to reflect the reordering
-                const sourceColumnIndex = sourceCard.getAttribute('data-column');
-                const sourceTaskIndex = sourceCard.getAttribute('data-task');
-                const destinationColumnIndex = destinationCard.getAttribute('data-column');
-                const destinationTaskIndex = destinationCard.getAttribute('data-task');
-
-                const sourceColumn = State.columns[sourceColumnIndex];
-                const destinationColumn = State.columns[destinationColumnIndex];
-
-                if (sourceColumn && destinationColumn) {
-                    const taskToMove = sourceColumn.tasks[sourceTaskIndex];
-                    if (taskToMove) {
-                        sourceColumn.tasks.splice(sourceTaskIndex, 1);
-                        destinationColumn.tasks.splice(destinationTaskIndex + 1, 0, taskToMove);
-                    }
-
-                    console.log('Task reordered within column ' + sourceColumn.title);
-                    console.log(State.columns);
-                }
-            }*/
 
             // If the drop target is a card, insert the dragged card immediately before the target card
             const destinationCard = destinationAddress.parentNode;
@@ -1990,12 +2014,17 @@
                         destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
                     }
 
-                    console.log('Task reordered within column ' + sourceColumn.title);
-                    console.log(State.columns);
+                    // // console.log('Task reordered within column ' + sourceColumn.title);
+                    // // console.log(State.columns);
                 }
             }
 
         } else if (event.target.classList.contains('cards')) {
+
+            // // console.log("Second If conditions")
+            var destinationAddress = event.target
+            // // console.log(destinationAddress)
+
             // Handle moving a card to a different column (same logic as before)
             const sourceColumn = sourceElement.getAttribute('data-column');
             const destinationColumn = event.target.getAttribute('data-column');
@@ -2004,43 +2033,27 @@
                 updateState(sourceColumn, destinationColumn, data);
                 renderKanban();
             }
-            console.log(State.columns);
+            // // console.log(State.columns);
         } else {
 
+            // // console.log("Third If conditions")
             var destinationAddress = event.target.parentNode
+            // // // console.log("Destination Address..parentNode.parennode..classList",destinationAddress.parentNode.parentNode.classList[0]);
 
             if (destinationAddress.classList.contains('card')) {
-                console.log("destinationAddress.classList.contains('card'): ", destinationAddress.classList.contains('card'))
+                var DropColumn = destinationAddress.parentNode.parentNode
+                var ListName = DropColumn.getElementsByClassName('ListHeader')[0].textContent;
+                // // console.log("1 List Name: ", ListName);
+
+                var cardName = sourceElement.getElementsByClassName('cardText')[0].textContent;
+                // // console.log('cardName:', cardName);
+
+                MoveCardToList(cardName, ListName);
+                //  // // console.log("destinationAddress.classList.contains('card'):1 ", destinationAddress.classList)
                 // If the drop target is a card, insert the dragged card immediately after the target card
-                /*const destinationCard = destinationAddress;
-                const sourceCard = sourceElement;
 
-                if (destinationCard && sourceCard) {
-                    // Insert the sourceCard after the destinationCard
-                    destinationCard.parentElement.insertBefore(sourceCard, destinationCard.nextSibling);
-
-                    // Update the State object to reflect the reordering
-                    const sourceColumnIndex = sourceCard.getAttribute('data-column');
-                    const sourceTaskIndex = sourceCard.getAttribute('data-task');
-                    const destinationColumnIndex = destinationCard.getAttribute('data-column');
-                    const destinationTaskIndex = destinationCard.getAttribute('data-task');
-
-                    const sourceColumn = State.columns[sourceColumnIndex];
-                    const destinationColumn = State.columns[destinationColumnIndex];
-
-                    if (sourceColumn && destinationColumn) {
-                        const taskToMove = sourceColumn.tasks[sourceTaskIndex];
-                        if (taskToMove) {
-                            sourceColumn.tasks.splice(sourceTaskIndex, 1);
-                            destinationColumn.tasks.splice(destinationTaskIndex + 1, 0, taskToMove);
-                        }
-
-                        console.log('Task reordered within column ' + sourceColumn.title);
-                        console.log(State.columns);
-                    }
-                }*/
                 // If the drop target is a card, insert the dragged card immediately before the target card
-                const destinationCard = destinationAddress.parentNode;
+                const destinationCard = destinationAddress;
                 const sourceCard = sourceElement;
 
                 if (destinationCard && sourceCard) {
@@ -2063,41 +2076,26 @@
                             destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
                         }
 
-                        console.log('Task reordered within column ' + sourceColumn.title);
-                        console.log(State.columns);
+                        // // console.log('Task reordered within column ' + sourceColumn.title);
+                        // // console.log(State.columns);
                     }
                 }
 
             } else if (destinationAddress.parentNode.classList.contains('card')) {
-                console.log("destinationAddress.parentNode.classList.contains('card'): ", destinationAddress.parentNode.classList.contains('card'))
+                // // console.log("destinationAddress.parentNode.classList.contains('card'):2 ", destinationAddress.parentNode.classList)
                 // If the drop target is a card, insert the dragged card immediately after the target card
-                /*const destinationCard = destinationAddress.parentNode;
-                const sourceCard = sourceElement;
+                var DropColumn = destinationAddress.parentNode.parentNode.parentNode;
+                var ListName = DropColumn.getElementsByClassName('ListHeader')[0].textContent;
+                //  var ListName = destinationAddress.parentNode.parentNode.parentNode.classList[0];
+                // // console.log("2 List Name: ", ListName);
 
-                if (destinationCard && sourceCard) {
-                    // Insert the sourceCard after the destinationCard
-                    destinationCard.parentElement.insertBefore(sourceCard, destinationCard.nextSibling);
 
-                    // Update the State object to reflect the reordering
-                    const sourceColumnIndex = sourceCard.getAttribute('data-column');
-                    const sourceTaskIndex = sourceCard.getAttribute('data-task');
-                    const destinationColumnIndex = destinationCard.getAttribute('data-column');
-                    const destinationTaskIndex = destinationCard.getAttribute('data-task');
+                var cardName = sourceElement.getElementsByClassName('cardText')[0].textContent
+                // // console.log('cardName:', cardName);
 
-                    const sourceColumn = State.columns[sourceColumnIndex];
-                    const destinationColumn = State.columns[destinationColumnIndex];
+                MoveCardToList(cardName, ListName);
 
-                    if (sourceColumn && destinationColumn) {
-                        const taskToMove = sourceColumn.tasks[sourceTaskIndex];
-                        if (taskToMove) {
-                            sourceColumn.tasks.splice(sourceTaskIndex, 1);
-                            destinationColumn.tasks.splice(destinationTaskIndex + 1, 0, taskToMove);
-                        }
 
-                        console.log('Task reordered within column ' + sourceColumn.title);
-                        console.log(State.columns);
-                    }
-                }*/
                 // If the drop target is a card, insert the dragged card immediately before the target card
                 const destinationCard = destinationAddress.parentNode;
                 const sourceCard = sourceElement;
@@ -2122,11 +2120,21 @@
                             destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
                         }
 
-                        console.log('Task reordered within column ' + sourceColumn.title);
-                        console.log(State.columns);
+                        // // console.log('Task reordered within column ' + sourceColumn.title);
+                        // // console.log(State.columns);
                     }
                 }
 
+            } else {
+                // // console.log("else last destinationAddress.", destinationAddress)
+                var DropColumn = destinationAddress;
+                var DropColumeName = DropColumn.getElementsByClassName('ListHeader')[0].textContent;
+                // // console.log("Drop List : ", DropColumeName);
+
+                var cardName = sourceElement.getElementsByClassName('cardText')[0].textContent
+                // // console.log('cardName:', cardName);
+
+                MoveCardToList(cardName, DropColumeName);
             }
 
         }
@@ -2166,7 +2174,7 @@
 
     function ccAddNewContact() {
         var CCContactCollections = document.getElementById('CCContactCollections');
-        console.log("Contact Count: ", CCContactCollections)
+        // // console.log("Contact Count: ", CCContactCollections)
         createContact(CCContactCollections);
     }
 
@@ -2321,7 +2329,7 @@
         Contact = [];
 
         for (i = 1; i <= ccEachContactCount; i++) {
-            console.log(document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`));
+            // // console.log(document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`));
             if (document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`)) {
                 var OneContact = {
                     Name: document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`).value,
@@ -2335,7 +2343,7 @@
         }
 
         if (!Customername || !Address || !Loaction || !SalesEx || !Co_ordinator || Contact.length === 0) {
-            alert("Please fill all fields");
+            // alert("Please fill all fields");
         } else {
             // URL of your backend API endpoint
             var apiUrl = '/sales/saveCustomer/';
@@ -2368,7 +2376,7 @@
                 .then(response => response.json()) // Parse the JSON response
                 .then(data => {
                     // Handle the data from the server
-                    console.log('Response from server:', data);
+                    // // console.log('Response from server:', data);
                     CloseCustomerCreationPopup();
                     resetCustomerValues();
                     fetchAllCards();
@@ -2458,6 +2466,7 @@
     function CloseCreateOrderPopup() {
         var mainPopup = document.getElementById('CreateOrderPopup');
         mainPopup.style.display = "none";
+        resetAllDataFromNewOrder();
     }
 
     function handleCustomerChange() {
@@ -2520,10 +2529,10 @@
 
     function CreateOrderselectColor(label, color) {
         // Call your function with the selected color
-        console.log('Selected color:', label, color);
+        //  // // console.log('Selected color:', label, color);
         var popCardAllLabelContainer = document.querySelector('.popCardAllLabelCreateOrder');
         var LableCount = popCardAllLabelContainer.getElementsByClassName('LabelData').length;
-        console.log(LableCount);
+        // // // console.log(LableCount);
         // Close the color modal after selecting a color
         var colorModal = document.getElementById('colorModal');
         colorModal.style.display = 'none';
@@ -2554,17 +2563,17 @@
 
     function searchFormulas(query) {
         var formulas = State.Formulas;
-        console.log(formulas);
+        //    // // console.log(formulas);
         const resultsContainer = document.getElementById('searchResults');
         resultsContainer.innerHTML = ''; // Clear previous results
 
         const matchingFormulas = formulas.filter(formula => {
-            console.log("Searching in Formula: ", formula)
+            //     // // console.log("Searching in Formula: ", formula)
             const searchFields = [formula.FileNo, formula.ColorCode, formula.ColorName];
             return searchFields.some(field => field.toLowerCase().includes(query.toLowerCase()));
         });
 
-        console.log("matchingFormulas: ", matchingFormulas);
+        // // // console.log("matchingFormulas: ", matchingFormulas);
 
         matchingFormulas.forEach(formula => {
             const resultItem = document.createElement('li');
@@ -2577,16 +2586,16 @@
 
     function handleResultItemClick(formula) {
         // Handle what happens when a result item is clicked
-        console.log('Result item clicked:', formula);
+        //  // // console.log('Result item clicked:', formula);
         var popProductsItemsCollectiosn = document.getElementById('popProductsItemsCollectiosns');
 
         var popEachProductsItemsCollection = document.getElementsByClassName('popEachProductsItemss ');
 
         var count = popEachProductsItemsCollection.length;
 
-        // console.log('popEachProductsItems: ' + popEachProductsItemsCollection);
+        // // // console.log('popEachProductsItems: ' + popEachProductsItemsCollection);
 
-        //  console.log('Count of popEachProductsItems: ' + count);
+        //  // // console.log('Count of popEachProductsItems: ' + count);
 
         var NextCount = count + 1;
 
@@ -2616,7 +2625,7 @@
     }
 
     function RemoveOneFormula(Name) {
-        // console.log(Name);
+        // // // console.log(Name);
         var popEachProductsItemsCollection = document.getElementsByClassName('popEachProductsItemss ');
 
         // Convert HTMLCollection to array using spread operator
@@ -2624,7 +2633,7 @@
 
         // Now you can use forEach
         itemsArray.forEach((EachProduct) => {
-            //   console.log(EachProduct);
+            //   // // console.log(EachProduct);
             var name = EachProduct.querySelector('p').textContent.trim();
             if (Name === name) {
                 EachProduct.remove();
@@ -2648,20 +2657,21 @@
 
     function AddNewComment(id) {
         let comment_content = document.getElementById(id).value;
-        var UserName;
+        if (comment_content) {
+            var UserName;
 
-        if (State.UserNow) {
-            UserName = State.UserNow;
-        } else {
-            UserName = document.getElementById('UserName').value;
-            console.log(UserName);
-            State.UserNow = UserName;
-        }
+            if (State.UserNow) {
+                UserName = State.UserNow;
+            } else {
+                UserName = document.getElementById('Username').value;
+                // // console.log(UserName);
+                State.UserNow = UserName;
+            }
 
 
-        var newOrderpopCommentsCollection = document.getElementById('newOrderpopCommentsCollection');
+            var newOrderpopCommentsCollection = document.getElementById('newOrderpopCommentsCollection');
 
-        var VirtualOneComment = `
+            var VirtualOneComment = `
                     <div class="popEachComment ">
                         <p class="popCommentSender" id="UserName">${UserName}</p>
                         <div class="popCommentSended">
@@ -2670,8 +2680,9 @@
                     </div>
         `
 
-        newOrderpopCommentsCollection.insertAdjacentHTML('beforeend', VirtualOneComment);
-        document.getElementById(id).value = "";
+            newOrderpopCommentsCollection.insertAdjacentHTML('beforeend', VirtualOneComment);
+            document.getElementById(id).value = "";
+        }
     }
 
 
@@ -2702,8 +2713,8 @@
                 mentionList.style.display = 'block';
 
                 // Position the mention list below the cursor
-                var cursorPos = getCaretCoordinates(textarea, textarea.selectionEnd);
-                mentionList.style.top = (cursorPos.top + 20) + 'px'; // Adjust the offset as needed
+                // var cursorPos = getCaretCoordinates(textarea, textarea.selectionEnd);
+                //  mentionList.style.top = (cursorPos.top + 20) + 'px'; // Adjust the offset as needed
 
                 // Create list items for each matched name
                 matchedNames.forEach(name => {
@@ -2755,12 +2766,14 @@
     }
 
     function resetAllDataFromNewOrder() {
+        //  alert("Resetting")
         document.getElementById('OrderIDNumber').value = "";
         document.getElementById('OrderName').value = "";
         document.getElementById('customer_contact').value = "";
-        document.getElementById('popCardAllLabelCreateOrder') = "";
-        document.getElementById('popProductsItemsCollectiosns') = "";
-        document.getElementById('newOrderpopCommentsCollection') = "";
+        document.getElementById('popCardAllLabelCreateOrder').innerHTML = "";
+        document.getElementById('popProductsItemsCollectiosns').innerHTML = "";
+        document.getElementById('newOrderpopCommentsCollection').innerHTML = "";
+        document.getElementById("AttachmentImage").src = "";
     }
 
 
@@ -2777,12 +2790,13 @@
             if (OrderIDNumber && OrderName && customer_contact) {
 
             } else {
+                // console.log('(OrderIDNumber && OrderName && customer_contact)', OrderIDNumber, OrderName, customer_contact)
                 flag = true;
                 NotValidNewOrderInput()
             }
 
             var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
-            //  console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
+            //  // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
             proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
             var ProItemsDivArray = [...proItems];
@@ -2792,16 +2806,21 @@
                 var qtyElement = OneItem.getElementsByClassName('FormulaQty')[0];
                 var unitElement = OneItem.getElementsByClassName('FormulaUnit')[0];
 
-                if (
-                    colorNameElement &&
-                    qtyElement && qtyElement.value &&
-                    unitElement
-                ) {
+                if (colorNameElement && qtyElement && qtyElement.value && unitElement) {
                     // Code to execute if all three conditions are truthy
-                    confirm("sdfasdf");
+                    // console.log("Color Name Element:", colorNameElement);
+                    // console.log("Quantity Element:", qtyElement);
+                    // console.log("Quantity Value:", qtyElement.value);
+                    // console.log("Unit Element:", unitElement);
+                    //confirm("sdfasdf");
                 } else {
                     // Code to execute if any of the conditions is falsy
                     flag = true;
+                    // console.log("One or more elements are missing or have undefined values.");
+                    // console.log("Color Name Element:", colorNameElement);
+                    // console.log("Quantity Element:", qtyElement);
+                    // console.log("Quantity Value:", qtyElement.value);
+                    // console.log("Unit Element:", unitElement);
                     NotValidNewOrderInput()
                 }
             });
@@ -2813,7 +2832,7 @@
 
 
             function NotValidNewOrderInput() {
-                alert('Please fill all the fields!');
+                // alert('Please fill all the fields!');
             }
 
             function ValidnewOrderInput() {
@@ -2841,7 +2860,7 @@
 
 
                 var popCardAllLabelCreateOrder = document.getElementById('popCardAllLabelCreateOrder')
-                console.log("LabelsDivs", popCardAllLabelCreateOrder);
+                // console.log("LabelsDivs", popCardAllLabelCreateOrder);
 
                 var labelsDiv = popCardAllLabelCreateOrder.getElementsByClassName('popLabel');
 
@@ -2851,9 +2870,9 @@
                 var Labels = [];
 
                 LabelsDivArray.forEach((OneLabel) => {
-                    console.log("OneLabel: ", OneLabel);
-                    console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
-                    console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
+                    // // console.log("OneLabel: ", OneLabel);
+                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
+                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
 
                     var Label = {
                         Name: OneLabel.getElementsByClassName('LabelData')[0].value,
@@ -2863,7 +2882,7 @@
                     Labels.push(Label);
                 });
 
-                console.log("Labels: ", Labels);
+                // console.log("Labels: ", Labels);
 
 
                 // productions items
@@ -2871,11 +2890,11 @@
                 var ProductionsItems = [];
 
                 var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
-                console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
+                // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
                 proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
 
-                console.log('proItems: ', proItems);
+                // console.log('proItems: ', proItems);
 
 
                 // Alternatively, you can use the spread operator
@@ -2891,7 +2910,7 @@
                         Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent
                     }
 
-                    console.log("Proitem: ", item);
+                    // console.log("Proitem: ", item);
 
                     ProductionsItems.push(item);
                 });
@@ -2899,7 +2918,7 @@
                 // get all Comment
                 var comments = [];
                 var newOrderpopCommentsCollection = document.getElementById('newOrderpopCommentsCollection');
-                console.log("newOrderpopCommentsCollection: ", newOrderpopCommentsCollection);
+                // console.log("newOrderpopCommentsCollection: ", newOrderpopCommentsCollection);
 
                 var popEachCommentsArray = newOrderpopCommentsCollection.getElementsByClassName('popEachComment');
 
@@ -2907,20 +2926,61 @@
 
                 CommentsDivArray.forEach((OneComment) => {
                     var comment = {
-                        comment: OneComment.getElementsByClassName('popCommentSender')[0].textContent,
-                        Sender: OneComment.getElementsByClassName('popComment')[0].textContent
+                        Sender: OneComment.getElementsByClassName('popCommentSender')[0].textContent,
+                        comment: OneComment.getElementsByClassName('popComment')[0].textContent
                     }
 
                     comments.push(comment);
                 })
 
+                // get Attachment Images
+                //   var input = document.getElementById('file');
+                // var imageFile = input.files[0];
+
                 var CompleteOrderData = {
                     OrderName: FinalOrderName,
+                    OrderIDNumber: OrderIDNumber,
+                    CustomerName: OrderName,
                     ContactDetails: ContactDetails,
                     Labels: Labels,
                     ProductionsItems: ProductionsItems,
-                    comments: comments
+                    comments: comments,
+                    //AttachmentImage: imageFile
                 }
+
+                var input = document.getElementById('file');
+                var imageFile = input.files[0];
+                //  CompleteOrderData.file = imageFile;
+
+                // Create a FormData object
+                var formData = new FormData();
+
+                // Append the file to FormData with a specific field name ('file' in this case)
+                formData.append('file', imageFile);
+
+                // Append other data to FormData
+                /* Object.entries(CompleteOrderData).forEach(([key, value]) => {
+                     formData.append(key, value);
+                 });*/
+
+                // Manually handle objects and arrays
+                Object.entries(CompleteOrderData).forEach(([key, value]) => {
+                    if (typeof value === 'object') {
+                        // Convert objects and arrays to JSON strings before appending
+                        formData.append(key, JSON.stringify(value));
+                    } else {
+                        // For other types, append as is
+                        formData.append(key, value);
+                    }
+                });
+
+                // Verify the content of formData
+                for (var pair of formData.entries()) {
+                    // console.log(pair[0] + ': ' + pair[1]);
+                }
+
+
+                // console.log("CompleteOrderData", CompleteOrderData);
 
 
 
@@ -2934,19 +2994,24 @@
                 // Set up the fetch options
                 var fetchOptions = {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Add any additional headers if needed
-                    },
-                    body: jsonData,
+                    //    headers: { 'Content-Type': 'multipart/form-data' },
+                    body: formData,
                 };
+                /* method: 'POST',
+                 headers: {
+                     // 'Content-Type': 'application/json',
+                     'Content-Type': 'multipart/form-data',
+                     // Add any additional headers if needed
+                 },
+                 body: jsonData,*/
+
 
                 // Make the fetch request
                 fetch(apiUrl, fetchOptions)
                     .then(response => response.json()) // Parse the JSON response
                     .then(data => {
                         // Handle the data from the server
-                        console.log('Response from server:', data.State);
+                        // console.log('Response from server:', data.State);
                         //CloseCustomerCreationPopup();
                         //resetCustomerValues();
                         location.reload();
@@ -2988,6 +3053,760 @@
     }
 
 
+    function ViewCardDetails(CardName) {
+        //  alert(CardName);
+        var AlreadyNameAdded = false;
+        var CreateOrderPopup = document.getElementById('CreateOrderPopup');
+        CreateOrderPopup.style.display = "flex";
+
+        const CardData = State.AllCards.find((Card) => Card.Name === CardName);
+        // console.log("CardData", CardData);
+
+        //   // console.log("mainPopup", CreateOrderPopup);
+        //  // console.log(CreateOrderPopup.getElementsByClassName('CardNameInput'));
+        if (CardData.CurrentList !== "ORDERS") {
+            CreateOrderPopup.getElementsByClassName('popCardHeaderText')[0].readOnly = true;
+        }
+
+        var Customers = State.Customers;
+        var OldCustomerName = CardData.CustomerName;
+        var MatchedCustomer;
+
+        //   // console.log(OldCustomerName);
+
+        if (CardData.OrderIDNumber) {
+            AlreadyNameAdded = true;
+            CreateOrderPopup.getElementsByClassName('popCardHeaderText')[0].value = CardData.OrderIDNumber;
+            // Assuming you have a function that returns a promise for the first block of code
+            function executeFirstBlock() {
+                return new Promise((resolve, reject) => {
+                    var matchingCustomer;
+                    Customers.forEach((OneCustomer) => {
+                        // console.log(OneCustomer)
+                        if (OneCustomer.Customername == OldCustomerName) {
+                            matchingCustomer = OneCustomer;
+                            MatchedCustomer = OneCustomer
+                            //       // console.log("matchingCustomer", matchingCustomer);
+                        }
+                    })
+
+                    //const matchingCustomer = Customers.find(customer => customer.Customername === OldCustomerName);
+                    var UpdatedCustomers = [matchingCustomer];
+
+
+                    Customers.forEach((Customer) => {
+                        if (Customer !== matchingCustomer) {
+                            UpdatedCustomers.push(Customer);
+                        }
+                    });
+
+                    // // console.log("Matching Completed!", UpdatedCustomers);
+                    resolve(UpdatedCustomers); // Resolve with the UpdatedCustomers array
+                });
+            }
+
+            // Execute the first block
+            executeFirstBlock().then((UpdatedCustomers) => {
+                // Now, UpdatedCustomers contains the result from the first block
+                // console.log("Updated Customers:", UpdatedCustomers);
+
+                // Check if a matching customer is found
+                if (UpdatedCustomers.length > 0) {
+
+                    var CustomerSelect = CreateOrderPopup.getElementsByClassName('CustomerNameSelect')[0];
+                    CustomerSelect.innerHTML = "";
+                    UpdatedCustomers.forEach((OneCustomer) => {
+                        var optionElement = document.createElement('option');
+                        optionElement.text = OneCustomer.Customername;
+                        optionElement.value = OneCustomer.Customername;
+                        CustomerSelect.appendChild(optionElement);
+                    });
+                } else {
+                    //  // console.log("No matching customer found.");
+                }
+            }).catch((error) => {
+                console.error("Error in executing the first block:", error);
+            });
+
+
+
+
+        } else {
+            CreateOrderPopup.getElementsByClassName('popCardHeaderText')[0].value = CardData.Name + "-";
+            var CustomerSelect = CreateOrderPopup.getElementsByClassName('CustomerNameSelect')[0];
+            CustomerSelect.innerHTML = "";
+            var optionElement = document.createElement('option');
+            optionElement.text = "Select a Customer";
+            optionElement.value = "";
+            CustomerSelect.appendChild(optionElement);
+            Customers.forEach((OneCustomer) => {
+                var optionElement = document.createElement('option');
+                optionElement.text = OneCustomer.Customername;
+                optionElement.value = OneCustomer.Customername;
+                CustomerSelect.appendChild(optionElement);
+            })
+        }
+
+
+
+
+        CreateOrderPopup.getElementsByClassName('PopcardListName')[0].textContent = CardData.CurrentList;
+
+        // // console.log();
+        var Contacts = [];
+
+
+        var CustomerContactSelect = CreateOrderPopup.getElementsByClassName('popCardHeaderText');
+
+        if (AlreadyNameAdded) {
+            var ContactPersonName = CardData.ContactPersonName;
+            function executeFirstBlock() {
+                return new Promise(async (resolve, reject) => {
+                    const MarchingContact = await MatchedCustomer.Contact.find(OneContact => OneContact.Name === ContactPersonName);
+                    Contacts.push(MarchingContact);
+                    await MatchedCustomer.Contact.forEach((OneContact) => {
+                        if (OneContact.Name !== ContactPersonName) {
+                            Contacts.push(OneContact);
+                        }
+                    })
+                    // // console.log("Contacts", Contacts);
+                    resolve(Contacts);
+                })
+            }
+
+
+            executeFirstBlock().then((Contacts) => {
+                // // console.log(Contacts);
+
+                var customer_contact = document.getElementById('customer_contact');
+                customer_contact.innerHTML = "";
+
+                Contacts.forEach((OneContact) => {
+                    var contactOption = document.createElement('option')
+                    contactOption.value = OneContact.Name;
+                    contactOption.text = OneContact.Name;
+                    customer_contact.append(contactOption);
+                })
+
+                HnadleContactChange();
+            })
+        }
+
+        // Handle Label
+        var Labels = CardData.Labels;
+        //  var popCardAllLabelContainer = document.querySelector('.popCardAllLabelCreateOrder');
+        var popLabelCollections = document.getElementsByClassName('popCardAllLabelCreateOrder');
+        popLabelCollections[0].innerHTML = '';
+
+        Labels.forEach((Onelabel) => {
+            CreateOrderselectColor(Onelabel.Name, Onelabel.Color)
+        })
+
+
+        // handle Productions
+        var popProductsItemsCollectiosn = document.getElementById('popProductsItemsCollectiosns');
+        popProductsItemsCollectiosn.innerHTML = "";
+        var ProsItems = CardData.CheckListItems.checkItems;
+        ProsItems.forEach((ProItems) => {
+            var formula = {
+                ColorName: ProItems.Name,
+                Unit: ProItems.Unit,
+                FileNo: ProItems.FileNo,
+                QTY: ProItems.Qty
+            }
+            handleResultItemClick(formula)
+        })
+
+        // handle Comment
+        var newOrderpopCommentsCollection = document.getElementById('newOrderpopCommentsCollection');
+        newOrderpopCommentsCollection.innerHTML = "";
+        var comments = CardData.comments;
+
+        comments.forEach((OneComment) => {
+            var VirtualOneComment = `
+                    <div class="popEachComment ">
+                        <p class="popCommentSender" id="UserName">${OneComment.Sender}</p>
+                        <div class="popCommentSended">
+                            <p class="popComment" id="UserComment" >${OneComment.comment}</p>
+                        </div>
+                    </div>
+        `
+
+            newOrderpopCommentsCollection.insertAdjacentHTML('beforeend', VirtualOneComment);
+        })
+
+
+        // if Attachment
+
+        if (CardData.IsAttachments) {
+            // alert("Has Image")
+            var attachementImg = document.getElementById("AttachmentImage");
+            attachementImg.src = `/images/Attachments/${CardData._id}.jpg`
+        }
+
+
+        // handle main Action BTN
+        var CreateOrderButton = document.getElementById('CreateOrderButton');
+        CreateOrderButton.onclick = function () {
+            UpdateOrder(CardData._id);
+        };
+        CreateOrderButton.textContent = "Update Order";
+
+
+        // action Buttons
+        var PopActionBtnSection = document.getElementById('PopActionBtnSection');
+        PopActionBtnSection.style.display = "flex";
+
+
+        // handle Move Actions Options
+        var moveSelect = document.getElementById('moveSelect');
+        var AllLists = [];
+        var Allcolumns = State.columns;
+        var CurrentList = CardData.CurrentList;
+        var CardID = CardData._id;
+
+        // add current list
+        if (CurrentList === "ORDERS") {
+            AllLists.push("ORDERS");
+        }
+
+        if (CurrentList === "OFFICE SECTION") {
+            AllLists.push("OFFICE SECTION");
+        }
+
+        Allcolumns.PRODUCTION.forEach((EachProductionList) => {
+            if (CurrentList === EachProductionList.Name) {
+                AllLists.push(EachProductionList.Name);
+            }
+        })
+
+        if (CurrentList === "FOR DISPATCH") {
+            AllLists.push("FOR DISPATCH");
+        }
+
+        if (CurrentList === "FOR CUSTOMER COLLECTION") {
+            AllLists.push("FOR CUSTOMER COLLECTION");
+        }
+
+        Allcolumns.DRIVERS.forEach((EachDriver) => {
+            if (CurrentList === EachDriver.Name) {
+                AllLists.push(EachDriver.Name);
+            }
+        })
+
+
+        // add all other list
+
+        if (CurrentList !== "ORDERS") {
+            AllLists.push("ORDERS");
+        }
+
+        if (CurrentList !== "OFFICE SECTION") {
+            AllLists.push("OFFICE SECTION");
+        }
+
+        Allcolumns.PRODUCTION.forEach((EachProductionList) => {
+            if (CurrentList !== EachProductionList.Name) {
+                AllLists.push(EachProductionList.Name);
+            }
+        })
+
+        if (CurrentList !== "FOR DISPATCH") {
+            AllLists.push("FOR DISPATCH");
+        }
+
+        if (CurrentList !== "FOR CUSTOMER COLLECTION") {
+            AllLists.push("FOR CUSTOMER COLLECTION");
+        }
+
+        Allcolumns.DRIVERS.forEach((EachDriver) => {
+            if (CurrentList !== EachDriver.Name) {
+                AllLists.push(EachDriver.Name);
+            }
+        })
+
+
+        moveSelect.onchange = function () {
+            ChangeList(CardID);
+        }
+
+        AllLists.forEach((OneList) => {
+            let OneOption = document.createElement('option');
+            OneOption.value = OneList;
+            OneOption.innerHTML = OneList;
+            OneOption.style.padding = "5px 0";
+            moveSelect.appendChild(OneOption);
+        })
+
+        // Handle Activity
+
+
+
+        var popActivityCollections = document.getElementById('popActivityCollections');
+        popActivityCollections.innerHTML = "";
+        // console.log("popActivityCollections", popActivityCollections);
+        var Activity = CardData.Activity;
+
+        Activity.reverse();
+        // console.log("Actitvity Array ", Activity)
+
+        var ULelement = document.createElement('ul');
+
+        Activity.forEach((EachActivity) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = EachActivity.activity;
+
+            // Create paragraph element for the timestamp
+
+            const timestamp = EachActivity.Time;
+            const formattedTimestamp = formatTimestamp(timestamp);
+            // console.log(formattedTimestamp);
+
+            const timestamp1 = document.createElement('p');
+            timestamp1.className = 'popActivityTime';
+            timestamp1.textContent = formattedTimestamp;
+
+            // Append the timestamp to the first list item
+            listItem.appendChild(timestamp1);
+
+            // Append the paragraphs to the list item
+
+            ULelement.appendChild(listItem);
+        })
+
+        popActivityCollections.appendChild(ULelement);
+        // console.log("Doing EAch activity", popActivityCollections);
+
+        function formatTimestamp(timestamp) {
+            const currentDate = new Date();
+            const activityDate = new Date(timestamp);
+
+            const timeDifference = currentDate - activityDate;
+
+            const seconds = Math.floor(timeDifference / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            let formattedTime = '';
+
+            if (days > 0) {
+                formattedTime = `@ ${activityDate.getHours()}:${String(activityDate.getMinutes()).padStart(2, '0')} (${days} day${days > 1 ? 's' : ''} ago)`;
+            } else if (hours > 0) {
+                formattedTime = `@ ${activityDate.getHours()}:${String(activityDate.getMinutes()).padStart(2, '0')} (${hours} hour${hours > 1 ? 's' : ''} ago)`;
+            } else if (minutes > 0) {
+                formattedTime = `@ ${activityDate.getHours()}:${String(activityDate.getMinutes()).padStart(2, '0')} (${minutes} minute${minutes > 1 ? 's' : ''} ago)`;
+            } else {
+                formattedTime = `@ ${activityDate.getHours()}:${String(activityDate.getMinutes()).padStart(2, '0')} (${seconds} second${seconds > 1 ? 's' : ''} ago)`;
+            }
+
+            return formattedTime;
+        }
+
+
+    }
+
+
+    function previewAttachmentImage() {
+        var input = document.getElementById('file');
+        var attachmentImage = document.getElementById('AttachmentImage');
+
+        if (attachmentImage) {
+            var file = input.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    attachmentImage.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        } else {
+            console.error("AttachmentImage element not found");
+        }
+    }
+
+    function UpdateOrder(cardID) {
+        // alert("Ordre updated", cardID);
+
+        function validateNewOrderInput() {
+
+            var flag = false;
+
+            var OrderIDNumber = document.getElementById('OrderIDNumber').value;
+            var OrderName = document.getElementById('OrderName').value;
+            var customer_contact = document.getElementById('customer_contact').value;
+
+            if (OrderIDNumber && OrderName && customer_contact) {
+
+            } else {
+                // console.log('(OrderIDNumber && OrderName && customer_contact)', OrderIDNumber, OrderName, customer_contact)
+                flag = true;
+                NotValidNewOrderInput()
+            }
+
+            var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
+            //  // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
+
+            proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+            var ProItemsDivArray = [...proItems];
+
+            ProItemsDivArray.forEach((OneItem) => {
+                var colorNameElement = OneItem.getElementsByClassName('FormulaColorName')[0];
+                var qtyElement = OneItem.getElementsByClassName('FormulaQty')[0];
+                var unitElement = OneItem.getElementsByClassName('FormulaUnit')[0];
+
+                if (colorNameElement && qtyElement && qtyElement.value && unitElement) {
+                    // Code to execute if all three conditions are truthy
+                    // console.log("Color Name Element:", colorNameElement);
+                    // console.log("Quantity Element:", qtyElement);
+                    // console.log("Quantity Value:", qtyElement.value);
+                    // console.log("Unit Element:", unitElement);
+                    //confirm("sdfasdf");
+                } else {
+                    // Code to execute if any of the conditions is falsy
+                    flag = true;
+                    // console.log("One or more elements are missing or have undefined values.");
+                    // console.log("Color Name Element:", colorNameElement);
+                    // console.log("Quantity Element:", qtyElement);
+                    // console.log("Quantity Value:", qtyElement.value);
+                    // console.log("Unit Element:", unitElement);
+                    NotValidNewOrderInput()
+                }
+            });
+
+
+            if (!flag) {
+                ValidnewOrderInput()
+            }
+
+
+            function NotValidNewOrderInput() {
+                // alert('Please fill all the fields!');
+            }
+
+            function ValidnewOrderInput() {
+                var OrderIDNumber = document.getElementById('OrderIDNumber').value;
+                var OrderName = document.getElementById('OrderName').value;
+                //OrderName
+                var FinalOrderName = OrderIDNumber + OrderName;
+
+                //CustomerContact
+                var customer_contact = document.getElementById('customer_contact').value;
+
+                // final Contact Details
+                var ContactDetails;
+
+                State.Customers.forEach((Customers) => {
+                    if (Customers.Customername === OrderName) {
+                        Customers.Contact.forEach((OneContact) => {
+                            if (OneContact.Name === customer_contact) {
+                                ContactDetails = OneContact;
+                            }
+                        })
+                    }
+                })
+
+
+
+                var popCardAllLabelCreateOrder = document.getElementById('popCardAllLabelCreateOrder')
+                // console.log("LabelsDivs", popCardAllLabelCreateOrder);
+
+                var labelsDiv = popCardAllLabelCreateOrder.getElementsByClassName('popLabel');
+
+                // Alternatively, you can use the spread operator
+                var LabelsDivArray = [...labelsDiv];
+
+                var Labels = [];
+
+                LabelsDivArray.forEach((OneLabel) => {
+                    // // console.log("OneLabel: ", OneLabel);
+                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
+                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
+
+                    var Label = {
+                        Name: OneLabel.getElementsByClassName('LabelData')[0].value,
+                        Color: OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor
+                    }
+
+                    Labels.push(Label);
+                });
+
+                // console.log("Labels: ", Labels);
+
+
+                // productions items
+
+                var ProductionsItems = [];
+
+                var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
+                // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
+
+                proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+
+                // console.log('proItems: ', proItems);
+
+
+                // Alternatively, you can use the spread operator
+                var ProItemsDivArray = [...proItems];
+
+
+                ProItemsDivArray.forEach((OneItem) => {
+                    // make changes 
+                    var item = {
+                        Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
+                        Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
+                        FileNo: OneItem.getElementsByClassName('HiddenFileNo')[0].value,
+                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent
+                    }
+
+                    // console.log("Proitem: ", item);
+
+                    ProductionsItems.push(item);
+                });
+
+                // get all Comment
+                var comments = [];
+                var newOrderpopCommentsCollection = document.getElementById('newOrderpopCommentsCollection');
+                // console.log("newOrderpopCommentsCollection: ", newOrderpopCommentsCollection);
+
+                var popEachCommentsArray = newOrderpopCommentsCollection.getElementsByClassName('popEachComment');
+
+                var CommentsDivArray = [...popEachCommentsArray];
+
+                CommentsDivArray.forEach((OneComment) => {
+                    var comment = {
+                        Sender: OneComment.getElementsByClassName('popCommentSender')[0].textContent,
+                        comment: OneComment.getElementsByClassName('popComment')[0].textContent
+                    }
+
+                    comments.push(comment);
+                })
+
+                // get Attachment Images
+                //   var input = document.getElementById('file');
+                // var imageFile = input.files[0];
+
+                var CompleteOrderData = {
+                    OrderName: FinalOrderName,
+                    OrderIDNumber: OrderIDNumber,
+                    CustomerName: OrderName,
+                    ContactDetails: ContactDetails,
+                    Labels: Labels,
+                    ProductionsItems: ProductionsItems,
+                    comments: comments,
+                    //AttachmentImage: imageFile
+                }
+
+                var input = document.getElementById('file');
+                var imageFile = input.files[0];
+                //  CompleteOrderData.file = imageFile;
+
+                // Create a FormData object
+                var formData = new FormData();
+
+                // Append the file to FormData with a specific field name ('file' in this case)
+                formData.append('file', imageFile);
+
+                // Append other data to FormData
+                /* Object.entries(CompleteOrderData).forEach(([key, value]) => {
+                     formData.append(key, value);
+                 });*/
+
+                // Manually handle objects and arrays
+                Object.entries(CompleteOrderData).forEach(([key, value]) => {
+                    if (typeof value === 'object') {
+                        // Convert objects and arrays to JSON strings before appending
+                        formData.append(key, JSON.stringify(value));
+                    } else {
+                        // For other types, append as is
+                        formData.append(key, value);
+                    }
+                });
+
+                // Verify the content of formData
+                for (var pair of formData.entries()) {
+                    // // console.log(pair[0] + ': ' + pair[1]);
+                }
+
+
+              //  // // console.log("CompleteOrderData", CompleteOrderData);
+
+
+
+                // api call
+                // URL of your backend API endpoint
+                var apiUrl = `/sales/UpdareCardOrder/${cardID}`;
+
+                // Convert the data object to a JSON string
+                var jsonData = JSON.stringify(CompleteOrderData);
+
+                // Set up the fetch options
+                var fetchOptions = {
+                    method: 'POST',
+                    //    headers: { 'Content-Type': 'multipart/form-data' },
+                    body: formData,
+                };
+                /* method: 'POST',
+                 headers: {
+                     // 'Content-Type': 'application/json',
+                     'Content-Type': 'multipart/form-data',
+                     // Add any additional headers if needed
+                 },
+                 body: jsonData,*/
+
+
+                // Make the fetch request
+                fetch(apiUrl, fetchOptions)
+                    .then(response => response.json()) // Parse the JSON response
+                    .then(data => {
+                        // Handle the data from the server
+                    //    // // console.log('Response from server:', data.State);
+                        //CloseCustomerCreationPopup();
+                        //resetCustomerValues();
+                        //location.reload();
+                        //resetAllDataFromNewOrder()
+                        fetchAllCards()
+                    })
+                    .catch(error => {
+                        // Handle errors
+                        console.error('Error:', error);
+                    });
+
+
+                CloseCreateOrderPopup()
+            }
+
+
+        }
+
+        validateNewOrderInput();
+    }
+
+
+
+    /*
+        function openMoveOptions() {
+            // Create a select element
+            var moveSelect = document.createElement('select');
+    
+            // Add options to the select element
+            var option1 = document.createElement('option');
+            option1.text = 'Option 1';
+            var option2 = document.createElement('option');
+            option2.text = 'Option 2';
+            var option3 = document.createElement('option');
+            option3.text = 'Option 3';
+    
+            moveSelect.add(option1);
+            moveSelect.add(option2);
+            moveSelect.add(option3);
+    
+            // Attach a click event listener to the options
+            moveSelect.addEventListener('change', function () {
+                // Call your function when an option is selected
+                handleMoveOption(this.value);
+                // Remove the select element
+                this.parentNode.removeChild(this);
+            });
+    
+            // Replace the "Move" button with the select element
+            var moveButton = document.querySelector('#PopActionBtnSection button:first-child');
+            moveButton.parentNode.replaceChild(moveSelect, moveButton);
+        }
+    
+        function handleMoveOption(selectedOption) {
+            // Implement your logic here based on the selected option
+            alert('Selected Move Option:', selectedOption);
+        }
+    
+    */
+    function toggleMoveOptions() {
+        var moveSelect = document.getElementById('moveSelect');
+
+        // Toggle the display property of the select element
+        moveSelect.style.display = moveSelect.style.display === 'none' ? 'block' : 'none';
+
+        // Attach a change event listener to the select element
+        moveSelect.addEventListener('change', function () {
+            // Call your function when an option is selected
+            handleMoveOption(this.value);
+            // Hide the select element after an option is selected
+            this.style.display = 'none';
+        });
+    }
+
+    function handleMoveOption(selectedOption) {
+        // Implement your logic here based on the selected option
+       // // // console.log('Selected Move Option:', selectedOption);
+    }
+
+    async function ChangeList(CardID) {
+        var NewListName = document.getElementById('moveSelect').value;
+        var Designation = "none";
+
+        //        var AllUsers = State.AllUsers;
+        const user = State.AllUsers.find(user => user.UserName === NewListName);
+
+        if (user) {
+
+            if (user.Designation === "Production") {
+                // production
+                Designation = "Production"
+            } else if (user.Designation === "Driver") {
+                // Driver
+                Designation = "Driver"
+            }
+        }
+
+        const response = await fetch(`/sales/ChangeListofCard/${CardID}/${NewListName}/${Designation}`);
+        const data = await response.json();
+
+        fetchAllCards();
+
+    }
+
+
+    async function MoveCardToList(CardName, DropColumeName) {
+        showLoader()
+        var Designation = "none";
+
+        //        var AllUsers = State.AllUsers;
+        const user = State.AllUsers.find(user => user.UserName === DropColumeName);
+
+        if (user) {
+
+            if (user.Designation === "Production") {
+                // production
+                Designation = "Production"
+            } else if (user.Designation === "Driver") {
+                // Driver
+                Designation = "Driver"
+            }
+        }
+
+        const response = await fetch(`/sales/ChangeListofCardName/${CardName}/${DropColumeName}/${Designation}`);
+        const data = await response.json();
+
+        fetchAllCards();
+    }
+
+
+    // Function to show the loader
+    function showLoader() {
+        document.getElementById('loader-container').style.display = 'flex';
+    }
+
+    // Function to hide the loader
+    function hideLoader() {
+        document.getElementById('loader-container').style.display = 'none';
+    }
+
+    // Example usage:
+    // Call showLoader() before making an asynchronous operation (e.g., API call)
+    // Call hideLoader() when the operation is complete
 
 
 
@@ -3179,14 +3998,16 @@
     }
 
     .ListsCollections {
+        overflow-y: hidden;
         padding-top: 2rem;
         width: 100%;
-        /* overflow-x: scroll;*/
+        overflow-x: scroll;
         display: flex;
         justify-content: start;
         padding-right: 5rem;
-
-        overflow: hidden;
+        padding-bottom: 5rem;
+        height: 97vh;
+        align-self: flex-end;
     }
 
     /* Add cursor styles for better user experience */
@@ -3222,7 +4043,7 @@
     .DriverSectionHeaderText,
     .DoneSectionHeaderText {
         color: #fff;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 600;
         margin: 0;
         padding-bottom: 0.5rem;
@@ -3263,7 +4084,7 @@
         margin-bottom: 1rem;
         margin-right: 3px;
         width: 98%;
-        min-width: 15rem;
+        max-width: 14rem;
 
     }
 
@@ -3274,6 +4095,7 @@
         flex-direction: column;
         justify-content: start;
         align-items: start;
+        font-size: 15px;
     }
 
     .CardSub {
@@ -3312,7 +4134,7 @@
     .CardImg {
         margin-bottom: 1rem;
         width: 100%;
-        max-width: 15rem;
+        max-width: 12rem;
     }
 
     .AddSmCardDiv {
@@ -3345,7 +4167,7 @@
         /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);*/
         /*   border: .5px #00AFAF solid;*/
         /*padding: 1rem 0.5rem;*/
-        height: 100%;
+        height: fit-content;
         width: auto;
         background-color: transparent;
     }
@@ -3378,11 +4200,13 @@
         justify-content: space-between;
     }
 
+    .OrdersList,
+    .OfficeSectionList,
     .ProductionColumn,
     .ReadyColumn,
     .DriverColumn,
     .DoneColumn {
-        min-width: 17rem;
+        min-width: 15rem;
         width: max-content;
         margin-top: 1rem;
         border-radius: 10px;
@@ -3390,9 +4214,11 @@
         padding: 1rem 0.5rem;
         background-color: #151919;
         margin: 1rem 0.5rem;
-        height: 100%;
+        height: fit-content;
     }
 
+    .OfficeSectionListHeader,
+    .OrdersListHeader,
     .ProductionColumnHeader,
     .ReadyColumnHeader,
     .DriverColumnHeader,
@@ -3679,10 +4505,11 @@
 
 
     .PopActionBtnSection {
-        display: flex;
+        display: none;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: start;
+        align-items: end;
+        padding: 2rem 10px;
     }
 
     .PopActionBtnSection button {
@@ -4145,7 +4972,7 @@
         border: none;
         color: #B3B7BA;
         background-color: transparent;
-        width: 18rem;
+        width: 20rem;
     }
 
     /* Styles for the modal */
@@ -4243,8 +5070,11 @@
         overflow-y: auto;
         color: #B3B7BA;
         padding: 0.5rem 1rem;
-        left: 7rem;
-        top: 1rem;
+        /*left: 7rem;*/
+        /*top: 1rem;*/
+
+        margin-top: -222px;
+
     }
 
     #mentionList div {
@@ -4263,8 +5093,216 @@
         width: 100%;
     }
 
+    .CardNameInput {
+        width: 100%;
+        /* box-sizing: border-box;*/
+        border-bottom: none;
+        border-radius: 5px;
+        font-size: 20px;
+        background-color: transparent;
+        color: #B3B7BA;
+        margin-top: 2rem;
+        padding: 1rem 0.5rem;
+        outline: none;
+
+    }
+
+    .custum-file-upload {
+        height: 200px;
+        width: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        gap: 20px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #e8e8e8;
+        background-color: #212121;
+        padding: 1.5rem;
+        border-radius: 10px;
+    }
+
+    .custum-file-upload .icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custum-file-upload .icon svg {
+        height: 80px;
+        fill: #e8e8e8;
+    }
+
+    .custum-file-upload .text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custum-file-upload .text span {
+        font-weight: 400;
+        color: #e8e8e8;
+    }
+
+    .custum-file-upload input {
+        display: none;
+    }
+
+    .icon {
+        position: relative;
+        width: auto;
+
+        z-index: 99;
+        left: 0;
+        bottom: 0;
+    }
+
+    .popAttachements {
+        display: flex;
+        flex-wrap: nowrap;
+        align-content: center;
+        justify-content: flex-start;
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .AttachmentIMG {
+        height: 167px;
+    }
+
+    .popAttachementsCollections {
+        border-radius: 10px;
+        border: 1px solid;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        padding: 1rem;
+        height: 100%;
+    }
+
+    #moveSelect {
+        display: none;
+        width: 100%;
+        padding: 0.5rem;
+        background: #3b444c;
+        color: #b3b7ba;
+        font-weight: 800;
+        font-size: 14px;
+    }
+
+    .moveSelectDiv {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        justify-content: center;
+    }
 
 
+    /*Loader */
+    #loader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        display: none;
+    }
+
+    /*.loader {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+*/
+
+    .loader {
+        display: flex;
+        align-items: center;
+    }
+
+    .bar {
+        display: inline-block;
+        width: 3px;
+        height: 20px;
+        background-color: rgba(255, 255, 255, .5);
+        border-radius: 10px;
+        animation: scale-up4 1s linear infinite;
+    }
+
+    .bar:nth-child(2) {
+        height: 35px;
+        margin: 0 5px;
+        animation-delay: .25s;
+    }
+
+    .bar:nth-child(3) {
+        animation-delay: .5s;
+    }
+
+    @keyframes scale-up4 {
+        20% {
+            background-color: #ffff;
+            transform: scaleY(1.5);
+        }
+
+        40% {
+            transform: scaleY(1);
+        }
+    }
+
+
+    /*Loader Ends*/
+
+
+    .tooltip-btn {
+        position: relative;
+        /* padding: 10px;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;*/
+    }
+
+    .tooltip-btn:hover::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 5px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 5px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+        font-size: 14px;
+        z-index: 9;
+    }
+
+    .tooltip-btn:hover::before {
+        opacity: 1;
+    }
 
 
 

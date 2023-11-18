@@ -3,6 +3,13 @@ var router = express.Router();
 const trelloHelpers = require('../helpers/trelloHelpers');
 const employeeHelpers = require('../helpers/employeeHelpers');
 const whatsappHelper = require('../helpers/whatsappHelper');
+const multer = require('multer');
+
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+
 
 const SalesVerifyLogin = (req, res, next) => {
     if (req.session.SalesData) {
@@ -234,7 +241,9 @@ router.post('/saveCustomer', SalesVerifyLogin, (req, res) => {
 router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
     console.log("Order Creating", req.body);
     var data = req.body;
+    const imageData = req.files;
 
+    //console.log("imageData", imageData);
     // ContactDetails: {
     //     Name: 'dfgdfdf',
     //     CallCountryCode: '+971',
@@ -245,7 +254,13 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
 
     var CheckItems = [];
 
-    await data.ProductionsItems.forEach((EachItem) => {
+    let productionsItemsArray = await JSON.parse(data.ProductionsItems);
+    let ContactDetails = await JSON.parse(data.ContactDetails);
+    let comments = await JSON.parse(data.comments);
+    let Labels = await JSON.parse(data.Labels);
+    // console.log(productionsItemsArray);
+
+    await productionsItemsArray.forEach((EachItem) => {
         CheckItems.push({
             Name: EachItem.Name,
             State: "InComplete",
@@ -259,6 +274,8 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
 
     var NewOrder = {
         Name: data.OrderName,
+        OrderIDNumber: data.OrderIDNumber,
+        CustomerName: data.CustomerName,
         CurrentList: "ORDERS",
         ListArray: [
             {
@@ -274,25 +291,191 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
             CardName: "ORDERS",
             checkItems: CheckItems
         },
-        ContactNumber: data.ContactDetails.CallNumber,
-        ContactcountrySelect: data.ContactDetails.CallCountryCode,
-        ContactPersonName: data.ContactDetails.Name,
-        CustomerName: data.ContactDetails.Name,
-        WhatsAppcountrySelect: data.ContactDetails.WhatsappCountryCode,
-        WhatsappNumber: data.ContactDetails.WhatsappNumber,
+        ContactNumber: ContactDetails.CallNumber,
+        ContactcountrySelect: ContactDetails.CallCountryCode,
+        ContactPersonName: ContactDetails.Name,
+        WhatsAppcountrySelect: ContactDetails.WhatsappCountryCode,
+        WhatsappNumber: ContactDetails.WhatsappNumber,
         description: "",
-        comments:data.comments,
-        Labels:data.Labels
+        comments: comments,
+        Labels: Labels,
+        Activity: [{
+            activity: `${req.session.SalesData.UserName} created card in Orders.`,
+            Time: Date.now()
+        }]
+    }
+
+    if (req.files) {
+        NewOrder.IsAttachments = true;
     }
 
     console.log("New Card: ", NewOrder);
 
-    employeeHelpers.InsertNewCard(NewOrder).then(()=>{
-        res.json({State:true});
+
+
+    employeeHelpers.InsertNewCard(NewOrder).then((CardId) => {
+        if (req.files) {
+            const imageData = req.files.file;
+            // console.log('Image data:', imageData);
+
+            imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
+                if (!err) {
+                } else {
+                    console.log("Error at img1 " + err)
+                }
+            })
+        }
+        res.json({ State: true });
     })
 })
 
 
+router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
+    console.log("Order Creating", req.body);
+    var data = req.body;
+    const imageData = req.files;
+    var cardID = req.params.cardID;
+
+    //console.log("imageData", imageData);
+    // ContactDetails: {
+    //     Name: 'dfgdfdf',
+    //     CallCountryCode: '+971',
+    //     CallNumber: '4334534',
+    //     WhatsappCountryCode: '+971',
+    //     WhatsappNumber: '34534'
+    //   }
+
+    var CheckItems = [];
+
+    let productionsItemsArray = await JSON.parse(data.ProductionsItems);
+    let ContactDetails = await JSON.parse(data.ContactDetails);
+    let comments = await JSON.parse(data.comments);
+    let Labels = await JSON.parse(data.Labels);
+    // console.log(productionsItemsArray);
+
+    await productionsItemsArray.forEach((EachItem) => {
+        CheckItems.push({
+            Name: EachItem.Name,
+            State: "InComplete",
+            Qty: EachItem.Qty,
+            Unit: EachItem.Unit,
+            FileNo: EachItem.FileNo ? EachItem.FileNo : ""
+        })
+    })
+
+
+
+    var NewOrder = {
+        Name: data.OrderName,
+        OrderIDNumber: data.OrderIDNumber,
+        CustomerName: data.CustomerName,
+        CurrentList: "ORDERS",
+        ListArray: [
+            {
+                ListName: "ORDERS",
+                InTIme: Date.now(),
+                InEmployeeName: req.session.SalesData.UserName,
+                InEmployeeDesignation: req.session.SalesData.Designation
+            }
+        ],
+        AlternateContactNumber: "",
+        AlternateContactcountrySelect: "",
+        CheckListItems: {
+            CardName: "ORDERS",
+            checkItems: CheckItems
+        },
+        ContactNumber: ContactDetails.CallNumber,
+        ContactcountrySelect: ContactDetails.CallCountryCode,
+        ContactPersonName: ContactDetails.Name,
+        WhatsAppcountrySelect: ContactDetails.WhatsappCountryCode,
+        WhatsappNumber: ContactDetails.WhatsappNumber,
+        description: "",
+        comments: comments,
+        Labels: Labels
+    }
+
+    if (req.files) {
+        NewOrder.IsAttachments = true;
+    }
+
+    console.log("New Card: ", NewOrder);
+
+    var Activity = {
+        activity: `${req.session.SalesData.UserName} Updated this card.`,
+        Time: Date.now()
+    }
+
+    employeeHelpers.UpdateCard(NewOrder, cardID,Activity).then((CardId) => {
+        if (req.files) {
+            const imageData = req.files.file;
+            // console.log('Image data:', imageData);
+
+            imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
+                if (!err) {
+                } else {
+                    console.log("Error at img1 " + err)
+                }
+            })
+        }
+        res.json({ State: true });
+    })
+})
+
+
+router.get('/ChangeListofCard/:CardID/:NewListName/:Designation', SalesVerifyLogin, (req, res) => {
+    let cardID = req.params.CardID;
+    let newlistname = req.params.NewListName;
+    let Designation = req.params.Designation;
+
+    var UserNow = req.session.SalesData;
+
+    var Data = {
+        cardID: cardID,
+        newlistname: newlistname,
+        UserName: UserNow.UserName,
+        Designation: UserNow.Designation,
+        Activity:{
+            activity:`${UserNow.UserName} Moved card to ${newlistname}.`,
+            Time:Date.now(),
+        }
+    }
+
+    if (Designation === "Production") {
+        Data.ProductionPerson = newlistname;
+    }
+
+
+    employeeHelpers.ChangeCardList(Data).then(() => {
+        res.json({ Status: true });
+    })
+
+})
+
+router.get('/ChangeListofCardName/:CardName/:DropColumeName/:Designation', SalesVerifyLogin, (req, res) => {
+    let CardName = req.params.CardName;
+    let DropColumeName = req.params.DropColumeName;
+    let Designation = req.params.Designation;
+    var UserNow = req.session.SalesData;
+    var NewActivity = UserNow.UserName+" Moved card to "+DropColumeName+".";
+    console.log("/ChangeListofCardName/:CardName/:DropColumeName/:Designation");
+    var Data = {
+        CardName: CardName,
+        newlistname: DropColumeName,
+        UserName: UserNow.UserName,
+        Designation: UserNow.Designation,
+        Activity:{
+            activity:NewActivity,
+            Time:Date.now(),
+        }
+    }
+    if (Designation === "Production") {
+        Data.ProductionPerson = DropColumeName;
+    }
+    employeeHelpers.ChangeCardListByName(Data).then((data) => {
+        //console.log(data);
+        res.json({ Status: true });
+    })
+})
 
 
 

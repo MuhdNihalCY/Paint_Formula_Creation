@@ -7,6 +7,7 @@ var hbs = require('express-handlebars');
 var db = require('./config/connection');
 var session = require('express-session');
 const fileUpload = require('express-fileupload');
+// const bodyParser = require('body-parser');
 
 
 var EmployeeRouter = require('./routes/employee');
@@ -32,6 +33,8 @@ app.engine('hbs', hbs.engine({
 
 app.use(logger('dev'));
 app.use(express.json());
+// app.use(express.json({ limit: '5mb' }));
+// app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -42,6 +45,13 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 2592000000 }
 })); // session upto 30 days ,  for 1 minute apply 60000, for 5 minutes 300000 
+
+// Increase payload size limit (adjust the limit as needed)
+// app.use(bodyParser.json({ limit: '5mb' }));
+// app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
+// Parse JSON-encoded data
+
+// Parse URL-encoded data
 
 // db.connect((err)=>{
 //   if(err) {
@@ -75,12 +85,12 @@ startApp();
 
 app.use('/', EmployeeRouter);
 app.use('/admin', AdminRouter);
-app.use('/customer',CustomerRouter);
-app.use('/sales',SalesRouter);
-app.use('/office',OfficeRouter);
-app.use('/dispatcher',DispatcherRouter);
-app.use('/driver',DriverRouter);
-app.use('/manager',ManagerRouter);
+app.use('/customer', CustomerRouter);
+app.use('/sales', SalesRouter);
+app.use('/office', OfficeRouter);
+app.use('/dispatcher', DispatcherRouter);
+app.use('/driver', DriverRouter);
+app.use('/manager', ManagerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -95,7 +105,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error',{FullErrorPage:true});
+  res.render('error', { FullErrorPage: true });
 });
 
 module.exports = app;

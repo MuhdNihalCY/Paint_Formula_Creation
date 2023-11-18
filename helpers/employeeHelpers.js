@@ -1196,29 +1196,97 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             for (let i = 0; i < Formulas.length; i++) {
                 const Formula = Formulas[i];
-               // console.log("Formula: ", Formula);
+                // console.log("Formula: ", Formula);
 
                 // this takes a bit of time
                 const Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION)
                     .findOne({ SubCategory: Formula.SubCategoryName });
 
-                    
-                    if (Subcategory.Liter) {
-                        Formula.Unit = "Liter";
-                    } else {
-                        Formula.Unit = "Kilogram";
-                    }
-                    console.log(Formula);
+
+                if (Subcategory.Liter) {
+                    Formula.Unit = "Liter";
+                } else {
+                    Formula.Unit = "Kilogram";
+                }
+                console.log(Formula);
             }
 
             // do this after the loop ends 
             resolve(Formulas)
         })
     },
-    InsertNewCard:(NewCard)=>{
-        return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.CARD_COLLECTION).insertOne(NewCard).then((response)=>{
-                resolve();
+    InsertNewCard: (NewCard) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CARD_COLLECTION).insertOne(NewCard).then((response) => {
+                resolve(response.insertedId);
+            })
+        })
+    },
+    UpdateCard: (CardData, CardID, Activity) => {
+        return new Promise(async (resolve, reject) => {
+            var OldCard = await db.get().collection(collection.CARD_COLLECTION).findOne({ _id: new ObjectId(CardID) });
+            OldCard.Activity.push(Activity)
+            CardData.CardData = OldCard.Activity;
+            await db.get().collection(collection.CARD_COLLECTION).updateOne({ _id: new ObjectId(CardID) }, { $set: CardData }).then(() => {
+                resolve(CardID);
+            })
+        })
+    },
+    ChangeCardList: (data) => {
+        return new Promise(async (resolve, reject) => {
+            var OldCard = await db.get().collection(collection.CARD_COLLECTION).findOne({ _id: new ObjectId(data.cardID) });
+
+            OldCard.CurrentList = data.newlistname;
+            OldCard.ListArray[0].OutTime = Date.now();
+            OldCard.ListArray[0].OutEmployeeName = data.UserName;
+            OldCard.ListArray[0].OutEmployeeDesignation = data.Designation;
+
+            OldCard.ListArray.unshift({
+                ListName: data.newlistname,
+                InTime: Date.now(),
+                InEmployeeName: data.UserName,
+                InEmployeeDesignation: data.Designation,
+            })
+
+            if (data.ProductionPerson) {
+                OldCard.ProductionPerson = data.ProductionPerson;
+            }
+            OldCard.Activity.push(data.Activity)
+
+
+            delete OldCard._id;
+            console.log("OldCard: ", OldCard);
+
+            await db.get().collection(collection.CARD_COLLECTION).updateOne({ _id: new ObjectId(data.cardID) }, { $set: OldCard }).then(() => {
+                resolve(data.cardID);
+            })
+        })
+    },
+    ChangeCardListByName: (data) => {
+        return new Promise(async (resolve, reject) => {
+            var OldCard = await db.get().collection(collection.CARD_COLLECTION).findOne({ Name: data.CardName });
+
+            OldCard.CurrentList = data.newlistname;
+            OldCard.ListArray[0].OutTime = Date.now();
+            OldCard.ListArray[0].OutEmployeeName = data.UserName;
+            OldCard.ListArray[0].OutEmployeeDesignation = data.Designation;
+
+            OldCard.ListArray.unshift({
+                ListName: data.newlistname,
+                InTime: Date.now(),
+                InEmployeeName: data.UserName,
+                InEmployeeDesignation: data.Designation,
+            })
+            if (data.ProductionPerson) {
+                OldCard.ProductionPerson = data.ProductionPerson;
+            }
+            OldCard.Activity.push(data.Activity)
+
+            delete OldCard._id;
+            console.log("OldCard: ", OldCard);
+
+            await db.get().collection(collection.CARD_COLLECTION).updateOne({ Name: data.CardName }, { $set: OldCard }).then(() => {
+                resolve(data.cardID);
             })
         })
     }
