@@ -965,7 +965,7 @@ router.post('/CreateEditedFormula', CustomerVerifyLogin, (req, res) => {
                     console.error('Source Image does not exist.');
                     // Handle the error or provide appropriate feedback to the user.
                 }
-            }
+            } 
         }
     }
 

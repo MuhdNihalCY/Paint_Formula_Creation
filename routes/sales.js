@@ -405,7 +405,7 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
         Time: Date.now()
     }
 
-    employeeHelpers.UpdateCard(NewOrder, cardID,Activity).then((CardId) => {
+    employeeHelpers.UpdateCard(NewOrder, cardID, Activity).then((CardId) => {
         if (req.files) {
             const imageData = req.files.file;
             // console.log('Image data:', imageData);
@@ -434,9 +434,9 @@ router.get('/ChangeListofCard/:CardID/:NewListName/:Designation', SalesVerifyLog
         newlistname: newlistname,
         UserName: UserNow.UserName,
         Designation: UserNow.Designation,
-        Activity:{
-            activity:`${UserNow.UserName} Moved card to ${newlistname}.`,
-            Time:Date.now(),
+        Activity: {
+            activity: `${UserNow.UserName} Moved card to ${newlistname}.`,
+            Time: Date.now(),
         }
     }
 
@@ -456,16 +456,16 @@ router.get('/ChangeListofCardName/:CardName/:DropColumeName/:Designation', Sales
     let DropColumeName = req.params.DropColumeName;
     let Designation = req.params.Designation;
     var UserNow = req.session.SalesData;
-    var NewActivity = UserNow.UserName+" Moved card to "+DropColumeName+".";
+    var NewActivity = UserNow.UserName + " Moved card to " + DropColumeName + ".";
     console.log("/ChangeListofCardName/:CardName/:DropColumeName/:Designation");
     var Data = {
         CardName: CardName,
         newlistname: DropColumeName,
         UserName: UserNow.UserName,
         Designation: UserNow.Designation,
-        Activity:{
-            activity:NewActivity,
-            Time:Date.now(),
+        Activity: {
+            activity: NewActivity,
+            Time: Date.now(),
         }
     }
     if (Designation === "Production") {
@@ -477,6 +477,61 @@ router.get('/ChangeListofCardName/:CardName/:DropColumeName/:Designation', Sales
     })
 })
 
+router.get('/CreateNewLabel/:Color/:ColorlabelName', SalesVerifyLogin, (req, res) => {
+    let Color = req.params.Color;
+    let ColorlabelName = req.params.ColorlabelName;
+
+    console.log("Color" + Color + "  Label:" + ColorlabelName);
+
+    employeeHelpers.CreateNewLabel(Color, ColorlabelName).then(() => {
+        res.json({ Status: true });
+    })
+})
+
+router.get('/CreateACopyOfCard/:CardID', SalesVerifyLogin, (req, res) => {
+    employeeHelpers.CreateACopyByCardID(req.params.CardID, req.session.SalesData.UserName, req.session.SalesData.Designation).then(() => {
+        res.json({ Status: true });
+    })
+})
+
+router.get('/MoveCardToArchived/:CardID', SalesVerifyLogin, (req, res) => {
+    let CardID = req.params.CardID;
+    let UserName = req.session.SalesData.UserName;
+    let Designation =  req.session.SalesData.Designation;
+
+
+    var Data = {
+        CardID: CardID,
+        newlistname: "ARCHIVED",
+        UserName: UserName,
+        Designation: Designation,
+        Activity: {
+            activity: `${UserName} moved the card to Archived`,
+            Time: Date.now(),
+        }
+    }
+    // if (Designation === "Production") {
+    //     Data.ProductionPerson = DropColumeName;
+    // }
+    console.log("Data:",Data);  
+    employeeHelpers.ChangeCardListByCardID(Data).then((data) => {
+        //console.log(data);
+        res.json({ Status: true });
+    })
+
+    // var NewActivity = {
+    //     activity: `${UserNow.UserName} moved the card ${CardID} to Archived`,
+    //     Time: Date.now()
+    // };
+    // employeeHelpers.moveCardToArchived(CardID,UserNow,Designation).then(()=>{
+    //     res.json({ Status: true });
+    // })
+})
+
+router.get('/Logout', SalesVerifyLogin, (req, res) => {
+    req.session.SalesData.destroy();
+    res.redirect('/login');
+})
 
 
 

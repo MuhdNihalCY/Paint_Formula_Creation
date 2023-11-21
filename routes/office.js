@@ -19,7 +19,8 @@ const OfficeVerifyLogin = (req, res, next) => {
 
 
 router.get('/', OfficeVerifyLogin, (req, res, next) => {
-    res.render('office/Officehome', { OfficeLogged: req.session.OfficeData });
+    // res.render('office/Officehome', { OfficeLogged: req.session.OfficeData });
+    res.redirect('/office/home');
 })
 
 router.get('/logout', OfficeVerifyLogin, (req, res) => {
@@ -154,10 +155,7 @@ router.get('/Printlabel/:FileNo', OfficeVerifyLogin, async (req, res) => {
         console.error('Error getting InsertedTime:', error);
         // Handle the error here or provide an appropriate response to the client.
     }
-
 })
-
-
 
 
 router.get('/moveToDoneToday/:cardId', OfficeVerifyLogin, (req, res) => {
@@ -178,8 +176,6 @@ router.get('/getAllCardsFromCustomerCollection', OfficeVerifyLogin, async (req, 
         var Cards = await trelloHelpers.getAllCardsFromCustomerCollectionSection();
         Cards = await trelloHelpers.addImageToCardsInArray(Cards)
         console.log(Cards);
-
-
         const allCardDataPromises = Cards.map(async (card) => {
             if (card.idChecklists.length > 0) {
                 const cardChecklistIDArray = card.idChecklists;
@@ -196,10 +192,7 @@ router.get('/getAllCardsFromCustomerCollection', OfficeVerifyLogin, async (req, 
             card.Driver = Driver
             return card;
         });
-
         const AllCards = await Promise.all(allCardDataPromises);
-
-
         res.json({ AllCards });
     } catch (error) {
         console.error(error);
@@ -209,26 +202,13 @@ router.get('/getAllCardsFromCustomerCollection', OfficeVerifyLogin, async (req, 
 
 
 router.get('/getAllCardsFromBoard', OfficeVerifyLogin, (req, res) => {
-
     employeeHelpers.GetAllCards().then((AllCards) => {
         console.log("Global cards: ", AllCards);
         res.json({ AllCards });
     })
-
-    // trelloHelpers.getAllCardsFromBoard().then((Cards) => {
-    //     // console.table(Cards);
-    //     trelloHelpers.addImageToCardsInArray(Cards).then((AllCard) => {
-    //         trelloHelpers.AddListToCards(AllCard).then((AllCards)=>{
-    //             // console.log(AllCards);
-    //             res.json({ AllCards });
-    //         })
-    //     })
-    // })
 })
 
-
 router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', OfficeVerifyLogin, (req, res) => {
-
     var cardID = req.params.cardID;
     var DeliveryLocation = req.params.DeliveryLocation;
     console.log("cardID: ", cardID);
@@ -244,18 +224,17 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', OfficeVerifyL
             const ContactDetails = await employeeHelpers.getCardContactDetails(Card.id);
             Card.ContactDetails = ContactDetails;
             console.log("ContactDetails: ", ContactDetails);
-
             console.log("Card: ", Card);
-
             whatsappHelper.sendDeliveyMessage(Card, DeliveryLocation).then(() => {
-
                 res.redirect('/office/CustomerCollection')
             })
-
         })
-
-    })
+    }) 
 })
+
+router.get('/home', OfficeVerifyLogin, (req, res) => {
+    res.render('office/OfficeCustomTrello', { OfficeLogged: req.session.OfficeData });
+});
 
 
 

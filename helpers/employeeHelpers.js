@@ -4,6 +4,10 @@ const { ObjectId, ReturnDocument } = require('mongodb');
 const { ReservationListInstance } = require('twilio/lib/rest/taskrouter/v1/workspace/task/reservation');
 const { response } = require('express');
 
+var express = require('express');
+const fs = require('fs');
+var app = express();
+var path = require('path');
 
 module.exports = {
     DoLogin: (Data) => {
@@ -1133,7 +1137,6 @@ module.exports = {
     moveCardToCustomerCollectionByCardIDAndMovedUser: (CardID, UserData) => {
         return new Promise(async (resolve, reject) => {
             //create a new Customer COllectio if not exist.
-
             var CustomerCollectionList = await db.get().collection(collection.LIST_COLLECTION).findOne({ Name: "FOR CUSTOMER COLLECTION" });
             if (!CustomerCollectionList) {
                 // create a list
@@ -1201,7 +1204,6 @@ module.exports = {
                 // this takes a bit of time
                 const Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION)
                     .findOne({ SubCategory: Formula.SubCategoryName });
-
 
                 if (Subcategory.Liter) {
                     Formula.Unit = "Liter";
@@ -1289,7 +1291,181 @@ module.exports = {
                 resolve(data.cardID);
             })
         })
+    },
+    CreateNewLabel: (Color, Label) => {
+        return new Promise(async (resolve, reject) => {
+            var LabelData = {
+                Color: `#${Color}`,
+                Label: Label
+            }
+            await db.get().collection(collection.LABEL_COLLECTION).insertOne(LabelData).then(() => {
+                resolve();
+            })
+        })
+    },
+    getAllLabels: () => {
+        return new Promise(async (resolve, reject) => {
+            let labels = await db.get().collection(collection.LABEL_COLLECTION).find().toArray();
+            resolve(labels);
+        })
+    },
+    CreateACopyByCardID: (CardID, UserName, Designation) => {
+        return new Promise(async (resolve, reject) => {
+
+            var date = new Date();
+            var day = date.getDate().toString().padStart(2, '0');
+            var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+            var year = date.getFullYear().toString().slice(-2);
+            var SearchOrderID = `${day}-${month}-${year}-`;
+            console.log("Searched ID: ", SearchOrderID);
+
+            var AllCards = await db.get().collection(collection.CARD_COLLECTION).find({ "OrderIDNumber": { $regex: `^${SearchOrderID}` } }).toArray();
+            console.log('All Cards', AllCards);
+
+            var OldCard = await db.get().collection(collection.CARD_COLLECTION).findOne({ _id: new ObjectId(CardID) });
+            OldCard.ListArray = [
+                {
+                    ListName: 'ORDERS',
+                    InTIme: Date.now(),
+                    InEmployeeName: UserName,
+                    InEmployeeDesignation: Designation
+                }
+            ];
+            OldCard.CurrentList = "ORDERS"
+
+
+            async function CreateNewOrderID() {
+                var date = new Date();
+                var day = date.getDate().toString().padStart(2, '0');
+                var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+                var year = date.getFullYear().toString().slice(-2);
+                var OrderID = `${day}-${month}-${year}-001-`;
+
+
+                CheckForDuplicateOrderID(OrderID);
+            }
+
+
+
+            async function CheckForDuplicateOrderID(OrderID) {
+                if (AllCards.length > 0) {
+                    for (const EachCard of AllCards) {
+                        console.log("Checking ID : ", OrderID);
+                        if (EachCard.OrderIDNumber === OrderID) {
+                            console.log("Increment" + "  " + EachCard.OrderIDNumber + "  " + OrderID);
+                            await IncrementOrderID(OrderID);
+                            return; // Exit the loop after calling IncrementOrderID
+                        }
+                    }
+                }
+
+                console.log("Store" + "  " + OrderID);
+                addNewOrderID(OrderID);
+            }
+
+            function IncrementOrderID(OrderID) {
+                // Extract the last section
+                const lastSection = OrderID.match(/-(\d+)-$/);
+                if (lastSection && lastSection[1]) {
+                    const currentNumber = parseInt(lastSection[1], 10);
+                    if (!isNaN(currentNumber)) {
+                        const newLastSection = (currentNumber + 1).toString().padStart(3, '0');
+                        const newOrderID = OrderID.replace(/-\d+-$/, '-' + newLastSection + '-');
+                        console.log("Old ID: " + OrderID + "  New ID: " + newOrderID);
+                        CheckForDuplicateOrderID(newOrderID);
+                    } else {
+                        console.log("Invalid last section: " + OrderID);
+                    }
+                } else {
+                    console.log("Invalid format: " + OrderID);
+                }
+                //  CheckForDuplicateOrderID(newOrderID);
+            }
+
+            CreateNewOrderID();
+
+            function addNewOrderID(OrderID) {
+                console.log("Putting ID", OrderID)
+                OldCard.OrderIDNumber = OrderID.toString();
+                OldCard.Name = OrderID + OldCard.CustomerName;
+            }
+
+            // handle checkItems
+            OldCard.CheckListItems.checkItems.forEach((EachItem) => {
+                EachItem.State = 'InComplete';
+            })
+
+            // handle Activity
+            OldCard.Activity = [
+                {
+                    activity: UserName + ' created card to Orders.',
+                    Time: Date.now()
+                }
+            ]
+
+            // handle Attachments
+            var OldID = OldCard._id;
+
+            delete OldCard._id
+
+            console.log(OldCard.CheckListItems);
+            console.log("OldCard: ", OldCard);
+            await db.get().collection(collection.CARD_COLLECTION).insertOne(OldCard).then((response) => {
+
+                if (OldCard.IsAttachments) {
+                    const ImageOldImageName = OldID;
+                    const SaveImgName = response.insertedId;
+                    const publicFolderPath = path.join(__dirname, '..', 'public');
+                    app.use(express.static(publicFolderPath));
+                    // Get the path to the public folder.
+                    const sourceImagePath = path.join(publicFolderPath, 'images', 'Attachments', `${ImageOldImageName}.jpg`);
+                    // console.log(sourceImagePath);
+                    const destinationImagePath = path.join(publicFolderPath, 'images', 'Attachments', `${SaveImgName}.jpg`);
+                    // console.log(destinationImagePath);
+
+                    if (fs.existsSync(sourceImagePath)) {
+                        // Copy the image.  
+                        fs.copyFileSync(sourceImagePath, destinationImagePath);
+                    } else {
+                        console.error('Source Image does not exist.');
+                        // Handle the error or provide appropriate feedback to the user.
+                    }
+                }
+                resolve();
+            })
+        })
+    },
+    // moveCardToArchived:(CardID,UserNow,Designation)=>{
+    //     return new Promise(async(resolve,reject)=>{
+
+    //     })
+    // },
+    ChangeCardListByCardID: (data) => {
+        return new Promise(async (resolve, reject) => {
+            var OldCard = await db.get().collection(collection.CARD_COLLECTION).findOne({ _id: new ObjectId(data.CardID) });
+
+            OldCard.CurrentList = data.newlistname;
+            OldCard.ListArray[0].OutTime = Date.now();
+            OldCard.ListArray[0].OutEmployeeName = data.UserName;
+            OldCard.ListArray[0].OutEmployeeDesignation = data.Designation;
+
+            OldCard.ListArray.unshift({
+                ListName: data.newlistname,
+                InTime: Date.now(),
+                InEmployeeName: data.UserName,
+                InEmployeeDesignation: data.Designation,
+            })
+            if (data.ProductionPerson) {
+                OldCard.ProductionPerson = data.ProductionPerson;
+            }
+            OldCard.Activity.push(data.Activity)
+
+            delete OldCard._id;
+            console.log("OldCard: ", OldCard);
+
+            await db.get().collection(collection.CARD_COLLECTION).updateOne({ _id: new ObjectId(data.CardID) }, { $set: OldCard }).then(() => {
+                resolve(data.cardID);
+            })
+        })
     }
-
-
 }

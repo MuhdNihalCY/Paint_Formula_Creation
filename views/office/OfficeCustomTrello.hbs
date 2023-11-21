@@ -172,7 +172,7 @@
                         <div class="PopSelectCustomerContact">
                             <p class="popCustomerName">Customer contact: </p>
                             <select name="customer_contact" onchange="HnadleContactChange()" id="customer_contact">
-                                <option value="">Select a contact person </option>
+                                <option value="">Select a Customer</option>
                             </select>
 
                         </div>
@@ -202,13 +202,7 @@
                                 </div>
                             </div>
                             <div id="colorModal" class="colorModal">
-                                <div class="ColorModelHeader">
-                                    <input type="button" value="x" onclick="CloseColorModel()">
-                                </div>
-                                <div id="ColorModelCollection" class="ColorModelCollection">
-
-                                </div>
-                                {{!-- <div class="colorOption" style="background-color: red;"
+                                <div class="colorOption" style="background-color: red;"
                                     onclick="CreateOrderselectColor('DO','red')">
                                     <p>
                                         DO
@@ -251,20 +245,7 @@
                                 <div class="colorOption" style="background-color: violet;"
                                     onclick="CreateOrderselectColor('CUSTOMER COLLECTION','violet')">
                                     <p>CUSTOMER COLLECTION</p>
-                                </div> --}}
-
-                                <hr>
-
-                                <div class="ColorModelNewAddingDiv">
-                                    <label for="colorSelector">Select Color:</label>
-                                    <input type="color" id="colorSelector">
-
-                                    <label for="labelName">Enter Label Name:</label>
-                                    <input type="text" placeholder="Label name" id="ColorlabelName">
-
-                                    <button id="AddNewLabelBTN" onclick="createNewOrderSelectColor()">Add</button>
                                 </div>
-
                             </div>
 
                         </div>
@@ -278,9 +259,8 @@
 
                         </select>
                     </div>
-                    <Button onclick="CreateACopyOfCard()" id="CopyThisCardBtn" class="tooltip-btn"
-                        data-tooltip="copy this card to new card.">Copy</Button>
-                    <Button onclick="MoveCardToArchived()" id="moveCardToArchivedBtn" class="tooltip-btn" data-tooltip="Move this card to Archived.">Archive</Button>
+                    <Button class="tooltip-btn" data-tooltip="copy this card to new card.">Copy</Button>
+                    <Button>Archive</Button>
                 </div>
             </div>
             <div class="poplastUpdateTimeSection">
@@ -618,7 +598,7 @@
         <div class="CustomContainer">
             <div class="KanbanHeaderMainDivArea">
                 <div class="KanbanHeaderMainDivAreaRight">
-                    <input type="text" hidden id="Username" value="{{SalesLogged.UserName}}">
+                    <input type="text" hidden id="Username" value="{{OfficeLogged.UserName}}">
                     <p class="KanbanHeaderText">MEGA PAINTS ACTIVITY BOARD</p>
                 </div>
                 <div class="KanbanHeaderMainDivAreaLeft">
@@ -636,36 +616,13 @@
                                 <p onclick="CloseSearchResultBox()" class="SearchResusultCloseBTN">x</p>
                             </div>
                             <div id="searchResultsCollectins" class="searchResultsCollectins">
-                                {{!-- <div class="EachSearchResult">
-                                    <p class="SearchResultName">18-11-2023-012115209-asfsdf</p>
-                                    <p class="SearchProductionItesmHeaderText">Production Items</p>
-                                    <div class="SearchResultsProductionsCollections">
-                                        <div class="EachSearchResultProductionItems">
-                                            <p class="SearchResultItemName">red-231</p>
-                                            <p class="SearchResultQuantity">4 Liters</p>
-                                        </div>
-                                        <div class="EachSearchResultProductionItems">
-                                            <p class="SearchResultItemName">red-231</p>
-                                            <p class="SearchResultQuantity">4 Liters</p>
-                                        </div>
-                                        <div class="EachSearchResultProductionItems">
-                                            <p class="SearchResultItemName">red-231</p>
-                                            <p class="SearchResultQuantity">4 Liters</p>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                </div> --}}
-
-
-
-
                             </div>
                         </div>
                     </div>
-                    <input type="button" class="CreateCustomerBTN btn" onclick="OpenCustomerCreationPopup()"
-                        value="Create Customer">
+                    {{!-- <input type="button" class="CreateCustomerBTN btn" onclick="OpenCustomerCreationPopup()"
+                        value="Create Customer"> --}}
                     <div class="input-button userBTN">
-                        <input type="button" value="{{SalesLogged.UserName}}" class="input-field  InputBTNField btn">
+                        <input type="button" value="{{OfficeLogged.UserName}}" class="input-field  InputBTNField btn">
                         <i class="fas fa-user user-icon"></i>
                     </div>
                 </div>
@@ -683,10 +640,10 @@
 
 
                     </div>
-                    <div onclick="OpenPopUpforNewOrder()" class="AddSmCardDiv">
+                    {{!-- <div onclick="OpenPopUpforNewOrder()" class="AddSmCardDiv">
                         <p class="AddCardIconText">+</p>
                         <p class="AddCardText">Add new card</p>
-                    </div>
+                    </div> --}} 
                 </div>
 
                 {{!-- Office section --}}
@@ -932,8 +889,7 @@
         Customers: [],
         Formulas: [],
         NewOrders: [],
-        UserNow: false,
-        Labels: []
+        UserNow: false
     };
 
     function initializeState() {
@@ -979,7 +935,6 @@
             State.AllUsers = data.AllUsers;
             State.Customers = data.Customers;
             State.Formulas = data.Formulas;
-            State.Labels = data.Labels;
             // // console.log("Old State:", State);
             UpdateStateWithCards();
 
@@ -1904,7 +1859,61 @@
 
 
 
+    /*function renderKanban() {
+        var kanbanBoard = document.getElementById('kanbanBoard');
+        kanbanBoard.innerHTML = '';
 
+        //var ListCollection = document.getElementById('ListCollections');
+
+
+        State.columns.forEach(function (column, columnIndex) {
+            var columnDiv = document.createElement('div');
+            columnDiv.className = 'column';
+            var columnInsideDiv = document.createElement('div');
+            columnInsideDiv.className = 'InsideColumn';
+
+
+
+            columnInsideDiv.innerHTML = '<h3>' + column.title + '</h3>';
+            var cardsDiv = document.createElement('div');
+            cardsDiv.className = 'cards';
+            cardsDiv.setAttribute('ondrop', 'drop(event)');
+            cardsDiv.setAttribute('ondragover', 'allowDrop(event)');
+            cardsDiv.setAttribute('data-column', columnIndex);
+
+            column.tasks.forEach(function (task, taskIndex) {
+                var cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                cardDiv.setAttribute('draggable', 'true');
+                cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+                cardDiv.innerText = task;
+
+                cardsDiv.appendChild(cardDiv);
+            });
+
+            columnInsideDiv.appendChild(cardsDiv);
+            columnDiv.appendChild(columnInsideDiv);
+            kanbanBoard.appendChild(columnDiv);
+        });
+    }
+
+    renderKanban();*/
+
+    /*function updateState(sourceColumn, destinationColumn, taskId) {
+        const source = State.columns[sourceColumn];
+        const destination = State.columns[destinationColumn];
+
+        if (source && destination) {
+            const taskIndex = taskId.split('-')[2];
+            const taskToMove = source.tasks[taskIndex];
+
+            if (taskToMove) {
+                source.tasks.splice(taskIndex, 1);
+                destination.tasks.push(taskToMove);
+            }
+        }
+    }*/
 
     function updateState(sourceColumn, destinationColumn, taskId) {
         const source = State.columns[sourceColumn];
@@ -1922,10 +1931,28 @@
     }
 
 
+    /*document.addEventListener('drop', function (event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const sourceColumn = data.split('-')[1];
+        const destinationColumn = event.target.getAttribute('data-column');
+
+        if (sourceColumn !== destinationColumn) {
+            updateState(sourceColumn, destinationColumn, data);
+            renderKanban();
+        }
+        // // console.log(State.columns);
+    });*/
+
 
     document.addEventListener('dragstart', function (event) {
         event.dataTransfer.setData('text/plain', event.target.id);
     });
+
+
+
+
+
 
     function allowDrop(event) {
         event.preventDefault();
@@ -2315,15 +2342,14 @@
 
         for (i = 1; i <= ccEachContactCount; i++) {
             // // console.log(document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`));
-            if (document.getElementById(`ccContactPersonNameInput${i}`)) {
+            if (document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`)) {
                 var OneContact = {
-                    Name: document.getElementById(`ccContactPersonNameInput${i}`).value,
-                    CallCountryCode: document.getElementById(`ccContactPersonCounrtryCodeInput${i}`).value,
-                    CallNumber: document.getElementById(`ccContactPersonNumberInput${i}`).value,
-                    WhatsappCountryCode: document.getElementById(`ccContactPersonWhatsAppCounrtryCodeInput${i}`).value,
-                    WhatsappNumber: document.getElementById(`ccContactPersonWhatsappNumberInput${i}`).value,
+                    Name: document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`).value,
+                    CallCountryCode: document.getElementById(`ccContactPersonCounrtryCodeInput${ccEachContactCount}`).value,
+                    CallNumber: document.getElementById(`ccContactPersonNumberInput${ccEachContactCount}`).value,
+                    WhatsappCountryCode: document.getElementById(`ccContactPersonWhatsAppCounrtryCodeInput${ccEachContactCount}`).value,
+                    WhatsappNumber: document.getElementById(`ccContactPersonWhatsappNumberInput${ccEachContactCount}`).value,
                 }
-                //console.log("OneContact",OneContact);
                 Contact.push(OneContact);
             }
         }
@@ -2343,8 +2369,6 @@
                 Co_ordinator: Co_ordinator,
                 Contact: Contact
             };
-
-            //console.log("Contact:",Contact);
 
             // Convert the data object to a JSON string
             var jsonData = JSON.stringify(postData);
@@ -2399,58 +2423,23 @@
 
 
     function OpenPopUpforNewOrder() {
-
-        console.log("State: ", State.AllCards);
         var mainPopup = document.getElementById('CreateOrderPopup');
         mainPopup.style.display = "flex";
 
-        function CreateNewOrderID() {
-            var date = new Date();
-            var day = date.getDate().toString().padStart(2, '0');
-            var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
-            var year = date.getFullYear().toString().slice(-2);
-            var OrderID = `${day}-${month}-${year}-001-`;
-            CheckForDuplicateOrderID(OrderID);
-        }
 
-        async function CheckForDuplicateOrderID(OrderID) {
-            if (State.AllCards.length > 0) {
-                await State.AllCards.forEach((EachCard) => {
-                    if (EachCard.OrderIDNumber === OrderID) {
-                        IncrementOrderID(OrderID);
-                    } else {
-                        //return OrderID;
-                        //alert("adding Order ID");
-                        document.getElementById('OrderIDNumber').value = OrderID;
-                    }
-                })
-            } else {
-                document.getElementById('OrderIDNumber').value = OrderID;
-            }
-        }
 
-        function IncrementOrderID(OrderID) {
-            // Extract the last section
-            const lastSection = OrderID.match(/-(\d+)-$/);
+        var date = new Date();
+        var day = date.getDate().toString().padStart(2, '0');
+        var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+        var year = date.getFullYear();
+        var hours = date.getHours().toString().padStart(2, '0');
+        var minutes = date.getMinutes().toString().padStart(2, '0');
+        var seconds = date.getSeconds().toString().padStart(2, '0');
+        var milliseconds = date.getMilliseconds().toString().padStart(3, '0');
 
-            if (lastSection && lastSection[1]) {
-                const currentNumber = parseInt(lastSection[1], 10);
+        var TimeNow = `${day}-${month}-${year}-${hours}${minutes}${seconds}${milliseconds}-`;
 
-                if (!isNaN(currentNumber)) {
-                    const newLastSection = (currentNumber + 1).toString().padStart(3, '0');
-                    const newOrderID = OrderID.replace(/-\d+-$/, '-' + newLastSection + '-');
-                    console.log("Old ID: " + OrderID + "  New ID: " + newOrderID);
-                    CheckForDuplicateOrderID(newOrderID);
-                } else {
-                    console.log("Invalid last section: " + OrderID);
-                }
-            } else {
-                console.log("Invalid format: " + OrderID);
-            }
-            //  CheckForDuplicateOrderID(newOrderID);
-        }
-
-        CreateNewOrderID();
+        document.getElementById('OrderIDNumber').value = TimeNow;
 
 
 
@@ -2482,16 +2471,6 @@
 
 
         // show mixing items
-
-
-        // hnadle Labesl
-        var AllLabels = State.Labels;
-        console.log("All labesl : ", AllLabels);
-        var ColorModelCollection = document.getElementById('ColorModelCollection');
-        ColorModelCollection.innerHTML = ""
-        AllLabels.forEach((OneLabel) => {
-            createColorOption(OneLabel.Color, OneLabel.Label);
-        })
 
 
     }
@@ -2582,41 +2561,12 @@
         labelInput.readOnly = true;
         labelInput.value = label;
         labelInput.style.backgroundColor = color
-        labelInput.style.color = calculateComplementaryColor(color);
-
-        var CloseBTN = document.createElement('button');
-        CloseBTN.className = 'LabelDeleteBTN';
-        CloseBTN.textContent = "x";
-        CloseBTN.onclick = function () {
-            // alert("Delete Label");
-            removeLabelFromCard(this.parentNode);
-        };
 
         // Append the label input to the popLabel element
         popLabelElement.appendChild(labelInput);
-        popLabelElement.appendChild(CloseBTN);
 
         // Append the popLabel element to the popCardAllLabel container
         popCardAllLabelContainer.appendChild(popLabelElement);
-    }
-
-    function removeLabelFromCard(LabelDiv) {
-        var popCardAllLabelContainer = document.querySelector('.popCardAllLabelCreateOrder');
-        //var labelDiv = popCardAllLabelContainer.getEleme
-        console.log("This: ", LabelDiv);
-        console.log('LAbelsss: ', popCardAllLabelContainer);
-        if (popCardAllLabelContainer.contains(LabelDiv)) {
-            popCardAllLabelContainer.removeChild(LabelDiv);
-        } else {
-            console.log("LabelDiv is not a child of popCardAllLabelContainer");
-        }
-
-    }
-
-    function CloseColorModel() {
-        // Close the color modal after selecting a color
-        var colorModal = document.getElementById('colorModal');
-        colorModal.style.display = 'none';
     }
 
 
@@ -2833,9 +2783,6 @@
         document.getElementById('OrderIDNumber').value = "";
         document.getElementById('OrderName').value = "";
         document.getElementById('customer_contact').value = "";
-        document.getElementById('customer_contact').innerHTML = "";
-        document.getElementById('ContactMobileno').textContent = "Mobile no: ";
-        document.getElementById('ContactWhatsAppNumber').textContent = "Mobile no: "
         document.getElementById('popCardAllLabelCreateOrder').innerHTML = "";
         document.getElementById('popProductsItemsCollectiosns').innerHTML = "";
         document.getElementById('newOrderpopCommentsCollection').innerHTML = "";
@@ -3213,10 +3160,15 @@
             })
         }
 
+
+
+
         CreateOrderPopup.getElementsByClassName('PopcardListName')[0].textContent = CardData.CurrentList;
 
         // // console.log();
         var Contacts = [];
+
+
         var CustomerContactSelect = CreateOrderPopup.getElementsByClassName('popCardHeaderText');
 
         if (AlreadyNameAdded) {
@@ -3261,15 +3213,6 @@
 
         Labels.forEach((Onelabel) => {
             CreateOrderselectColor(Onelabel.Name, Onelabel.Color)
-        })
-
-
-        var AllLabels = State.Labels;
-        console.log("All labesl : ", AllLabels);
-        var ColorModelCollection = document.getElementById('ColorModelCollection');
-        ColorModelCollection.innerHTML = "";
-        AllLabels.forEach((OneLabel) => {
-            createColorOption(OneLabel.Color, OneLabel.Label);
         })
 
 
@@ -3408,20 +3351,10 @@
             moveSelect.appendChild(OneOption);
         })
 
-
-        // Handle Copy Button 
-        var CopyThisCardBtn = document.getElementById('CopyThisCardBtn');
-        CopyThisCardBtn.onclick = function () {
-            CreateACopyOfCard(CardData._id);
-        }
-
-        //Handle Archive Btn
-        var moveCardToArchivedBtn = document.getElementById('moveCardToArchivedBtn');
-        moveCardToArchivedBtn.onclick = function () {
-            MoveCardToArchived(CardData._id)
-        }
-
         // Handle Activity
+
+
+
         var popActivityCollections = document.getElementById('popActivityCollections');
         popActivityCollections.innerHTML = "";
         // console.log("popActivityCollections", popActivityCollections);
@@ -4088,89 +4021,6 @@
         searchResultsCollectins.innerHTML = "";
     }
 
-    function createNewOrderSelectColor() {
-        var Color = document.getElementById('colorSelector').value;
-        var ColorlabelName = document.getElementById('ColorlabelName').value;
-
-        console.log(Color + " " + ColorlabelName);
-
-
-
-        createColorOption(Color, ColorlabelName)
-
-        CreateNewLabel(Color, ColorlabelName);
-
-    }
-
-
-    async function CreateNewLabel(Color, ColorlabelName) {
-        //  let colorWithoutHash = Color.slice(1);
-        var url = `/sales/CreateNewLabel/${Color.slice(1)}/${ColorlabelName}`;
-        console.log(url);
-
-        const response = await fetch(url);
-        const data = response.json();
-        State.Labels.push({
-            Color: Color,
-            Label: ColorlabelName
-        })
-    }
-
-
-    function createColorOption(color, label) {
-        var ColorModelCollection = document.getElementById('ColorModelCollection');
-
-        const colorOptionDiv = document.createElement('div');
-        colorOptionDiv.className = 'colorOption';
-        colorOptionDiv.style.backgroundColor = color;
-        colorOptionDiv.style.color = calculateComplementaryColor(color);
-        colorOptionDiv.onclick = function () {
-            CreateOrderselectColor(label, color);
-        };
-
-        const labelParagraph = document.createElement('p');
-        labelParagraph.textContent = label;
-
-        colorOptionDiv.appendChild(labelParagraph);
-        ColorModelCollection.appendChild(colorOptionDiv);
-    }
-
-
-    function calculateComplementaryColor(hexColor) {
-        // Convert hex to RGB
-        const r = parseInt(hexColor.slice(1, 3), 16);
-        const g = parseInt(hexColor.slice(3, 5), 16);
-        const b = parseInt(hexColor.slice(5, 7), 16);
-
-        // Calculate complementary color
-        const complementaryR = 255 - r;
-        const complementaryG = 255 - g;
-        const complementaryB = 255 - b;
-
-        // Convert back to hex
-        const complementaryHex = `#${(1 << 24 | complementaryR << 16 | complementaryG << 8 | complementaryB).toString(16).slice(1)}`;
-
-        return complementaryHex;
-    }
-
-
-    async function CreateACopyOfCard(CardID) {
-        var url = `/sales/CreateACopyOfCard/${CardID}`;
-        console.log(url);
-
-        const response = await fetch(url);
-        const data = response.json();
-        fetchAllCards();
-    }
-
-    async function MoveCardToArchived(CardID){
-        var url = `/sales/MoveCardToArchived/${CardID}`;
-        console.log(url);
-
-        const response = await fetch(url);
-        const data = response.json();
-        fetchAllCards();
-    }
 
 </script>
 
@@ -4775,7 +4625,7 @@
     }
 
     .PopCustomerLabelBtnsSection p {
-        margin: 10px;
+        margin-top: 15px;
     }
 
     .PopCustomerAndLabelSection {
@@ -4839,25 +4689,13 @@
         /*width: 70px;
         height: 40px;*/
         border-radius: 10px;
-        /* border: 1px solid #B3B7BA;*/
+        border: 1px solid #B3B7BA;
         /* background-color: red;*/
         color: #B3B7BA;
         text-align: center;
         width: min-content;
         margin-bottom: 1rem;
-        display: flex;
-        gap: 2rem;
-    }
 
-    .LabelDeleteBTN {
-        background-color: transparent;
-        border: 1px solid #B3B7BA;
-        border-radius: 5px;
-        cursor: pointer;
-        color: #B3B7BA;
-        font-size: 20px;
-        font-weight: 900;
-        padding: 0.5rem;
     }
 
     .AddLableBTN {
@@ -5346,8 +5184,8 @@
     #OrderIDNumber {
         border: none;
         color: #B3B7BA;
+        width: 20rem;
         background-color: transparent;
-        width: 12rem;
     }
 
     /* Styles for the modal */
@@ -5382,13 +5220,8 @@
     }
 
     .colorOption p {
-        /*   -webkit-text-stroke: 1px #323940;
-        margin: 0;*/
-    }
-
-    #ColorModelCollection {
-        overflow-y: auto;
-        max-height: 15rem;
+        -webkit-text-stroke: 1px #323940;
+        margin: 0;
     }
 
     /* Style for the "+" button */
@@ -5712,58 +5545,9 @@
         font-weight: 800;
     }
 
-    .EachSearchResult {
+    .EachSearchResult{
         cursor: pointer;
     }
-
-    .ColorModelHeader {
-        width: 100%;
-        display: flex;
-        justify-content: end;
-        align-items: center;
-        padding: .5rem;
-        font-size: 20px;
-        font-weight: 900;
-    }
-
-    .ColorModelNewAddingDiv {
-        width: 100%;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        padding: .5rem;
-        font-size: 18px;
-        font-weight: 700;
-    }
-
-    .ColorModelNewAddingDiv label {
-        margin: .5rem;
-    }
-
-    #colorSelector {
-        height: 36px;
-        margin-right: 1rem;
-    }
-
-    #ColorlabelName,
-    #AddNewLabelBTN {
-        background-color: #3B444C;
-        margin: 0 1rem;
-        padding: 0.5rem 1rem;
-        border-radius: 10px;
-        width: 15rem;
-        color: #B3B7BA;
-        font-family: sans-serif;
-        font-size: 20px;
-        font-weight: 600;
-        border: 1px solid #B3B7BA;
-    }
-
-    #AddNewLabelBTN {
-        width: 7rem;
-    }
-
-
 
 
 

@@ -15,4 +15,5 @@ module.exports={
     CARD_COLLECTION:'Card_Collection',
     SALES_MODIFIED_CARDS:'Sales_Modified_Cards',
     LIST_COLLECTION:'List_Collection',
+    LABEL_COLLECTION:'Label_Collectin',
 };

@@ -2231,17 +2231,20 @@ router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
         employeeHelpers.getAllCustomers().then((AllCustomers) => {
           employeeHelpers.GetAllFormulations().then((Formulas) => {
             employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas).then((UpdatedFromuls) => {
+              employeeHelpers.getAllLabels().then((AllLabels) => {
 
-              console.log("Formulas = ", Formulas[2]);
+                console.log("Formulas = ", Formulas[2]);
 
-              var data = {
-                AllCards: AllCards,
-                AllLists: AllLists,
-                AllUsers: AllUsers,
-                Customers: AllCustomers,
-                Formulas: UpdatedFromuls
-              }
-              res.json(data);
+                var data = {
+                  AllCards: AllCards,
+                  AllLists: AllLists,
+                  AllUsers: AllUsers,
+                  Customers: AllCustomers,
+                  Formulas: UpdatedFromuls,
+                  Labels:AllLabels
+                }
+                res.json(data);
+              })
             })
           })
 
