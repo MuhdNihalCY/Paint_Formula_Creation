@@ -280,7 +280,8 @@
                     </div>
                     <Button onclick="CreateACopyOfCard()" id="CopyThisCardBtn" class="tooltip-btn"
                         data-tooltip="copy this card to new card.">Copy</Button>
-                    <Button onclick="MoveCardToArchived()" id="moveCardToArchivedBtn" class="tooltip-btn" data-tooltip="Move this card to Archived.">Archive</Button>
+                    <Button onclick="MoveCardToArchived()" id="moveCardToArchivedBtn" class="tooltip-btn"
+                        data-tooltip="Move this card to Archived.">Archive</Button>
                 </div>
             </div>
             <div class="poplastUpdateTimeSection">
@@ -2665,8 +2666,18 @@
         var VirtualFormula = `
                     <div class="popEachProductsItemss">
                         <p id="FormulaColorName" class='FormulaColorName'>${formula.ColorName}</p>
+                        <p id="FormulaColorCode" class='FormulaColorName'>${formula.ColorCode? formula.ColorCode:""} </p>
+                        <p id="FormulaColorName" class='FormulaColorName'>${formula.SubCategoryName?formula.SubCategoryName:""}</p>
+                        <p id="FormulaColorName" class='FormulaColorName'>${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
+                        <p id="FormulaColorName" class='FormulaColorName'>"${formula.FileNo?formula.FileNo:""}"</p>
+                       
+
                         <div class="QtyOfFormula">
                             <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo}" hidden>
+                            <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode}" hidden>
+                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName}" hidden>
+                            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt}" hidden>` : ""}
+                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss}" hidden>` : ""}
                             <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
                             <p class="FormulaUnit">${formula.Unit}</p>
                         </div>
@@ -2973,7 +2984,17 @@
                         Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
                         Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
                         FileNo: OneItem.getElementsByClassName('HiddenFileNo')[0].value,
-                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent
+                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
+                        ColorCode: OneItem.getElementsByClassName('HiddenColorCode')[0].value,
+                        SubCategoryName: OneItem.getElementsByClassName('HiddenSubCategoryName')[0].value,
+                    }
+
+                    if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
+                        item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
+                    }
+
+                    if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
+                        item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
                     }
 
                     // console.log("Proitem: ", item);
@@ -3282,8 +3303,17 @@
                 ColorName: ProItems.Name,
                 Unit: ProItems.Unit,
                 FileNo: ProItems.FileNo,
-                QTY: ProItems.Qty
+                QTY: ProItems.Qty,
+                ColorCode: ProItems.ColorCode,
+                SubCategoryName: ProItems.SubCategoryName
             }
+            if (ProItems.matt) {
+                formula.matt = ProItems.matt
+            }
+            if (ProItems.gloss) {
+                formula.gloss = ProItems.gloss
+            }
+
             handleResultItemClick(formula)
         })
 
@@ -3639,7 +3669,16 @@
                         Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
                         Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
                         FileNo: OneItem.getElementsByClassName('HiddenFileNo')[0].value,
-                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent
+                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
+                        ColorCode: OneItem.getElementsByClassName('HiddenColorCode')[0].value,
+                        SubCategoryName: OneItem.getElementsByClassName('HiddenSubCategoryName')[0].value,
+                    }
+                    if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
+                        item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
+                    }
+
+                    if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
+                        item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
                     }
 
                     // console.log("Proitem: ", item);
@@ -4163,7 +4202,7 @@
         fetchAllCards();
     }
 
-    async function MoveCardToArchived(CardID){
+    async function MoveCardToArchived(CardID) {
         var url = `/sales/MoveCardToArchived/${CardID}`;
         console.log(url);
 
@@ -4966,8 +5005,10 @@
     }
 
     .FormulaQty {
-        text-align: end;
-        max-width: 10rem;
+        text-align: center;
+        max-width: 5rem;
+        padding: 0.5rem;
+        min-width: 4rem;
     }
 
 

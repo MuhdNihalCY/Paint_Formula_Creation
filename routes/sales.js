@@ -261,13 +261,23 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
     // console.log(productionsItemsArray);
 
     await productionsItemsArray.forEach((EachItem) => {
-        CheckItems.push({
+        var PushData = {
             Name: EachItem.Name,
             State: "InComplete",
             Qty: EachItem.Qty,
             Unit: EachItem.Unit,
-            FileNo: EachItem.FileNo ? EachItem.FileNo : ""
-        })
+            FileNo: EachItem.FileNo ? EachItem.FileNo : "",
+            ColorCode:EachItem.ColorCode,
+            SubCategoryName:EachItem.SubCategoryName
+        }
+        if(EachItem.matt){
+            PushData.matt = EachItem.matt
+        }
+        if(EachItem.gloss){
+            PushData.gloss = EachItem.gloss
+        }
+
+        CheckItems.push(PushData);
     })
 
 
@@ -510,6 +520,7 @@ router.get('/MoveCardToArchived/:CardID', SalesVerifyLogin, (req, res) => {
             Time: Date.now(),
         }
     }
+    
     // if (Designation === "Production") {
     //     Data.ProductionPerson = DropColumeName;
     // }
