@@ -258,6 +258,7 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
     let ContactDetails = await JSON.parse(data.ContactDetails);
     let comments = await JSON.parse(data.comments);
     let Labels = await JSON.parse(data.Labels);
+    let ReadyProducts = await JSON.parse(data.ReadyProducts);
     // console.log(productionsItemsArray);
 
     await productionsItemsArray.forEach((EachItem) => {
@@ -271,10 +272,10 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
             SubCategoryName:EachItem.SubCategoryName
         }
         if(EachItem.matt){
-            PushData.matt = EachItem.matt
+            PushData.matt = EachItem.Matt
         }
         if(EachItem.gloss){
-            PushData.gloss = EachItem.gloss
+            PushData.gloss = EachItem.Gloss
         }
 
         CheckItems.push(PushData);
@@ -312,7 +313,8 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
         Activity: [{
             activity: `${req.session.SalesData.UserName} created card in Orders.`,
             Time: Date.now()
-        }]
+        }],
+        ReadyProducts:ReadyProducts
     }
 
     if (req.files) {
@@ -341,7 +343,7 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
 
 
 router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
-    console.log("Order Creating", req.body);
+    console.log("Order Creating Updating: ", req.body);
     var data = req.body;
     const imageData = req.files;
     var cardID = req.params.cardID;
@@ -361,16 +363,29 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
     let ContactDetails = await JSON.parse(data.ContactDetails);
     let comments = await JSON.parse(data.comments);
     let Labels = await JSON.parse(data.Labels);
+    let ReadyProducts = await JSON.parse(data.ReadyProducts);
     // console.log(productionsItemsArray);
 
     await productionsItemsArray.forEach((EachItem) => {
-        CheckItems.push({
+        var PushData ={
             Name: EachItem.Name,
             State: "InComplete",
             Qty: EachItem.Qty,
             Unit: EachItem.Unit,
-            FileNo: EachItem.FileNo ? EachItem.FileNo : ""
-        })
+            FileNo: EachItem.FileNo ? EachItem.FileNo : "",
+            ColorCode:EachItem.ColorCode,
+            SubCategoryName:EachItem.SubCategoryName,
+            
+        }
+        
+        if(EachItem.matt){
+            PushData.matt = EachItem.Matt
+        }
+        if(EachItem.gloss){
+            PushData.gloss = EachItem.Gloss
+        }
+        
+        CheckItems.push(PushData)
     })
 
 
@@ -401,7 +416,8 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
         WhatsappNumber: ContactDetails.WhatsappNumber,
         description: "",
         comments: comments,
-        Labels: Labels
+        Labels: Labels,
+        ReadyProducts:ReadyProducts
     }
 
     if (req.files) {

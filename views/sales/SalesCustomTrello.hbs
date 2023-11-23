@@ -288,10 +288,10 @@
                 {{!-- <p>Last update : 3 hours ago</p> --}}
             </div>
 
-            {{!-- <div class="popReadyProductsSection">
+            <div class="popReadyProductsSection">
                 <p class="popCardHeaderText">Ready Products</p>
-                <div class="popReadyProductsCollectiosn">
-                    <div class="popEachReadyProducts">
+                <div id="popReadyProductsCollectiosn" class="popReadyProductsCollectiosn">
+                    {{!-- <div class="popEachReadyProducts">
                         <p>Mipa 2K C85 Clearcoat</p>
                         <p>100.00 Ltr</p>
                     </div>
@@ -302,9 +302,19 @@
                     <div class="popEachReadyProducts">
                         <p>Mipa 2K C85 Clearcoat</p>
                         <p>100.00 Ltr</p>
-                    </div>
+                    </div> --}}
+
                 </div>
-            </div> --}}
+                <div class="PopReadyProductsInputSection">
+                    <input placeholder="Product Name" type="text" id="NewReadyProductsInput">
+                    <input placeholder="0.00" type="text" oninput="OnlyNumber(this)" id="NewReadyProductsQtyInput">
+                    <select name="" id="NewReadyProductUnit">
+                        <option selected value="Liter">Liter</option>
+                        <option value="Kilogram">Kilogram</option>
+                    </select>
+                    <button onclick="AddNewReadyProductMannully()">Add</button>
+                </div>
+            </div>
 
             <div class="popProductsItemsSection">
                 <p class="popCardHeaderText">Productions Items</p>
@@ -934,7 +944,8 @@
         Formulas: [],
         NewOrders: [],
         UserNow: false,
-        Labels: []
+        Labels: [],
+        NewReadyProducts: []
     };
 
     function initializeState() {
@@ -2629,23 +2640,25 @@
         //    // // console.log(formulas);
         const resultsContainer = document.getElementById('searchResults');
         resultsContainer.innerHTML = ''; // Clear previous results
+        if (query) {
 
-        const matchingFormulas = formulas.filter(formula => {
-            //     // // console.log("Searching in Formula: ", formula)
-            const searchFields = [formula.FileNo, formula.ColorCode, formula.ColorName];
-            return searchFields.some(field => field.toLowerCase().includes(query.toLowerCase()));
-        });
+            const matchingFormulas = formulas.filter(formula => {
+                //     // // console.log("Searching in Formula: ", formula)
+                const searchFields = [formula.FileNo, formula.ColorCode, formula.ColorName];
+                return searchFields.some(field => field.toLowerCase().includes(query.toLowerCase()));
+            });
 
-        // // // console.log("matchingFormulas: ", matchingFormulas);
+            // // // console.log("matchingFormulas: ", matchingFormulas);
 
-        matchingFormulas.forEach(formula => {
-            const resultItem = document.createElement('li');
-            resultItem.classList.add('search-result-item');
-            resultItem.textContent = `FileNo: ${formula.FileNo}, Color Code: ${formula.ColorCode}, Color Name: ${formula.ColorName}`;
-            resultItem.addEventListener('click', () => handleResultItemClick(formula));
-            resultsContainer.appendChild(resultItem);
-        });
+            matchingFormulas.forEach(formula => {
+                const resultItem = document.createElement('li');
+                resultItem.classList.add('search-result-item');
+                resultItem.textContent = `FileNo: ${formula.FileNo}, Color Code: ${formula.ColorCode}, Color Name: ${formula.ColorName}`;
+                resultItem.addEventListener('click', () => handleResultItemClick(formula));
+                resultsContainer.appendChild(resultItem);
+            });
 
+        }
     }
 
     function handleResultItemClick(formula) {
@@ -2666,10 +2679,10 @@
         var VirtualFormula = `
                     <div class="popEachProductsItemss">
                         <p id="FormulaColorName" class='FormulaColorName'>${formula.ColorName}</p>
-                        <p id="FormulaColorCode" class='FormulaColorName'>${formula.ColorCode? formula.ColorCode:""} </p>
-                        <p id="FormulaColorName" class='FormulaColorName'>${formula.SubCategoryName?formula.SubCategoryName:""}</p>
+                        <p id="FormulaColorCode" class='FormulaColorName'>${formula.ColorCode ? formula.ColorCode : ""} </p>
+                        <p id="FormulaColorName" class='FormulaColorName'>${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
                         <p id="FormulaColorName" class='FormulaColorName'>${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
-                        <p id="FormulaColorName" class='FormulaColorName'>"${formula.FileNo?formula.FileNo:""}"</p>
+                        <p id="FormulaColorName" class='FormulaColorName'>"${formula.FileNo ? formula.FileNo : ""}"</p>
                        
 
                         <div class="QtyOfFormula">
@@ -2961,6 +2974,21 @@
 
                 // console.log("Labels: ", Labels);
 
+                // handle Ready Prodcuts
+                var ReadyProducts = [];
+                var popReadyProductsCollectiosn = document.getElementById('popReadyProductsCollectiosn');
+                var ReadyItems = popReadyProductsCollectiosn.getElementsByClassName('popEachReadyProductsItemss');
+
+                var ReadyItemsDivArray = [...ReadyItems];
+                ReadyItemsDivArray.forEach((OneReadyItem) => {
+                    var ReadyProduct = {
+                        Name: OneReadyItem.getElementsByClassName('ReadyProductName')[0].textContent,
+                        Qty: OneReadyItem.getElementsByClassName('ReadyProductQty')[0].value,
+                        Unit: OneReadyItem.getElementsByClassName('ReadyProductUnit')[0].textContent
+                    }
+                    ReadyProducts.push(ReadyProduct);
+                })
+
 
                 // productions items
 
@@ -2969,7 +2997,7 @@
                 var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
                 // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
-                proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+                var proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
 
                 // console.log('proItems: ', proItems);
 
@@ -2979,6 +3007,7 @@
 
 
                 ProItemsDivArray.forEach((OneItem) => {
+
                     // make changes 
                     var item = {
                         Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
@@ -3030,10 +3059,14 @@
                     CustomerName: OrderName,
                     ContactDetails: ContactDetails,
                     Labels: Labels,
+                    ReadyProducts: ReadyProducts,
                     ProductionsItems: ProductionsItems,
                     comments: comments,
+                    ReadyProducts: ReadyProducts
                     //AttachmentImage: imageFile
                 }
+
+                console.log("Creating new Order: ", CompleteOrderData);
 
                 var input = document.getElementById('file');
                 var imageFile = input.files[0];
@@ -3132,11 +3165,17 @@
             QTY: NewFromulaQtyInput
         }
 
-        handleResultItemClick(formula)
+        if (NewFormulaNameInput && NewProductUnit) {
+            handleResultItemClick(formula)
 
-        document.getElementById('NewFormulaNameInput').value = "";
-        document.getElementById('NewFromulaQtyInput').value = "";
-        document.getElementById('NewProductUnit').value = "";
+            document.getElementById('NewFormulaNameInput').value = "";
+            document.getElementById('NewFromulaQtyInput').value = "";
+            //   document.getElementById('NewProductUnit').value = "";
+        } else {
+            alert("Fill Product name and unit.");
+        }
+
+
     }
 
 
@@ -3293,6 +3332,15 @@
             createColorOption(OneLabel.Color, OneLabel.Label);
         })
 
+        // handle Ready Products
+        var popReadyProductsCollectiosn = document.getElementById('popReadyProductsCollectiosn');
+        popReadyProductsCollectiosn.innerHTML = "";
+        var ReadyProducts = CardData.ReadyProducts;
+        ReadyProducts.forEach((OneProduct) => {
+            OneProduct.QTY = OneProduct.Qty;
+            HandleAddReadyProducts(OneProduct)
+        })
+
 
         // handle Productions
         var popProductsItemsCollectiosn = document.getElementById('popProductsItemsCollectiosns');
@@ -3347,6 +3395,7 @@
 
         // handle main Action BTN
         var CreateOrderButton = document.getElementById('CreateOrderButton');
+        // alert("sdf");
         CreateOrderButton.onclick = function () {
             UpdateOrder(CardData._id);
         };
@@ -3646,6 +3695,21 @@
 
                 // console.log("Labels: ", Labels);
 
+                // handle Ready Prodcuts
+                var ReadyProducts = [];
+                var popReadyProductsCollectiosn = document.getElementById('popReadyProductsCollectiosn');
+                var ReadyItems = popReadyProductsCollectiosn.getElementsByClassName('popEachReadyProductsItemss');
+
+                var ReadyItemsDivArray = [...ReadyItems];
+                ReadyItemsDivArray.forEach((OneReadyItem) => {
+                    var ReadyProduct = {
+                        Name: OneReadyItem.getElementsByClassName('ReadyProductName')[0].textContent,
+                        Qty: OneReadyItem.getElementsByClassName('ReadyProductQty')[0].value,
+                        Unit: OneReadyItem.getElementsByClassName('ReadyProductUnit')[0].textContent
+                    }
+                    ReadyProducts.push(ReadyProduct);
+                })
+
 
                 // productions items
 
@@ -3716,6 +3780,7 @@
                     Labels: Labels,
                     ProductionsItems: ProductionsItems,
                     comments: comments,
+                    ReadyProducts: ReadyProducts
                     //AttachmentImage: imageFile
                 }
 
@@ -4210,6 +4275,79 @@
         const data = response.json();
         fetchAllCards();
     }
+
+    function HandleAddReadyProducts(ReadyProduct) {
+        // Handle what happens when a result item is clicked
+        //  // // console.log('Result item clicked:', formula);
+        console.log("Ready Products: ", ReadyProduct);
+        var popReadyProductsCollectiosn = document.getElementById('popReadyProductsCollectiosn');
+
+        var popEachReadyProductsCollection = document.getElementsByClassName('popEachReadyProductsItemss ');
+
+        var count = popEachReadyProductsCollection.length;
+
+        var NextCount = count + 1;
+
+        var VirtualFormula = `
+                    <div class="popEachReadyProductsItemss">
+                        <p id="ReadyProductName" class='ReadyProductName'>${ReadyProduct.Name}</p>
+
+                        <div class="QtyOfFormula">
+                           
+                            <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${ReadyProduct.QTY ? `value="${ReadyProduct.QTY}"` : ""} class="ReadyProductQty" id="ReadyProductQty${NextCount}">
+                            <p class="ReadyProductUnit">${ReadyProduct.Unit}</p>
+                        <button onclick="RemoveOneReadyProduct('${ReadyProduct.Name}')"
+                            class="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+        `
+        var NewReadyProduct = {
+            Name: ReadyProduct.ColorName,
+            Unit: ReadyProduct.Unit,
+        }
+
+        State.NewReadyProducts.push(NewReadyProduct);
+
+        popReadyProductsCollectiosn.insertAdjacentHTML('beforeend', VirtualFormula);
+    }
+
+    function AddNewReadyProductMannully() {
+        var ReadyProductNameInput = document.getElementById('NewReadyProductsInput').value;
+        var ReadyProductQtyInput = document.getElementById('NewReadyProductsQtyInput').value;
+        var ReadyProductUnit = document.getElementById('NewReadyProductUnit').value;
+
+        var Product = {
+            Name: ReadyProductNameInput,
+            Unit: ReadyProductUnit,
+            QTY: ReadyProductQtyInput
+        }
+
+        if (ReadyProductNameInput && ReadyProductUnit) {
+            HandleAddReadyProducts(Product)
+            document.getElementById('NewReadyProductsInput').value = "";
+            document.getElementById('NewReadyProductsQtyInput').value = "";
+            // document.getElementById('NewReadyProductUnit').value = "";
+        } else {
+            alert("Fill Product name and unit.");
+        }
+    }
+
+    function RemoveOneReadyProduct(ProductName) {
+        var popEachReadyProductsItemss = document.getElementsByClassName('popEachReadyProductsItemss');
+
+        // Convert HTMLCollection to array using spread operator
+        var itemsArray = [...popEachReadyProductsItemss];
+
+        // Now you can use forEach
+        itemsArray.forEach((EachProduct) => {
+            //   // // console.log(EachProduct);
+            var name = EachProduct.querySelector('p').textContent.trim();
+            if (ProductName === name) {
+                EachProduct.remove();
+            }
+        });
+    }
+
 
 </script>
 
@@ -5200,7 +5338,11 @@
     #NewFormulaNameInput,
     #NewFromulaQtyInput,
     #NewProductUnit,
-    .NewOrderNewFormulaNameSection button {
+    .NewOrderNewFormulaNameSection button,
+    #NewReadyProductsInput,
+    #NewReadyProductsQtyInput,
+    #NewReadyProductUnit,
+    .PopReadyProductsInputSection button {
         background-color: #3B444C;
         margin: 0 1rem;
         padding: 0.5rem 1rem;
@@ -5804,7 +5946,53 @@
         width: 7rem;
     }
 
+    .popEachReadyProductsItemss {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 500;
+        margin: 0.5rem 0;
+    }
 
+    .popEachReadyProductsItemss p {
+        margin-bottom: 0;
+    }
+
+    .ReadyProductUnit {
+        margin-right: 3rem;
+    }
+
+    .ReadyProductQty {
+        background-color: #3B444C;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 5rem;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: 1px solid #B3B7BA;
+    }
+
+    .PopReadyProductsInputSection {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    #NewReadyProductsQtyInput,
+    #NewReadyProductUnit {
+        width: 7rem;
+    }
+
+    .PopReadyProductsInputSection button {
+        width: fit-content;
+    }
+
+    #NewReadyProductsInput {
+        width: 25rem;
+    }
 
 
 
