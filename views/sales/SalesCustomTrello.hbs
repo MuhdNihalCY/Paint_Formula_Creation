@@ -2412,7 +2412,7 @@
 
     function OpenPopUpforNewOrder() {
 
-         resetAllDataFromNewOrder();
+        resetAllDataFromNewOrder();
 
         console.log("State: ", State.AllCards);
         var mainPopup = document.getElementById('CreateOrderPopup');
@@ -2506,7 +2506,7 @@
         AllLabels.forEach((OneLabel) => {
             createColorOption(OneLabel.Color, OneLabel.Label);
         })
-        
+
         // handle action buttons
         var PopActionBtnSection = document.getElementById('PopActionBtnSection');
         PopActionBtnSection.style.display = "none";
@@ -5272,6 +5272,8 @@
         font-size: 20px;
         font-weight: 500;
         color: #B3B7BA;
+        overflow-y: auto;
+        max-height: 18rem;
     }
 
     .popActivityTime {
