@@ -7,9 +7,11 @@
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@superfaceai/one-sdk": "^2.4.2",
     "axios": "^1.5.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "device-detector": "^1.0.2",
     "dotenv": "^16.3.1",
     "express": "~4.16.1",
     "express-fileupload": "^1.4.0",
@@ -17,12 +19,14 @@
     "express-session": "^1.17.3",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
+    "ipdata": "^2.2.4",
     "mongodb": "^5.5.0",
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
     "node-fetch": "^3.3.2",
     "nodemon": "^2.0.22",
     "pdfmake": "^0.2.7",
-    "twilio": "^4.19.0"
+    "twilio": "^4.19.0",
+    "useragent": "^2.3.0"
   }
 }

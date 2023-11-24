@@ -2225,7 +2225,7 @@ router.get('/CustomTrello', (req, res) => {
 
 router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
   employeeHelpers.GetAllCards().then((AllCards) => {
-    console.log(AllCards);
+  //  console.log(AllCards);
     employeeHelpers.getAllLists().then((AllLists) => {
       employeeHelpers.getAllUsers().then((AllUsers) => {
         employeeHelpers.getAllCustomers().then((AllCustomers) => {
@@ -2233,7 +2233,7 @@ router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
             employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas).then((UpdatedFromuls) => {
               employeeHelpers.getAllLabels().then((AllLabels) => {
 
-                console.log("Formulas = ", Formulas[2]);
+                // console.log("Formulas = ", Formulas[2]);
 
                 var data = {
                   AllCards: AllCards,

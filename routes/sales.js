@@ -4,6 +4,9 @@ const trelloHelpers = require('../helpers/trelloHelpers');
 const employeeHelpers = require('../helpers/employeeHelpers');
 const whatsappHelper = require('../helpers/whatsappHelper');
 const multer = require('multer');
+var FindGeoss = require('../helpers/geoLoactions');
+const useragent = require('useragent');
+
 
 
 const storage = multer.memoryStorage();
@@ -12,6 +15,8 @@ const upload = multer({ storage: storage });
 
 
 const SalesVerifyLogin = (req, res, next) => {
+
+
     if (req.session.SalesData) {
         next();
     } else {
@@ -22,7 +27,21 @@ const SalesVerifyLogin = (req, res, next) => {
 
 router.get('/', SalesVerifyLogin, (req, res, next) => {
     // res.render('sales/home', { SalesLogged: req.session.SalesData });
+    const ip = req.ip
+    console.log("IP Address: ", ip);
+    // FindGeoss.FindGeo(ip).then((Location)=>{
+    //     console.log("Locations: ",Location)
+    // });
+
+
+    const userAgentString = req.headers['user-agent'];
+    const deviceInfo = useragent.parse(userAgentString);
+    console.log("Useragent deviceInfo:", deviceInfo);
+
+
+    FindGeoss.FindGeoUseIPData(ip);
     res.redirect('/sales/home')
+
 })
 
 router.get('/logout', SalesVerifyLogin, (req, res) => {
@@ -243,15 +262,6 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
     var data = req.body;
     const imageData = req.files;
 
-    //console.log("imageData", imageData);
-    // ContactDetails: {
-    //     Name: 'dfgdfdf',
-    //     CallCountryCode: '+971',
-    //     CallNumber: '4334534',
-    //     WhatsappCountryCode: '+971',
-    //     WhatsappNumber: '34534'
-    //   }
-
     var CheckItems = [];
 
     let productionsItemsArray = await JSON.parse(data.ProductionsItems);
@@ -268,13 +278,13 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
             Qty: EachItem.Qty,
             Unit: EachItem.Unit,
             FileNo: EachItem.FileNo ? EachItem.FileNo : "",
-            ColorCode:EachItem.ColorCode,
-            SubCategoryName:EachItem.SubCategoryName
+            ColorCode: EachItem.ColorCode,
+            SubCategoryName: EachItem.SubCategoryName
         }
-        if(EachItem.matt){
+        if (EachItem.matt) {
             PushData.matt = EachItem.Matt
         }
-        if(EachItem.gloss){
+        if (EachItem.gloss) {
             PushData.gloss = EachItem.Gloss
         }
 
@@ -314,7 +324,7 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
             activity: `${req.session.SalesData.UserName} created card in Orders.`,
             Time: Date.now()
         }],
-        ReadyProducts:ReadyProducts
+        ReadyProducts: ReadyProducts
     }
 
     if (req.files) {
@@ -367,24 +377,24 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
     // console.log(productionsItemsArray);
 
     await productionsItemsArray.forEach((EachItem) => {
-        var PushData ={
+        var PushData = {
             Name: EachItem.Name,
             State: "InComplete",
             Qty: EachItem.Qty,
             Unit: EachItem.Unit,
             FileNo: EachItem.FileNo ? EachItem.FileNo : "",
-            ColorCode:EachItem.ColorCode,
-            SubCategoryName:EachItem.SubCategoryName,
-            
+            ColorCode: EachItem.ColorCode,
+            SubCategoryName: EachItem.SubCategoryName,
+
         }
-        
-        if(EachItem.matt){
+
+        if (EachItem.matt) {
             PushData.matt = EachItem.Matt
         }
-        if(EachItem.gloss){
+        if (EachItem.gloss) {
             PushData.gloss = EachItem.Gloss
         }
-        
+
         CheckItems.push(PushData)
     })
 
@@ -394,19 +404,19 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
         Name: data.OrderName,
         OrderIDNumber: data.OrderIDNumber,
         CustomerName: data.CustomerName,
-        CurrentList: "ORDERS",
-        ListArray: [
-            {
-                ListName: "ORDERS",
-                InTIme: Date.now(),
-                InEmployeeName: req.session.SalesData.UserName,
-                InEmployeeDesignation: req.session.SalesData.Designation
-            }
-        ],
+        // CurrentList: "ORDERS",
+        // ListArray: [
+        //     {
+        //         ListName: "ORDERS",
+        //         InTIme: Date.now(),
+        //         InEmployeeName: req.session.SalesData.UserName,
+        //         InEmployeeDesignation: req.session.SalesData.Designation
+        //     }
+        // ],
         AlternateContactNumber: "",
         AlternateContactcountrySelect: "",
         CheckListItems: {
-            CardName: "ORDERS",
+            // CardName: "ORDERS",
             checkItems: CheckItems
         },
         ContactNumber: ContactDetails.CallNumber,
@@ -417,14 +427,14 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
         description: "",
         comments: comments,
         Labels: Labels,
-        ReadyProducts:ReadyProducts
+        ReadyProducts: ReadyProducts
     }
 
     if (req.files) {
         NewOrder.IsAttachments = true;
     }
 
-    console.log("New Card: ", NewOrder);
+    console.log("New Card updated: ", NewOrder);
 
     var Activity = {
         activity: `${req.session.SalesData.UserName} Updated this card.`,
@@ -523,7 +533,7 @@ router.get('/CreateACopyOfCard/:CardID', SalesVerifyLogin, (req, res) => {
 router.get('/MoveCardToArchived/:CardID', SalesVerifyLogin, (req, res) => {
     let CardID = req.params.CardID;
     let UserName = req.session.SalesData.UserName;
-    let Designation =  req.session.SalesData.Designation;
+    let Designation = req.session.SalesData.Designation;
 
 
     var Data = {
@@ -536,11 +546,11 @@ router.get('/MoveCardToArchived/:CardID', SalesVerifyLogin, (req, res) => {
             Time: Date.now(),
         }
     }
-    
+
     // if (Designation === "Production") {
     //     Data.ProductionPerson = DropColumeName;
     // }
-    console.log("Data:",Data);  
+    console.log("Data:", Data);
     employeeHelpers.ChangeCardListByCardID(Data).then((data) => {
         //console.log(data);
         res.json({ Status: true });

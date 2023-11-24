@@ -2412,6 +2412,8 @@
 
     function OpenPopUpforNewOrder() {
 
+         resetAllDataFromNewOrder();
+
         console.log("State: ", State.AllCards);
         var mainPopup = document.getElementById('CreateOrderPopup');
         mainPopup.style.display = "flex";
@@ -2504,6 +2506,18 @@
         AllLabels.forEach((OneLabel) => {
             createColorOption(OneLabel.Color, OneLabel.Label);
         })
+        
+        // handle action buttons
+        var PopActionBtnSection = document.getElementById('PopActionBtnSection');
+        PopActionBtnSection.style.display = "none";
+
+        // handle main Action BTN
+        var CreateOrderButton = document.getElementById('CreateOrderButton');
+        // alert("sdf");
+        CreateOrderButton.onclick = function () {
+            CreateNewOrder();
+        };
+        CreateOrderButton.textContent = "Create new Order";
 
 
     }
@@ -2864,6 +2878,9 @@
         document.getElementById('popProductsItemsCollectiosns').innerHTML = "";
         document.getElementById('newOrderpopCommentsCollection').innerHTML = "";
         document.getElementById("AttachmentImage").src = "";
+        document.getElementById('moveSelect').style.display = moveSelect.style.display = 'none';
+        document.getElementById('popActivityCollections').innerHTML = "";
+        document.getElementById('popReadyProductsCollectiosn').innerHTML = "";
     }
 
 
@@ -3336,34 +3353,38 @@
         var popReadyProductsCollectiosn = document.getElementById('popReadyProductsCollectiosn');
         popReadyProductsCollectiosn.innerHTML = "";
         var ReadyProducts = CardData.ReadyProducts;
-        ReadyProducts.forEach((OneProduct) => {
-            OneProduct.QTY = OneProduct.Qty;
-            HandleAddReadyProducts(OneProduct)
-        })
+        if (ReadyProducts) {
+            ReadyProducts.forEach((OneProduct) => {
+                OneProduct.QTY = OneProduct.Qty;
+                HandleAddReadyProducts(OneProduct)
+            })
+        }
 
 
         // handle Productions
         var popProductsItemsCollectiosn = document.getElementById('popProductsItemsCollectiosns');
         popProductsItemsCollectiosn.innerHTML = "";
         var ProsItems = CardData.CheckListItems.checkItems;
-        ProsItems.forEach((ProItems) => {
-            var formula = {
-                ColorName: ProItems.Name,
-                Unit: ProItems.Unit,
-                FileNo: ProItems.FileNo,
-                QTY: ProItems.Qty,
-                ColorCode: ProItems.ColorCode,
-                SubCategoryName: ProItems.SubCategoryName
-            }
-            if (ProItems.matt) {
-                formula.matt = ProItems.matt
-            }
-            if (ProItems.gloss) {
-                formula.gloss = ProItems.gloss
-            }
+        if (ProsItems.length > 0) {
+            ProsItems.forEach((ProItems) => {
+                var formula = {
+                    ColorName: ProItems.Name,
+                    Unit: ProItems.Unit,
+                    FileNo: ProItems.FileNo,
+                    QTY: ProItems.Qty,
+                    ColorCode: ProItems.ColorCode,
+                    SubCategoryName: ProItems.SubCategoryName
+                }
+                if (ProItems.matt) {
+                    formula.matt = ProItems.matt
+                }
+                if (ProItems.gloss) {
+                    formula.gloss = ProItems.gloss
+                }
 
-            handleResultItemClick(formula)
-        })
+                handleResultItemClick(formula)
+            })
+        }
 
         // handle Comment
         var newOrderpopCommentsCollection = document.getElementById('newOrderpopCommentsCollection');
@@ -3409,6 +3430,7 @@
 
         // handle Move Actions Options
         var moveSelect = document.getElementById('moveSelect');
+        moveSelect.innerHTML = "";
         var AllLists = [];
         var Allcolumns = State.columns;
         var CurrentList = CardData.CurrentList;

@@ -30,6 +30,9 @@ app.engine('hbs', hbs.engine({
   layoutsDir: __dirname + '/views/layouts/',
   partialsDir: __dirname + '/views/partials/'
 }));
+// find IP
+app.set("trust proxy", true);
+
 
 app.use(logger('dev'));
 app.use(express.json());
