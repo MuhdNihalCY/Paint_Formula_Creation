@@ -1210,7 +1210,7 @@ module.exports = {
                 } else {
                     Formula.Unit = "Kilogram";
                 }
-              //  console.log(Formula);
+                //  console.log(Formula);
             }
 
             // do this after the loop ends 
@@ -1230,7 +1230,7 @@ module.exports = {
             OldCard.Activity.push(Activity)
             CardData.CardData = OldCard.Activity;
             CardData.Activity = OldCard.Activity;
-            console.log("New Updated card: ",CardData);
+            console.log("New Updated card: ", CardData);
             await db.get().collection(collection.CARD_COLLECTION).updateOne({ _id: new ObjectId(CardID) }, { $set: CardData }).then(() => {
                 resolve(CardID);
             })
@@ -1288,6 +1288,17 @@ module.exports = {
 
             delete OldCard._id;
             console.log("OldCard: ", OldCard);
+
+            var IsList = await db.get().collection(collection.LIST_COLLECTION).findOne({ Name: data.newlistname })
+
+            if (!IsList) {
+                let NewList = {
+                    Name: data.newlistname,
+                    OldCards: [],
+                };
+                await db.get().collection(collection.LIST_COLLECTION).insertOne(NewList);
+            }
+
 
             await db.get().collection(collection.CARD_COLLECTION).updateOne({ Name: data.CardName }, { $set: OldCard }).then(() => {
                 resolve(data.cardID);

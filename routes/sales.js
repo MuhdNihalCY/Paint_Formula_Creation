@@ -324,7 +324,12 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
             activity: `${req.session.SalesData.UserName} created card in Orders.`,
             Time: Date.now()
         }],
-        ReadyProducts: ReadyProducts
+        ReadyProducts: ReadyProducts,
+        Card_Created: {
+            Name: req.session.SalesData.UserName,
+            Designation: req.session.SalesData.Designation,
+            Time: Date.now()
+        }
     }
 
     if (req.files) {

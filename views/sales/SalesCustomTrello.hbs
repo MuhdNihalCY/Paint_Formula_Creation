@@ -738,8 +738,7 @@
                         </div>
                         <div class="ReadyColumn">
                             <div class="ReadyColumnHeader">
-                                <p class="ReadySectionHeaderText ListHeader" dropzone="false">for Customer collection
-                                </p>
+                                <p class="ReadySecHed ListHeader" dropzone="false">for Customer collection</p>
                             </div>
                             <div id="ForCustomerCollectionCards" class="ReadyCardsCollections">
 
@@ -767,18 +766,16 @@
                         <div class="centered-section" dropzone="false">
                             <p class="DoneSectionHeaderText">Done</p>
                         </div>
-                        <div class="search-input">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" class="input-field" placeholder="Search">
-                        </div>
+
 
                     </div>
                     <div class="DoneListCollections">
                         <div class="DoneColumn">
                             <div class="DoneColumnHeader" dropzone="false">
-                                <p class="DoneSectionHeaderText ListHeader">Today</p>
+                                <p class="DoneSectionHeaderText ListHeader">DONE TODAY</p>
+
                             </div>
-                            <div class="DoneCardsCollections">
+                            <div id="DoneCardsCollections" class="DoneCardsCollections ">
 
                             </div>
                         </div>
@@ -786,8 +783,22 @@
                             <div class="DoneColumnHeader" dropzone="false">
                                 <p class="DoneSectionHeaderText ListHeader">
                                     < 7 Days</p>
+
                             </div>
-                            <div class="DoneCardsCollections">
+                            <div id="DoneInAWeekCollections" class="DoneCardsCollections">
+
+                            </div>
+                        </div>
+                        <div class="DoneColumn">
+                            <div class="DoneColumnHeader" dropzone="false">
+                                <p class="DoneSectionHeaderText ListHeader">> 7 Days</p>
+                                <div class="search-input">
+                                    <i class="fas fa-search search-icon OldSearchIcon"></i>
+                                    <input type="text" class="input-field" placeholder="Search"
+                                        oninput="searchBeforeWeek(this.value)">
+                                </div>
+                            </div>
+                            <div id="DoneBeforeWeekCollection" class="DoneCardsCollections">
 
                             </div>
                         </div>
@@ -891,37 +902,7 @@
 
 
 
-    var columns = [
-        {
-            id: '6472429fde9d77f912facae6',
-            name: '13-23-98-nihaldfs',
-            status: 'InComplete',
-            description: '',
-            isAttachment: false,
-            fileNo: '785412',
-            contactDetails: {
-                contactCountryCode: '+971',
-                ContactNumber: '9078654321',
-                WhatsappCountryCode: '+971',
-                WhatsappContactNumber: '09876654331',
-                AlternateContactCountryCode: '+971',
-                AlternateContactNumber: '3216549870'
 
-            },
-            ListArray: [
-                {
-                    ListId: '6472429fde9d77f912facae6',
-                    ListName: 'Orders',
-                    InTIme: '32165498',
-                    OutTime: '987654321',
-                    InEmployeeName: 'SampleName',
-                    InEmployeeDesignation: 'SampleDesignation',
-                    OutEmployeeName: 'SampleName',
-                    OutEmployeeDesignation: 'SampleDesignation'
-                }
-            ]
-        }
-    ]
 
     // Initial State object with dynamic columns
     let State = {
@@ -937,7 +918,9 @@
             DONE: {
                 AllDone: [],
                 DONE_TODAY: [],
-                IN_A_WEEK: []
+                IN_A_WEEK: [],
+                BEFORE_A_WEEK: [],
+                OLD_MATCHED_CARDS: []
             }
         },
         Customers: [],
@@ -1039,6 +1022,7 @@
 
 
         await processUserData();
+        State.columns.DONE.BEFORE_A_WEEK = [];
 
         for (i = 0; i < AllCards.length; i++) {
             var CardList = AllCards[i].CurrentList;
@@ -1046,8 +1030,10 @@
 
             // // console.log("One Card: ", AllCards[i])
             AllLists.forEach((Onelist) => {
-                if (CardList === Onelist.Name) {
-                    //// // console.log("Onelist: ", Onelist);
+
+                if (CardList.toLowerCase() === Onelist.Name.toLowerCase()) {
+                    console.log("Onelist: ", Onelist.Name);
+                    console.log("CardList: ", CardList);
 
 
                     if ("ORDERS" === Onelist.Name) {
@@ -1056,16 +1042,42 @@
                     } else if ("OFFICE SECTION" === Onelist.Name) {
                         State.columns['OFFICE_SECTION'].push(AllCards[i]);
                         // // console.log("In Office Section")
-                    } else if ("FOR DISPATCH" === Onelist.Name) {
+                    } else if ("FOR DISPATCH" === Onelist.Name.toUpperCase()) {
                         State.columns.READY.FOR_DISPATCH.push(AllCards[i]);
                         // // console.log("In Dispatch")
-                    } else if ("FOR CUSTOMER COLLECTION" === Onelist.Name) {
+                    } else if ("FOR CUSTOMER COLLECTION" === Onelist.Name.toUpperCase()) {
                         State.columns.READY.FOR_CUSTOMER_COLLECTION.push(AllCards[i]);
                         // // console.log("In Customer Collections")
                     } else if ("DONE TODAY" === Onelist.Name) {
                         State.columns.DONE.AllDone.push(AllCards[i]);
-                        // // console.log("AllCards[i] done all ", AllCards[i]);
-                        //   State.columns.READY.FOR_CUSTOMER_COLLECTION.push(AllCards[i]);
+
+
+                        // do the today logic <7 day Login >7 day Logic
+                        var DoneMovedTime = AllCards[i].ListArray[0].InTime;
+                        console.log("Done Today InTime: ", DoneMovedTime);
+
+                        // Convert the timestamp to a Date object
+                        const date = new Date(DoneMovedTime);
+                        console.log("moved Date:", date);
+
+                        // Get today's date
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0 for accurate comparison
+
+                        // Calculate the difference in days
+                        const timeDifference = (today - date) / (1000 * 60 * 60 * 24);
+
+                        if (date.toDateString() === today.toDateString()) {
+                            console.log("Moved Today");
+                            State.columns.DONE.DONE_TODAY.push(AllCards[i]);
+                        } else if (timeDifference < 7) {
+                            console.log("< 7 days");
+                            State.columns.DONE.IN_A_WEEK.push(AllCards[i]);
+                        } else {
+                            console.log("> 7 days");
+                            State.columns.DONE.BEFORE_A_WEEK.push(AllCards[i]);
+                        }
+
                     } else {
                         // this is for productions and drivers,
                         // // console.log("Checking Cards", AllCards[i])
@@ -1114,7 +1126,7 @@
                                 var ListFound = false;
 
                                 DriverArray.forEach((SingleList) => {
-                                    if (SingleList.Name == AllCards[i].ProductionPerson) {
+                                    if (SingleList.Name == AllCards[i].CurrentList) {
                                         ListFound = true;
                                         if (!SingleList.Cards) {
                                             SingleList.Cards = [];
@@ -1128,14 +1140,14 @@
                                 if (ListFound === false) {
                                     // create a new List
                                     var NewList = {};
-                                    NewList.Name = AllCards[i].ProductionPerson;
+                                    NewList.Name = AllCards[i].CurrentList;
                                     NewList.Cards = [AllCards[i]];
                                     DriverArray.push(NewList);
                                 }
                             } else {
                                 // Create a list and push
                                 var NewList = {};
-                                NewList.Name = AllCards[i].ProductionPerson;
+                                NewList.Name = AllCards[i].CurrentList;
                                 NewList.Cards = [AllCards[i]];
                                 DriverArray.push(NewList);
 
@@ -1147,7 +1159,7 @@
             })
         }
 
-        // // console.log("New Updated State: ", State);
+        console.log("New Updated State: ", State);
         updateBoardUsingState()
     }
 
@@ -1164,6 +1176,9 @@
         loadForDispatchSectionCards();
         loadForCustomerCollectionCards();
         loadDriversSectionListCards();
+        loadDoneTodayListCards();
+        loadDoneInAWeekListCards();
+        // loadDoneBeforeWeekListCards()
 
         hideLoader();
 
@@ -1909,6 +1924,324 @@
 
             });
         }
+
+        function loadDoneTodayListCards() {
+            columnIndex = columnIndex + 1;
+            var DoneCardsCollections = document.getElementById('DoneCardsCollections');
+            DoneCardsCollections.innerHTML = '';
+            DoneCardsCollections.setAttribute('ondrop', 'drop(event)');
+            DoneCardsCollections.setAttribute('ondragover', 'allowDrop(event)');
+            DoneCardsCollections.setAttribute('data-column', columnIndex);
+            DoneCardsCollections.classList.add('cardsCollections');
+
+
+
+            var OrderCards = State.columns.DONE.DONE_TODAY;
+
+            var virtualOrderCardCollection;
+
+            OrderCards.forEach((OneCard, taskIndex) => {
+
+                var checklistItems = OneCard.CheckListItems;
+                var ChecklistCompleted = 0;
+                var TotalChecklist = 0;
+
+                if (OneCard.CheckListItems) {
+                    var checklistItems = OneCard.CheckListItems.checkItems;
+                    ChecklistCompleted = 0;
+                    TotalChecklist = checklistItems.length;
+
+                    checklistItems.forEach((checkItem) => {
+                        if (checkItem.State === 'Complete') {
+                            ChecklistCompleted = ChecklistCompleted + 1;
+                        }
+                    })
+
+                }
+
+                // Create the main div with class "Card"
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card Card';
+                cardDiv.onclick = function () {
+                    ViewCardDetails(OneCard.Name)
+                };
+
+                cardDiv.setAttribute('draggable', 'true');
+                cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                const cardImgDiv = document.createElement('div');
+                cardImgDiv.className = 'CardImgDiv';
+
+
+
+                // Create the paragraph element with class "cardText" and set its text content
+                const cardText = document.createElement('p');
+                cardText.className = 'cardText';
+                cardText.textContent = OneCard.Name;
+
+                // Create the div with class "CardSub"
+                const cardSubDiv = document.createElement('div');
+                cardSubDiv.className = 'CardSub';
+
+                // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                const descriptionIcon = document.createElement('img');
+                descriptionIcon.className = 'DescriptionSmIcon';
+                descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                descriptionIcon.alt = '';
+
+                // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                const checkBoxIcon = document.createElement('img');
+                checkBoxIcon.className = 'checkBoxSMIcon';
+                checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                checkBoxIcon.alt = '';
+
+                // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                const cardSMCheckNum = document.createElement('p');
+                cardSMCheckNum.className = 'CardSMCheckNum';
+                cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                // Check if the image file exists, and only create the image element if it does
+                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const cardImg = new Image();
+                cardImg.className = 'CardImg';
+                cardImg.alt = 'No Attachments';
+                cardImg.src = imageSrc;
+                cardImg.setAttribute('draggable', 'false');
+
+                cardImg.onload = function () {
+                    // The image exists, so set the src attribute
+                    cardImgDiv.appendChild(cardImg);
+                };
+                cardDiv.appendChild(cardImgDiv);
+
+                cardDiv.appendChild(cardText);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the child elements to their respective parent elements
+                cardSubDiv.appendChild(descriptionIcon);
+                cardSubDiv.appendChild(checkBoxIcon);
+                cardSubDiv.appendChild(cardSMCheckNum);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the "cardDiv" to the parent element in your HTML document
+                DoneCardsCollections.appendChild(cardDiv);
+            });
+        }
+
+        function loadDoneInAWeekListCards() {
+            columnIndex = columnIndex + 1;
+            var DoneInAWeekCollections = document.getElementById('DoneInAWeekCollections');
+            DoneInAWeekCollections.innerHTML = '';
+            //  DoneInAWeekCollections.setAttribute('ondrop', 'drop(event)');
+            //  DoneInAWeekCollections.setAttribute('ondragover', 'allowDrop(event)');
+            //  DoneInAWeekCollections.setAttribute('data-column', columnIndex);
+            //  DoneInAWeekCollections.classList.add('cardsCollections');
+
+
+
+            var OrderCards = State.columns.DONE.IN_A_WEEK;
+
+            var virtualOrderCardCollection;
+
+            OrderCards.forEach((OneCard, taskIndex) => {
+
+                var checklistItems = OneCard.CheckListItems;
+                var ChecklistCompleted = 0;
+                var TotalChecklist = 0;
+
+                if (OneCard.CheckListItems) {
+                    var checklistItems = OneCard.CheckListItems.checkItems;
+                    ChecklistCompleted = 0;
+                    TotalChecklist = checklistItems.length;
+
+                    checklistItems.forEach((checkItem) => {
+                        if (checkItem.State === 'Complete') {
+                            ChecklistCompleted = ChecklistCompleted + 1;
+                        }
+                    })
+
+                }
+
+                // Create the main div with class "Card"
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card Card';
+                var Done = true;
+                cardDiv.onclick = function () {
+                    ViewCardDetails(OneCard.Name, Done)
+                };
+
+                // cardDiv.setAttribute('draggable', 'true');
+                // cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                const cardImgDiv = document.createElement('div');
+                cardImgDiv.className = 'CardImgDiv';
+
+
+
+                // Create the paragraph element with class "cardText" and set its text content
+                const cardText = document.createElement('p');
+                cardText.className = 'cardText';
+                cardText.textContent = OneCard.Name;
+
+                // Create the div with class "CardSub"
+                const cardSubDiv = document.createElement('div');
+                cardSubDiv.className = 'CardSub';
+
+                // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                const descriptionIcon = document.createElement('img');
+                descriptionIcon.className = 'DescriptionSmIcon';
+                descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                descriptionIcon.alt = '';
+
+                // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                const checkBoxIcon = document.createElement('img');
+                checkBoxIcon.className = 'checkBoxSMIcon';
+                checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                checkBoxIcon.alt = '';
+
+                // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                const cardSMCheckNum = document.createElement('p');
+                cardSMCheckNum.className = 'CardSMCheckNum';
+                cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                // Check if the image file exists, and only create the image element if it does
+                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const cardImg = new Image();
+                cardImg.className = 'CardImg';
+                cardImg.alt = 'No Attachments';
+                cardImg.src = imageSrc;
+                cardImg.setAttribute('draggable', 'false');
+
+                cardImg.onload = function () {
+                    // The image exists, so set the src attribute
+                    cardImgDiv.appendChild(cardImg);
+                };
+                cardDiv.appendChild(cardImgDiv);
+
+                cardDiv.appendChild(cardText);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the child elements to their respective parent elements
+                cardSubDiv.appendChild(descriptionIcon);
+                cardSubDiv.appendChild(checkBoxIcon);
+                cardSubDiv.appendChild(cardSMCheckNum);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the "cardDiv" to the parent element in your HTML document
+                DoneInAWeekCollections.appendChild(cardDiv);
+            });
+        }
+
+
+
+
+    }
+
+    function loadDoneBeforeWeekListCards() {
+        var columnIndex = 98 + 1;
+        var DoneBeforeWeekCollection = document.getElementById('DoneBeforeWeekCollection');
+        DoneBeforeWeekCollection.innerHTML = '';
+        //   DoneBeforeWeekCollection.setAttribute('ondrop', 'drop(event)');
+        //   DoneBeforeWeekCollection.setAttribute('ondragover', 'allowDrop(event)');
+        //   DoneBeforeWeekCollection.setAttribute('data-column', columnIndex);
+        //   DoneBeforeWeekCollection.classList.add('cardsCollections');
+
+
+
+        var OrderCards = State.columns.DONE.OLD_MATCHED_CARDS;
+
+        var virtualOrderCardCollection;
+
+        OrderCards.forEach((OneCard, taskIndex) => {
+
+            var checklistItems = OneCard.CheckListItems;
+            var ChecklistCompleted = 0;
+            var TotalChecklist = 0;
+
+            if (OneCard.CheckListItems) {
+                var checklistItems = OneCard.CheckListItems.checkItems;
+                ChecklistCompleted = 0;
+                TotalChecklist = checklistItems.length;
+
+                checklistItems.forEach((checkItem) => {
+                    if (checkItem.State === 'Complete') {
+                        ChecklistCompleted = ChecklistCompleted + 1;
+                    }
+                })
+
+            }
+
+            // Create the main div with class "Card"
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card Card';
+            var Done = true;
+            cardDiv.onclick = function () {
+                ViewCardDetails(OneCard.Name, Done)
+            };
+
+            //  cardDiv.setAttribute('draggable', 'true');
+            //  cardDiv.setAttribute('ondragstart', 'drag(event)');
+            cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+            const cardImgDiv = document.createElement('div');
+            cardImgDiv.className = 'CardImgDiv';
+
+
+
+            // Create the paragraph element with class "cardText" and set its text content
+            const cardText = document.createElement('p');
+            cardText.className = 'cardText';
+            cardText.textContent = OneCard.Name;
+
+            // Create the div with class "CardSub"
+            const cardSubDiv = document.createElement('div');
+            cardSubDiv.className = 'CardSub';
+
+            // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+            const descriptionIcon = document.createElement('img');
+            descriptionIcon.className = 'DescriptionSmIcon';
+            descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+            descriptionIcon.alt = '';
+
+            // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+            const checkBoxIcon = document.createElement('img');
+            checkBoxIcon.className = 'checkBoxSMIcon';
+            checkBoxIcon.src = '/images/Icons/check_Gray.png';
+            checkBoxIcon.alt = '';
+
+            // Create the paragraph element with class "CardSMCheckNum" and set its text content
+            const cardSMCheckNum = document.createElement('p');
+            cardSMCheckNum.className = 'CardSMCheckNum';
+            cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+            // Check if the image file exists, and only create the image element if it does
+            const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+            const cardImg = new Image();
+            cardImg.className = 'CardImg';
+            cardImg.alt = 'No Attachments';
+            cardImg.src = imageSrc;
+            cardImg.setAttribute('draggable', 'false');
+
+            cardImg.onload = function () {
+                // The image exists, so set the src attribute
+                cardImgDiv.appendChild(cardImg);
+            };
+            cardDiv.appendChild(cardImgDiv);
+
+            cardDiv.appendChild(cardText);
+            cardDiv.appendChild(cardSubDiv);
+
+            // Append the child elements to their respective parent elements
+            cardSubDiv.appendChild(descriptionIcon);
+            cardSubDiv.appendChild(checkBoxIcon);
+            cardSubDiv.appendChild(cardSMCheckNum);
+            cardDiv.appendChild(cardSubDiv);
+
+            // Append the "cardDiv" to the parent element in your HTML document
+            DoneBeforeWeekCollection.appendChild(cardDiv);
+        });
     }
 
 
@@ -1952,6 +2285,7 @@
         var data = event.dataTransfer.getData("text/plain");
         var target = event.target;
 
+        console.log("Checking for drop:", target);
         if (target.classList.contains("cardsCollections")) {
             target.appendChild(document.getElementById(data));
         }
@@ -3196,7 +3530,7 @@
     }
 
 
-    function ViewCardDetails(CardName) {
+    function ViewCardDetails(CardName, Done) {
         //  alert(CardName);
         var AlreadyNameAdded = false;
         var CreateOrderPopup = document.getElementById('CreateOrderPopup');
@@ -3431,83 +3765,99 @@
         // handle Move Actions Options
         var moveSelect = document.getElementById('moveSelect');
         moveSelect.innerHTML = "";
-        var AllLists = [];
-        var Allcolumns = State.columns;
-        var CurrentList = CardData.CurrentList;
-        var CardID = CardData._id;
 
-        // add current list
-        if (CurrentList === "ORDERS") {
-            AllLists.push("ORDERS");
-        }
+        if (!Done) {
+            var AllLists = [];
+            var Allcolumns = State.columns;
+            var CurrentList = CardData.CurrentList;
+            var CardID = CardData._id;
 
-        if (CurrentList === "OFFICE SECTION") {
-            AllLists.push("OFFICE SECTION");
-        }
-
-        Allcolumns.PRODUCTION.forEach((EachProductionList) => {
-            if (CurrentList === EachProductionList.Name) {
-                AllLists.push(EachProductionList.Name);
+            // add current list
+            if (CurrentList === "ORDERS") {
+                AllLists.push("ORDERS");
             }
-        })
 
-        if (CurrentList === "FOR DISPATCH") {
-            AllLists.push("FOR DISPATCH");
-        }
-
-        if (CurrentList === "FOR CUSTOMER COLLECTION") {
-            AllLists.push("FOR CUSTOMER COLLECTION");
-        }
-
-        Allcolumns.DRIVERS.forEach((EachDriver) => {
-            if (CurrentList === EachDriver.Name) {
-                AllLists.push(EachDriver.Name);
+            if (CurrentList === "OFFICE SECTION") {
+                AllLists.push("OFFICE SECTION");
             }
-        })
 
+            Allcolumns.PRODUCTION.forEach((EachProductionList) => {
+                if (CurrentList === EachProductionList.Name) {
+                    AllLists.push(EachProductionList.Name);
+                }
+            })
 
-        // add all other list
-
-        if (CurrentList !== "ORDERS") {
-            AllLists.push("ORDERS");
-        }
-
-        if (CurrentList !== "OFFICE SECTION") {
-            AllLists.push("OFFICE SECTION");
-        }
-
-        Allcolumns.PRODUCTION.forEach((EachProductionList) => {
-            if (CurrentList !== EachProductionList.Name) {
-                AllLists.push(EachProductionList.Name);
+            if (CurrentList === "FOR DISPATCH") {
+                AllLists.push("FOR DISPATCH");
             }
-        })
 
-        if (CurrentList !== "FOR DISPATCH") {
-            AllLists.push("FOR DISPATCH");
-        }
-
-        if (CurrentList !== "FOR CUSTOMER COLLECTION") {
-            AllLists.push("FOR CUSTOMER COLLECTION");
-        }
-
-        Allcolumns.DRIVERS.forEach((EachDriver) => {
-            if (CurrentList !== EachDriver.Name) {
-                AllLists.push(EachDriver.Name);
+            if (CurrentList === "FOR CUSTOMER COLLECTION") {
+                AllLists.push("FOR CUSTOMER COLLECTION");
             }
-        })
+
+            Allcolumns.DRIVERS.forEach((EachDriver) => {
+                if (CurrentList === EachDriver.Name) {
+                    AllLists.push(EachDriver.Name);
+                }
+            })
+
+            if (CurrentList === "DONE TODAY") {
+                AllLists.push("DONE TODAY");
+            }
 
 
-        moveSelect.onchange = function () {
-            ChangeList(CardID);
+
+            // add all other list
+
+            if (CurrentList !== "ORDERS") {
+                AllLists.push("ORDERS");
+            }
+
+            if (CurrentList !== "OFFICE SECTION") {
+                AllLists.push("OFFICE SECTION");
+            }
+
+            Allcolumns.PRODUCTION.forEach((EachProductionList) => {
+                if (CurrentList !== EachProductionList.Name) {
+                    AllLists.push(EachProductionList.Name);
+                }
+            })
+
+            if (CurrentList !== "FOR DISPATCH") {
+                AllLists.push("FOR DISPATCH");
+            }
+
+            if (CurrentList !== "FOR CUSTOMER COLLECTION") {
+                AllLists.push("FOR CUSTOMER COLLECTION");
+            }
+
+            Allcolumns.DRIVERS.forEach((EachDriver) => {
+                if (CurrentList !== EachDriver.Name) {
+                    AllLists.push(EachDriver.Name);
+                }
+            })
+
+            if (CurrentList !== "DONE TODAY") {
+                AllLists.push("DONE TODAY");
+            }
+
+
+            moveSelect.onchange = function () {
+                ChangeList(CardID);
+            }
+
+            AllLists.forEach((OneList) => {
+                let OneOption = document.createElement('option');
+                OneOption.value = OneList;
+                OneOption.innerHTML = OneList;
+                OneOption.style.padding = "5px 0";
+                moveSelect.appendChild(OneOption);
+            })
+        } else {
+            moveSelect.ariaDisabled = true;
+            // alert("Move disabled");
         }
 
-        AllLists.forEach((OneList) => {
-            let OneOption = document.createElement('option');
-            OneOption.value = OneList;
-            OneOption.innerHTML = OneList;
-            OneOption.style.padding = "5px 0";
-            moveSelect.appendChild(OneOption);
-        })
 
 
         // Handle Copy Button 
@@ -4371,6 +4721,61 @@
         });
     }
 
+    function searchBeforeWeek(SearchInput) {
+        if (SearchInput === "") {
+            State.columns.DONE.OLD_MATCHED_CARDS = [];
+            loadDoneBeforeWeekListCards();
+        } else {
+            var AllOldCards = State.columns.DONE.BEFORE_A_WEEK;
+            console.log("AllOLDCARDSSS:", AllOldCards);
+
+
+            const matchingObjects = [];
+
+            function searchObject(obj, searchInput) {
+                var ThisCard = obj;
+                for (const key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        const value = obj[key];
+
+                        if (typeof value === 'object') {
+                            // Recursive call for nested objects
+                            searchObject(value, searchInput);
+                        } else {
+                            // Check if the current value contains the search input (case-insensitive)
+                            if (String(value).toLowerCase().includes(String(searchInput).toLowerCase())) {
+                                //if (obj.CheckListItems) {
+                                //  matchingObjects.push(ThisCard);
+                                //console.log("ThisCard: ",ThisCard);
+                                //}
+                                return true;
+                                break; // Stop searching this object once a match is found
+                            }
+                            /*else {
+                                return false;
+                            }*/
+                        }
+                    }
+                }
+            }
+
+            AllOldCards.forEach((card) => {
+                //searchObject(card, SearchInput);
+                if (searchObject(card, SearchInput)) {
+                    matchingObjects.push(card);
+                    console.log("Matchig: ", card);
+                } else {
+                    console.log("Not Matching: ", card);
+                }
+            });
+
+            // Display the matching objects
+            console.log(matchingObjects);
+            State.columns.DONE.OLD_MATCHED_CARDS = matchingObjects;
+            loadDoneBeforeWeekListCards();
+        }
+    }
+
 
 </script>
 
@@ -4475,6 +4880,11 @@
         transform: translateY(-50%);
         color: #00FDFD;
         /* Icon color */
+    }
+
+    .OldSearchIcon {
+        left: 9px;
+        top: 51%;
     }
 
     .globalSeaarch {
@@ -4603,6 +5013,7 @@
     .ListHeaderText,
     .ProdctionSectionHeaderText,
     .ReadySectionHeaderText,
+    .ReadySecHed,
     .DriverSectionHeaderText,
     .DoneSectionHeaderText {
         color: #fff;
@@ -4881,6 +5292,10 @@
     /* Add additional styling for the search input if needed */
     .search-input {
         /* Additional styling for the search input container */
+    }
+
+    .DoneColumnHeader {
+        gap: 1rem;
     }
 
 

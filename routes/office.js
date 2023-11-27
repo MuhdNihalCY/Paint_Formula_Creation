@@ -108,7 +108,7 @@ router.get('/moveCardtoReadyToDispatch/:cardId', OfficeVerifyLogin, (req, res) =
 router.post('/cardUpdated/:cardID', OfficeVerifyLogin, (req, res) => {
     var CardID = req.params.cardID;
     // console.log(req.body);
-    var ProductionPerson = req.body.selectProductionPeople; 
+    var ProductionPerson = req.body.selectProductionPeople;
     if (ProductionPerson) {
         employeeHelpers.getCardByID(CardID).then((Card) => {
             // 
@@ -229,13 +229,121 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', OfficeVerifyL
                 res.redirect('/office/CustomerCollection')
             })
         })
-    }) 
+    })
 })
 
 router.get('/home', OfficeVerifyLogin, (req, res) => {
+    // OfficeLogged.UserName
     res.render('office/OfficeCustomTrello', { OfficeLogged: req.session.OfficeData });
 });
 
+router.post('/saveCustomer', OfficeVerifyLogin, (req, res) => {
+    employeeHelpers.SaveCustomer(req.body).then((id) => {
+        var data = req.body
+        data._id = id;
+        res.json({ data });
+    })
+})
+
+
+router.post('/CreateNewOrder', OfficeVerifyLogin, async (req, res) => {
+    console.log("Order Creating", req.body);
+    var data = req.body;
+    const imageData = req.files;
+
+    var CheckItems = [];
+
+    let productionsItemsArray = await JSON.parse(data.ProductionsItems);
+    let ContactDetails = await JSON.parse(data.ContactDetails);
+    let comments = await JSON.parse(data.comments);
+    let Labels = await JSON.parse(data.Labels);
+    let ReadyProducts = await JSON.parse(data.ReadyProducts);
+    // console.log(productionsItemsArray);
+
+    await productionsItemsArray.forEach((EachItem) => {
+        var PushData = {
+            Name: EachItem.Name,
+            State: "InComplete",
+            Qty: EachItem.Qty,
+            Unit: EachItem.Unit,
+            FileNo: EachItem.FileNo ? EachItem.FileNo : "",
+            ColorCode: EachItem.ColorCode,
+            SubCategoryName: EachItem.SubCategoryName
+        }
+        if (EachItem.matt) {
+            PushData.matt = EachItem.Matt
+        }
+        if (EachItem.gloss) {
+            PushData.gloss = EachItem.Gloss
+        }
+
+        CheckItems.push(PushData);
+    })
+
+
+
+    var NewOrder = {
+        Name: data.OrderName,
+        OrderIDNumber: data.OrderIDNumber,
+        CustomerName: data.CustomerName,
+        CurrentList: "ORDERS",
+        ListArray: [
+            {
+                ListName: "ORDERS",
+                InTIme: Date.now(),
+                InEmployeeName: req.session.OfficeData.UserName,
+                InEmployeeDesignation: req.session.OfficeData.Designation
+            }
+        ],
+        AlternateContactNumber: "",
+        AlternateContactcountrySelect: "",
+        CheckListItems: {
+            CardName: "ORDERS",
+            checkItems: CheckItems
+        },
+        ContactNumber: ContactDetails.CallNumber,
+        ContactcountrySelect: ContactDetails.CallCountryCode,
+        ContactPersonName: ContactDetails.Name,
+        WhatsAppcountrySelect: ContactDetails.WhatsappCountryCode,
+        WhatsappNumber: ContactDetails.WhatsappNumber,
+        description: "",
+        comments: comments,
+        Labels: Labels,
+        Activity: [{
+            activity: `${req.session.OfficeData.UserName} created card in Orders.`,
+            Time: Date.now()
+        }],
+        ReadyProducts: ReadyProducts,
+        Card_Created: {
+            Name: req.session.OfficeData.UserName,
+            Designation: req.session.OfficeData.Designation,
+            Time: Date.now()
+        }
+    }
+
+    if (req.files) {
+        NewOrder.IsAttachments = true;
+    }
+
+    console.log("New Card: ", NewOrder);
+
+
+
+    employeeHelpers.InsertNewCard(NewOrder).then((CardId) => {
+        if (req.files) {
+            const imageData = req.files.file;
+            // console.log('Image data:', imageData);
+
+            imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
+                if (!err) {
+                } else {
+                    console.log("Error at img1 " + err)
+                }
+            })
+        }
+        res.json({ State: true });
+    })
+})
 
 
 
