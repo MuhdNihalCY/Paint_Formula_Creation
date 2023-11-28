@@ -330,14 +330,14 @@
                     </div> --}}
                 </div>
                 <div class="NewOrderPopProctionItemsActionsSections">
-                    <div class="popSeachMixingDiv">
+                    {{!-- <div class="popSeachMixingDiv">
                         <i class="fas fa-search search-icon MixingSeachIcon"></i>
                         <input type="search" class="popSeachMixingInput-field" placeholder="Search"
                             oninput="searchFormulas(this.value)">
                     </div>
                     <div class="SearchResultsDiv">
                         <ul class="search-results" id="searchResults"></ul>
-                    </div>
+                    </div> --}}
                     {{!-- <a href="/createFormula" class="btn popNewFormulaBtn ">Create New Formula</a> --}}
                 </div>
                 <div class="NewOrderNewFormulaNameSection">
@@ -3026,19 +3026,19 @@
 
         var VirtualFormula = `
                     <div class="popEachProductsItemss">
-                        <p id="FormulaColorName" class='FormulaColorName'>${formula.ColorName}</p>
-                        <p id="FormulaColorCode" class='FormulaColorName'>${formula.ColorCode ? formula.ColorCode : ""} </p>
-                        <p id="FormulaColorName" class='FormulaColorName'>${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
-                        <p id="FormulaColorName" class='FormulaColorName'>${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
-                        <p id="FormulaColorName" class='FormulaColorName'>"${formula.FileNo ? formula.FileNo : ""}"</p>
+                        <p id="FormulaColorName" class='FormulaColorName' contenteditable="true">${formula.ColorName}</p>
+                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' contenteditable="true">${formula.ColorCode ? formula.ColorCode : ""} </p>
+                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' contenteditable="true">${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
+                        <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
+                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p>
                        
 
                         <div class="QtyOfFormula">
-                            <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo}" hidden>
-                            <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode}" hidden>
-                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName}" hidden>
-                            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt}" hidden>` : ""}
-                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss}" hidden>` : ""}
+                            <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
+                            <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode ? formula.ColorCode : ""}" hidden>
+                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName ? formula.SubCategoryName : ""}" hidden>
+                            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
+                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""}
                             <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
                             <p class="FormulaUnit">${formula.Unit}</p>
                         </div>
@@ -4104,10 +4104,10 @@
                     var item = {
                         Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
                         Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
-                        FileNo: OneItem.getElementsByClassName('HiddenFileNo')[0].value,
+                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0].textContent,
                         Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
-                        ColorCode: OneItem.getElementsByClassName('HiddenColorCode')[0].value,
-                        SubCategoryName: OneItem.getElementsByClassName('HiddenSubCategoryName')[0].value,
+                        ColorCode: OneItem.getElementsByClassName('FormulaColorCode')[0].textContent,
+                        SubCategoryName: OneItem.getElementsByClassName('FormulaSubCategoryName')[0].textContent,
                     }
                     if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
                         item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
@@ -4775,6 +4775,11 @@
             loadDoneBeforeWeekListCards();
         }
     }
+
+
+   
+
+
 
 
 </script>
