@@ -570,6 +570,10 @@ router.get('/MoveCardToArchived/:CardID', SalesVerifyLogin, (req, res) => {
     // })
 })
 
+router.get('/Customer',SalesVerifyLogin,(req,res)=>{
+    res.send("Sales Customers");
+})
+
 router.get('/Logout', SalesVerifyLogin, (req, res) => {
     req.session.SalesData.destroy();
     res.redirect('/login');

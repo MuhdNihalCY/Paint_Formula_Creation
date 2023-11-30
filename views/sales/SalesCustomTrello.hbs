@@ -14,131 +14,68 @@
             <div class="MainPopupTopsection">
                 <img onclick="CloseMainPopup()" class="MainPopupCloseIcon" src="/images/Icons/x.png" alt="">
             </div>
-            {{!-- <div class="PopupCardNameSection">
-                <input type="text" id="CardNameInput" class="CardNameInput popCardHeaderText" placeholder="Card name">
-                <p class="popCardHeaderText">13-10-2023-125447893-Aero Head</p>
-                <div class="PopupCardListNameSection">
-                    <p class="popCardList">in list</p>
-                    <p class="PopcardListName">ORDERS</p>
+            <div class="FollowUpHeaderDiv">
+                <p class="popCardHeaderText text-center">Customer follow-up</p>
+            </div>
+            <div class="SerialNoDiv">
+                <p class="ccNameText">Serial no:</p>
+                <input type="text" name="serial_no" id="followUPserial_no" readonly placeholder="Enter serial number..."
+                    value="">
+            </div>
+            <div class="FollowUpCustNameDiv">
+                <p class="ccNameText">Customer Name:</p>
+                <div>
+
+                    <div style="position: relative; display: inline-block;">
+                        <input type="text" name="CustomerName" id="followUPCustomerName"
+                            oninput="ShowCustomerNameToFollowup()" placeholder="Enter Customer name..." value="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            style="position: absolute; top: 50%; right: 25px; transform: translateY(-50%);">
+                            <path
+                                d="M19 19L13.0001 13M15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8Z"
+                                stroke="#B3B7BA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <datalist id="FollowUpcustomerSuggestions"></datalist>
                 </div>
             </div>
-            <div class="PopCustomerLabelBtnsSection">
-                <div class="PopCustomerAndLabelSection">
-                    <div class="PopCustomerSections">
-                        <div class="popCUstomerSectionDiv">
-                            <p class="popCustomerName">Customer contact: Mr.Niyad</p>
-                            <select name="" class="CustomerContactNameSelect" id="CustomerContactNameSelect">
-
-                            </select>
-                        </div>
-                        <div class="popCustomerCallNumberSection">
-                            <img src="/images/Icons/Call.png" class="CallIcon" alt="">
-                            <p class="PopCustomerMobileNumber">Mobile no: +971 50 22223</p>
-                        </div>
-                        <div class="popCustomerCallNumberSection">
-                            <img src="/images/Icons/WhatsApp_out.png" class="CallIcon" alt="">
-                            <p class="PopCustomerMobileNumber">WhatsApp no: +971 50 22223</p>
-                        </div>
-                    </div>
-                    <div class="popCardLabelSection">
-                        <p class="popCardHeaderText">Labels</p>
-                        <div class="popLabelCollections">
-                            <div class="popCardAllLabel">
-                                <div class="popLabel">
-                                </div>
-                            </div>
-                            <div class="AddBtnSection">
-                                <div class="AddLableBTN" onclick="openColorModal()">
-                                    <p>+</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="PopActionBtnSection">
-                    <button>Move</button>
-                    <Button>Copy</Button>
-                    <Button>Archive</Button>
-                </div>
-            </div>
-            <div class="poplastUpdateTimeSection">
-                <p>Last update : 3 hours ago</p>
+            <div class="FollowUpCustNameDiv">
+                <p class="ccNameText">Purpose of visit/call:</p>
+                <select name="" id="" class="VisitPurposeFollowup">
+                    <option selected disabled value="">Select purpose...</option>
+                    <option value="Enquiry">Enquiry</option>
+                    <option value="Order Purchase">Order Purchase</option>
+                    <option value="Payment settlement">Payment settlement</option>
+                </select>
             </div>
 
-            <div class="popReadyProductsSection">
-                <p class="popCardHeaderText">Ready Products</p>
-                <div class="popReadyProductsCollectiosn">
-                    <div class="popEachReadyProducts">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
+            <div class="FollowUpConnectedDiv">
+                <p class="ccNameText">Connected through:</p>
+                <div class="toggle-container">
+                    <div class="toggle-button" onclick="toggleRadioButton(1)">
+                        <input type="radio" name="toggle" id="radio1" />
+                        <label for="radio1">In-Person</label>
                     </div>
-                    <div class="popEachReadyProducts">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
-                    </div>
-                    <div class="popEachReadyProducts">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
+                    <div class="toggle-button" onclick="toggleRadioButton(2)">
+                        <input type="radio" name="toggle" id="radio2" />
+                        <label for="radio2">Call</label>
                     </div>
                 </div>
             </div>
-
-            <div class="popProductsItemsSection">
-                <p class="popCardHeaderText">Productions Items</p>
-                <div class="popProductsItemsCollectiosn">
-                    <div class="popEachProductsItems">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
-                    </div>
-                </div>
-                <div class="PopProctionItemsActionsSections">
-                    <div class="popSeachMixingDiv">
-                        <i class="fas fa-search search-icon MixingSeachIcon"></i>
-                        <input type="text" class="popSeachMixingInput-field" placeholder="Search">
-                    </div>
-                    <a href="/createFormula" class="btn popNewFormulaBtn ">Create New Formula</a>
-                </div>
+            <div class="FollowUpCommentDiv">
+                <textarea rows="6" name="comment" id="followUPComment" placeholder="Comments..."></textarea>
+            </div>
+            <div class="FollowUpContactedDiv">
+                <p class="ccNameText">Contacted Person:</p>
+                <select name="" id="ContactPersonsSelect" class="VisitPurposeFollowup">
+                    <option value="">Select Person...</option>
+                    <option value="">Me</option>
+                </select>
             </div>
 
-
-            <div class="popCommentsSections">
-                <p class="popCardHeaderText">Comments</p>
-                <div class="popCommentsCollection">
-                    <div class="popEachComment">
-                        <p class="popCommentSender">REHMAN</p>
-                        <div class="popCommentSended">
-                            <p class="popComment">@someOne do something</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="popAddCommentSection">
-                    <p class="popAddCommentsTex">Add Comments</p>
-                    <textarea name="commentBox" placeholder="Add your comments" class="commentBox" id="comment"
-                        rows="10"></textarea>
-                    <div class="popCommentSaveBtnSection">
-                        <button>Post Comment</button>
-                    </div>
-                </div>
+            <div class="FollowUpSaveBTNDiv">
+                <input type="button" onclick="SubmitFollowUP()" value="Save" class="followUpSaveBTN">
             </div>
-
-            <div class="popCardActivity">
-                <p class="popCardHeaderText">Activity</p>
-                <div id="" class="popActivityCollections">
-                    <ul>
-                        <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
-                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
-                        </li>
-                        <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
-                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
-                        </li>
-                    </ul>
-                </div>
-            </div> --}}
-
-            {{!-- <div class="popSaveBtnSection">
-                <button>Save card</button>
-            </div> --}}
 
         </div>
     </div>
@@ -453,7 +390,7 @@
 
                     <div class="CCLocationSection">
                         <p class="ccLocationText">Location</p>
-                        <input type="text" id="ccLocation" placeholder="Enter name here" class="CCInputLocations">
+                        <input type="text" id="ccLocation" placeholder="Enter Location here" class="CCInputLocations">
                     </div>
 
                 </div>
@@ -675,6 +612,8 @@
                     </div>
                     <input type="button" class="CreateCustomerBTN btn" onclick="OpenCustomerCreationPopup()"
                         value="Create Customer">
+                    <input type="button" class="CreateCustomerBTN followupBTN btn" onclick="OpenCustomerFollowup()"
+                        value="Add Customer follow-up">
                     <div class="input-button userBTN">
                         <input type="button" value="{{SalesLogged.UserName}}" class="input-field  InputBTNField btn">
                         <i class="fas fa-user user-icon"></i>
@@ -2480,6 +2419,8 @@
     function CloseMainPopup() {
         var mainPopup = document.getElementById('mainPopup');
         mainPopup.style.display = "none";
+        const dataList = document.getElementById('FollowUpcustomerSuggestions');
+        dataList.style.display = "none";
     }
 
     function OpenMainPopup() {
@@ -4777,7 +4718,161 @@
     }
 
 
-   
+    function OpenCustomerFollowup() {
+        //alert("Follow-up");
+        var mainPopup = document.getElementById('mainPopup');
+        mainPopup.style.display = "flex";
+
+
+
+        function getCurrentSerialNumber() {
+            const currentDate = new Date();
+
+            const year = currentDate.getFullYear() % 100; // Using only the last two digits of the year
+            const month = currentDate.getMonth() + 1; // Months are zero-based, so adding 1
+            const day = currentDate.getDate();
+
+            // Assuming other parts of the serial number are fixed
+            const fixedParts = ['31', month.toString().padStart(2, '0'), day.toString(), '1'];
+
+            // Construct the full serial number
+            const currentSerialNumber = [...fixedParts, '01'].join('-');
+
+            return currentSerialNumber;
+        }
+
+
+        const currentSerialNumber = getCurrentSerialNumber();
+        const serialNumberCollection = [];
+
+
+        serialNumberCollection.push(currentSerialNumber.toString());
+        console.log(serialNumberCollection);
+
+        var followUPserial_no = document.getElementById('followUPserial_no').value = serialNumberCollection;
+    }
+
+
+    function SubmitFollowUP() {
+        alert("Followup Submited!")
+    }
+
+    function ShowCustomerNameToFollowup() {
+        var Customers = State.Customers;
+        const customerNames = Customers.map(customer => customer.Customername);
+
+        console.log(customerNames);
+
+        const input = document.getElementById('followUPCustomerName');
+        const dataList = document.getElementById('FollowUpcustomerSuggestions');
+        dataList.style.display = "flex";
+
+        // Clear previous suggestions
+        dataList.innerHTML = '';
+
+        const inputText = input.value.toLowerCase();
+
+        // Filter customers based on input
+        const filteredCustomers = customerNames.filter(customer =>
+            customer.toLowerCase().includes(inputText)
+        );
+
+        console.log("filteredCustomers:", filteredCustomers);
+
+        // Create option elements for each suggestion
+        filteredCustomers.forEach(customer => {
+            const option = document.createElement('option');
+            option.value = customer;
+            option.textContent = customer;
+            option.className = "FollowUpCustomerFilterOPtion"
+            option.onclick = () => {
+                setCustomerName(customer);
+            }
+            dataList.appendChild(option);
+        });
+    }
+
+    // Function to set the selected customer name in the input field
+    function setCustomerName(selectedCustomer) {
+        document.getElementById('followUPCustomerName').value = selectedCustomer;
+        const dataList = document.getElementById('FollowUpcustomerSuggestions');
+        dataList.style.display = "none";
+
+        var Customers = State.Customers;
+        var Contacts = [];
+        var selectedCustomerLowerCase = selectedCustomer.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+
+        // Check if the selectedCustomer exists in the Customers array
+        var matchingCustomer = Customers.find(customer => customer.Customername.toLowerCase() === selectedCustomerLowerCase);
+
+        if (matchingCustomer) {
+            Contacts = matchingCustomer.Contact;
+            console.log("Contacts:", Contacts);
+
+            var ContactPersons = [];
+
+            Contacts.forEach((contact) => {
+                console.log("EachContact: ", contact);
+                ContactPersons.push(contact.Name);
+            });
+        } else {
+            console.log("Selected customer not found in the Customers array.");
+        }
+
+        console.log("ContactPersons:", ContactPersons)
+        var ContactPersonsSelect = document.getElementById('ContactPersonsSelect');
+        ContactPersonsSelect.innerHTML = "";
+
+        var FirstContactOption = document.createElement('option');
+        FirstContactOption.value = "";
+        FirstContactOption.textContent = "Select a contacted person";
+        FirstContactOption.disabled = true;
+        FirstContactOption.selected = true;
+
+        ContactPersonsSelect.appendChild(FirstContactOption);
+
+        ContactPersons.forEach((ContactPerson) => {
+            console.log("ContactPerson:", ContactPerson);
+            var ContactOption = document.createElement('option');
+            ContactOption.value = ContactPerson;
+            ContactOption.textContent = ContactPerson;
+
+            ContactPersonsSelect.appendChild(ContactOption);
+        })
+    }
+
+    function toggleRadioButton(radioButtonNumber) {
+        const radio1 = document.getElementById("radio1");
+        const radio2 = document.getElementById("radio2");
+
+        if (radioButtonNumber === 1) {
+            radio1.checked = true;
+            radio2.checked = false;
+        } else if (radioButtonNumber === 2) {
+            radio1.checked = false;
+            radio2.checked = true;
+        }
+
+        updateButtonStyles();
+    }
+
+    function updateButtonStyles() {
+        const radio1Button = document.querySelector('.toggle-button:nth-child(1)');
+        const radio2Button = document.querySelector('.toggle-button:nth-child(2)');
+
+        if (radio1.checked) {
+            radio1Button.classList.add('active');
+            radio2Button.classList.remove('active');
+        } else if (radio2.checked) {
+            radio1Button.classList.remove('active');
+            radio2Button.classList.add('active');
+        }
+    }
+
+    // Initial styling based on default checked state
+    updateButtonStyles();
+
+
 
 
 
@@ -4927,6 +5022,10 @@
         color: #00FDFD;
         border: 1px solid #00FDFD;
         transition: color 0.3s, background-color 0.3s;
+    }
+
+    .followupBTN {
+        width: 210px;
     }
 
 
@@ -6438,6 +6537,134 @@
     #NewReadyProductsInput {
         width: 25rem;
     }
+
+    #mainPopup {
+        display: none;
+    }
+
+    .SerialNoDiv,
+    .FollowUpCustNameDiv,
+    .FollowUpConnectedDiv,
+    .FollowUpContactedDiv {
+        margin-top: 2rem;
+        display: flex;
+
+    }
+
+    #followUPserial_no,
+    #followUPCustomerName,
+    .VisitPurposeFollowup {
+        background-color: #3B444C;
+        margin: 0 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 20rem;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: 1px solid #B3B7BA;
+    }
+
+    #followUPserial_no {
+        background-color: transparent;
+        border: none;
+    }
+
+    #followUPCustomerName {
+        width: 25rem;
+    }
+
+    .VisitPurposeFollowup {
+        width: 25rem;
+    }
+
+    .toggle-container {
+        display: flex;
+        gap: 10px;
+        padding-left: 1rem;
+    }
+
+    .toggle-button,
+    .followUpSaveBTN {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #3b444c;
+        color: #B3B7BA;
+        border: 1px solid #B3B7BA;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+        user-select: none;
+        width: 10rem;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .toggle-button input {
+        display: none;
+    }
+
+    .toggle-button.active {
+        background-color: #5787ff;
+        /* Red color when active */
+        color: white;
+    }
+
+    .toggle-button label {
+        margin: 0;
+    }
+
+    .FollowUpCommentDiv,
+    #followUPComment {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    #followUPComment {
+        background-color: transparent;
+        border-radius: 10px;
+        border: 1px solid #B3B7BA;
+        padding: 1rem;
+        color: #B3B7BA;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .FollowUpSaveBTNDiv {
+        margin: 2rem 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .followUpSaveBTN:hover {
+        background-color: #353d52 !important;
+    }
+
+    #FollowUpcustomerSuggestions {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        z-index: 999;
+        background-color: #3b444c;
+        border: 1px solid gray;
+        padding: 5px;
+        left: 221px;
+        top: 229px;
+    }
+
+    .FollowUpCustomerFilterOPtion {
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .FollowUpCustomerFilterOPtion:hover {
+        background-color: #24292d;
+    }
+
 
 
 
