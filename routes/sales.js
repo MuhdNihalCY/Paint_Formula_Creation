@@ -574,6 +574,22 @@ router.get('/Customer',SalesVerifyLogin,(req,res)=>{
     res.send("Sales Customers");
 })
 
+router.post('/Followup/api',SalesVerifyLogin,(req,res)=>{
+    req.body.EmployeeName = req.session.SalesData.UserName;
+    req.body.Designation = req.session.SalesData.Designation;
+    req.body.InsertedTime = Date.now();
+   
+    employeeHelpers.StoreCustomerFollowUP(req.body).then(()=>{
+        res.json({Status:true});
+    })
+})
+
+router.get('/GetAllFollowup/api',SalesVerifyLogin,(req,res)=>{
+    employeeHelpers.GetAllCustomerFollowUp().then((data)=>{
+        res.json(data);
+    })
+})
+
 router.get('/Logout', SalesVerifyLogin, (req, res) => {
     req.session.SalesData.destroy();
     res.redirect('/login');

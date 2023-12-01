@@ -1480,5 +1480,19 @@ module.exports = {
                 resolve(data.cardID);
             })
         })
+    },
+    StoreCustomerFollowUP:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.CUSTOMER_FOLLOW_UP).insertOne(data).then(()=>{
+                resolve();
+            })
+        })
+    },
+    GetAllCustomerFollowUp:()=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.CUSTOMER_FOLLOW_UP).find().toArray().then((Data)=>{
+                resolve(Data);
+            })
+        })
     }
 }

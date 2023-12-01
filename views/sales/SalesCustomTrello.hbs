@@ -41,7 +41,7 @@
             </div>
             <div class="FollowUpCustNameDiv">
                 <p class="ccNameText">Purpose of visit/call:</p>
-                <select name="" id="" class="VisitPurposeFollowup">
+                <select name="" id="PuposeofVisit" class="VisitPurposeFollowup">
                     <option selected disabled value="">Select purpose...</option>
                     <option value="Enquiry">Enquiry</option>
                     <option value="Order Purchase">Order Purchase</option>
@@ -53,11 +53,11 @@
                 <p class="ccNameText">Connected through:</p>
                 <div class="toggle-container">
                     <div class="toggle-button" onclick="toggleRadioButton(1)">
-                        <input type="radio" name="toggle" id="radio1" />
+                        <input type="radio" name="toggle" id="InpersonRadio" />
                         <label for="radio1">In-Person</label>
                     </div>
                     <div class="toggle-button" onclick="toggleRadioButton(2)">
-                        <input type="radio" name="toggle" id="radio2" />
+                        <input type="radio" name="toggle" id="CallRadio" />
                         <label for="radio2">Call</label>
                     </div>
                 </div>
@@ -867,7 +867,8 @@
         NewOrders: [],
         UserNow: false,
         Labels: [],
-        NewReadyProducts: []
+        NewReadyProducts: [],
+        CustomerFollowUp: []
     };
 
     function initializeState() {
@@ -4718,43 +4719,168 @@
     }
 
 
-    function OpenCustomerFollowup() {
+    async function OpenCustomerFollowup() {
         //alert("Follow-up");
         var mainPopup = document.getElementById('mainPopup');
         mainPopup.style.display = "flex";
 
+        await $.ajax({
+            url: "/sales/GetAllFollowup/api",
+            type: "GET",
+            contentType: "application/json",
+            success: function (data) {
+                // Handle the success response
+                console.log("FollowUPdata:", data);
+                State.CustomerFollowUp = data;
+            },
+            error: function (errMsg) {
+                // Handle the error
+                alert("Error!");
+            }
+        }).then(() => {
+            var AllFollowUP = State.CustomerFollowUp;
 
 
-        function getCurrentSerialNumber() {
-            const currentDate = new Date();
+            /*function getCurrentSerialNumber() {
+                const currentDate = new Date();
+                const year = currentDate.getFullYear() % 100;
+                const month = currentDate.getMonth() + 1;
+                const day = currentDate.getDate();
 
-            const year = currentDate.getFullYear() % 100; // Using only the last two digits of the year
-            const month = currentDate.getMonth() + 1; // Months are zero-based, so adding 1
-            const day = currentDate.getDate();
+                const fixedParts = ['31', month.toString().padStart(2, '0'), day.toString(), '1'];
+                const currentSerialNumber = [...fixedParts, '01'].join('-');
 
-            // Assuming other parts of the serial number are fixed
-            const fixedParts = ['31', month.toString().padStart(2, '0'), day.toString(), '1'];
+                return currentSerialNumber;
+            }*/
+            function getCurrentSerialNumber() {
+                const currentDate = new Date();
+                const year = currentDate.getFullYear() % 100;
+                const month = currentDate.getMonth() + 1;
+                const day = currentDate.getDate();
 
-            // Construct the full serial number
-            const currentSerialNumber = [...fixedParts, '01'].join('-');
+                const fixedParts = [day.toString().padStart(2, '0'), month.toString().padStart(2, '0'), year.toString(), '1'];
+                const currentSerialNumber = [...fixedParts, '01'].join('-');
 
-            return currentSerialNumber;
-        }
+                return currentSerialNumber;
+            }
 
+            /*function incrementSerialNumber(serialNumber) {
+                const parts = serialNumber.split('-');
+                let lastPart = parseInt(parts[parts.length - 1], 10);
+                let secondLastPart = parseInt(parts[parts.length - 2], 10);
 
-        const currentSerialNumber = getCurrentSerialNumber();
-        const serialNumberCollection = [];
+                if (lastPart < 99) {
+                    lastPart++;
+                } else {
+                    lastPart = 1;
+                    if (secondLastPart < 99) {
+                        secondLastPart++;
+                    } else {
+                        // Handle your logic when both last and second last parts are 99
+                    }
+                }
 
+                parts[parts.length - 1] = lastPart.toString().padStart(2, '0');
+                parts[parts.length - 2] = secondLastPart.toString().padStart(2, '0');
 
-        serialNumberCollection.push(currentSerialNumber.toString());
-        console.log(serialNumberCollection);
+                return parts.join('-');
+            }*/
 
-        var followUPserial_no = document.getElementById('followUPserial_no').value = serialNumberCollection;
+            function incrementSerialNumber(serialNumber) {
+                const parts = serialNumber.split('-');
+                let lastPart = parseInt(parts[parts.length - 1], 10);
+                let secondLastPart = parseInt(parts[parts.length - 2], 10);
+
+                if (lastPart < 99) {
+                    lastPart++;
+                } else {
+                    lastPart = 1;
+                    secondLastPart++;
+                }
+
+                parts[parts.length - 1] = lastPart.toString().padStart(2, '0');
+                parts[parts.length - 2] = secondLastPart.toString().padStart(2, '0');
+
+                return parts.join('-');
+            }
+
+            const currentSerialNumber = getCurrentSerialNumber();
+            console.log("Checking Current SerialNo:", currentSerialNumber);
+            checkIfDuplicateSerialNo(currentSerialNumber, AllFollowUP)
+            function checkIfDuplicateSerialNo(currentSerialNumber, AllFollowUP) {
+                // Check if the generated serial number is present in AllFollowUP
+                const isSerialNumberPresent = AllFollowUP.some(item => item.Serial_No == currentSerialNumber);
+                console.log("Checking for duplicate,")
+                // If present, increment the serial number
+                if (isSerialNumberPresent) {
+                    const newSerialNumber = incrementSerialNumber(currentSerialNumber);
+                    console.log("Incremented Serial Number:", newSerialNumber);
+                    checkIfDuplicateSerialNo(newSerialNumber, AllFollowUP)
+                    // document.getElementById('followUPserial_no').value = newSerialNumber;
+                } else {
+                    console.log("Serial Number is not present. Use the generated one:", currentSerialNumber);
+                    document.getElementById('followUPserial_no').value = currentSerialNumber;
+                }
+
+            }
+            // Initial styling based on default checked state
+            updateButtonStyles();
+        })
     }
 
 
     function SubmitFollowUP() {
-        alert("Followup Submited!")
+        //  alert("Followup Submited!")
+        // get all data
+
+
+        var SerailNo = document.getElementById('followUPserial_no').value;
+        var customerName = document.getElementById('followUPCustomerName').value;
+        var Purpose = document.getElementById('PuposeofVisit').value;
+        var Connected_Through;
+        if (document.getElementById('InpersonRadio').value) {
+            Connected_Through = "In-Person";
+        } else if (document.getElementById('CallRadio').value) {
+            Connected_Through = "Call";
+        }
+
+        var Comment = document.getElementById('followUPComment').value;
+        var ContactPersons = document.getElementById('ContactPersonsSelect').value;
+
+        if (customerName && Purpose && Connected_Through) {
+            SubmitFollowUPData();
+        } else {
+            alert("Fill Customer name, Purpose of visit and Connected through.");
+        }
+
+        function SubmitFollowUPData() {
+            var Follow_Up = {
+                Serial_No: SerailNo,
+                Customer_Name: customerName,
+                Purpose: Purpose,
+                Connection_Type: Connected_Through,
+                Comment: Comment,
+                Contact_Person: ContactPersons
+            }
+
+            console.log("Follow_up", Follow_Up);
+
+            $.ajax({
+                url: "/sales/Followup/api",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(Follow_Up),
+                success: function () {
+                    fetchAllCards();
+                    CloseMainPopup();
+                    resetMainPopup();
+                },
+                error: function (errMsg) {
+                    alert("Error!");
+                }
+            });
+        }
+
     }
 
     function ShowCustomerNameToFollowup() {
@@ -4842,8 +4968,8 @@
     }
 
     function toggleRadioButton(radioButtonNumber) {
-        const radio1 = document.getElementById("radio1");
-        const radio2 = document.getElementById("radio2");
+        const radio1 = document.getElementById("InpersonRadio");
+        const radio2 = document.getElementById("CallRadio");
 
         if (radioButtonNumber === 1) {
             radio1.checked = true;
@@ -4857,6 +4983,8 @@
     }
 
     function updateButtonStyles() {
+        const radio1 = document.getElementById("InpersonRadio");
+        const radio2 = document.getElementById("CallRadio");
         const radio1Button = document.querySelector('.toggle-button:nth-child(1)');
         const radio2Button = document.querySelector('.toggle-button:nth-child(2)');
 
@@ -4869,8 +4997,31 @@
         }
     }
 
-    // Initial styling based on default checked state
-    updateButtonStyles();
+
+
+
+    function resetMainPopup() {
+        document.getElementById('followUPserial_no').value = "";
+        document.getElementById('followUPCustomerName').value = "";
+        document.getElementById('PuposeofVisit').value = "";
+        const radio1Button = document.querySelector('.toggle-button:nth-child(1)');
+        const radio2Button = document.querySelector('.toggle-button:nth-child(2)');
+        radio2Button.classList.remove('active');
+        radio1Button.classList.remove('active');
+        document.getElementById('InpersonRadio').checked = false;
+        document.getElementById('CallRadio').checked = false;
+        document.getElementById('followUPComment').value = "";
+        document.getElementById('ContactPersonsSelect').value = "";
+        var ContactPersonsSelect = document.getElementById('ContactPersonsSelect');
+        ContactPersonsSelect.innerHTML = "";
+        var ContactOPtion = document.createElement('option');
+        ContactOPtion.textContent = "Select a contact person";
+        ContactOPtion.setAttribute('selected', 'true');
+        ContactOPtion.disabled = true;
+        ContactPersonsSelect.appendChild(ContactOPtion);
+
+
+    }
 
 
 
@@ -5091,6 +5242,7 @@
     .ListsCollections.grabbing {
         cursor: grabbing;
     }
+
 
     .ListsCollections.grab {
         cursor: grab;

@@ -16,4 +16,5 @@ module.exports={
     SALES_MODIFIED_CARDS:'Sales_Modified_Cards',
     LIST_COLLECTION:'List_Collection',
     LABEL_COLLECTION:'Label_Collectin',
+    CUSTOMER_FOLLOW_UP:'Customer_Follow_Up'
 };
