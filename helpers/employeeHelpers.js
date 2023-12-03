@@ -1494,5 +1494,27 @@ module.exports = {
                 resolve(Data);
             })
         })
+    },
+    GetAllCustomersAndFollowups:()=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.CUSTOMER_COLLECTION).find().toArray().then(async(Customers)=>{
+                await db.get().collection(collection.CUSTOMER_FOLLOW_UP).find().toArray().then((AllFollowUPs)=>{
+                    let Data={
+                        AllCustomer :Customers,
+                        AllFollowUP:AllFollowUPs
+                    };
+                    resolve(Data)
+                })
+            })
+
+
+        })
+    },
+    GetAllPurchasedOrders:()=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.CARD_COLLECTION).find().toArray().then((AllOrders)=>{
+                resolve(AllOrders);
+            })
+        })
     }
 }

@@ -571,10 +571,10 @@ router.get('/MoveCardToArchived/:CardID', SalesVerifyLogin, (req, res) => {
 })
 
 router.get('/Customer',SalesVerifyLogin,(req,res)=>{
-    res.send("Sales Customers");
+    res.render('sales/CustomerCollection',{SalesLogged:true});
 })
 
-router.post('/Followup/api',SalesVerifyLogin,(req,res)=>{
+router.post('/Followup/api',(req,res)=>{
     req.body.EmployeeName = req.session.SalesData.UserName;
     req.body.Designation = req.session.SalesData.Designation;
     req.body.InsertedTime = Date.now();
@@ -584,9 +584,21 @@ router.post('/Followup/api',SalesVerifyLogin,(req,res)=>{
     })
 })
 
-router.get('/GetAllFollowup/api',SalesVerifyLogin,(req,res)=>{
+router.get('/GetAllFollowup/api',(req,res)=>{
     employeeHelpers.GetAllCustomerFollowUp().then((data)=>{
         res.json(data);
+    })
+})
+
+router.get('/GetAllCustomersAndFollowUp/api',(req,res)=>{
+    employeeHelpers.GetAllCustomersAndFollowups().then((data)=>{
+        res.json(data);
+    })
+})
+
+router.get('/getallorders/api',(req,res)=>{
+    employeeHelpers.GetAllPurchasedOrders().then((AllOrders)=>{
+        res.json(AllOrders);
     })
 })
 
