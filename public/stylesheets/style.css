@@ -302,14 +302,14 @@ a {
   align-items: center;
   justify-content: space-around;
   width: 80%;
-
   margin-top: -2vh;
   margin-left: 2vw;
   background-color: #2a2a2a;
   border-radius: 15px;
   display: none;
   padding-top: 1rem;
-
+  position: absolute;
+  z-index: 99;
 }
 
 .ADAccountExpandDiv a {

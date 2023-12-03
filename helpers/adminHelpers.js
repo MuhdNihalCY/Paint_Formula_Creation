@@ -893,6 +893,24 @@ module.exports = {
             })
         })
     },
+    ValidateAndStoreNewBranch:(data)=>{
+        return new Promise(async(resolve,reject)=>{
+            var SameBranch = await db.get().collection(collection.BRANCH_COLLECTION).findOne({BranchName:data.BranchName});
+
+            if(SameBranch){
+                // Error Same Branch Name Exist
+                var State = {
+                    Error:"Branch Name already exist."
+                }
+                resolve(State)
+            }else{
+                // Store New Branch
+                await db.get().collection(collection.BRANCH_COLLECTION).insertOne(data).then((Response)=>{
+                    resolve(Response);
+                })
+            }
+        })
+    },
 
 
 
