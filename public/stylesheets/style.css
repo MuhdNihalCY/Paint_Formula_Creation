@@ -734,7 +734,7 @@ a {
 .ADAddCategoryTextInput {
   padding: 0.7rem 1.5rem 0.7rem 1rem;
   margin-bottom: 2rem;
-  width: 80%;
+  width: 45%;
   border-radius: 11px;
 }
 
@@ -864,6 +864,7 @@ a {
   border: 1px solid gray;
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
 }
 
 .ADFromPriceForCust {

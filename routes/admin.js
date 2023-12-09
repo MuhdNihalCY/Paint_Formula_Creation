@@ -615,11 +615,14 @@ router.get('/Users', verifyLogin, (req, res) => {
 
   adminHelpers.getAllUser().then((Users) => {
     adminHelpers.getAllCustomerCategory().then((CustomerCategory) => {
-      if (Error) {
-        res.render('admin/Users', { admin: true, Users, CustomerCategory, Error });
-      } else {
-        res.render('admin/Users', { admin: true, Users, CustomerCategory });
-      }
+      adminHelpers.GetAllBranches().then((AllBranch) => {
+        if (Error) {
+          res.render('admin/Users', { admin: true, Users, CustomerCategory, Error, AllBranch });
+        } else {
+          res.render('admin/Users', { admin: true, Users, CustomerCategory, AllBranch });
+        }
+
+      })
     })
   })
 })
@@ -650,56 +653,73 @@ router.post('/addUser', verifyLogin, (req, res) => {
 
 router.get('/editUser/:id', verifyLogin, (req, res) => {
   adminHelpers.getUserByID(req.params.id).then((User) => {
-    adminHelpers.getAllUser().then(AllUsers => {
+    adminHelpers.GetAllBranches().then((AllBranch) => {
+      //console.log("AllBranch= ", AllBranch);
+      if (User.Branch) {
+        var Branch = User.Branch;
+        // Find the index of the branch in AllBranch
+        var branchIndex = AllBranch.findIndex(branch => branch.BranchName === Branch);
 
-      // Step 1: Extract unique Designations
-      var Designations = ["Customer", "Sales", "Office", "Production", "Dispatcher", "Driver"];
+        // If the branch is found, move it to the first position
+        if (branchIndex !== -1) {
+          var matchingBranch = AllBranch.splice(branchIndex, 1)[0]; // Remove the matching branch
+          AllBranch.unshift(matchingBranch); // Add it to the first position
+        }
 
-
-      // Step 2: Remove the selectedUser's Designation
-      var indexToRemove = Designations.indexOf(User.Designation);
-      if (indexToRemove !== -1) {
-        Designations.splice(indexToRemove, 1);
+        console.log(AllBranch);
       }
 
-      // Step 3: Prepend the selectedUser's Designation
-      Designations.unshift(User.Designation);
+      adminHelpers.getAllUser().then(AllUsers => {
 
-      // Designations now contains the list of unique Designations with the selectedUser's Designation at the beginning
-      // console.log(Designations);
-      console.log(User);
+        // Step 1: Extract unique Designations
+        var Designations = ["Customer", "Sales", "Office", "Production", "Dispatcher", "Driver"];
 
-      //     Designation: 'Customer',
-      // Category: 'Category 1',
 
-      if (User.Designation === 'Customer') {
-        // user is customer
-        adminHelpers.getAllCustomerCategory().then(CustomerCategories => {
-          var CustomerCategory = User.Category;
-          // console.log(CustomerCategories);
-          // Find the index of the object with CustomerCategory
-          var indexToMove = CustomerCategories.findIndex(function (item) {
-            return item.Category === CustomerCategory;
-          });
+        // Step 2: Remove the selectedUser's Designation
+        var indexToRemove = Designations.indexOf(User.Designation);
+        if (indexToRemove !== -1) {
+          Designations.splice(indexToRemove, 1);
+        }
 
-          // If the CustomerCategory is found in the array
-          if (indexToMove !== -1) {
-            // Remove the object from its current position
-            var categoryToMove = CustomerCategories.splice(indexToMove, 1)[0];
+        // Step 3: Prepend the selectedUser's Designation
+        Designations.unshift(User.Designation);
 
-            // Add it as the first element in the array
-            CustomerCategories.unshift(categoryToMove);
-          }
+        // Designations now contains the list of unique Designations with the selectedUser's Designation at the beginning
+        // console.log(Designations);
+        console.log(User);
 
-          // Now, AllCustomerCategory has the object with CustomerCategory as the first element
-          console.log(CustomerCategories);
+        //     Designation: 'Customer',
+        // Category: 'Category 1',
 
-          res.render("admin/forms/EditUser", { admin: true, User, Designations, CustomerCategories });
-        })
-      } else {
-        res.render("admin/forms/EditUser", { admin: true, User, Designations });
-      }
+        if (User.Designation === 'Customer') {
+          // user is customer
+          adminHelpers.getAllCustomerCategory().then(CustomerCategories => {
+            var CustomerCategory = User.Category;
+            // console.log(CustomerCategories);
+            // Find the index of the object with CustomerCategory
+            var indexToMove = CustomerCategories.findIndex(function (item) {
+              return item.Category === CustomerCategory;
+            });
 
+            // If the CustomerCategory is found in the array
+            if (indexToMove !== -1) {
+              // Remove the object from its current position
+              var categoryToMove = CustomerCategories.splice(indexToMove, 1)[0];
+
+              // Add it as the first element in the array
+              CustomerCategories.unshift(categoryToMove);
+            }
+
+            // Now, AllCustomerCategory has the object with CustomerCategory as the first element
+            console.log(CustomerCategories);
+
+            res.render("admin/forms/EditUser", { admin: true, User, Designations, CustomerCategories, AllBranch });
+          })
+        } else {
+          res.render("admin/forms/EditUser", { admin: true, User, Designations, AllBranch });
+        }
+
+      })
     })
   })
 })
@@ -761,16 +781,117 @@ router.get('/Branches', verifyLogin, (req, res) => {
   res.render('admin/Branches', { admin: true });
 })
 
-router.post('/addNewBranch',verifyLogin,(req,res)=>{
+router.post('/addNewBranch', verifyLogin, (req, res) => {
   console.log(req.body);
-  adminHelpers.ValidateAndStoreNewBranch(req.body).then((State)=>{
-    if(State.Error){
-      res.render('admin/Branches', { admin: true,Error:State.Error });
-    }else{
+  adminHelpers.ValidateAndStoreNewBranch(req.body).then((State) => {
+    if (State.Error) {
+      res.render('admin/Branches', { admin: true, Error: State.Error });
+    } else {
       res.redirect('/admin/Branches')
     }
   })
 })
+
+router.get('/UsersAndBranches/Api', verifyLogin, (req, res) => {
+  adminHelpers.GetAllBranches().then((AllBranches) => {
+    console.log(AllBranches);
+    adminHelpers.getAllUsers().then((AllUsers) => {
+      var Data = {
+        Branches: AllBranches,
+        Users: AllUsers
+      }
+      res.json(Data);
+    })
+  })
+})
+
+router.post('/EditBranchBranch', verifyLogin, (req, res) => {
+  adminHelpers.UpdateBranchDetails(req.body).then((Status) => {
+    res.redirect('/admin/Branches');
+  })
+})
+
+router.get('/Inventory/Api', verifyLogin, (req, res) => {
+  adminHelpers.GetAllInventory().then((AllInventory) => {
+    res.json(AllInventory);
+  })
+})
+
+router.get('/UpdateProductStock/:BranchID/:ProductID/:NewStock/api', verifyLogin, (req, res) => {
+  console.log("Branch: ", req.params.BranchID, " Product ID: ", req.params.ProductID);
+  var sendData = `Branch: ${req.params.BranchID},  Product ID: ${req.params.ProductID} `;
+
+  console.log(req.params.NewStock);
+  // { NewStock: '1' }
+  if (!isNaN(req.params.NewStock)) {
+    adminHelpers.UpdateProductStock(req.params.BranchID, req.params.ProductID, req.params.NewStock).then((ProductLatest) => {
+      // res.send(sendData);
+      var currentStock
+      ProductLatest.BranchStocks.forEach((BranchStock) => {
+        if (BranchStock.BranchID === req.params.BranchID) {
+          currentStock = BranchStock.Stock
+        }
+      })
+      res.json({ Status: true, Stock: currentStock });
+      // res.redirect('/admin/Branches')
+    })
+  } else {
+    res.json({ Status: false });
+  }
+})
+
+router.get('/UpdateBinderStock/:BranchID/:BinderID/:NewStock/api', verifyLogin, (req, res) => {
+  console.log("Branch: ", req.params.BranchID, " BinderID ID: ", req.params.BinderID);
+  var sendData = `Branch: ${req.params.BranchID},  BinderID ID: ${req.params.BinderID} `;
+
+  console.log(req.params.NewStock);
+  // { NewStock: '1' }
+  if (!isNaN(req.params.NewStock)) {
+    adminHelpers.UpdateBinderStock(req.params.BranchID, req.params.BinderID, req.params.NewStock).then((ProductLatest) => {
+      // res.send(sendData);
+      var currentStock
+      ProductLatest.BranchStocks.forEach((BranchStock) => {
+        if (BranchStock.BranchID === req.params.BranchID) {
+          currentStock = BranchStock.Stock
+        }
+      })
+      res.json({ Status: true, Stock: currentStock });
+      // res.redirect('/admin/Branches')
+    })
+  } else {
+    res.json({ Status: false });
+  }
+})
+
+
+router.get('/UpdateAdditiveStock/:BranchID/:AdditiveID/:NewStock/api', verifyLogin, (req, res) => {
+  console.log("Branch: ", req.params.BranchID, " AdditiveID ID: ", req.params.AdditiveID);
+  var sendData = `Branch: ${req.params.BranchID},  AdditiveID ID: ${req.params.AdditiveID} `;
+
+  console.log(req.params.NewStock);
+  // { NewStock: '1' }
+  if (!isNaN(req.params.NewStock)) {
+    adminHelpers.UpdateAdditiveStock(req.params.BranchID, req.params.AdditiveID, req.params.NewStock).then((ProductLatest) => {
+      // res.send(sendData);
+      var currentStock
+      ProductLatest.BranchStocks.forEach((BranchStock) => {
+        if (BranchStock.BranchID === req.params.BranchID) {
+          currentStock = BranchStock.Stock
+        }
+      })
+      res.json({ Status: true, Stock: currentStock });
+      // res.redirect('/admin/Branches')
+    })
+  } else {
+    res.json({ Status: false });
+  }
+})
+
+// router.get('/ViewBranch/:BranchName',verifyLogin,(req,res) => {
+//   adminHelpers.getBranchByName(req.params.BranchName).then((Branch)=>{
+//     res.render('admin/viewbranch',{admin :true , branch : Branch});
+//   })
+// })
 
 
 

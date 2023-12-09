@@ -1,7 +1,6 @@
 var db = require('../config/connection');
 var collection = require('../config/collection');
 const { ObjectId } = require('mongodb');
-const { request, response } = require('express');
 
 
 module.exports = {
@@ -886,32 +885,250 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             var ListData = {
                 Name: UserName,
-                OldCards:[]
+                OldCards: []
             }
-            await db.get().collection(collection.LIST_COLLECTION).insertOne(ListData).then((respose)=>{
+            await db.get().collection(collection.LIST_COLLECTION).insertOne(ListData).then((respose) => {
                 resolve(respose);
             })
         })
     },
-    ValidateAndStoreNewBranch:(data)=>{
-        return new Promise(async(resolve,reject)=>{
-            var SameBranch = await db.get().collection(collection.BRANCH_COLLECTION).findOne({BranchName:data.BranchName});
+    ValidateAndStoreNewBranch: (data) => {
+        return new Promise(async (resolve, reject) => {
+            var SameBranch = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: data.BranchName });
 
-            if(SameBranch){
+            if (SameBranch) {
                 // Error Same Branch Name Exist
                 var State = {
-                    Error:"Branch Name already exist."
+                    Error: "Branch Name already exist."
                 }
                 resolve(State)
-            }else{
+            } else {
                 // Store New Branch
-                await db.get().collection(collection.BRANCH_COLLECTION).insertOne(data).then((Response)=>{
+                await db.get().collection(collection.BRANCH_COLLECTION).insertOne(data).then((Response) => {
                     resolve(Response);
                 })
             }
         })
     },
+    GetAllBranches: () => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.BRANCH_COLLECTION).find().toArray().then((GetAllBranches) => {
+                resolve(GetAllBranches);
+            })
+        })
+    },
+    UpdateBranchDetails: (BranchData) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.BRANCH_COLLECTION).updateOne({ _id: new ObjectId(BranchData.BranchID) }, {
+                $set: {
+                    BranchName: BranchData.BranchName,
+                    Location: BranchData.Location,
+                    Contact: BranchData.Contact
+                }
+            }).then(() => {
+                resolve();
+            })
+        })
+    },
+    GetAllInventory: () => {
+        return new Promise(async (resolve, reject) => {
+            var Products = await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray();
+            var Additives = await db.get().collection(collection.ADDITIVE_COLLECTION).find().toArray();
+            var Binders = await db.get().collection(collection.BINDER_COLLECTION).find().toArray();
+            var Inventory = {
+                Products: Products,
+                Additives: Additives,
+                Binders: Binders
+            }
+            resolve(Inventory);
+        })
+    },
+    getAllUsers: () => {
+        return new Promise(async (resolve, reject) => {
+            var Users = await db.get().collection(collection.USERS_COLLECTION).find().toArray();
+            resolve(Users);
+        })
+    },
+    UpdateProductStock: (BranchID, ProductID, NewStock) => {
+        return new Promise(async (resolve, reject) => {
+            var Branch = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ _id: new ObjectId(BranchID) })
+            // console.log(Branch);    //BranchName
 
+            var product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: parseInt(ProductID) });
+            console.log(product);
+
+            if (product.BranchStocks) {
+                // already have any Branch stocks here Bracnch stocks is an array of all branches with thier stocks
+                var BranchStocks = product.BranchStocks;
+
+                // check for current branch and modify it, if not current branch create it.
+                var StockFound = false;
+
+                BranchStocks.forEach(EachStock => {
+                    if (EachStock.BranchID === BranchID) {
+                        StockFound = true;
+                        EachStock.Stock = parseInt(EachStock.Stock) + (parseInt(NewStock) * parseInt(product.StandardQuatity));
+                    }
+                });
+
+                // Check the flag after the loop is complete
+                if (!StockFound) {
+                    BranchStocks.push({
+                        BranchID: BranchID,
+                        BranchName: Branch.BranchName,
+                        Stock: parseInt(NewStock) * parseInt(product.StandardQuatity)
+                    });
+                }
+
+
+                console.log("Updated ProductStocks: ", product);
+                // update in database
+                await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ Product_Id: parseInt(ProductID) }, { $set: product }).then(() => {
+                    resolve(product);
+                })
+
+            } else {
+                // no Branch Stocks available
+                var BranchStocks = [];
+                var ThisBranchStock = {
+                    BranchID: BranchID,
+                    BranchName: Branch.BranchName,
+                    Stock: parseInt(NewStock) * parseInt(product.StandardQuatity)
+                }
+                BranchStocks.push(ThisBranchStock);
+
+                // update the Product
+                product.BranchStocks = BranchStocks;
+
+                console.log("Stock Updated Product: ", product);
+                await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ Product_Id: parseInt(ProductID) }, { $set: product }).then(() => {
+                    resolve(product);
+                })
+
+            }
+
+        })
+    },
+    UpdateBinderStock: (BranchID, BinderID, NewStock) => {
+        return new Promise(async (resolve, reject) => {
+            var Branch = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ _id: new ObjectId(BranchID) })
+            // console.log(Branch);    //BranchName
+
+            var Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ Binder_Id: parseInt(BinderID) });
+            console.log(Binder);
+
+            if (Binder.BranchStocks) {
+                // already have any Branch stocks here Bracnch stocks is an array of all branches with thier stocks
+                var BranchStocks = Binder.BranchStocks;
+
+                // check for current branch and modify it, if not current branch create it.
+                var StockFound = false;
+
+                BranchStocks.forEach(EachStock => {
+                    if (EachStock.BranchID === BranchID) {
+                        StockFound = true;
+                        EachStock.Stock = parseInt(EachStock.Stock) + parseInt(NewStock);
+                    }
+                });
+
+                // Check the flag after the loop is complete
+                if (!StockFound) {
+                    BranchStocks.push({
+                        BranchID: BranchID,
+                        BranchName: Branch.BranchName,
+                        Stock: parseInt(NewStock) 
+                    });
+                }
+
+
+                console.log("Updated Binder Stocks: ", Binder);
+                // update in database
+                await db.get().collection(collection.BINDER_COLLECTION).updateOne({ Binder_Id: parseInt(BinderID) }, { $set: Binder }).then(() => {
+                    resolve(Binder);
+                })
+
+            } else {
+                // no Branch Stocks available
+                var BranchStocks = [];
+                var ThisBranchStock = {
+                    BranchID: BranchID,
+                    BranchName: Branch.BranchName,
+                    Stock: parseInt(NewStock) 
+                }
+                BranchStocks.push(ThisBranchStock);
+
+                // update the Product
+                Binder.BranchStocks = BranchStocks;
+
+                console.log("Stock Updated Binder: ", Binder);
+                await db.get().collection(collection.BINDER_COLLECTION).updateOne({ Binder_Id: parseInt(BinderID) }, { $set: Binder }).then(() => {
+                    resolve(Binder);
+                })
+
+            }
+
+        })
+    },
+    UpdateAdditiveStock: (BranchID, AdditiveID, NewStock) => {
+        return new Promise(async (resolve, reject) => {
+            var Branch = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ _id: new ObjectId(BranchID) })
+            // console.log(Branch);    //BranchName
+
+            var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ Additive_Id: parseInt(AdditiveID) });
+            console.log(Additive);
+
+            if (Additive.BranchStocks) {
+                // already have any Branch stocks here Bracnch stocks is an array of all branches with thier stocks
+                var BranchStocks = Additive.BranchStocks;
+
+                // check for current branch and modify it, if not current branch create it.
+                var StockFound = false;
+
+                BranchStocks.forEach(EachStock => {
+                    if (EachStock.BranchID === BranchID) {
+                        StockFound = true;
+                        EachStock.Stock = parseInt(EachStock.Stock) + parseInt(NewStock);
+                    }
+                });
+
+                // Check the flag after the loop is complete
+                if (!StockFound) {
+                    BranchStocks.push({
+                        BranchID: BranchID,
+                        BranchName: Branch.BranchName,
+                        Stock: parseInt(NewStock) 
+                    });
+                }
+
+
+                console.log("Updated Additive Stocks: ", Additive);
+                // update in database
+                await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ Additive_Id: parseInt(AdditiveID) }, { $set: Additive }).then(() => {
+                    resolve(Additive);
+                })
+
+            } else {
+                // no Branch Stocks available
+                var BranchStocks = [];
+                var ThisBranchStock = {
+                    BranchID: BranchID,
+                    BranchName: Branch.BranchName,
+                    Stock: parseInt(NewStock) 
+                }
+                BranchStocks.push(ThisBranchStock);
+
+                // update the Product
+                Additive.BranchStocks = BranchStocks;
+
+                console.log("Stock Updated Additive: ", Additive);
+                await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ Additive_Id: parseInt(AdditiveID) }, { $set: Additive }).then(() => {
+                    resolve(Additive);
+                })
+
+            }
+
+        })
+    },
 
 
 

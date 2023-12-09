@@ -10,6 +10,7 @@
                         <div id="AddUserCloseBtn" class="AddUserCloseBtn">
                             <p>X</p>
                         </div>
+
                     </div>
                     <hr>
                     <div class="AddUserBodyDiv">
@@ -17,6 +18,15 @@
                             <p class="AddUserLabel">User Name</p>
                             <input type="text" required placeholder="Enter User Name" name="UserName" oninput="this.value = this.value.toUpperCase();"
                                 class="AddUserINP">
+                        </div>
+                        <div class="AddUserEachSectionDiv">
+                            <p class="AddUserLabel">Branch</p>
+                            <select required name="Branch" class="AddUserINP" id="BranchSelect">
+                                <option value="" selected disabled>Select a Branch</option>
+                                {{#each AllBranch}}
+                                <option value="{{this.BranchName}}">{{this.BranchName}}</option>
+                                {{/each}}
+                            </select>
                         </div>
                         <div class="AddUserEachSectionDiv">
                             <p class="AddUserLabel">Designation</p>
@@ -184,6 +194,7 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Designation</th>
+                            <th>Branch</th>
                             <th>Contact</th>
                             <th>Action</th>
                         </tr>
@@ -195,6 +206,7 @@
                             <td>{{this.UserID}}</td>
                             <td>{{this.UserName}}</td>
                             <td>{{this.Designation}}</td>
+                            <td>{{this.Branch}}</td>
                             <td>{{this.Contact}}</td>
                             <td><a href="/admin/EditUser/{{this.UserID}}" class="btn btn-primary">Edit</a></td>
                         </tr>

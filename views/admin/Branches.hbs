@@ -1,12 +1,21 @@
 <section class="AdminPage">
+    <div id="loader-container">
+        {{!-- <div class="loader"></div> --}}
+        <div class="loader">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </div>
+
     {{!-- Add User Pop up start here --}}
     <div id="popup-container" class="popup">
         <div class="popup-content">
             <!-- Your form goes here -->
-            <form action="/admin/addNewBranch" method="post">
+            <form id="AddNewBranchForm" action="/admin/addNewBranch" method="post">
                 <div class="AddUserFormDiv">
                     <div class="AddUserHeaderDiv">
-                        <p class="AddUserHeading">Add New Branch</p>
+                        <p id="AddUserHeadingText" class="AddUserHeading">Add New Branch</p>
                         <div id="AddUserCloseBtn" class="AddUserCloseBtn">
                             <p>X</p>
                         </div>
@@ -15,26 +24,171 @@
                     <div class="AddUserBodyDiv">
                         <div class="AddUserEachSectionDiv">
                             <p class="AddUserLabel">Branch Name</p>
-                            <input type="text" required placeholder="Enter Branch name" name="BranchName"class="AddUserINP">
+                            <input type="text" required placeholder="Enter Branch name" id="BranchName"
+                                name="BranchName" class="AddUserINP">
+                            <input type="text" hidden aria-disabled="true" name="BranchID" id="BranchID">
                         </div>
                         <div class="AddUserEachSectionDiv">
                             <p class="AddUserLabel">Location</p>
-                            <input type="text" required placeholder="Enter Location" name="Location" class="AddUserINP">
+                            <input type="text" required placeholder="Enter Location" id="Location" name="Location"
+                                class="AddUserINP">
                         </div>
                         <div class="AddUserEachSectionDiv">
                             <p class="AddUserLabel">Contact</p>
-                            <input type="text" name="Contact" placeholder="Enter Contact Number" class="AddUserINP"
-                                required id="contactInput">
+                            <input type="text" name="Contact" placeholder="eg. 971501234567" class="AddUserINP" required
+                                id="contactInput">
                         </div>
-                        <div class="AddUserEachSectionDiv AdduserSubmitDiv">
-                            <input type="submit" class="btn AddUserBTNSubmit" value="Add User">
+                        <div class="AddUserEachSectionDiv AddBranchesubmitDiv">
+                            <input type="submit" id="SBTBTNbranch" class="btn AddUserBTNSubmit" value="Add Branch">
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-   
+
+    {{!-- popup for view branch --}}
+    <div id="ViewBranchPopup" class="popup">
+        <div class="ViewBranchDiv">
+            <div class="ViewBRheader">
+                <div onclick="hidePopUpTOViewBranch()" id="ViewBranchCloseBtn"
+                    class=" AddUserCloseBtn ViewBranchCloseBtn">
+                    <p>X</p>
+                </div>
+            </div>
+            <div class="ViewBranchMain">
+                <div class="BranchMainHeader">
+                    <p id="viewBranchName" class="ViewBranchaName"></p>
+                    <p id="ViewBranchID" hidden></p>
+                    <div class="BranchContactSec">
+                        <p>Contact: </p>
+                        <p id="ContactNumber"></p>
+                    </div>
+                </div>
+                <div class="ViewBranchLocationDiv">
+                    <p class="ViewBranchaLocation">Location:</p>
+                    <p id="ViewBranchaLocation" class="ViewBranchaLocation">East Cost DB st</p>
+                </div>
+                <hr>
+                <div class="ViewBranchDirSlection">
+                    <button id="EmployeeStaffBTN">Employee & Staff Directory</button>
+                    <button id="InventoryBTN">Inventory</button>
+                </div>
+                <div class="EmployeeAndStaffArea">
+                    <div class="ManagerSection">
+                        <p>Manager:</p>
+                        <p id="Managername">REHMAN</p>
+                    </div>
+                    <div class="search-container">
+                        <input type="search" id="searchInput" placeholder="Search...">
+                    </div>
+                    <div class="employeeTable">
+                        <table class="custom-table employee_table">
+                            <thead>
+                                <tr>
+                                    <th id="nameHeader" data-order="">
+                                        Name
+                                        <i class="fas fa-sort"></i>
+                                    </th>
+                                    <th id="designationHeader" data-order="">
+                                        Designation
+                                        <i class="fas fa-sort"></i>
+                                    </th>
+                                    <th>
+                                        Contact
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="EmployeeTable">
+                                <!-- Table content will be rendered here -->
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="Inventory">
+                    <div class="USMainHeaderDiv">
+                        <div class="USHeaderEachItemDiv USHeaderEachItemDivActive " onclick="changeClass(this)">
+                            <p>Products</p>
+                        </div>
+                        {{!--
+                        </a> --}}
+                        {{!-- <a class="USAtag" href="/BinderStockUpdate"> --}}
+                            <div class="USHeaderEachItemDiv " onclick="changeClass(this)">
+                                <p>Binders</p>
+                            </div>
+                            {{!--
+                        </a> --}}
+                        {{!-- <a class="USAtag" href="/AdditiveStockUpdate"> --}}
+                            <div class="USHeaderEachItemDiv" onclick="changeClass(this)">
+                                <p>Additives</p>
+                            </div>
+                            {{!--
+                        </a> --}}
+                    </div>
+
+                    <div id="productStocks" class=" productStocks INVMainContentDiv">
+                        <div class="search-container">
+                            <input type="search" id="ProductsearchInput" placeholder="Search...">
+                        </div>
+                        <table id="ProductTable" class="display employee_table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th class="text-center" style="font-size: 20px;">Item</th>
+                                    <th class="text-center" style="font-size: 20px;">Old Stock</th>
+                                    <th class="text-center" style="font-size: 20px;">Standard Unit</th>
+                                    <th class="text-center" style="font-size: 20px;">New Stock & Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ProductTableBody">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="BinderStocks" class="BinderStocks INVMainContentDiv">
+                        <div class="search-container">
+                            <input type="search" id="BindersearchInput" placeholder="Search...">
+                        </div>
+                        <table id="BinderTable" class="display employee_table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th class="text-center" style="font-size: 20px;">Item</th>
+                                    <th class="text-center" style="font-size: 20px;">Old Stock</th>
+                                    <th class="text-center" style="font-size: 20px;">New Stock & Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="BinderTableBody" >
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="AdditivesStoks" class=" AdditivesStoks INVMainContentDiv">
+                        <div class="search-container">
+                            <input type="search" id="AdditivesearchInput" placeholder="Search...">
+                        </div>
+                        <table id="AdditiveTable" class="display employee_table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th class="text-center" style="font-size: 20px;">Item</th>
+                                    <th class="text-center" style="font-size: 20px;">Old Stock</th>
+                                    <th class="text-center" style="font-size: 20px;">New Stock & Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="AdditiveTableBody" >
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <aside class="ADSidebar">
         <div class="ADSidebarLogoDiv">
@@ -78,12 +232,12 @@
                 </div>
             </a>
             <a href="/admin/Users">
-                <div class="Category ">
+                <div class="Category">
                     <p class="ADDelectionSideBarLabel">Users</p>
                     <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
                 </div>
             </a>
-            
+
 
             <div class="ADAccount">
                 <p class="ADDelectionSideBarLabel">Account</p>
@@ -121,23 +275,22 @@
                     {{!--
                 </a> --}}
             </div>
-            
-            <p class="AddError text-center" id="AddErrorPTag" style="color: red;"  >{{Error}}</p>
-           
+
+            <p class="AddError text-center" id="AddErrorPTag" style="color: red;">{{Error}}</p>
+
             <div class="ADMainTableDiv">
                 <table id="" class="ADMainTable  table table-bordered text-center ADcustom-border">
                     <thead class="ADTableHead">
                         <tr class="ADTableHeadTR">
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Designation</th>
+                            <th>Branch Name</th>
+                            <th>Location</th>
                             <th>Contact</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        {{#if Users}}
-                        {{#each Users}}
+                        {{!-- {{#if Branches}}
+                        {{#each Branches}}
                         <tr>
                             <td>{{this.UserID}}</td>
                             <td>{{this.UserName}}</td>
@@ -148,9 +301,9 @@
                         {{/each}}
                         {{else}}
                         <tr>
-                            <td class="ADSubCategoryNotAvailable" colspan="4">No Users are Added</td>
+                            <td class="ADSubCategoryNotAvailable" colspan="4">No Branches are Added</td>
                         </tr>
-                        {{/if}}
+                        {{/if}} --}}
                     </tbody>
                 </table>
 
@@ -166,87 +319,226 @@
 <script>
     // alert(AddingError);
 
+    var AllBranches = [];
+    var AllInventory = {};
     var AllUsers = [];
 
     // JavaScript to show the popup
     const addButton = document.getElementById('ADMainAddButton');
     const popupContainer = document.getElementById('popup-container');
     const AddUserCloseBtn = document.getElementById('AddUserCloseBtn');
-
-
-    // Get references to the select boxes
-    const designationSelect = document.getElementById('designationSelect');
-    const categorySelect = document.getElementById('categorySelect');
-    const categoryDIVCustomer = document.getElementById("categoryDIVCustomer");
+    const ViewBranchPopup = document.getElementById('ViewBranchPopup');
 
     // Get references to the elements
     const contactInput = document.getElementById('contactInput');
-    const whatsappInput = document.getElementById('whatsappInput');
-    const isSameContactNumberCheckbox = document.getElementById('isSameContactNumber');
 
-    const alternateContactInput = document.getElementById('alternateContactInput');
-
-    var CustomeraddButton = document.getElementById('ADAddCusCategoryBTN');
-    var popup = document.getElementById('ADCUSpopup');
-    var categoryInput = document.getElementById('categoryInput');
-    var submitBtn = document.getElementById('submitBtn');
+    // const alternateContactInput = document.getElementById('alternateContactInput');
 
 
+
+    // Function to show the loader
+    function showLoader() {
+        document.getElementById('loader-container').style.display = 'flex';
+    }
+
+    // Function to hide the loader
+    function hideLoader() {
+        document.getElementById('loader-container').style.display = 'none';
+    }
 
 
 
 
     document.addEventListener("DOMContentLoaded", function () {
+        showLoader()
         checkForError();
         loadAllUser();
+
+        // buttons
+
+        var employeeStaffBtn = document.getElementById("EmployeeStaffBTN");
+        var inventoryBtn = document.getElementById("InventoryBTN");
+        var employeeStaffDiv = document.querySelector(".EmployeeAndStaffArea");
+        var inventoryDiv = document.querySelector(".Inventory");
+
+        // Show employee and staff div at loading time
+        employeeStaffDiv.style.display = "block";
+        employeeStaffDiv.classList.add("slide-in");
+        employeeStaffBtn.classList.add("activeBtn");
+
+        employeeStaffBtn.addEventListener("click", function () {
+            // Show employee and staff div, hide inventory div
+            employeeStaffDiv.style.display = "block";
+            inventoryDiv.style.display = "none";
+            // Add animation class
+            employeeStaffDiv.classList.add("slide-in");
+            // Remove animation class after animation is complete
+            setTimeout(function () {
+                employeeStaffDiv.classList.remove("slide-in");
+            }, 500);
+
+            // Highlight the selected button
+            employeeStaffBtn.classList.add("activeBtn");
+            inventoryBtn.classList.remove("activeBtn");
+        });
+
+        inventoryBtn.addEventListener("click", function () {
+            // Show inventory div, hide employee and staff div
+            inventoryDiv.style.display = "block";
+            employeeStaffDiv.style.display = "none";
+            // Add animation class
+            inventoryDiv.classList.add("slide-in");
+            // Remove animation class after animation is complete
+            setTimeout(function () {
+                inventoryDiv.classList.remove("slide-in");
+            }, 500);
+
+            // Highlight the selected button
+            inventoryBtn.classList.add("activeBtn");
+            employeeStaffBtn.classList.remove("activeBtn");
+            populateProductTables();
+        });
+
+        // employee table
+        var nameHeader = document.getElementById("nameHeader");
+        var designationHeader = document.getElementById("designationHeader");
+
+        function renderUsersTable(data) {
+            console.log(" render table data", data);
+            var tableBody = document.getElementById("EmployeeTable");
+            tableBody.innerHTML = "";
+
+            data.forEach(function (row) {
+                console.log("rows;", row);
+                var tr = document.createElement("tr");
+                tr.innerHTML = `
+                        <td>${row.UserName}</td>
+                        <td>${row.Designation}</td>
+                        <td>${row.Contact}</td>
+                        <td>
+                            <button>Edit</button>
+                            <button>Delete</button>
+                        </td>
+                    `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function sortData(field, order) {
+            AllUsers.sort(function (a, b) {
+                var valueA = a[field].toUpperCase();
+                var valueB = b[field].toUpperCase();
+
+                if (valueA < valueB) {
+                    return order === "asc" ? -1 : 1;
+                } else if (valueA > valueB) {
+                    return order === "asc" ? 1 : -1;
+                } else {
+                    return 0;
+                }
+            });
+
+            renderUsersTable(AllUsers);
+        }
+
+        nameHeader.addEventListener("click", function () {
+            sortData("UserName", nameHeader.dataset.order === "asc" ? "desc" : "asc");
+            nameHeader.dataset.order = nameHeader.dataset.order === "asc" ? "desc" : "asc";
+            designationHeader.dataset.order = ""; // Reset the order for other headers
+        });
+
+        designationHeader.addEventListener("click", function () {
+            sortData("Designation", designationHeader.dataset.order === "asc" ? "desc" : "asc");
+            designationHeader.dataset.order = designationHeader.dataset.order === "asc" ? "desc" : "asc";
+            nameHeader.dataset.order = ""; // Reset the order for other headers
+        });
+
+        // Initial rendering of the table
+
     });
 
+
+    document.getElementById("searchInput").addEventListener("input", function () {
+        searchTable();
+    });
+
+    function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("EmployeeTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            var found = false; // Flag to determine if the search term is found in any column
+
+            // Loop through the columns (td elements) in the current row
+            for (var j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
+                td = tr[i].getElementsByTagName("td")[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break; // Exit the loop if the search term is found in any column
+                    }
+                }
+            }
+
+            // Set display style based on the search result
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+
+
     function loadAllUser() {
-        fetch('/admin/getAllUsers/Api')
+        fetch('/admin/UsersAndBranches/Api')
             .then(response => response.json())
-            .then(Users => {
-                AllUsers = Users;
+            .then(data => {
+                AllBranches = data.Branches;
+                AllUsers = data.Users;
+                console.table(AllBranches);
+                console.table(AllUsers);
+                loadAllInventory();
+                displayFilteredBranches(AllBranches);
+
+
             })
             .catch(error => {
                 console.log('Error:', error);
             });
     }
 
-    function checkForError(){
+    function loadAllInventory() {
+        fetch('/admin/Inventory/Api')
+            .then(response => response.json())
+            .then(Inventory => {
+                AllInventory = Inventory;
+                console.log("AllInventory=", AllInventory);
+                // displayFilteredBranches(AllBranches);
+
+
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+    function checkForError() {
         var AddErrorPTag = document.getElementById('AddErrorPTag').textContent;
-        if(AddErrorPTag){
+        if (AddErrorPTag) {
             alert(AddErrorPTag);
             popupContainer.style.display = 'flex';
         }
     }
 
-    function selectDesignation() {
-        var Designation = document.getElementById('DesignationSelect').value;
-        //alert(Designation);
-
-        if (Designation === "") {
-            displayFilteredUsers(AllUsers);
-        } else {
-            var UserwithSameDesignation = [];
-
-            // Iterate through the AllUsers array
-            for (var i = 0; i < AllUsers.length; i++) {
-                if (AllUsers[i].Designation === Designation) {
-                    UserwithSameDesignation.push(AllUsers[i]);
-                }
-            }
-
-            // Now, UserwithSameDesignation contains users with the selected designation
-            // You can use this array as needed
-            //console.log(UserwithSameDesignation);
-            displayFilteredUsers(UserwithSameDesignation)
-        }
 
 
-    }
-
-
-    function displayFilteredUsers(Users) {
+    function displayFilteredBranches(Branches) {
         const tableBody = document.querySelector('#tableBody'); // Assuming you have added an id "tableBody" to the <tbody> element
 
         // Clear the existing table body
@@ -254,16 +546,19 @@
 
         //<td><a href="/admin/EditUser/{{this.UserID}}" class="btn btn-primary">Edit</a></td>
         // Check if filtered subcategories exist
-        if (Users.length > 0) {
+        if (Branches.length > 0) {
             // Iterate over each filtered subcategory and create table rows
-            Users.forEach(user => {
+            Branches.forEach(Branch => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-          <td>${user.UserID}</td>
-          <td>${user.UserName}</td>
-          <td>${user.Designation}</td>
-           <td>${user.Contact}</td>
-          <td><a href="/admin/EditUser/${user.UserID}" class="btn btn-primary">Edit</a></td>
+          <td>${Branch.BranchName}</td>
+          <td>${Branch.Location}</td>
+          <td>${Branch.Contact}</td>
+          <td>
+            <button class="btn btn-primary" onclick="EditBranch('${Branch._id}')">Edit</button>
+            <button class="btn btn-warning" onclick="ViewBranch('${Branch.BranchName}')">View more</button>
+          </td>
+
           `;
                 tableBody.appendChild(row);
             });
@@ -271,10 +566,11 @@
             // Display a message when no filtered subcategories are available
             const row = document.createElement('tr');
             row.innerHTML = `
-          <td class="ADSubCategoryNotAvailable" colspan="5">No Users is Added</td>
+          <td class="ADSubCategoryNotAvailable" colspan="5">No Branches is Added</td>
           `;
             tableBody.appendChild(row);
         }
+        hideLoader()
     }
 
 
@@ -289,6 +585,7 @@
 
     AddUserCloseBtn.addEventListener('click', () => {
         popupContainer.style.display = 'none';
+        resetBranchPopUP();
     });
 
     // JavaScript to hide the popup when clicking outside of it
@@ -299,53 +596,6 @@
     });
 
 
-
-
-
-
-    // Add an event listener to the Designation select box
-    designationSelect.addEventListener('change', function () {
-        // Check if the selected option is "Customer"
-        if (designationSelect.value === 'Customer') {
-            // If "Customer" is selected, enable and make the Category select box required
-            categorySelect.disabled = false;
-            categorySelect.required = true;
-            categoryDIVCustomer.style.display = "block"
-        } else {
-            // If any other option is selected, disable and reset the Category select box
-            categorySelect.disabled = true;
-            categorySelect.required = false;
-            categorySelect.selectedIndex = 0; // Reset to the default option
-            categoryDIVCustomer.style.display = "none"
-        }
-    });
-
-
-
-
-    // Function to update WhatsApp Number based on Contact
-    function updateWhatsAppNumber() {
-        if (isSameContactNumberCheckbox.checked) {
-            // If the checkbox is checked, copy the value from Contact to WhatsApp Number
-            whatsappInput.value = contactInput.value;
-            whatsappInput.setAttribute('readonly', true); // Make it read-only
-        }
-    }
-
-    // Add an input event listener to the Contact input field
-    contactInput.addEventListener('input', updateWhatsAppNumber);
-
-    // Add an event listener to the checkbox
-    isSameContactNumberCheckbox.addEventListener('change', function () {
-        if (isSameContactNumberCheckbox.checked) {
-            // If the checkbox is checked, update WhatsApp Number immediately
-            updateWhatsAppNumber();
-        } else {
-            // If the checkbox is unchecked, clear the value and allow input again
-            whatsappInput.value = '';
-            whatsappInput.removeAttribute('readonly');
-        }
-    });
 
 
 
@@ -363,8 +613,6 @@
 
     // Call the function for each input field
     allowOnlyNumericInput(contactInput);
-    allowOnlyNumericInput(whatsappInput);
-    allowOnlyNumericInput(alternateContactInput);
 
 
     function togglePassword() {
@@ -380,60 +628,568 @@
 
 
 
-    CustomeraddButton.addEventListener('click', function () {
-        popup.style.display = 'flex';
-        // Disable scrolling
-        document.body.style.overflow = 'hidden';
-    });
 
-    submitBtn.addEventListener('click', function () {
-        var categoryName = categoryInput.value;
-        if (categoryName) {
-            // You can perform further actions, such as adding the category to the list.
-            //console.log('New category:', categoryName);
-            // Close the popup
-            popup.style.display = 'none';
+
+
+    function EditBranch(BranchID) {
+        console.log("Branch ID:", BranchID);
+        const foundBranch = AllBranches.find(branch => branch._id === BranchID);
+
+        if (foundBranch) {
+            console.log('Found Branch:', foundBranch);
+            showPopUpTOEditBranch(foundBranch)
         } else {
-            alert('Please enter a category name');
+            console.log('Branch not found with ID:', BranchID);
         }
-    });
-
-    function closePopup() {
-        popup.style.display = 'none';
-        // Enable scrolling
-        document.body.style.overflow = 'auto';
 
     }
 
+    function ViewBranch(BranchName) {
+        console.log("Branch ID:", BranchName);
+        const foundBranch = AllBranches.find(branch => branch.BranchName === BranchName);
 
-
-    function toggleCategoryList() {
-
-        var categoryList = document.getElementById('categoryList');
-        var icon = document.getElementById('rotateIcon');
-        var BTN = document.getElementById('ADAddCusCategoryBTN');
-
-        if (categoryList.style.maxHeight === '0px') {
-
-            categoryList.style.maxHeight = categoryList.scrollHeight + 'px';
-            icon.style.transform = 'rotate(-90deg)';
-            BTN.style.display = 'block';
+        if (foundBranch) {
+            console.log('Found Branch:', foundBranch);
+            showPopUpTOViewBranch(foundBranch);
+            showEmployeesFromBranch(BranchName);
         } else {
-            closePopup()
-            categoryList.style.maxHeight = '0px';
-            icon.style.transform = 'rotate(90deg)';
-            BTN.style.display = 'none';
-
+            console.log('Branch not found with ID:', BranchName);
         }
     }
 
 
+    function showPopUpTOEditBranch(Branch) {
+        popupContainer.style.display = 'flex';
+        document.getElementById('AddUserHeadingText').textContent = "Edit Branch"
+        document.getElementById("AddNewBranchForm").action = "/admin/EditBranchBranch";
+        document.getElementById('BranchName').value = Branch.BranchName;
+        document.getElementById('Location').value = Branch.Location;
+        document.getElementById('contactInput').value = Branch.Contact;
+        document.getElementById('BranchID').ariaDisabled = false;
+        document.getElementById('BranchID').value = Branch._id;
+        document.getElementById('SBTBTNbranch').value = "Update Branch";
+    }
+
+    function resetBranchPopUP() {
+        document.getElementById('AddUserHeadingText').textContent = "Add New Branch"
+        document.getElementById("AddNewBranchForm").action = "/admin/addNewBranch";
+        document.getElementById('BranchName').value = "";
+        document.getElementById('Location').value = "";
+        document.getElementById('contactInput').value = "";
+        document.getElementById('BranchID').ariaDisabled = true;
+        document.getElementById('BranchID').value = "";
+    }
+
+    function showPopUpTOViewBranch(foundBranch) {
+        ViewBranchPopup.style.display = 'flex';
+        console.log("foundBranch", foundBranch);
+        document.getElementById('viewBranchName').textContent = foundBranch.BranchName;
+        document.getElementById('ViewBranchID').textContent = foundBranch._id;
+        document.getElementById('ContactNumber').textContent = `+${foundBranch.Contact}`;
+        document.getElementById('ViewBranchaLocation').textContent = foundBranch.Location;
+
+
+        populateProductTables();
+
+    }
+
+    async function showEmployeesFromBranch(BranchName) {
+        var UsersFromBranch = [];
+        // Wrap the forEach loop inside a Promise to make it asynchronous
+        await new Promise(resolve => {
+            AllUsers.forEach(user => {
+                if (user.Branch === BranchName) {
+                    UsersFromBranch.push(user);
+                }
+            });
+            resolve();
+        });
+
+        console.log("UserFromBranch", UsersFromBranch);
+        PopulateUsersTable(UsersFromBranch);
+    }
+
+    function PopulateUsersTable(Users) {
+        console.log(" render table data", Users);
+        var tableBody = document.getElementById("EmployeeTable");
+        tableBody.innerHTML = "";
+
+        Users.forEach(function (row) {
+            console.log("rows;", row);
+            var tr = document.createElement("tr");
+            tr.innerHTML = `
+                        <td>${row.UserName}</td>
+                        <td>${row.Designation}</td>
+                        <td>${row.Contact}</td>
+                        <td>
+                            <a href="/admin/EditUser/${row.UserID}" class="btn btn-primary" target="_blank">Edit</a>
+                        </td>
+                    `;
+            tableBody.appendChild(tr);
+        });
+    }
+
+    function hidePopUpTOViewBranch() {
+        ViewBranchPopup.style.display = 'none'
+    }
+
+
+    function changeClass(clickedElement) {
+        // Remove 'USHeaderEachItemDivActive' class from all elements
+        var elements = document.querySelectorAll('.USHeaderEachItemDiv');
+        elements.forEach(function (element) {
+            element.classList.remove('USHeaderEachItemDivActive');
+        });
+
+        // Add 'USHeaderEachItemDivActive' class to the clicked element
+        clickedElement.classList.add('USHeaderEachItemDivActive');
+
+        var ClickedText = clickedElement.getElementsByTagName('p')[0].textContent;
+        if (ClickedText === "Binders") {
+            document.getElementById('BinderStocks').style.display = 'block';
+            document.getElementById('AdditivesStoks').style.display = 'none';
+            document.getElementById('productStocks').style.display = 'none';
+            populateBindersTable()
+        } else if (ClickedText === "Additives") {
+            document.getElementById('AdditivesStoks').style.display = 'block';
+            document.getElementById('productStocks').style.display = 'none';
+            document.getElementById('BinderStocks').style.display = 'none';
+            populateAdditivesTable()
+        } else if (ClickedText === "Products") {
+            document.getElementById('productStocks').style.display = 'block';
+            document.getElementById('AdditivesStoks').style.display = 'none';
+            document.getElementById('BinderStocks').style.display = 'none';
+            populateProductTables();
+        }
+    }
+
+
+    function populateProductTables() {
+        // Populate Products Table
+        var ViewBranchID = document.getElementById('ViewBranchID').textContent;
+        const productsTable = document.getElementById("ProductTable");
+        const productsTbody = productsTable.querySelector("tbody");
+        productsTbody.innerHTML = '';
+
+        var Products = AllInventory.Products;
+        Products.forEach((product, index) => {
+            var ProductStock = 0;
+            if (product.BranchStocks) {
+
+                product.BranchStocks.forEach((BranchStock) => {
+                    if (BranchStock.BranchID === ViewBranchID) {
+                        ProductStock = BranchStock.Stock
+                    }
+                })
+            }
+            const row = document.createElement("tr");
+            row.classList.add("text-center");
+
+            const itemNameCell = document.createElement("td");
+            itemNameCell.classList.add("USFormReadOnly");
+            itemNameCell.textContent = product.Product_Name;
+            row.appendChild(itemNameCell);
+
+            const oldStockCell = document.createElement("td");
+            oldStockCell.classList.add("USFormReadOnly");
+            oldStockCell.id = `oldProductStock${index}`
+            oldStockCell.textContent = ProductStock;
+            row.appendChild(oldStockCell);
+
+            const standardUnitCell = document.createElement("td");
+            standardUnitCell.classList.add("USFormReadOnly");
+            standardUnitCell.textContent = `${product.StandardQuatity} ${product.StandardQuantityUnit}`;
+            row.appendChild(standardUnitCell);
+
+            const actionCell = document.createElement("td");
+            const updateForm = document.createElement("form");
+            // updateForm.action = `/admin/UpdateProductStock/${ViewBranchID}/${product.Product_Id}`;
+            // updateForm.method = "post";
+
+            const newStockInput = document.createElement("input");
+            newStockInput.type = "text";
+            newStockInput.id = `NewStockProduct${index}`
+            newStockInput.classList.add("USFormWriteOnly");
+            newStockInput.name = "NewStock";
+            newStockInput.oninput = (event) => {
+                allowNumbersOnly(event)
+            }
+            updateForm.appendChild(newStockInput);
+
+            const updateButton = document.createElement("input");
+            updateButton.type = "button";
+            updateButton.classList.add("btn", "btn-primary");
+            updateButton.value = "Update";
+            // Add onclick function with the specified parameter
+            updateButton.onclick = function () {
+                UpdateProductStocks(ViewBranchID, product.Product_Id, index);
+            };
+
+            updateForm.appendChild(updateButton);
+
+
+            actionCell.appendChild(updateForm);
+            row.appendChild(actionCell);
+
+            productsTbody.appendChild(row);
+        });
+
+        //  Similar code can be repeated for Binders and Additives tables.
+        populateBindersTable()
+    }
+
+    function populateBindersTable() {
+        var ViewBranchID = document.getElementById('ViewBranchID').textContent;
+        const bindersTable = document.getElementById("BinderTable");
+        const bindersTbody = bindersTable.querySelector("tbody");
+        bindersTbody.innerHTML = "";
+
+        var Binders = AllInventory.Binders;
+
+        Binders.forEach((binder, index) => {
+            var BinderStock = 0;
+            if (binder.BranchStocks) {
+                binder.BranchStocks.forEach((BranchStock) => {
+                    if (BranchStock.BranchID === ViewBranchID) {
+                        BinderStock = BranchStock.Stock
+                    }
+                })
+            }
+
+            const row = document.createElement("tr");
+            row.classList.add("text-center");
+
+            const itemNameCell = document.createElement("td");
+            itemNameCell.classList.add("USFormReadOnly");
+            itemNameCell.textContent = binder.Binder_Name;
+            row.appendChild(itemNameCell);
+
+            const oldStockCell = document.createElement("td");
+            oldStockCell.classList.add("USFormReadOnly");
+            oldStockCell.id = `oldBinderStock${index}`
+            oldStockCell.textContent = BinderStock;
+            row.appendChild(oldStockCell);
+
+            const actionCell = document.createElement("td");
+            const updateForm = document.createElement("form");
+            // updateForm.action = `/admin/UpdateBinderStock/${ViewBranchID}/${binder.Binder_Id}`;
+            // updateForm.method = "post";
+
+            const newStockInput = document.createElement("input");
+            newStockInput.type = "text";
+            newStockInput.id = `NewStockBinder${index}`
+            newStockInput.classList.add("USFormWriteOnly");
+            newStockInput.name = "NewStock";
+            newStockInput.oninput = (event) => {
+                allowNumbersOnly(event)
+            }
+            updateForm.appendChild(newStockInput);
+
+            const updateButton = document.createElement("input");
+            updateButton.type = "button";
+            updateButton.classList.add("btn", "btn-primary");
+            updateButton.value = "Update";
+            // Add onclick function with the specified parameter
+            updateButton.onclick = function () {
+                UpdateBinderStocks(ViewBranchID, binder.Binder_Id, index);
+            };
+            updateForm.appendChild(updateButton);
+
+            actionCell.appendChild(updateForm);
+            row.appendChild(actionCell);
+
+            bindersTbody.appendChild(row);
+        });
+        populateAdditivesTable()
+    }
+
+    function populateAdditivesTable() {
+        var ViewBranchID = document.getElementById('ViewBranchID').textContent;
+        const additivesTable = document.getElementById("AdditiveTable");
+        const additivesTbody = additivesTable.querySelector("tbody");
+        additivesTbody.innerHTML = "";
+
+        var Additives = AllInventory.Additives;
+        Additives.forEach((additive, index) => {
+            var AdditiveStock = 0;
+            if (additive.BranchStocks) {
+
+                additive.BranchStocks.forEach((BranchStock) => {
+                    if (BranchStock.BranchID === ViewBranchID) {
+                        AdditiveStock = BranchStock.Stock
+                    }
+                })
+            }
+
+            const row = document.createElement("tr");
+            row.classList.add("text-center");
+
+            const itemNameCell = document.createElement("td");
+            itemNameCell.classList.add("USFormReadOnly");
+            itemNameCell.textContent = additive.Additive_Name;
+            row.appendChild(itemNameCell);
+
+            const oldStockCell = document.createElement("td");
+            oldStockCell.classList.add("USFormReadOnly");
+            oldStockCell.id = `oldAdditiveStock${index}`
+            oldStockCell.textContent = AdditiveStock;
+            row.appendChild(oldStockCell);
+
+            const actionCell = document.createElement("td");
+            const updateForm = document.createElement("form");
+            //updateForm.action = `/admin/UpdateAdditiveStock/${ViewBranchID}/${additive.Additive_Id}`;
+            //updateForm.method = "post";
+
+            const newStockInput = document.createElement("input");
+            newStockInput.type = "text";
+            newStockInput.id = `NewStockAdditve${index}`
+            newStockInput.classList.add("USFormWriteOnly");
+            newStockInput.name = "NewStock";
+            newStockInput.oninput = (event) => {
+                allowNumbersOnly(event)
+            }
+            updateForm.appendChild(newStockInput);
+
+            const updateButton = document.createElement("input");
+            updateButton.type = "button";
+            updateButton.classList.add("btn", "btn-primary");
+            updateButton.value = "Update";
+            // Add onclick function with the specified parameter
+            updateButton.onclick = function () {
+                UpdateAdditiveStocks(ViewBranchID, additive.Additive_Id, index);
+            };
+            updateForm.appendChild(updateButton);
+
+            actionCell.appendChild(updateForm);
+            row.appendChild(actionCell);
+
+            additivesTbody.appendChild(row);
+        });
+    }
+
+
+    function UpdateProductStocks(ViewBranchID, Product_Id, index) {
+        showLoader();
+        var NewStock = document.getElementById(`NewStockProduct${index}`).value;
+        fetch(`/admin/UpdateProductStock/${ViewBranchID}/${Product_Id}/${NewStock}/api`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                loadAllUser();
+                document.getElementById(`NewStockProduct${index}`).value = "";
+                document.getElementById(`oldProductStock${index}`).textContent = data.Stock;
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+
+    }
+
+    function UpdateBinderStocks(ViewBranchID, Binder_Id, index) {
+        showLoader();
+        var NewStock = document.getElementById(`NewStockBinder${index}`).value;
+        fetch(`/admin/UpdateBinderStock/${ViewBranchID}/${Binder_Id}/${NewStock}/api`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                loadAllUser();
+                document.getElementById(`NewStockBinder${index}`).value = "";
+                document.getElementById(`oldBinderStock${index}`).textContent = data.Stock;
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+
+    }
+
+    function UpdateAdditiveStocks(ViewBranchID, AdditiveID, index) {
+        showLoader();
+        var NewStock = document.getElementById(`NewStockAdditve${index}`).value;
+        fetch(`/admin/UpdateAdditiveStock/${ViewBranchID}/${AdditiveID}/${NewStock}/api`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                loadAllUser();
+                document.getElementById(`NewStockAdditve${index}`).value = "";
+                document.getElementById(`oldAdditiveStock${index}`).textContent = data.Stock;
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+
+    }
+
+
+    function allowNumbersOnly(event) {
+        const inputElement = event.target;
+        // Remove non-numeric characters using a regular expression
+        inputElement.value = inputElement.value.replace(/\D/g, '');
+    }
+
+    document.getElementById("ProductsearchInput").addEventListener("input", function () {
+        ProductsearchTable();
+    });
+
+    function ProductsearchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("ProductsearchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("ProductTableBody");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            var found = false; // Flag to determine if the search term is found in any column
+
+            // Loop through the columns (td elements) in the current row
+            for (var j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
+                td = tr[i].getElementsByTagName("td")[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break; // Exit the loop if the search term is found in any column
+                    }
+                }
+            }
+
+            // Set display style based on the search result
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+     document.getElementById("BindersearchInput").addEventListener("input", function () {
+        BindersearchTable();
+    });
+
+    function BindersearchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("BindersearchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("BinderTableBody");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            var found = false; // Flag to determine if the search term is found in any column
+
+            // Loop through the columns (td elements) in the current row
+            for (var j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
+                td = tr[i].getElementsByTagName("td")[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break; // Exit the loop if the search term is found in any column
+                    }
+                }
+            }
+
+            // Set display style based on the search result
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+
+     document.getElementById("AdditivesearchInput").addEventListener("input", function () {
+        AdditivesearchTable();
+    });
+
+    function AdditivesearchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("AdditivesearchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("AdditiveTableBody");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            var found = false; // Flag to determine if the search term is found in any column
+
+            // Loop through the columns (td elements) in the current row
+            for (var j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
+                td = tr[i].getElementsByTagName("td")[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break; // Exit the loop if the search term is found in any column
+                    }
+                }
+            }
+
+            // Set display style based on the search result
+            if (found) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
 
 </script>
 
 
 
 <style>
+    /*Loader */
+    #loader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        display: none;
+    }
+
+    .loader {
+        display: flex;
+        align-items: center;
+    }
+
+    .bar {
+        display: inline-block;
+        width: 3px;
+        height: 20px;
+        background-color: rgba(255, 255, 255, .5);
+        border-radius: 10px;
+        animation: scale-up4 1s linear infinite;
+    }
+
+    .bar:nth-child(2) {
+        height: 35px;
+        margin: 0 5px;
+        animation-delay: .25s;
+    }
+
+    .bar:nth-child(3) {
+        animation-delay: .5s;
+    }
+
+    @keyframes scale-up4 {
+        20% {
+            background-color: #ffff;
+            transform: scaleY(1.5);
+        }
+
+        40% {
+            transform: scaleY(1);
+        }
+    }
+
+
+    /*Loader Ends*/
+
+
     /* Styles for the background overlay */
     .popup {
         display: none;
@@ -447,12 +1203,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.7);
         /* Semi-transparent background */
-        z-index: 1000;
+        z-index: 90;
         /* Make sure it's above other elements */
         overflow-y: auto;
         padding: 2rem 0;
+
     }
 
     /* Styles for the form container */
@@ -515,6 +1272,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
+        user-select: none;
     }
 
     .AddUserCloseBtn p {
@@ -582,7 +1341,7 @@
         margin: 0;
     }
 
-    .AdduserSubmitDiv {
+    .AddBranchesubmitDiv {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -603,14 +1362,203 @@
         color: white;
     }
 
-    /* Optional: You can style the entire section if needed */
-    .AddUserEachSectionDiv {
-        /* Add any desired styles for the entire section */
-    }
+
 
     .password-container {
         display: flex;
         justify-content: start;
         align-items: center;
+    }
+
+    .ViewBranchDiv {
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 7px 0 rgba(0, 0, 0, 0.19) !important;
+        width: 65rem;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .ViewBRheader {
+        text-align: right;
+        display: flex;
+        justify-content: end;
+        padding: 10px;
+    }
+
+    .ViewBranchMain {
+        padding: 0 2rem;
+        color: #3d3d3d;
+    }
+
+    .BranchMainHeader,
+    .BranchContactSec {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    .ViewBranchaName {
+        gap: 1rem;
+        font-size: 35px;
+        font-weight: bold;
+    }
+
+    .BranchContactSec,
+    .ViewBranchLocationDiv {
+        gap: 1rem;
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .ViewBranchLocationDiv {
+        display: flex;
+        justify-content: start;
+        gap: 1rem;
+    }
+
+    .ViewBranchDirSlection {
+        width: 90%;
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+        align-items: center;
+    }
+
+    .ViewBranchDirSlection button {
+        color: #3d3d3d;
+        background-color: transparent;
+        padding: 1rem 2rem;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 2rem;
+        margin-bottom: 2rem;
+        stroke: #3d3d3d;
+        border-radius: 4px;
+        cursor: pointer;
+        position: relative;
+        transition: border-color 0.3s ease, background-color 0.3s ease;
+    }
+
+    .EmployeeAndStaffArea {
+        border: 1px solid #3d3d3d;
+        border-radius: ;
+    }
+
+    .ViewBranchDirSlection {
+        display: flex;
+        justify-content: space-around;
+        position: relative;
+    }
+
+    .EmployeeAndStaffArea,
+    .Inventory {
+        display: none;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        transition: all 0.5s ease;
+        position: relative;
+        margin-bottom: 2rem;
+    }
+
+    .EmployeeAndStaffArea::before,
+    .Inventory::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        pointer-events: none;
+        transition: border-color 0.3s ease;
+    }
+
+    .ViewBranchDirSlection .activeBtn {
+        background-color: #3498db;
+        color: whitesmoke;
+    }
+
+
+
+    .slide-in {
+        animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+        0% {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .ManagerSection {
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        gap: 1rem;
+    }
+
+    /* Generic Table Styles */
+    .employee_table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        border: 2px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    .employee_table th,
+    .employee_table td {
+        border: 1px solid #ddd;
+        padding: 15px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .employee_table th {
+        cursor: pointer;
+        background-color: #f2f2f2;
+    }
+
+    .employee_table th:hover {
+        background-color: #e6e6e6;
+    }
+
+    .employee_table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .employee_table tr:hover {
+        background-color: #e6e6e6;
+    }
+
+    /* Your Specific Table Styles */
+    .employee_table {
+        /* Add specific styles for this table */
+    }
+
+    .search-container {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: end;
+    }
+
+    .search-container input {
+        padding: 8px;
+        margin-right: 8px;
+    }
+
+    #BinderStocks,
+    #AdditivesStoks {
+        display: none;
     }
 </style>

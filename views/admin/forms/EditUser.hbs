@@ -36,6 +36,12 @@
                     <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
                 </div>
             </a>
+             <a href="/admin/Branches">
+                <div class="Category ">
+                    <p class="ADDelectionSideBarLabel">Branches</p>
+                    <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
+                </div>
+            </a>
             <a href="/admin/Users">
                 <div class="Category ADactiveButton">
                     <p class="ADDelectionSideBarLabel">Users</p>
@@ -85,6 +91,17 @@
                             <input type="text" required placeholder="Enter User Name" value="{{User.UserName}}"
                                 name="UserName" class="AddUserINP">
                         </div>
+                        
+                        <div class="AddUserEachSectionDiv">
+                            <p class="AddUserLabel">Branch</p>
+                            <select required name="Branch" class="AddUserINP" id="BranchSelect">
+                                {{#each AllBranch}}
+                                <option value="{{this.BranchName}}">{{this.BranchName}}</option>
+                                {{/each}}
+                                <option value="" disabled>Select a Branch</option>
+                            </select>
+                        </div>
+
                         <div class="AddUserEachSectionDiv">
                             <p class="AddUserLabel">Designation</p>
                             <select required name="Designation" class="AddUserINP" id="designationSelect">
@@ -131,7 +148,7 @@
                             </div>
                         </div>
                         <div class="AddUserEachSectionDiv AdduserSubmitDiv">
-                            <input type="submit" class="btn AddUserBTNSubmit" value="Add User">
+                            <input type="submit" class="btn AddUserBTNSubmit" value="Update User">
                         </div>
                     </div>
                 </div>
