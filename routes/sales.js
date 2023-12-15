@@ -298,9 +298,6 @@ router.post('/saveCustomer', SalesVerifyLogin, (req, res) => {
             data._id = Response.response;
             res.json({ data });
         }
-
-       
-
     })
 })
 
@@ -534,12 +531,9 @@ router.get('/ChangeListofCard/:CardID/:NewListName/:Designation', SalesVerifyLog
     if (Designation === "Production") {
         Data.ProductionPerson = newlistname;
     }
-
-
     employeeHelpers.ChangeCardList(Data).then(() => {
         res.json({ Status: true });
     })
-
 })
 
 router.get('/ChangeListofCardName/:CardName/:DropColumeName/:Designation', SalesVerifyLogin, (req, res) => {

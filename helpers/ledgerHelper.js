@@ -3066,7 +3066,7 @@ module.exports = {
                 // Log or use the extracted data as needed
                 // console.log("Date:", date);
                 // console.log("VCH No.:", vchNo);
-                console.log("PO No.:", poNo);
+                //console.log("PO No.:", poNo);
                 // console.log("Item Name:", itemName);
                 // console.log("Qty:", qty);
                 // console.log("Price:", price);

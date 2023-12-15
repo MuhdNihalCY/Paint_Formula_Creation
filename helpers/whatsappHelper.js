@@ -55,5 +55,21 @@ module.exports = {
 
 
         })
+    },
+    SendTestMessage:()=>{
+        return new Promise ((resolve , reject)=>{
+            var ClientWhatsappNumber = "+918891303280"
+            var Message = `Your ordered items (Order ID: *SampleOrderID*)\n*Sample Items*\nIs delivered to you location`;
+            client.messages
+                    .create({
+                        from: 'whatsapp:+971528704255',
+                        body: Message,
+                        to: `whatsapp:${ClientWhatsappNumber}`
+                    })
+                    .then(message => {
+                        console.log(message);
+                        resolve(message.sid);
+                    })
+        })
     }
 };

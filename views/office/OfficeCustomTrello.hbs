@@ -9,139 +9,79 @@
         </div>
     </div>
 
-    <div id="mainPopup" class="popupWrapper">
+    {{!-- <div id="mainPopup" class="popupWrapper">
         <div id="" class="popup mainPopup">
             <div class="MainPopupTopsection">
                 <img onclick="CloseMainPopup()" class="MainPopupCloseIcon" src="/images/Icons/x.png" alt="">
             </div>
-            {{!-- <div class="PopupCardNameSection">
-                <input type="text" id="CardNameInput" class="CardNameInput popCardHeaderText" placeholder="Card name">
-                <p class="popCardHeaderText">13-10-2023-125447893-Aero Head</p>
-                <div class="PopupCardListNameSection">
-                    <p class="popCardList">in list</p>
-                    <p class="PopcardListName">ORDERS</p>
+            <div class="FollowUpHeaderDiv">
+                <p class="popCardHeaderText text-center">Customer follow-up</p>
+            </div>
+            <div class="SerialNoDiv">
+                <p class="ccNameText">Serial no:</p>
+                <input type="text" name="serial_no" id="followUPserial_no" readonly placeholder="Enter serial number..."
+                    value="">
+            </div>
+            <div class="FollowUpCustNameDiv">
+                <p class="ccNameText">Customer Name:</p>
+                <div>
+
+                    <div style="position: relative; display: inline-block;">
+                        <input type="text" name="CustomerName" id="followUPCustomerName"
+                            oninput="ShowCustomerNameToFollowup()" placeholder="Enter Customer name..." value="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            style="position: absolute; top: 50%; right: 25px; transform: translateY(-50%);">
+                            <path
+                                d="M19 19L13.0001 13M15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1C11.866 1 15 4.13401 15 8Z"
+                                stroke="#B3B7BA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <datalist id="FollowUpcustomerSuggestions"></datalist>
                 </div>
             </div>
-            <div class="PopCustomerLabelBtnsSection">
-                <div class="PopCustomerAndLabelSection">
-                    <div class="PopCustomerSections">
-                        <div class="popCUstomerSectionDiv">
-                            <p class="popCustomerName">Customer contact: Mr.Niyad</p>
-                            <select name="" class="CustomerContactNameSelect" id="CustomerContactNameSelect">
-
-                            </select>
-                        </div>
-                        <div class="popCustomerCallNumberSection">
-                            <img src="/images/Icons/Call.png" class="CallIcon" alt="">
-                            <p class="PopCustomerMobileNumber">Mobile no: +971 50 22223</p>
-                        </div>
-                        <div class="popCustomerCallNumberSection">
-                            <img src="/images/Icons/WhatsApp_out.png" class="CallIcon" alt="">
-                            <p class="PopCustomerMobileNumber">WhatsApp no: +971 50 22223</p>
-                        </div>
-                    </div>
-                    <div class="popCardLabelSection">
-                        <p class="popCardHeaderText">Labels</p>
-                        <div class="popLabelCollections">
-                            <div class="popCardAllLabel">
-                                <div class="popLabel">
-                                </div>
-                            </div>
-                            <div class="AddBtnSection">
-                                <div class="AddLableBTN" onclick="openColorModal()">
-                                    <p>+</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="PopActionBtnSection">
-                    <button>Move</button>
-                    <Button>Copy</Button>
-                    <Button>Archive</Button>
-                </div>
-            </div>
-            <div class="poplastUpdateTimeSection">
-                <p>Last update : 3 hours ago</p>
+            <div class="FollowUpCustNameDiv">
+                <p class="ccNameText">Purpose of visit/call:</p>
+                <select name="" id="PuposeofVisit" class="VisitPurposeFollowup">
+                    <option selected disabled value="">Select purpose...</option>
+                    <option value="Regular visit">Regular visit</option>
+                    <option value="Payment follow-up">Payment follow-up</option>
+                    <option value="New Introduction">New Introduction</option>
+                    <option value="Trouble shooting">Trouble shooting</option>
+                    <option value="Technical support">Technical support</option>
+                    <option value="Urgent Delivery">Urgent Delivery</option>
+                </select>
             </div>
 
-            <div class="popReadyProductsSection">
-                <p class="popCardHeaderText">Ready Products</p>
-                <div class="popReadyProductsCollectiosn">
-                    <div class="popEachReadyProducts">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
+            <div class="FollowUpConnectedDiv">
+                <p class="ccNameText">Connected through:</p>
+                <div class="toggle-container">
+                    <div class="toggle-button" onclick="toggleRadioButton(1)">
+                        <input type="radio" name="toggle" id="InpersonRadio" />
+                        <label for="radio1">In-Person</label>
                     </div>
-                    <div class="popEachReadyProducts">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
-                    </div>
-                    <div class="popEachReadyProducts">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
+                    <div class="toggle-button" onclick="toggleRadioButton(2)">
+                        <input type="radio" name="toggle" id="CallRadio" />
+                        <label for="radio2">Call</label>
                     </div>
                 </div>
             </div>
-
-            <div class="popProductsItemsSection">
-                <p class="popCardHeaderText">Productions Items</p>
-                <div class="popProductsItemsCollectiosn">
-                    <div class="popEachProductsItems">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
-                    </div>
-                </div>
-                <div class="PopProctionItemsActionsSections">
-                    <div class="popSeachMixingDiv">
-                        <i class="fas fa-search search-icon MixingSeachIcon"></i>
-                        <input type="text" class="popSeachMixingInput-field" placeholder="Search">
-                    </div>
-                    <a href="/createFormula" class="btn popNewFormulaBtn ">Create New Formula</a>
-                </div>
+            <div class="FollowUpCommentDiv">
+                <textarea rows="6" name="comment" id="followUPComment" placeholder="Comments..."></textarea>
+            </div>
+            <div class="FollowUpContactedDiv">
+                <p class="ccNameText">Contacted Person:</p>
+                <select name="" id="ContactPersonsSelect" class="VisitPurposeFollowup">
+                    <option value="">Select Person...</option>
+                    <option value="">Me</option>
+                </select>
             </div>
 
-
-            <div class="popCommentsSections">
-                <p class="popCardHeaderText">Comments</p>
-                <div class="popCommentsCollection">
-                    <div class="popEachComment">
-                        <p class="popCommentSender">REHMAN</p>
-                        <div class="popCommentSended">
-                            <p class="popComment">@someOne do something</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="popAddCommentSection">
-                    <p class="popAddCommentsTex">Add Comments</p>
-                    <textarea name="commentBox" placeholder="Add your comments" class="commentBox" id="comment"
-                        rows="10"></textarea>
-                    <div class="popCommentSaveBtnSection">
-                        <button>Post Comment</button>
-                    </div>
-                </div>
+            <div class="FollowUpSaveBTNDiv">
+                <input type="button" onclick="SubmitFollowUP()" value="Save" class="followUpSaveBTN">
             </div>
-
-            <div class="popCardActivity">
-                <p class="popCardHeaderText">Activity</p>
-                <div id="" class="popActivityCollections">
-                    <ul>
-                        <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
-                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
-                        </li>
-                        <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
-                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
-                        </li>
-                    </ul>
-                </div>
-            </div> --}}
-
-            {{!-- <div class="popSaveBtnSection">
-                <button>Save card</button>
-            </div> --}}
 
         </div>
-    </div>
+    </div> --}}
 
 
     <div id="CreateOrderPopup" class="CreateOderPopupWrapper">
@@ -208,50 +148,7 @@
                                 <div id="ColorModelCollection" class="ColorModelCollection">
 
                                 </div>
-                                {{!-- <div class="colorOption" style="background-color: red;"
-                                    onclick="CreateOrderselectColor('DO','red')">
-                                    <p>
-                                        DO
-                                    </p>
-                                </div>
-                                <div class="colorOption" style="background-color: orange;"
-                                    onclick="CreateOrderselectColor('DELIVERD','orange')">
-                                    <p>
-                                        DELIVERD
-                                    </p>
-                                </div>
-                                <div class="colorOption" style="background-color: yellow;"
-                                    onclick="CreateOrderselectColor('CHECK COLLECTION','yellow')">
-                                    <p>
-                                        CHECK COLLECTION
-                                    </p>
-                                </div>
-
-                                <div class="colorOption" style="background-color: green;"
-                                    onclick="CreateOrderselectColor('OLD PAYMENT COLLECTION','green')">
-                                    <p>
-                                        OLD PAYMENT COLLECTION
-
-                                    </p>
-                                </div>
-                                <div class="colorOption" style="background-color: purple;"
-                                    onclick="CreateOrderselectColor('URGENT','purple')">
-                                    <p>
-                                        URGENT
-                                    </p>
-                                </div>
-                                <div class="colorOption" style="background-color: blue;"
-                                    onclick="CreateOrderselectColor('RETURN','blue')">
-                                    <p>RETURN</p>
-                                </div>
-                                <div class="colorOption" style="background-color: indigo;"
-                                    onclick="CreateOrderselectColor('SAMPLE COLLECTION','indigo')">
-                                    <p>SAMPLE COLLECTION</p>
-                                </div>
-                                <div class="colorOption" style="background-color: violet;"
-                                    onclick="CreateOrderselectColor('CUSTOMER COLLECTION','violet')">
-                                    <p>CUSTOMER COLLECTION</p>
-                                </div> --}}
+                                
 
                                 <hr>
 
@@ -285,24 +182,13 @@
                 </div>
             </div>
             <div class="poplastUpdateTimeSection">
-                {{!-- <p>Last update : 3 hours ago</p> --}}
+               
             </div>
 
             <div class="popReadyProductsSection">
                 <p class="popCardHeaderText">Ready Products</p>
                 <div id="popReadyProductsCollectiosn" class="popReadyProductsCollectiosn">
-                    {{!-- <div class="popEachReadyProducts">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
-                    </div>
-                    <div class="popEachReadyProducts">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
-                    </div>
-                    <div class="popEachReadyProducts">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <p>100.00 Ltr</p>
-                    </div> --}}
+                    
 
                 </div>
                 <div class="PopReadyProductsInputSection">
@@ -319,26 +205,10 @@
             <div class="popProductsItemsSection">
                 <p class="popCardHeaderText">Productions Items</p>
                 <div id="popProductsItemsCollectiosns" class="popProductsItemsCollectiosn">
-                    {{!-- <div class="popEachProductsItems">
-                        <p>Mipa 2K C85 Clearcoat</p>
-                        <div class="QtyOfFormula">
-                            <input type="text" placeholder="0.00" class="FormulaQty" id="FormulaQty1">
-                            <p>100Ltr</p>
-                        </div>
-                        <button onclick="RemoveOneFormula('Mipa 2K C85 Clearcoat')"
-                            class="btn btn-danger">Delete</button>
-                    </div> --}}
+                   
                 </div>
                 <div class="NewOrderPopProctionItemsActionsSections">
-                    <div class="popSeachMixingDiv">
-                        <i class="fas fa-search search-icon MixingSeachIcon"></i>
-                        <input type="search" class="popSeachMixingInput-field" placeholder="Search"
-                            oninput="searchFormulas(this.value)">
-                    </div>
-                    <div class="SearchResultsDiv">
-                        <ul class="search-results" id="searchResults"></ul>
-                    </div>
-                    {{!-- <a href="/createFormula" class="btn popNewFormulaBtn ">Create New Formula</a> --}}
+                   
                 </div>
                 <div class="NewOrderNewFormulaNameSection">
                     <input placeholder="Product Name" type="text" id="NewFormulaNameInput">
@@ -355,19 +225,11 @@
             <div class="popCommentsSections">
                 <p class="popCardHeaderText">Comments</p>
                 <div id="newOrderpopCommentsCollection" class="popCommentsCollection newOrderpopCommentsCollection">
-                    {{!--
-                    <div class="popEachComment ">
-                        <p class="popCommentSender">REHMAN</p>
-                        <div class="popCommentSended">
-                            <p class="popComment">@someOne do something</p>
-                        </div>
-                    </div>
-                    --}}
+                 
                 </div>
                 <div class="popAddCommentSection">
                     <p class="popAddCommentsTex">Add Comments</p>
-                    {{!-- <textarea oninput="CheckForMention" name="commentBox" placeholder="Add your comments"
-                        class="commentBox" id="newOrderComment" rows="10"></textarea> --}}
+                  
                     <textarea oninput="checkForMention()" name="commentBox" placeholder="Add your comments"
                         class="commentBox" id="newOrderComment" rows="10"></textarea>
                     <div id="mentionList"></div>
@@ -413,12 +275,7 @@
                 <p class="popCardHeaderText">Activity</p>
                 <div id="popActivityCollections" class="popActivityCollections">
                     <ul>
-                        {{!-- <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
-                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
-                        </li>
-                        <li>Rehman moved this card from PRODUCTION - REHMAN to READY - FOR DISPATCH
-                            <p class="popActivityTime">@ 14:15 (30 min ago)</p>
-                        </li> --}}
+                      
                     </ul>
                 </div>
             </div>
@@ -453,7 +310,7 @@
 
                     <div class="CCLocationSection">
                         <p class="ccLocationText">Location</p>
-                        <input type="text" id="ccLocation" placeholder="Enter name here" class="CCInputLocations">
+                        <input type="text" id="ccLocation" placeholder="Enter Location here" class="CCInputLocations">
                     </div>
 
                 </div>
@@ -629,7 +486,7 @@
         <div class="CustomContainer">
             <div class="KanbanHeaderMainDivArea">
                 <div class="KanbanHeaderMainDivAreaRight">
-                    <input type="text" hidden id="Username" value="{{SalesLogged.UserName}}">
+                    <input type="text" hidden id="Username" value="{{OfficeLogged.UserName}}">
                     <p class="KanbanHeaderText">MEGA PAINTS ACTIVITY BOARD</p>
                 </div>
                 <div class="KanbanHeaderMainDivAreaLeft">
@@ -647,34 +504,14 @@
                                 <p onclick="CloseSearchResultBox()" class="SearchResusultCloseBTN">x</p>
                             </div>
                             <div id="searchResultsCollectins" class="searchResultsCollectins">
-                                {{!-- <div class="EachSearchResult">
-                                    <p class="SearchResultName">18-11-2023-012115209-asfsdf</p>
-                                    <p class="SearchProductionItesmHeaderText">Production Items</p>
-                                    <div class="SearchResultsProductionsCollections">
-                                        <div class="EachSearchResultProductionItems">
-                                            <p class="SearchResultItemName">red-231</p>
-                                            <p class="SearchResultQuantity">4 Liters</p>
-                                        </div>
-                                        <div class="EachSearchResultProductionItems">
-                                            <p class="SearchResultItemName">red-231</p>
-                                            <p class="SearchResultQuantity">4 Liters</p>
-                                        </div>
-                                        <div class="EachSearchResultProductionItems">
-                                            <p class="SearchResultItemName">red-231</p>
-                                            <p class="SearchResultQuantity">4 Liters</p>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                </div> --}}
-
-
-
-
+                              
                             </div>
                         </div>
                     </div>
                     <input type="button" class="CreateCustomerBTN btn" onclick="OpenCustomerCreationPopup()"
                         value="Create Customer">
+                    {{!-- <input type="button" class="CreateCustomerBTN followupBTN btn" onclick="OpenCustomerFollowup()"
+                        value="Add Customer follow-up"> --}}
                     <div class="input-button userBTN">
                         <input type="button" value="{{OfficeLogged.UserName}}" class="input-field  InputBTNField btn">
                         <i class="fas fa-user user-icon"></i>
@@ -738,7 +575,7 @@
                         </div>
                         <div class="ReadyColumn">
                             <div class="ReadyColumnHeader">
-                                <p class="ReadySectionHeaderText ListHeader" dropzone="false">for Customer collection</p>
+                                <p class="ReadySecHed ListHeader" dropzone="false">for Customer collection</p>
                             </div>
                             <div id="ForCustomerCollectionCards" class="ReadyCardsCollections">
 
@@ -766,18 +603,16 @@
                         <div class="centered-section" dropzone="false">
                             <p class="DoneSectionHeaderText">Done</p>
                         </div>
-                        <div class="search-input">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" class="input-field" placeholder="Search">
-                        </div>
+
 
                     </div>
                     <div class="DoneListCollections">
                         <div class="DoneColumn">
                             <div class="DoneColumnHeader" dropzone="false">
-                                <p class="DoneSectionHeaderText ListHeader">Today</p>
+                                <p class="DoneSectionHeaderText ListHeader">DONE TODAY</p>
+
                             </div>
-                            <div class="DoneCardsCollections">
+                            <div id="DoneCardsCollections" class="DoneCardsCollections ">
 
                             </div>
                         </div>
@@ -785,8 +620,22 @@
                             <div class="DoneColumnHeader" dropzone="false">
                                 <p class="DoneSectionHeaderText ListHeader">
                                     < 7 Days</p>
+
                             </div>
-                            <div class="DoneCardsCollections">
+                            <div id="DoneInAWeekCollections" class="DoneCardsCollections">
+
+                            </div>
+                        </div>
+                        <div class="DoneColumn">
+                            <div class="DoneColumnHeader" dropzone="false">
+                                <p class="DoneSectionHeaderText ListHeader">> 7 Days</p>
+                                <div class="search-input">
+                                    <i class="fas fa-search search-icon OldSearchIcon"></i>
+                                    <input type="text" class="input-field" placeholder="Search"
+                                        oninput="searchBeforeWeek(this.value)">
+                                </div>
+                            </div>
+                            <div id="DoneBeforeWeekCollection" class="DoneCardsCollections">
 
                             </div>
                         </div>
@@ -836,6 +685,9 @@
 
 
 <script>
+
+    // auto refresh each 5 minutes
+    setInterval(fetchAllCards, 300000);
 
     // Get the reference to the image element by its ID
     var logoImg = document.getElementById('LogoImg');
@@ -890,37 +742,7 @@
 
 
 
-    var columns = [
-        {
-            id: '6472429fde9d77f912facae6',
-            name: '13-23-98-nihaldfs',
-            status: 'InComplete',
-            description: '',
-            isAttachment: false,
-            fileNo: '785412',
-            contactDetails: {
-                contactCountryCode: '+971',
-                ContactNumber: '9078654321',
-                WhatsappCountryCode: '+971',
-                WhatsappContactNumber: '09876654331',
-                AlternateContactCountryCode: '+971',
-                AlternateContactNumber: '3216549870'
 
-            },
-            ListArray: [
-                {
-                    ListId: '6472429fde9d77f912facae6',
-                    ListName: 'Orders',
-                    InTIme: '32165498',
-                    OutTime: '987654321',
-                    InEmployeeName: 'SampleName',
-                    InEmployeeDesignation: 'SampleDesignation',
-                    OutEmployeeName: 'SampleName',
-                    OutEmployeeDesignation: 'SampleDesignation'
-                }
-            ]
-        }
-    ]
 
     // Initial State object with dynamic columns
     let State = {
@@ -936,7 +758,9 @@
             DONE: {
                 AllDone: [],
                 DONE_TODAY: [],
-                IN_A_WEEK: []
+                IN_A_WEEK: [],
+                BEFORE_A_WEEK: [],
+                OLD_MATCHED_CARDS: []
             }
         },
         Customers: [],
@@ -944,7 +768,8 @@
         NewOrders: [],
         UserNow: false,
         Labels: [],
-        NewReadyProducts: []
+        NewReadyProducts: [],
+        CustomerFollowUp: []
     };
 
     function initializeState() {
@@ -974,7 +799,7 @@
         initializeState();
 
         try {
-            const backendURL = '/getAllCardAndListsAndUsersToManagement';
+            const backendURL = '/office/getAllCardAndListsAndUsersToManagement';
             //// // console.log("Called Fetch api")
             const response = await fetch(backendURL);
 
@@ -1004,7 +829,8 @@
 
     async function UpdateStateWithCards() {
 
-
+        var AllCards = State.AllCards;
+        var AllLists = State.AllLists;
 
         // // // console.log("State: ", State);
         var AllProductionLists = [];
@@ -1025,11 +851,6 @@
                         Name: User.UserName,
                         Cards: []  // Add an array to store cards for each user
                     });
-                    State.AllLists.push({
-                        _id: User._id,
-                        Name: User.UserName,
-                        Cards: []  // Add an array to store cards for each user
-                    });
                 }
             }
 
@@ -1039,20 +860,21 @@
 
         }
 
-        await processUserData();
 
-        var AllCards = State.AllCards;
-        var AllLists = State.AllLists;
+
+        await processUserData();
+        State.columns.DONE.BEFORE_A_WEEK = [];
 
         for (i = 0; i < AllCards.length; i++) {
             var CardList = AllCards[i].CurrentList;
-            console.log("CardList: ", ",", CardList, ",");
+            //// // console.log("CardList: ", CardList);
 
             // // console.log("One Card: ", AllCards[i])
             AllLists.forEach((Onelist) => {
-                console.log("CardList**: ", ",", CardList.toLowerCase(), ",");
-                console.log("Onelist: ", ",", Onelist.Name.toUpperCase(), ",");
+
                 if (CardList.toLowerCase() === Onelist.Name.toLowerCase()) {
+                    console.log("Onelist: ", Onelist.Name);
+                    console.log("CardList: ", CardList);
 
 
                     if ("ORDERS" === Onelist.Name) {
@@ -1069,11 +891,37 @@
                         // // console.log("In Customer Collections")
                     } else if ("DONE TODAY" === Onelist.Name) {
                         State.columns.DONE.AllDone.push(AllCards[i]);
-                        // // console.log("AllCards[i] done all ", AllCards[i]);
-                        //   State.columns.READY.FOR_CUSTOMER_COLLECTION.push(AllCards[i]);
+
+
+                        // do the today logic <7 day Login >7 day Logic
+                        var DoneMovedTime = AllCards[i].ListArray[0].InTime;
+                        console.log("Done Today InTime: ", DoneMovedTime);
+
+                        // Convert the timestamp to a Date object
+                        const date = new Date(DoneMovedTime);
+                        console.log("moved Date:", date);
+
+                        // Get today's date
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0 for accurate comparison
+
+                        // Calculate the difference in days
+                        const timeDifference = (today - date) / (1000 * 60 * 60 * 24);
+
+                        if (date.toDateString() === today.toDateString()) {
+                            console.log("Moved Today");
+                            State.columns.DONE.DONE_TODAY.push(AllCards[i]);
+                        } else if (timeDifference < 7) {
+                            console.log("< 7 days");
+                            State.columns.DONE.IN_A_WEEK.push(AllCards[i]);
+                        } else {
+                            console.log("> 7 days");
+                            State.columns.DONE.BEFORE_A_WEEK.push(AllCards[i]);
+                        }
+
                     } else {
                         // this is for productions and drivers,
-                        // console.log("Checking Cards", AllCards[i])
+                        // // console.log("Checking Cards", AllCards[i])
                         if (AllCards[i].ProductionPerson === AllCards[i].CurrentList) {
                             // for Productions
                             // // console.log("In Productions")
@@ -1111,7 +959,7 @@
                             }
 
                         } else {
-                            console.log("In DRivers", AllCards[i])
+                            // // console.log("In DRivers")
                             // try for drivers
                             var DriverArray = State.columns.DRIVERS;
                             if (DriverArray.length > 0) {
@@ -1169,6 +1017,9 @@
         loadForDispatchSectionCards();
         loadForCustomerCollectionCards();
         loadDriversSectionListCards();
+        loadDoneTodayListCards();
+        loadDoneInAWeekListCards();
+        // loadDoneBeforeWeekListCards()
 
         hideLoader();
 
@@ -1914,6 +1765,324 @@
 
             });
         }
+
+        function loadDoneTodayListCards() {
+            columnIndex = columnIndex + 1;
+            var DoneCardsCollections = document.getElementById('DoneCardsCollections');
+            DoneCardsCollections.innerHTML = '';
+            DoneCardsCollections.setAttribute('ondrop', 'drop(event)');
+            DoneCardsCollections.setAttribute('ondragover', 'allowDrop(event)');
+            DoneCardsCollections.setAttribute('data-column', columnIndex);
+            DoneCardsCollections.classList.add('cardsCollections');
+
+
+
+            var OrderCards = State.columns.DONE.DONE_TODAY;
+
+            var virtualOrderCardCollection;
+
+            OrderCards.forEach((OneCard, taskIndex) => {
+
+                var checklistItems = OneCard.CheckListItems;
+                var ChecklistCompleted = 0;
+                var TotalChecklist = 0;
+
+                if (OneCard.CheckListItems) {
+                    var checklistItems = OneCard.CheckListItems.checkItems;
+                    ChecklistCompleted = 0;
+                    TotalChecklist = checklistItems.length;
+
+                    checklistItems.forEach((checkItem) => {
+                        if (checkItem.State === 'Complete') {
+                            ChecklistCompleted = ChecklistCompleted + 1;
+                        }
+                    })
+
+                }
+
+                // Create the main div with class "Card"
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card Card';
+                cardDiv.onclick = function () {
+                    ViewCardDetails(OneCard.Name)
+                };
+
+                cardDiv.setAttribute('draggable', 'true');
+                cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                const cardImgDiv = document.createElement('div');
+                cardImgDiv.className = 'CardImgDiv';
+
+
+
+                // Create the paragraph element with class "cardText" and set its text content
+                const cardText = document.createElement('p');
+                cardText.className = 'cardText';
+                cardText.textContent = OneCard.Name;
+
+                // Create the div with class "CardSub"
+                const cardSubDiv = document.createElement('div');
+                cardSubDiv.className = 'CardSub';
+
+                // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                const descriptionIcon = document.createElement('img');
+                descriptionIcon.className = 'DescriptionSmIcon';
+                descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                descriptionIcon.alt = '';
+
+                // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                const checkBoxIcon = document.createElement('img');
+                checkBoxIcon.className = 'checkBoxSMIcon';
+                checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                checkBoxIcon.alt = '';
+
+                // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                const cardSMCheckNum = document.createElement('p');
+                cardSMCheckNum.className = 'CardSMCheckNum';
+                cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                // Check if the image file exists, and only create the image element if it does
+                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const cardImg = new Image();
+                cardImg.className = 'CardImg';
+                cardImg.alt = 'No Attachments';
+                cardImg.src = imageSrc;
+                cardImg.setAttribute('draggable', 'false');
+
+                cardImg.onload = function () {
+                    // The image exists, so set the src attribute
+                    cardImgDiv.appendChild(cardImg);
+                };
+                cardDiv.appendChild(cardImgDiv);
+
+                cardDiv.appendChild(cardText);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the child elements to their respective parent elements
+                cardSubDiv.appendChild(descriptionIcon);
+                cardSubDiv.appendChild(checkBoxIcon);
+                cardSubDiv.appendChild(cardSMCheckNum);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the "cardDiv" to the parent element in your HTML document
+                DoneCardsCollections.appendChild(cardDiv);
+            });
+        }
+
+        function loadDoneInAWeekListCards() {
+            columnIndex = columnIndex + 1;
+            var DoneInAWeekCollections = document.getElementById('DoneInAWeekCollections');
+            DoneInAWeekCollections.innerHTML = '';
+            //  DoneInAWeekCollections.setAttribute('ondrop', 'drop(event)');
+            //  DoneInAWeekCollections.setAttribute('ondragover', 'allowDrop(event)');
+            //  DoneInAWeekCollections.setAttribute('data-column', columnIndex);
+            //  DoneInAWeekCollections.classList.add('cardsCollections');
+
+
+
+            var OrderCards = State.columns.DONE.IN_A_WEEK;
+
+            var virtualOrderCardCollection;
+
+            OrderCards.forEach((OneCard, taskIndex) => {
+
+                var checklistItems = OneCard.CheckListItems;
+                var ChecklistCompleted = 0;
+                var TotalChecklist = 0;
+
+                if (OneCard.CheckListItems) {
+                    var checklistItems = OneCard.CheckListItems.checkItems;
+                    ChecklistCompleted = 0;
+                    TotalChecklist = checklistItems.length;
+
+                    checklistItems.forEach((checkItem) => {
+                        if (checkItem.State === 'Complete') {
+                            ChecklistCompleted = ChecklistCompleted + 1;
+                        }
+                    })
+
+                }
+
+                // Create the main div with class "Card"
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card Card';
+                var Done = true;
+                cardDiv.onclick = function () {
+                    ViewCardDetails(OneCard.Name, Done)
+                };
+
+                // cardDiv.setAttribute('draggable', 'true');
+                // cardDiv.setAttribute('ondragstart', 'drag(event)');
+                cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                const cardImgDiv = document.createElement('div');
+                cardImgDiv.className = 'CardImgDiv';
+
+
+
+                // Create the paragraph element with class "cardText" and set its text content
+                const cardText = document.createElement('p');
+                cardText.className = 'cardText';
+                cardText.textContent = OneCard.Name;
+
+                // Create the div with class "CardSub"
+                const cardSubDiv = document.createElement('div');
+                cardSubDiv.className = 'CardSub';
+
+                // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                const descriptionIcon = document.createElement('img');
+                descriptionIcon.className = 'DescriptionSmIcon';
+                descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                descriptionIcon.alt = '';
+
+                // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                const checkBoxIcon = document.createElement('img');
+                checkBoxIcon.className = 'checkBoxSMIcon';
+                checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                checkBoxIcon.alt = '';
+
+                // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                const cardSMCheckNum = document.createElement('p');
+                cardSMCheckNum.className = 'CardSMCheckNum';
+                cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                // Check if the image file exists, and only create the image element if it does
+                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const cardImg = new Image();
+                cardImg.className = 'CardImg';
+                cardImg.alt = 'No Attachments';
+                cardImg.src = imageSrc;
+                cardImg.setAttribute('draggable', 'false');
+
+                cardImg.onload = function () {
+                    // The image exists, so set the src attribute
+                    cardImgDiv.appendChild(cardImg);
+                };
+                cardDiv.appendChild(cardImgDiv);
+
+                cardDiv.appendChild(cardText);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the child elements to their respective parent elements
+                cardSubDiv.appendChild(descriptionIcon);
+                cardSubDiv.appendChild(checkBoxIcon);
+                cardSubDiv.appendChild(cardSMCheckNum);
+                cardDiv.appendChild(cardSubDiv);
+
+                // Append the "cardDiv" to the parent element in your HTML document
+                DoneInAWeekCollections.appendChild(cardDiv);
+            });
+        }
+
+
+
+
+    }
+
+    function loadDoneBeforeWeekListCards() {
+        var columnIndex = 98 + 1;
+        var DoneBeforeWeekCollection = document.getElementById('DoneBeforeWeekCollection');
+        DoneBeforeWeekCollection.innerHTML = '';
+        //   DoneBeforeWeekCollection.setAttribute('ondrop', 'drop(event)');
+        //   DoneBeforeWeekCollection.setAttribute('ondragover', 'allowDrop(event)');
+        //   DoneBeforeWeekCollection.setAttribute('data-column', columnIndex);
+        //   DoneBeforeWeekCollection.classList.add('cardsCollections');
+
+
+
+        var OrderCards = State.columns.DONE.OLD_MATCHED_CARDS;
+
+        var virtualOrderCardCollection;
+
+        OrderCards.forEach((OneCard, taskIndex) => {
+
+            var checklistItems = OneCard.CheckListItems;
+            var ChecklistCompleted = 0;
+            var TotalChecklist = 0;
+
+            if (OneCard.CheckListItems) {
+                var checklistItems = OneCard.CheckListItems.checkItems;
+                ChecklistCompleted = 0;
+                TotalChecklist = checklistItems.length;
+
+                checklistItems.forEach((checkItem) => {
+                    if (checkItem.State === 'Complete') {
+                        ChecklistCompleted = ChecklistCompleted + 1;
+                    }
+                })
+
+            }
+
+            // Create the main div with class "Card"
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card Card';
+            var Done = true;
+            cardDiv.onclick = function () {
+                ViewCardDetails(OneCard.Name, Done)
+            };
+
+            //  cardDiv.setAttribute('draggable', 'true');
+            //  cardDiv.setAttribute('ondragstart', 'drag(event)');
+            cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+            const cardImgDiv = document.createElement('div');
+            cardImgDiv.className = 'CardImgDiv';
+
+
+
+            // Create the paragraph element with class "cardText" and set its text content
+            const cardText = document.createElement('p');
+            cardText.className = 'cardText';
+            cardText.textContent = OneCard.Name;
+
+            // Create the div with class "CardSub"
+            const cardSubDiv = document.createElement('div');
+            cardSubDiv.className = 'CardSub';
+
+            // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+            const descriptionIcon = document.createElement('img');
+            descriptionIcon.className = 'DescriptionSmIcon';
+            descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+            descriptionIcon.alt = '';
+
+            // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+            const checkBoxIcon = document.createElement('img');
+            checkBoxIcon.className = 'checkBoxSMIcon';
+            checkBoxIcon.src = '/images/Icons/check_Gray.png';
+            checkBoxIcon.alt = '';
+
+            // Create the paragraph element with class "CardSMCheckNum" and set its text content
+            const cardSMCheckNum = document.createElement('p');
+            cardSMCheckNum.className = 'CardSMCheckNum';
+            cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+            // Check if the image file exists, and only create the image element if it does
+            const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+            const cardImg = new Image();
+            cardImg.className = 'CardImg';
+            cardImg.alt = 'No Attachments';
+            cardImg.src = imageSrc;
+            cardImg.setAttribute('draggable', 'false');
+
+            cardImg.onload = function () {
+                // The image exists, so set the src attribute
+                cardImgDiv.appendChild(cardImg);
+            };
+            cardDiv.appendChild(cardImgDiv);
+
+            cardDiv.appendChild(cardText);
+            cardDiv.appendChild(cardSubDiv);
+
+            // Append the child elements to their respective parent elements
+            cardSubDiv.appendChild(descriptionIcon);
+            cardSubDiv.appendChild(checkBoxIcon);
+            cardSubDiv.appendChild(cardSMCheckNum);
+            cardDiv.appendChild(cardSubDiv);
+
+            // Append the "cardDiv" to the parent element in your HTML document
+            DoneBeforeWeekCollection.appendChild(cardDiv);
+        });
     }
 
 
@@ -1957,6 +2126,7 @@
         var data = event.dataTransfer.getData("text/plain");
         var target = event.target;
 
+        console.log("Checking for drop:", target);
         if (target.classList.contains("cardsCollections")) {
             target.appendChild(document.getElementById(data));
         }
@@ -2151,6 +2321,8 @@
     function CloseMainPopup() {
         var mainPopup = document.getElementById('mainPopup');
         mainPopup.style.display = "none";
+        const dataList = document.getElementById('FollowUpcustomerSuggestions');
+        dataList.style.display = "none";
     }
 
     function OpenMainPopup() {
@@ -2345,8 +2517,8 @@
             }
         }
 
-        if (!Customername || !Address || !Loaction || !SalesEx || !Co_ordinator || Contact.length === 0) {
-            // alert("Please fill all fields");
+        if (!Customername || !Address || !Loaction || !SalesEx || !Co_ordinator || Contact.length === 0 || !Contact[0].Name || !Contact[0].CallCountryCode || !Contact[0].CallNumber || !Contact[0].WhatsappCountryCode || !Contact[0].WhatsappNumber) {
+            alert("Fill in all fields to save the customer. Ensure no fields are left empty.");
         } else {
             // URL of your backend API endpoint
             var apiUrl = '/office/saveCustomer/';
@@ -2382,13 +2554,17 @@
                 .then(data => {
                     // Handle the data from the server
                     // // console.log('Response from server:', data);
-                    CloseCustomerCreationPopup();
-                    resetCustomerValues();
-                    fetchAllCards();
+                    if (data.Error) {
+                        alert(data.Error);
+                    } else {
+                        CloseCustomerCreationPopup();
+                        resetCustomerValues();
+                        fetchAllCards();
+                    }
                 })
                 .catch(error => {
                     // Handle errors
-                    console.error('Error:', error);
+                    alert('Error:', error);
                 });
 
         }
@@ -2697,19 +2873,19 @@
 
         var VirtualFormula = `
                     <div class="popEachProductsItemss">
-                        <p id="FormulaColorName" class='FormulaColorName'>${formula.ColorName}</p>
-                        <p id="FormulaColorCode" class='FormulaColorName'>${formula.ColorCode ? formula.ColorCode : ""} </p>
-                        <p id="FormulaColorName" class='FormulaColorName'>${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
-                        <p id="FormulaColorName" class='FormulaColorName'>${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
-                        <p id="FormulaColorName" class='FormulaColorName'>"${formula.FileNo ? formula.FileNo : ""}"</p>
+                        <p id="FormulaColorName" class='FormulaColorName' contenteditable="true">${formula.ColorName}</p>
+                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' contenteditable="true">${formula.ColorCode ? formula.ColorCode : ""} </p>
+                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' contenteditable="true">${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
+                        <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
+                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p>
                        
 
                         <div class="QtyOfFormula">
-                            <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo}" hidden>
-                            <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode}" hidden>
-                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName}" hidden>
-                            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt}" hidden>` : ""}
-                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss}" hidden>` : ""}
+                            <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
+                            <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode ? formula.ColorCode : ""}" hidden>
+                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName ? formula.SubCategoryName : ""}" hidden>
+                            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
+                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""}
                             <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
                             <p class="FormulaUnit">${formula.Unit}</p>
                         </div>
@@ -3127,7 +3303,7 @@
 
 
                 // api call
-                // URL of your backend API endpoint
+                // URL of your backend API endpoint 
                 var apiUrl = '/office/CreateNewOrder/';
 
                 // Convert the data object to a JSON string
@@ -3201,7 +3377,7 @@
     }
 
 
-    function ViewCardDetails(CardName) {
+    function ViewCardDetails(CardName, Done) {
         //  alert(CardName);
         var AlreadyNameAdded = false;
         var CreateOrderPopup = document.getElementById('CreateOrderPopup');
@@ -3436,85 +3612,99 @@
         // handle Move Actions Options
         var moveSelect = document.getElementById('moveSelect');
         moveSelect.innerHTML = "";
-        var AllLists = [];
-        var Allcolumns = State.columns;
-        var CurrentList = CardData.CurrentList;
-        var CardID = CardData._id;
 
-        // add current list
-        
+        if (!Done) {
+            var AllLists = [];
+            var Allcolumns = State.columns;
+            var CurrentList = CardData.CurrentList;
+            var CardID = CardData._id;
 
-        if (CurrentList === "ORDERS") {
-            AllLists.push("ORDERS");
-        }
-
-        if (CurrentList === "OFFICE SECTION") {
-            AllLists.push("OFFICE SECTION");
-        }
-
-        Allcolumns.PRODUCTION.forEach((EachProductionList) => {
-            if (CurrentList === EachProductionList.Name) {
-                AllLists.push(EachProductionList.Name);
+            // add current list
+            if (CurrentList === "ORDERS") {
+                AllLists.push("ORDERS");
             }
-        })
 
-        if (CurrentList === "FOR DISPATCH") {
-            AllLists.push("FOR DISPATCH");
-        }
-
-        if (CurrentList === "FOR CUSTOMER COLLECTION") {
-            AllLists.push("FOR CUSTOMER COLLECTION");
-        }
-
-        Allcolumns.DRIVERS.forEach((EachDriver) => {
-            if (CurrentList === EachDriver.Name) {
-                AllLists.push(EachDriver.Name);
+            if (CurrentList === "OFFICE SECTION") {
+                AllLists.push("OFFICE SECTION");
             }
-        })
 
+            Allcolumns.PRODUCTION.forEach((EachProductionList) => {
+                if (CurrentList === EachProductionList.Name) {
+                    AllLists.push(EachProductionList.Name);
+                }
+            })
 
-        // add all other list
-
-        if (CurrentList !== "ORDERS") {
-            AllLists.push("ORDERS");
-        }
-
-        if (CurrentList !== "OFFICE SECTION") {
-            AllLists.push("OFFICE SECTION");
-        }
-
-        Allcolumns.PRODUCTION.forEach((EachProductionList) => {
-            if (CurrentList !== EachProductionList.Name) {
-                AllLists.push(EachProductionList.Name);
+            if (CurrentList === "FOR DISPATCH") {
+                AllLists.push("FOR DISPATCH");
             }
-        })
 
-        if (CurrentList !== "FOR DISPATCH") {
-            AllLists.push("FOR DISPATCH");
-        }
-
-        if (CurrentList !== "FOR CUSTOMER COLLECTION") {
-            AllLists.push("FOR CUSTOMER COLLECTION");
-        }
-
-        Allcolumns.DRIVERS.forEach((EachDriver) => {
-            if (CurrentList !== EachDriver.Name) {
-                AllLists.push(EachDriver.Name);
+            if (CurrentList === "FOR CUSTOMER COLLECTION") {
+                AllLists.push("FOR CUSTOMER COLLECTION");
             }
-        })
+
+            Allcolumns.DRIVERS.forEach((EachDriver) => {
+                if (CurrentList === EachDriver.Name) {
+                    AllLists.push(EachDriver.Name);
+                }
+            })
+
+            if (CurrentList === "DONE TODAY") {
+                AllLists.push("DONE TODAY");
+            }
 
 
-        moveSelect.onchange = function () {
-            ChangeList(CardID);
+
+            // add all other list
+
+            if (CurrentList !== "ORDERS") {
+                AllLists.push("ORDERS");
+            }
+
+            if (CurrentList !== "OFFICE SECTION") {
+                AllLists.push("OFFICE SECTION");
+            }
+
+            Allcolumns.PRODUCTION.forEach((EachProductionList) => {
+                if (CurrentList !== EachProductionList.Name) {
+                    AllLists.push(EachProductionList.Name);
+                }
+            })
+
+            if (CurrentList !== "FOR DISPATCH") {
+                AllLists.push("FOR DISPATCH");
+            }
+
+            if (CurrentList !== "FOR CUSTOMER COLLECTION") {
+                AllLists.push("FOR CUSTOMER COLLECTION");
+            }
+
+            Allcolumns.DRIVERS.forEach((EachDriver) => {
+                if (CurrentList !== EachDriver.Name) {
+                    AllLists.push(EachDriver.Name);
+                }
+            })
+
+            if (CurrentList !== "DONE TODAY") {
+                AllLists.push("DONE TODAY");
+            }
+
+
+            moveSelect.onchange = function () {
+                ChangeList(CardID);
+            }
+
+            AllLists.forEach((OneList) => {
+                let OneOption = document.createElement('option');
+                OneOption.value = OneList;
+                OneOption.innerHTML = OneList;
+                OneOption.style.padding = "5px 0";
+                moveSelect.appendChild(OneOption);
+            })
+        } else {
+            moveSelect.ariaDisabled = true;
+            // alert("Move disabled");
         }
 
-        AllLists.forEach((OneList) => {
-            let OneOption = document.createElement('option');
-            OneOption.value = OneList;
-            OneOption.innerHTML = OneList;
-            OneOption.style.padding = "5px 0";
-            moveSelect.appendChild(OneOption);
-        })
 
 
         // Handle Copy Button 
@@ -3761,10 +3951,10 @@
                     var item = {
                         Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
                         Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
-                        FileNo: OneItem.getElementsByClassName('HiddenFileNo')[0].value,
+                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0].textContent,
                         Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
-                        ColorCode: OneItem.getElementsByClassName('HiddenColorCode')[0].value,
-                        SubCategoryName: OneItem.getElementsByClassName('HiddenSubCategoryName')[0].value,
+                        ColorCode: OneItem.getElementsByClassName('FormulaColorCode')[0].textContent,
+                        SubCategoryName: OneItem.getElementsByClassName('FormulaSubCategoryName')[0].textContent,
                     }
                     if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
                         item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
@@ -3851,7 +4041,7 @@
 
                 // api call
                 // URL of your backend API endpoint
-                var apiUrl = `/sales/UpdareCardOrder/${cardID}`;
+                var apiUrl = `/office/UpdareCardOrder/${cardID}`;
 
                 // Convert the data object to a JSON string
                 var jsonData = JSON.stringify(CompleteOrderData);
@@ -3900,7 +4090,42 @@
 
 
 
-   
+    /*
+        function openMoveOptions() {
+            // Create a select element
+            var moveSelect = document.createElement('select');
+    
+            // Add options to the select element
+            var option1 = document.createElement('option');
+            option1.text = 'Option 1';
+            var option2 = document.createElement('option');
+            option2.text = 'Option 2';
+            var option3 = document.createElement('option');
+            option3.text = 'Option 3';
+    
+            moveSelect.add(option1);
+            moveSelect.add(option2);
+            moveSelect.add(option3);
+    
+            // Attach a click event listener to the options
+            moveSelect.addEventListener('change', function () {
+                // Call your function when an option is selected
+                handleMoveOption(this.value);
+                // Remove the select element
+                this.parentNode.removeChild(this);
+            });
+    
+            // Replace the "Move" button with the select element
+            var moveButton = document.querySelector('#PopActionBtnSection button:first-child');
+            moveButton.parentNode.replaceChild(moveSelect, moveButton);
+        }
+    
+        function handleMoveOption(selectedOption) {
+            // Implement your logic here based on the selected option
+            alert('Selected Move Option:', selectedOption);
+        }
+    
+    */
     function toggleMoveOptions() {
         var moveSelect = document.getElementById('moveSelect');
 
@@ -3939,7 +4164,7 @@
             }
         }
 
-        const response = await fetch(`/sales/ChangeListofCard/${CardID}/${NewListName}/${Designation}`);
+        const response = await fetch(`/office/ChangeListofCard/${CardID}/${NewListName}/${Designation}`);
         const data = await response.json();
 
         fetchAllCards();
@@ -3965,7 +4190,7 @@
             }
         }
 
-        const response = await fetch(`/sales/ChangeListofCardName/${CardName}/${DropColumeName}/${Designation}`);
+        const response = await fetch(`/office/ChangeListofCardName/${CardName}/${DropColumeName}/${Designation}`);
         const data = await response.json();
 
         fetchAllCards();
@@ -4203,7 +4428,7 @@
 
     async function CreateNewLabel(Color, ColorlabelName) {
         //  let colorWithoutHash = Color.slice(1);
-        var url = `/sales/CreateNewLabel/${Color.slice(1)}/${ColorlabelName}`;
+        var url = `/office/CreateNewLabel/${Color.slice(1)}/${ColorlabelName}`;
         console.log(url);
 
         const response = await fetch(url);
@@ -4254,7 +4479,7 @@
 
 
     async function CreateACopyOfCard(CardID) {
-        var url = `/sales/CreateACopyOfCard/${CardID}`;
+        var url = `/office/CreateACopyOfCard/${CardID}`;
         console.log(url);
 
         const response = await fetch(url);
@@ -4263,7 +4488,7 @@
     }
 
     async function MoveCardToArchived(CardID) {
-        var url = `/sales/MoveCardToArchived/${CardID}`;
+        var url = `/office/MoveCardToArchived/${CardID}`;
         console.log(url);
 
         const response = await fetch(url);
@@ -4342,6 +4567,124 @@
             }
         });
     }
+
+    function searchBeforeWeek(SearchInput) {
+        if (SearchInput === "") {
+            State.columns.DONE.OLD_MATCHED_CARDS = [];
+            loadDoneBeforeWeekListCards();
+        } else {
+            var AllOldCards = State.columns.DONE.BEFORE_A_WEEK;
+            console.log("AllOLDCARDSSS:", AllOldCards);
+
+
+            const matchingObjects = [];
+
+            function searchObject(obj, searchInput) {
+                var ThisCard = obj;
+                for (const key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        const value = obj[key];
+
+                        if (typeof value === 'object') {
+                            // Recursive call for nested objects
+                            searchObject(value, searchInput);
+                        } else {
+                            // Check if the current value contains the search input (case-insensitive)
+                            if (String(value).toLowerCase().includes(String(searchInput).toLowerCase())) {
+                                //if (obj.CheckListItems) {
+                                //  matchingObjects.push(ThisCard);
+                                //console.log("ThisCard: ",ThisCard);
+                                //}
+                                return true;
+                                break; // Stop searching this object once a match is found
+                            }
+                            /*else {
+                                return false;
+                            }*/
+                        }
+                    }
+                }
+            }
+
+            AllOldCards.forEach((card) => {
+                //searchObject(card, SearchInput);
+                if (searchObject(card, SearchInput)) {
+                    matchingObjects.push(card);
+                    console.log("Matchig: ", card);
+                } else {
+                    console.log("Not Matching: ", card);
+                }
+            });
+
+            // Display the matching objects
+            console.log(matchingObjects);
+            State.columns.DONE.OLD_MATCHED_CARDS = matchingObjects;
+            loadDoneBeforeWeekListCards();
+        }
+    }  
+
+
+  
+
+    function toggleRadioButton(radioButtonNumber) {
+        const radio1 = document.getElementById("InpersonRadio");
+        const radio2 = document.getElementById("CallRadio");
+
+        if (radioButtonNumber === 1) {
+            radio1.checked = true;
+            radio2.checked = false;
+        } else if (radioButtonNumber === 2) {
+            radio1.checked = false;
+            radio2.checked = true;
+        }
+
+        updateButtonStyles();
+    }
+
+    function updateButtonStyles() {
+        const radio1 = document.getElementById("InpersonRadio");
+        const radio2 = document.getElementById("CallRadio");
+        const radio1Button = document.querySelector('.toggle-button:nth-child(1)');
+        const radio2Button = document.querySelector('.toggle-button:nth-child(2)');
+
+        if (radio1.checked) {
+            radio1Button.classList.add('active');
+            radio2Button.classList.remove('active');
+        } else if (radio2.checked) {
+            radio1Button.classList.remove('active');
+            radio2Button.classList.add('active');
+        }
+    }
+
+
+
+
+    function resetMainPopup() {
+        document.getElementById('followUPserial_no').value = "";
+        document.getElementById('followUPCustomerName').value = "";
+        document.getElementById('PuposeofVisit').value = "";
+        const radio1Button = document.querySelector('.toggle-button:nth-child(1)');
+        const radio2Button = document.querySelector('.toggle-button:nth-child(2)');
+        radio2Button.classList.remove('active');
+        radio1Button.classList.remove('active');
+        document.getElementById('InpersonRadio').checked = false;
+        document.getElementById('CallRadio').checked = false;
+        document.getElementById('followUPComment').value = "";
+        document.getElementById('ContactPersonsSelect').value = "";
+        var ContactPersonsSelect = document.getElementById('ContactPersonsSelect');
+        ContactPersonsSelect.innerHTML = "";
+        var ContactOPtion = document.createElement('option');
+        ContactOPtion.textContent = "Select a contact person";
+        ContactOPtion.setAttribute('selected', 'true');
+        ContactOPtion.disabled = true;
+        ContactPersonsSelect.appendChild(ContactOPtion);
+
+
+    }
+
+
+
+
 
 
 </script>
@@ -4449,6 +4792,11 @@
         /* Icon color */
     }
 
+    .OldSearchIcon {
+        left: 9px;
+        top: 51%;
+    }
+
     .globalSeaarch {
         left: 10px;
     }
@@ -4484,6 +4832,10 @@
         color: #00FDFD;
         border: 1px solid #00FDFD;
         transition: color 0.3s, background-color 0.3s;
+    }
+
+    .followupBTN {
+        width: 210px;
     }
 
 
@@ -4550,6 +4902,7 @@
         cursor: grabbing;
     }
 
+
     .ListsCollections.grab {
         cursor: grab;
     }
@@ -4575,6 +4928,7 @@
     .ListHeaderText,
     .ProdctionSectionHeaderText,
     .ReadySectionHeaderText,
+    .ReadySecHed,
     .DriverSectionHeaderText,
     .DoneSectionHeaderText {
         color: #fff;
@@ -4853,6 +5207,10 @@
     /* Add additional styling for the search input if needed */
     .search-input {
         /* Additional styling for the search input container */
+    }
+
+    .DoneColumnHeader {
+        gap: 1rem;
     }
 
 
@@ -5990,6 +6348,134 @@
     #NewReadyProductsInput {
         width: 25rem;
     }
+
+    #mainPopup {
+        display: none;
+    }
+
+    .SerialNoDiv,
+    .FollowUpCustNameDiv,
+    .FollowUpConnectedDiv,
+    .FollowUpContactedDiv {
+        margin-top: 2rem;
+        display: flex;
+
+    }
+
+    #followUPserial_no,
+    #followUPCustomerName,
+    .VisitPurposeFollowup {
+        background-color: #3B444C;
+        margin: 0 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        width: 20rem;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        border: 1px solid #B3B7BA;
+    }
+
+    #followUPserial_no {
+        background-color: transparent;
+        border: none;
+    }
+
+    #followUPCustomerName {
+        width: 25rem;
+    }
+
+    .VisitPurposeFollowup {
+        width: 25rem;
+    }
+
+    .toggle-container {
+        display: flex;
+        gap: 10px;
+        padding-left: 1rem;
+    }
+
+    .toggle-button,
+    .followUpSaveBTN {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #3b444c;
+        color: #B3B7BA;
+        border: 1px solid #B3B7BA;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+        user-select: none;
+        width: 10rem;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .toggle-button input {
+        display: none;
+    }
+
+    .toggle-button.active {
+        background-color: #5787ff;
+        /* Red color when active */
+        color: white;
+    }
+
+    .toggle-button label {
+        margin: 0;
+    }
+
+    .FollowUpCommentDiv,
+    #followUPComment {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    #followUPComment {
+        background-color: transparent;
+        border-radius: 10px;
+        border: 1px solid #B3B7BA;
+        padding: 1rem;
+        color: #B3B7BA;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .FollowUpSaveBTNDiv {
+        margin: 2rem 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .followUpSaveBTN:hover {
+        background-color: #353d52 !important;
+    }
+
+    #FollowUpcustomerSuggestions {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        z-index: 999;
+        background-color: #3b444c;
+        border: 1px solid gray;
+        padding: 5px;
+        left: 221px;
+        top: 229px;
+    }
+
+    .FollowUpCustomerFilterOPtion {
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .FollowUpCustomerFilterOPtion:hover {
+        background-color: #24292d;
+    }
+
 
 
 
