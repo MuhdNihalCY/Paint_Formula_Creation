@@ -75,7 +75,10 @@ module.exports = {
 
             var Subcategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).find({ Category_Id: id }).toArray();
             if (Subcategories.length > 0) {
-                await db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({ "_id": new ObjectId(id) }).then((response) => {
+                State.error = "Category Must be empty before deleting the Category. ie, no Subcategory Should be avalailable under this Category."
+                resolve(State);
+            } else {
+                await db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({ "Category_Id": parseInt(id) }).then((response) => {
                     // console.log(response);
                     if (response.deletedCount) {
                         State.Status = true;
@@ -85,9 +88,6 @@ module.exports = {
                     }
                     resolve(State);
                 })
-            } else {
-                State.error = "Category Must be empty before deleting the Category. ie, no Subcategory Should be avalailable under this Category."
-                resolve(State);
             }
         })
     },
@@ -1036,7 +1036,7 @@ module.exports = {
                     BranchStocks.push({
                         BranchID: BranchID,
                         BranchName: Branch.BranchName,
-                        Stock: parseInt(NewStock) 
+                        Stock: parseInt(NewStock)
                     });
                 }
 
@@ -1053,7 +1053,7 @@ module.exports = {
                 var ThisBranchStock = {
                     BranchID: BranchID,
                     BranchName: Branch.BranchName,
-                    Stock: parseInt(NewStock) 
+                    Stock: parseInt(NewStock)
                 }
                 BranchStocks.push(ThisBranchStock);
 
@@ -1096,7 +1096,7 @@ module.exports = {
                     BranchStocks.push({
                         BranchID: BranchID,
                         BranchName: Branch.BranchName,
-                        Stock: parseInt(NewStock) 
+                        Stock: parseInt(NewStock)
                     });
                 }
 
@@ -1113,7 +1113,7 @@ module.exports = {
                 var ThisBranchStock = {
                     BranchID: BranchID,
                     BranchName: Branch.BranchName,
-                    Stock: parseInt(NewStock) 
+                    Stock: parseInt(NewStock)
                 }
                 BranchStocks.push(ThisBranchStock);
 
@@ -1127,6 +1127,80 @@ module.exports = {
 
             }
 
+        })
+    },
+    deleteUserByUserID: (UserID) => {
+        return new Promise(async (resolve, reject) => {
+            var User = await db.get().collection(collection.USERS_COLLECTION).findOne({ UserID: parseInt(UserID) });
+            User.DeletedTime = Date.now();
+
+            await db.get().collection(collection.DELETED_USERS_COLLECTION).insertOne(User);
+
+            await db.get().collection(collection.USERS_COLLECTION).deleteOne({ UserID: parseInt(UserID) }).then(() => {
+                resolve();
+            })
+        })
+    },
+    AddBranchToEachDatastoreLedgerData: (LedgerData,CustomerName,UserName, Branch) => {
+        return new Promise(async (resolve, reject) => {
+
+            // await LedgerData.TableData.forEach((EachPurchaseData)=>{
+            //     EachPurchaseData.Branch = Branch;
+            // })
+
+            // await db.get().collection(collection.LEDGER_UPLOADED_DATA).insertOne(LedgerData);
+            // // check to avoid dplicates
+            // var AllPurchases = await db.get().collection(collection.CUSTOMER_PURCHASE_COLLECTION).find({"Branch":Branch});
+
+            // var PurchaseDataWithoutDuplicate = [];
+            // await AllPurchases.forEach((EachOldPurchase)=>{
+            //     LedgerData.TableData.forEach((EachPurchaseData)=>{
+
+            //         if(EachOldPurchase.VchNo !== EachPurchaseData.VchNo){
+            //             PurchaseDataWithoutDuplicate.push(EachPurchaseData);
+            //         }
+            //     })
+            // })
+
+            // await db.get().collection(collection.CUSTOMER_PURCHASE_COLLECTION).insertMany(LedgerData.TableData).then(()=>{
+            //     resolve();
+            // })
+
+
+            // Update each purchase data with the provided branch
+            LedgerData.TableData.forEach((EachPurchaseData) => {
+                EachPurchaseData.Branch = Branch;
+                EachPurchaseData.UploadedPerson = UserName; 
+                EachPurchaseData.CustomerName = CustomerName; 
+                EachPurchaseData.InsertedTime = Date.now();
+            });
+
+            LedgerData.Branch = Branch;
+
+            // Insert LedgerData into the Ledger Uploaded Data collection
+            await db.get().collection(collection.LEDGER_UPLOADED_DATA).insertOne(LedgerData);
+
+            // Fetch all purchases for the given branch
+            const AllPurchases = await db.get().collection(collection.CUSTOMER_PURCHASE_COLLECTION).find({ "Branch": Branch }).toArray();
+
+            // Identify and filter out duplicate purchase data
+            const PurchaseDataWithoutDuplicate = LedgerData.TableData.filter((newPurchaseData) => {
+                return !AllPurchases.some((oldPurchase) => oldPurchase.VchNo === newPurchaseData.VchNo);
+            });
+
+            const PurchaseDuplicates = LedgerData.TableData.filter((newPurchaseData) => {
+                return AllPurchases.some((oldPurchase) => oldPurchase.VchNo === newPurchaseData.VchNo);
+            });
+
+            console.log("Purchase Duplicates found: ",PurchaseDuplicates.length);
+            console.log("PurchaseData Without Duplicate: ",PurchaseDataWithoutDuplicate.length);
+
+
+            // Insert non-duplicate purchase data into the Customer Purchase collection
+            if (PurchaseDataWithoutDuplicate.length > 0) {
+                await db.get().collection(collection.CUSTOMER_PURCHASE_COLLECTION).insertMany(PurchaseDataWithoutDuplicate);
+            }
+            resolve();
         })
     },
 

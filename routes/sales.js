@@ -6,6 +6,10 @@ const whatsappHelper = require('../helpers/whatsappHelper');
 const multer = require('multer');
 var FindGeoss = require('../helpers/geoLoactions');
 const useragent = require('useragent');
+const adminHelpers = require('../helpers/adminHelpers');
+const ExcelJS = require('exceljs');
+const { Readable } = require('stream');
+const ledgerHelper = require('../helpers/ledgerHelper');
 
 
 
@@ -59,8 +63,8 @@ router.get('/getAllCardsFromOrders', SalesVerifyLogin, (req, res) => {
     //         res.json({ AllCards });
     //     })
     // })
-
-    employeeHelpers.GetAllCardsByListName("ORDERS").then((AllCards) => {
+    var Branch = req.session.SalesData.Branch;
+    employeeHelpers.GetAllCardsByListName("ORDERS", Branch).then((AllCards) => {
         console.log("Orders Cards", AllCards);
         res.json({ AllCards });
     })
@@ -202,7 +206,7 @@ router.get('/getAllCardsFromBoard', SalesVerifyLogin, (req, res) => {
     //         })
     //     })
     // })
-    employeeHelpers.GetAllCards().then((AllCards) => {
+    employeeHelpers.GetAllCards(req.session.SalesData.Branch).then((AllCards) => {
         res.json({ AllCards });
     })
 })
@@ -246,14 +250,57 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', SalesVerifyLo
 })
 
 router.get('/home', SalesVerifyLogin, (req, res) => {
+    // give all cards a branch   
+    // employeeHelpers.GiveAllCardABranch().then(()=>{        
+    // })
+
     res.render('sales/SalesCustomTrello', { SalesLogged: req.session.SalesData });
 });
 
+router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
+    var BranchName = req.session.SalesData.Branch;
+    employeeHelpers.GetAllCards(BranchName).then((AllCards) => {
+        //  console.log(AllCards);
+        employeeHelpers.getAllLists(BranchName).then((AllLists) => {
+            employeeHelpers.getAllUsers(BranchName).then((AllUsers) => {
+                employeeHelpers.getAllCustomers(BranchName).then((AllCustomers) => {
+                    employeeHelpers.GetAllFormulations().then((Formulas) => {
+                        employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas).then((UpdatedFromuls) => {
+                            employeeHelpers.getAllLabels(BranchName).then((AllLabels) => {
+
+                                // console.log("Formulas = ", Formulas[2]);
+
+                                var data = {
+                                    AllCards: AllCards,
+                                    AllLists: AllLists,
+                                    AllUsers: AllUsers,
+                                    Customers: AllCustomers,
+                                    Formulas: UpdatedFromuls,
+                                    Labels: AllLabels
+                                }
+                                res.json(data);
+                            })
+                        })
+                    })
+
+                })
+            })
+        })
+    })
+})
+
 router.post('/saveCustomer', SalesVerifyLogin, (req, res) => {
-    employeeHelpers.SaveCustomer(req.body).then((id) => {
-        var data = req.body
-        data._id = id;
-        res.json({ data });
+    employeeHelpers.SaveCustomer(req.body, req.session.SalesData).then((Response) => {
+        if (Response.Error) {
+            res.json({ Error: Response.Error});
+        } else {
+            var data = req.body
+            data._id = Response.response;
+            res.json({ data });
+        }
+
+       
+
     })
 })
 
@@ -335,6 +382,9 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
     if (req.files) {
         NewOrder.IsAttachments = true;
     }
+
+    // adding Branch
+    NewOrder.Branch = req.session.SalesData.Branch;
 
     console.log("New Card: ", NewOrder);
 
@@ -521,10 +571,11 @@ router.get('/ChangeListofCardName/:CardName/:DropColumeName/:Designation', Sales
 router.get('/CreateNewLabel/:Color/:ColorlabelName', SalesVerifyLogin, (req, res) => {
     let Color = req.params.Color;
     let ColorlabelName = req.params.ColorlabelName;
+    var Branch = req.session.SalesData.Branch;
 
     console.log("Color" + Color + "  Label:" + ColorlabelName);
 
-    employeeHelpers.CreateNewLabel(Color, ColorlabelName).then(() => {
+    employeeHelpers.CreateNewLabel(Color, ColorlabelName, Branch).then(() => {
         res.json({ Status: true });
     })
 })
@@ -570,37 +621,117 @@ router.get('/MoveCardToArchived/:CardID', SalesVerifyLogin, (req, res) => {
     // })
 })
 
-router.get('/Customer',SalesVerifyLogin,(req,res)=>{
-    res.render('sales/CustomerCollection',{SalesLogged:true});
+router.get('/Customer', SalesVerifyLogin, (req, res) => {
+    res.render('sales/CustomerCollection', { SalesLogged: true });
 })
 
-router.post('/Followup/api',(req,res)=>{
+router.post('/Followup/api', (req, res) => {
     req.body.EmployeeName = req.session.SalesData.UserName;
     req.body.Designation = req.session.SalesData.Designation;
     req.body.InsertedTime = Date.now();
-   
-    employeeHelpers.StoreCustomerFollowUP(req.body).then(()=>{
-        res.json({Status:true});
+    req.body.Branch = req.session.SalesData.Branch;
+
+    employeeHelpers.StoreCustomerFollowUP(req.body).then(() => {
+        res.json({ Status: true });
     })
 })
 
-router.get('/GetAllFollowup/api',(req,res)=>{
-    employeeHelpers.GetAllCustomerFollowUp().then((data)=>{
+router.get('/GetAllFollowup/api', (req, res) => {
+    let Branch = req.session.SalesData.Branch
+    employeeHelpers.GetAllCustomerFollowUp(Branch).then((data) => {
         res.json(data);
     })
 })
 
-router.get('/GetAllCustomersAndFollowUp/api',(req,res)=>{
-    employeeHelpers.GetAllCustomersAndFollowups().then((data)=>{
+router.get('/GetAllCustomersAndFollowUp/api', (req, res) => {
+    let Branch = req.session.SalesData.Branch
+    employeeHelpers.GetAllCustomersAndFollowups(Branch).then((data) => {
         res.json(data);
     })
 })
 
-router.get('/getallorders/api',(req,res)=>{
-    employeeHelpers.GetAllPurchasedOrders().then((AllOrders)=>{
+router.get('/getallorders/api', (req, res) => {
+    let Branch = req.session.SalesData.Branch
+    employeeHelpers.GetAllPurchasedOrders(Branch).then((AllOrders) => {
         res.json(AllOrders);
     })
 })
+
+router.post('/uploadLedgerData', async (req, res) => {
+
+    try {
+        // Check if the file was uploaded
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).send('No files were uploaded.');
+        }
+
+        // The uploaded file is available in req.files.excelFile
+        const excelFile = req.files.excelFile;
+        // Example: Log the file details
+        console.log('Uploaded File:', excelFile);
+
+        // Get start data and end data
+        let data = [];
+        // Create a new workbook using exceljs
+        const workbook = new ExcelJS.Workbook();
+
+        // Use the file data directly from req.files.excelFile.data
+        await workbook.xlsx.load(excelFile.data);
+
+        // Get the last worksheet
+        const lastSheet = workbook.getWorksheet(workbook.worksheets.length);
+
+        // Convert the last sheet to JSON
+        const lastSheetData = lastSheet.getSheetValues();
+
+        // Append the data to the result array
+        data.push(...lastSheetData);
+
+        const TestDatas = await ledgerHelper.doSomeSampleTest(data);
+        const datas = await ledgerHelper.doAdvancedSampleTest(TestDatas.Arrays);
+
+        // Get table data.
+        // Convert the Buffer to a Readable stream
+        const stream = new Readable();
+        stream.push(excelFile.data);
+        stream.push(null);
+
+        const workbookTable = new ExcelJS.Workbook();
+        await workbookTable.xlsx.read(stream);
+
+        // Get the last sheet for table data
+        const lastSheetTable = workbookTable.getWorksheet(workbookTable.worksheets.length);
+
+        // Extract column names from the 8th row
+        const columnNames = lastSheetTable.getRow(8).values;
+
+        // Map the keys to the desired format for table data
+        const mappedData = [];
+        lastSheetTable.eachRow({ includeEmpty: false, range: 9 }, (row, rowNumber) => {
+            const rowData = {};
+            row.values.forEach((value, index) => {
+                rowData[columnNames[index]] = value;
+            });
+            mappedData.push(rowData);
+        });
+
+        const UpdatedMapedData = await ledgerHelper.OranizeTableData(mappedData, datas.Objects);
+
+        // After all are executed, proceed to res.send
+        const finalOutput = datas.Objects
+
+        finalOutput.TableData = UpdatedMapedData
+
+        adminHelpers.AddBranchToEachDatastoreLedgerData(finalOutput, req.body.CustomerName, req.session.SalesData.UserName, req.session.SalesData.Branch).then(() => {
+            // res.send(finalOutput);
+            res.redirect('/sales/Customer');
+        })
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+
+});
+
 
 router.get('/Logout', SalesVerifyLogin, (req, res) => {
     req.session.SalesData.destroy();

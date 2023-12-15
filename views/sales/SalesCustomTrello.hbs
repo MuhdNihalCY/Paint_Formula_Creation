@@ -901,7 +901,7 @@
         initializeState();
 
         try {
-            const backendURL = '/getAllCardAndListsAndUsersToManagement';
+            const backendURL = '/sales/getAllCardAndListsAndUsersToManagement';
             //// // console.log("Called Fetch api")
             const response = await fetch(backendURL);
 
@@ -2619,8 +2619,8 @@
             }
         }
 
-        if (!Customername || !Address || !Loaction || !SalesEx || !Co_ordinator || Contact.length === 0) {
-            // alert("Please fill all fields");
+        if (!Customername || !Address || !Loaction || !SalesEx || !Co_ordinator || Contact.length === 0 || !Contact[0].Name || !Contact[0].CallCountryCode || !Contact[0].CallNumber || !Contact[0].WhatsappCountryCode || !Contact[0].WhatsappNumber) {
+            alert("Fill in all fields to save the customer. Ensure no fields are left empty.");
         } else {
             // URL of your backend API endpoint
             var apiUrl = '/sales/saveCustomer/';
@@ -2656,13 +2656,17 @@
                 .then(data => {
                     // Handle the data from the server
                     // // console.log('Response from server:', data);
-                    CloseCustomerCreationPopup();
-                    resetCustomerValues();
-                    fetchAllCards();
+                    if (data.Error) {
+                        alert(data.Error);
+                    } else {
+                        CloseCustomerCreationPopup();
+                        resetCustomerValues();
+                        fetchAllCards();
+                    }
                 })
                 .catch(error => {
                     // Handle errors
-                    console.error('Error:', error);
+                    alert('Error:', error);
                 });
 
         }
@@ -3401,7 +3405,7 @@
 
 
                 // api call
-                // URL of your backend API endpoint
+                // URL of your backend API endpoint 
                 var apiUrl = '/sales/CreateNewOrder/';
 
                 // Convert the data object to a JSON string

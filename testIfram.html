@@ -1,21 +1,56 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>My Page with iframe</title>
-    <style>
-        /* CSS for the header */
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Table Extractor</title>
+  </head>
+  <body>
+    <label for="pdfInput">file</label>
+    <input
+      type="file"
+      id="pdfInput"
+      accept=".pdf"
+      onchange="handleFileSelect()"
+    />
+    <div id="output"></div>
+
+    <script src="https://unpkg.com/pdf-lib"></script>
+    <script>
+      async function handleFileSelect() {
+        const fileInput = document.getElementById("pdfInput");
+        const outputDiv = document.getElementById("output");
+
+        // Check if a file is selected
+        if (fileInput.files.length > 0) {
+          const pdfFile = fileInput.files[0];
+
+          const reader = new FileReader();
+          reader.onload = async function (e) {
+            const pdfData = e.target.result;
+
+            // Use pdf-lib to load the PDF data
+            const { PDFDocument } = window["pdf-lib"];
+            const pdfDoc = await PDFDocument.load(pdfData);
+
+            // Extract text from each page
+            let textContent = "";
+            for (let i = 0; i < pdfDoc.getPageCount(); i++) {
+              const page = await pdfDoc.getPage(i + 1);
+              textContent += await page.getText();
+            }
+
+            // Display the extracted text in the output div
+            outputDiv.innerHTML = `<p>${textContent}</p>`;
+          };
+
+          // Read the PDF file as an ArrayBuffer
+          reader.readAsArrayBuffer(pdfFile);
+        } else {
+          // No file selected
+          outputDiv.innerHTML = "Please select a PDF file.";
         }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Header Text</h1>
-    </header>
-    <iframe src="https://trello.com/" width="100%" height="500"></iframe>
-</body>
+      }
+    </script>
+  </body>
 </html>

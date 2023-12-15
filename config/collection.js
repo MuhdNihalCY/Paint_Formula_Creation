@@ -12,10 +12,13 @@ module.exports={
     CUSTOMER_CATETGORY_COLLECTION: 'Customer_Category_Collection',
     EDITED_FROMULA_COLLECTION: 'Updated_Fromula_Collection',
     USERS_COLLECTION:'Users_Collection',
+    DELETED_USERS_COLLECTION:'Deleted_Users_Collection',
     CARD_COLLECTION:'Card_Collection',
     SALES_MODIFIED_CARDS:'Sales_Modified_Cards',
     LIST_COLLECTION:'List_Collection',
     LABEL_COLLECTION:'Label_Collectin',
     CUSTOMER_FOLLOW_UP:'Customer_Follow_Up',
-    BRANCH_COLLECTION:'Branch_Collection'
+    BRANCH_COLLECTION:'Branch_Collection',
+    CUSTOMER_PURCHASE_COLLECTION:'Customer_Purchase_Collection',
+    LEDGER_UPLOADED_DATA:'Ledger_Uploaded_Data'
 };

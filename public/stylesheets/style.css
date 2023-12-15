@@ -203,7 +203,7 @@ a {
 
 .ADSidebar {
   width: 25%;
-  /* height: 130%; */
+  height: 180%;
   position: absolute;
   background-color: #3D3D3D;
   padding-bottom: 10rem;
@@ -370,7 +370,7 @@ a {
 }
 
 .ADMainAddButton {
-  width: 250px;
+  width: 300px;
   height: 50px;
   background-color: #3D3D3D;
   border-radius: 25px;

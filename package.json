@@ -13,6 +13,7 @@
     "debug": "~2.6.9",
     "device-detector": "^1.0.2",
     "dotenv": "^16.3.1",
+    "exceljs": "^4.4.0",
     "express": "~4.16.1",
     "express-fileupload": "^1.4.0",
     "express-handlebars": "^7.0.7",
@@ -26,7 +27,9 @@
     "node-fetch": "^3.3.2",
     "nodemon": "^3.0.2",
     "pdfmake": "^0.2.7",
+    "stream": "^0.0.2",
     "twilio": "^4.19.0",
-    "useragent": "^2.3.0"
+    "useragent": "^2.3.0",
+    "xlsx": "^0.18.5"
   }
 }

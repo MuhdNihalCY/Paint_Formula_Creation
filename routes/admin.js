@@ -3,6 +3,11 @@ var router = express.Router();
 var adminHelpers = require('../helpers/adminHelpers');
 const trelloHelpers = require('../helpers/trelloHelpers');
 const whatsappHelper = require('../helpers/whatsappHelper');
+const reader = require('xlsx');
+const xlsx = require('xlsx');
+const ExcelJS = require('exceljs');
+const { Readable } = require('stream');
+const ledgerHelper = require('../helpers/ledgerHelper');
 
 const AdminUser = {
   userName: "Admin",
@@ -24,6 +29,13 @@ const verifyLogin = (req, res, next) => {
 router.get('/', verifyLogin, function (req, res, next) {
   adminHelpers.getCategory().then((AllCategory) => {
     // console.log("Calling Admin Dash")
+
+    // ledgerHelper.doSomeSampleTest().then((data) => {
+    //   res.send(data);
+    //   // ledgerHelper.doAdvancedSampleTest(data).then((AdvancedData)=>{
+    //   // })
+    // })
+
     if (req.query.Error) {
       res.render('admin/Dashboard', { admin: true, AllCategory, AddError: req.query.Error });
     } else if (req.query.DelError) {
@@ -886,6 +898,92 @@ router.get('/UpdateAdditiveStock/:BranchID/:AdditiveID/:NewStock/api', verifyLog
     res.json({ Status: false });
   }
 })
+
+router.get('/deleteUser/:UserID', verifyLogin, (req, res) => {
+  console.log(req.params.UserID);
+  adminHelpers.deleteUserByUserID(req.params.UserID).then(() => {
+    res.redirect('/admin/Users')
+  })
+})
+
+
+router.get('/GetLedgerData', verifyLogin, (req, res) => {
+  res.render('admin/GetLedgerData', { admin: true })
+})
+
+router.post('/uploadLedgerData', async (req, res) => {
+
+  try {
+    // Check if the file was uploaded
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send('No files were uploaded.');
+    }
+
+    // The uploaded file is available in req.files.excelFile
+    const excelFile = req.files.excelFile;
+    // Example: Log the file details
+    console.log('Uploaded File:', excelFile);
+
+    // Get start data and end data
+    let data = [];
+    // Create a new workbook using exceljs
+    const workbook = new ExcelJS.Workbook();
+
+    // Use the file data directly from req.files.excelFile.data
+    await workbook.xlsx.load(excelFile.data);
+
+    // Get the last worksheet
+    const lastSheet = workbook.getWorksheet(workbook.worksheets.length);
+
+    // Convert the last sheet to JSON
+    const lastSheetData = lastSheet.getSheetValues();
+
+    // Append the data to the result array
+    data.push(...lastSheetData);
+
+    const TestDatas = await ledgerHelper.doSomeSampleTest(data);
+    const datas = await ledgerHelper.doAdvancedSampleTest(TestDatas.Arrays);
+
+    // Get table data.
+    // Convert the Buffer to a Readable stream
+    const stream = new Readable();
+    stream.push(excelFile.data);
+    stream.push(null);
+
+    const workbookTable = new ExcelJS.Workbook();
+    await workbookTable.xlsx.read(stream);
+
+    // Get the last sheet for table data
+    const lastSheetTable = workbookTable.getWorksheet(workbookTable.worksheets.length);
+
+    // Extract column names from the 8th row
+    const columnNames = lastSheetTable.getRow(8).values;
+
+    // Map the keys to the desired format for table data
+    const mappedData = [];
+    lastSheetTable.eachRow({ includeEmpty: false, range: 9 }, (row, rowNumber) => {
+      const rowData = {};
+      row.values.forEach((value, index) => {
+        rowData[columnNames[index]] = value;
+      });
+      mappedData.push(rowData);
+    });
+    
+    const UpdatedMapedData = await ledgerHelper.OranizeTableData(mappedData,datas.Objects);
+
+    // After all are executed, proceed to res.send
+    const finalOutput = datas.Objects
+
+    finalOutput.TableData = UpdatedMapedData
+    adminHelpers.storeLedgerData(finalOutput).then(()=>{
+      // res.send(finalOutput);
+      res.redirect('/sales/Customer');
+    })
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+
+});
 
 // router.get('/ViewBranch/:BranchName',verifyLogin,(req,res) => {
 //   adminHelpers.getBranchByName(req.params.BranchName).then((Branch)=>{

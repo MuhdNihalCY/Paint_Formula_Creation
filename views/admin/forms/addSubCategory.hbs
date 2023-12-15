@@ -2,7 +2,7 @@
     <div class="ADSubCategoryWholeFrame">
         <div class="container">
             <div class="ADSubCategorySubPageSsection">
-                <div class="col-md-7">
+                <div class="col-md-11">
                     <div class="AddSubCategoryPage">
                         {{#if EditSubcategory}}
                         <p class="ADAddCategoryFromHeader text-center">Edit Sub Category</p>
@@ -168,19 +168,23 @@
                                                 <div class="Binder1EquationTopSection">
                                                     <p>( Total tinter X </p>
                                                     <input type="text" name="Binder1Avalue" class="BinderInputVariable"
-                                                        value="{{SubCategory.Binder1Avalue}}" >
+                                                        oninput="validateNumericInput(this)"
+                                                        value="{{SubCategory.Binder1Avalue}}">
                                                     <p> X Gloss or Matt ) - ( </p>
                                                     <input type="text" name="Binder1Bvalue" class="BinderInputVariable"
-                                                        value="{{SubCategory.Binder1Bvalue}}" >
+                                                        oninput="validateNumericInput(this)"
+                                                        value="{{SubCategory.Binder1Bvalue}}">
                                                     <p> X </p>
                                                     <input type="text" name="Binder1Cvalue" class="BinderInputVariable"
-                                                        value="{{SubCategory.Binder1Cvalue}}" >
+                                                        oninput="validateNumericInput(this)"
+                                                        value="{{SubCategory.Binder1Cvalue}}">
                                                     <p> X Total tinter )</p>
                                                 </div>
                                                 <hr>
                                                 <div class="Binder1EquationBottomSection">
                                                     <input type="text" name="Binder1dvalue" class="BinderInputVariable"
-                                                        value="{{SubCategory.Binder1dvalue}}" >
+                                                        oninput="validateNumericInput(this)"
+                                                        value="{{SubCategory.Binder1dvalue}}">
                                                 </div>
                                             </div>
                                         </div>
@@ -241,8 +245,9 @@
                                                 <input type="text" name="Binder2XvalueHidden" id="Binder2XvalueHidden"
                                                     class="BinderInputVariable" value="{{SubCategory.Binder2Avalue}}">
 
-                                                <input type="text" name="Binder2XWithoutB1Hidden" id="Binder2XWithoutB1Hidden"
-                                                    class="BinderInputVariable" value="{{SubCategory.Binder2EQ2}}">
+                                                <input type="text" name="Binder2XWithoutB1Hidden"
+                                                    id="Binder2XWithoutB1Hidden" class="BinderInputVariable"
+                                                    value="{{SubCategory.Binder2EQ2}}">
 
                                                 <input type="text" name="Binder2XwithB1Hidden" id="Binder2XwithB1Hidden"
                                                     class="BinderInputVariable" value="{{SubCategory.Binder2EQ1}}">
@@ -323,13 +328,13 @@
             }
         }*/
 
-      /*  // Attach the change event listener to the select element
-        Binder1Select.addEventListener("change", handleBinder1Change);
-        Binder2Select.addEventListener("change", handleBinder2Change);
-
-        // Call the event handler initially to set the initial state
-        handleBinder1Change();
-        handleBinder2Change();*/
+        /*  // Attach the change event listener to the select element
+          Binder1Select.addEventListener("change", handleBinder1Change);
+          Binder2Select.addEventListener("change", handleBinder2Change);
+  
+          // Call the event handler initially to set the initial state
+          handleBinder1Change();
+          handleBinder2Change();*/
         handleBinder2Equation();
     });
 
@@ -497,12 +502,12 @@
 
             Binder2EqBorderDiv.innerHTML = `
         <p>( Total tinter X </p>
-        <input type="text" name="Binder2Avalue" id="Binder2Avalue" value="${value}" class="BinderInputVariable" required>
+        <input type="text" name="Binder2Avalue" id="Binder2Avalue" value="${value}" class="BinderInputVariable" oninput="validateNumericInput(this)"  required>
         <p> ) - Value of Binder 1 </p>`;
         } else {
             Binder2EqBorderDiv.innerHTML = `
         <p>( Total tinter X </p>
-        <input type="text" name="Binder2Avalue" id="Binder2Avalue"  class="BinderInputVariable" required>
+        <input type="text" name="Binder2Avalue" id="Binder2Avalue"  class="BinderInputVariable" oninput="validateNumericInput(this)" required>
         <p> ) - Value of Binder 1 </p>`;
         }
 
@@ -517,12 +522,12 @@
         if (value) {
             Binder2EqBorderDiv.innerHTML = `
         <p>Total tinter X </p>
-        <input type="text" name="Binder2Avalue" id="Binder2Avalue" value="${value}" class="BinderInputVariable" required>`;
+        <input type="text" name="Binder2Avalue" id="Binder2Avalue" value="${value}" oninput="validateNumericInput(this)" class="BinderInputVariable" required>`;
 
         } else {
             Binder2EqBorderDiv.innerHTML = `
         <p>Total tinter X </p>
-        <input type="text" name="Binder2Avalue" id="Binder2Avalue" class="BinderInputVariable" required>`;
+        <input type="text" name="Binder2Avalue" id="Binder2Avalue" oninput="validateNumericInput(this)" class="BinderInputVariable" required>`;
 
         }
 
@@ -554,6 +559,52 @@
         }
     }
 
+    function validateNumericInput(inputElement) {
+        // Remove non-numeric characters from the input value
+        inputElement.value = inputElement.value.replace(/\D/g, '');
+    }
+
+
 
 
 </script>
+
+<style>
+    .Binder1EquationBorderDiv,
+    .Binder2EqBorderDiv {
+        border: #000 1px solid;
+        padding: 1rem;
+        border-radius: 11px;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+
+    .ADAddCategoryFromHeader {
+        font-size: 3rem;
+    }
+
+    .ADAddCategoryLabel,
+    .Binder1EquationLabel {
+        font-size: 1.7rem;
+        font-weight: 600;
+    }
+
+    .ADSelectCategory,
+    .ADAddCategoryTextInput,
+    .BinderSelect,
+    .BinderSelect option {
+        font-size: 1.5rem;
+    }
+
+    .Binder1EquationTopSection,
+    .BinderInputVariable,
+    .Binder2EqBorderDiv {
+        font-size: 20px;
+    }
+
+    .Binder2EQCLearBtn {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: red;
+    }
+</style>

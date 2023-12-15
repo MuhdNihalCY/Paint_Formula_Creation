@@ -100,7 +100,7 @@
                         <tr>
                             <td>{{this.Category_Id}}</td>
                             <td>{{this.Category}}</td>
-                            <td><a onclick="return confirmProductDelete()" href="/admin/Detele-Category/{{this._id}}"
+                            <td><a onclick="return confirmProductDelete()" href="/admin/Detele-Category/{{this.Category_Id}}"
                                     class="btn btn-danger">Delete <img class="ADdeleteIcon" src="/images/Icons/bin.png"
                                         alt=""></a></td>
                         </tr>
@@ -158,3 +158,9 @@
         return confirm('Are you sure you want to delete this Category?');
     }
 </script>
+
+<style>
+    .ADAddCategoryTextInput {
+        width: 100%;
+    }
+</style>

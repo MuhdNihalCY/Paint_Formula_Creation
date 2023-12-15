@@ -1026,19 +1026,21 @@ module.exports = {
                         InEmployeeDesignation: EmployeeData.Designation
                     }
 
-                ]
+                ],
+                Branch: EmployeeData.Branch
             }
 
             await db.get().collection(collection.CARD_COLLECTION).insertOne(CardData).then(async (response) => {
                 // add this card to 
                 console.log("response", response);
                 const insertedIdString = response.insertedId.toString();
-                var OrderList = await db.get().collection(collection.LIST_COLLECTION).findOne({ "Name": "ORDERS" });
+                var OrderList = await db.get().collection(collection.LIST_COLLECTION).findOne({ "Name": "ORDERS", "Branch": EmployeeData.Branch });
                 if (!OrderList) {
                     //create an Order List
                     OrderList = {
                         Name: "ORDERS",
-                        OldCards: []
+                        OldCards: [],
+                        Branch: EmployeeData.Branch
                     }
 
                     await db.get().collection(collection.LIST_COLLECTION).insertOne(OrderList).then((OrderResponse) => {
@@ -1049,28 +1051,30 @@ module.exports = {
                     resolve();
                 }
             })
-
-
-
-
         })
     },
 
-    GetAllCardsByListName: (ListName) => {
+    GetAllCardsByListName: (ListName, Branch) => {
         return new Promise(async (resolve, reject) => {
-            let Cards = await db.get().collection(collection.CARD_COLLECTION).find({ CurrentList: ListName }).toArray();
+            let Cards = await db.get().collection(collection.CARD_COLLECTION).find({ CurrentList: ListName, Branch: Branch }).toArray();
             resolve(Cards);
         })
     },
-    GetAllCards: () => {
+    GetAllCards: (BranchName) => {
         return new Promise(async (resolve, reject) => {
-            let AllCards = await db.get().collection(collection.CARD_COLLECTION).find().toArray();
-            resolve(AllCards);
+            if (BranchName) {
+                console.log("Getting cards from Branch ", BranchName);
+                let AllCards = await db.get().collection(collection.CARD_COLLECTION).find({ Branch: BranchName }).toArray();
+                resolve(AllCards);
+            } else {
+                let AllCards = await db.get().collection(collection.CARD_COLLECTION).find().toArray();
+                resolve(AllCards);
+            }
         })
     },
-    getAllLists: () => {
+    getAllLists: (Branch) => {
         return new Promise(async (resolve, reject) => {
-            let AllList = await db.get().collection(collection.LIST_COLLECTION).find().toArray();
+            let AllList = await db.get().collection(collection.LIST_COLLECTION).find({ Branch: Branch }).toArray();
             resolve(AllList);
         })
     },
@@ -1170,9 +1174,9 @@ module.exports = {
 
         })
     },
-    getAllUsers: () => {
+    getAllUsers: (Branch) => {
         return new Promise(async (resolve, reject) => {
-            var Users = await db.get().collection(collection.USERS_COLLECTION).find().toArray();
+            var Users = await db.get().collection(collection.USERS_COLLECTION).find({ Branch: Branch }).toArray();
             Users.forEach(user => {
                 delete user.Password;
             });
@@ -1181,17 +1185,24 @@ module.exports = {
         })
 
     },
-    SaveCustomer: (data) => {
+    SaveCustomer: (data, SaveUser) => {
         return new Promise(async (resolve, reject) => {
             data.InsertedTime = Date.now();
-            await db.get().collection(collection.CUSTOMER_COLLECTION).insertOne(data).then((response) => {
-                resolve(response.insertedId);
-            })
+            data.Branch = SaveUser.Branch;
+            data.InsertedUser = SaveUser.UserName;
+            var SameCustomerName = await db.get().collection(collection.CUSTOMER_COLLECTION).findOne({ Customername: data.Customername });
+            if (SameCustomerName) {
+                resolve({ Error: "Customer Name Already Exist, Create a Unique one." });
+            } else {
+                await db.get().collection(collection.CUSTOMER_COLLECTION).insertOne(data).then((response) => {
+                    resolve({ response: response.insertedId });
+                })
+            }
         })
     },
-    getAllCustomers: () => {
+    getAllCustomers: (Branch) => {
         return new Promise(async (resolve, reject) => {
-            let Customers = await db.get().collection(collection.CUSTOMER_COLLECTION).find().toArray();
+            let Customers = await db.get().collection(collection.CUSTOMER_COLLECTION).find({ Branch: Branch }).toArray();
             resolve(Customers);
         })
     },
@@ -1295,6 +1306,7 @@ module.exports = {
                 let NewList = {
                     Name: data.newlistname,
                     OldCards: [],
+                    Branch: OldCard.Branch
                 };
                 await db.get().collection(collection.LIST_COLLECTION).insertOne(NewList);
             }
@@ -1305,20 +1317,21 @@ module.exports = {
             })
         })
     },
-    CreateNewLabel: (Color, Label) => {
+    CreateNewLabel: (Color, Label, Branch) => {
         return new Promise(async (resolve, reject) => {
             var LabelData = {
                 Color: `#${Color}`,
-                Label: Label
+                Label: Label,
+                Branch: Branch
             }
             await db.get().collection(collection.LABEL_COLLECTION).insertOne(LabelData).then(() => {
                 resolve();
             })
         })
     },
-    getAllLabels: () => {
+    getAllLabels: (Branch) => {
         return new Promise(async (resolve, reject) => {
-            let labels = await db.get().collection(collection.LABEL_COLLECTION).find().toArray();
+            let labels = await db.get().collection(collection.LABEL_COLLECTION).find({ Branch: Branch }).toArray();
             resolve(labels);
         })
     },
@@ -1481,27 +1494,27 @@ module.exports = {
             })
         })
     },
-    StoreCustomerFollowUP:(data)=>{
-        return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.CUSTOMER_FOLLOW_UP).insertOne(data).then(()=>{
+    StoreCustomerFollowUP: (data) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CUSTOMER_FOLLOW_UP).insertOne(data).then(() => {
                 resolve();
             })
         })
     },
-    GetAllCustomerFollowUp:()=>{
-        return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.CUSTOMER_FOLLOW_UP).find().toArray().then((Data)=>{
+    GetAllCustomerFollowUp: (Branch) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CUSTOMER_FOLLOW_UP).find({ Branch: Branch }).toArray().then((Data) => {
                 resolve(Data);
             })
         })
     },
-    GetAllCustomersAndFollowups:()=>{
-        return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.CUSTOMER_COLLECTION).find().toArray().then(async(Customers)=>{
-                await db.get().collection(collection.CUSTOMER_FOLLOW_UP).find().toArray().then((AllFollowUPs)=>{
-                    let Data={
-                        AllCustomer :Customers,
-                        AllFollowUP:AllFollowUPs
+    GetAllCustomersAndFollowups: (Branch) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CUSTOMER_COLLECTION).find({ Branch: Branch }).toArray().then(async (Customers) => {
+                await db.get().collection(collection.CUSTOMER_FOLLOW_UP).find({ Branch: Branch }).toArray().then((AllFollowUPs) => {
+                    let Data = {
+                        AllCustomer: Customers,
+                        AllFollowUP: AllFollowUPs
                     };
                     resolve(Data)
                 })
@@ -1510,11 +1523,20 @@ module.exports = {
 
         })
     },
-    GetAllPurchasedOrders:()=>{
-        return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.CARD_COLLECTION).find().toArray().then((AllOrders)=>{
+    GetAllPurchasedOrders: (Branch) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CARD_COLLECTION).find({ Branch: Branch }).toArray().then((AllOrders) => {
                 resolve(AllOrders);
             })
         })
+    },
+
+    // convert all cards to East cost DC branch
+    GiveAllCardABranch: () => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CUSTOMER_FOLLOW_UP).updateMany({}, { $set: { Branch: "East cost DC" } });
+            resolve()
+        })
     }
+
 }

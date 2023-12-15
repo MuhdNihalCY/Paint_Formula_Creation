@@ -36,7 +36,7 @@
                     <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
                 </div>
             </a>
-             <a href="/admin/Branches">
+            <a href="/admin/Branches">
                 <div class="Category ">
                     <p class="ADDelectionSideBarLabel">Branches</p>
                     <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
@@ -91,7 +91,7 @@
                             <input type="text" required placeholder="Enter User Name" value="{{User.UserName}}"
                                 name="UserName" class="AddUserINP">
                         </div>
-                        
+
                         <div class="AddUserEachSectionDiv">
                             <p class="AddUserLabel">Branch</p>
                             <select required name="Branch" class="AddUserINP" id="BranchSelect">
@@ -149,6 +149,10 @@
                         </div>
                         <div class="AddUserEachSectionDiv AdduserSubmitDiv">
                             <input type="submit" class="btn AddUserBTNSubmit" value="Update User">
+                        </div>
+                        <div class="AddUserEachSectionDiv AdduserSubmitDiv">
+                            <a href="#" onclick="confirmUserDelete('{{User.UserID}}', '{{User.UserName}}')" class="text-danger" >Delete User
+                                {{User.UserName}}</a>
                         </div>
                     </div>
                 </div>
@@ -247,6 +251,17 @@
             passwordInput.type = "text";
         } else {
             passwordInput.type = "password";
+        }
+    }
+
+    function confirmUserDelete(userID, userName) {
+        var confirmation = window.confirm("Are you sure you want to delete user " + userName + "?");
+
+        if (confirmation) {
+            // If the user confirms, proceed with the deletion by navigating to the delete URL
+            window.location.href = "/admin/deleteUser/" + userID;
+        } else {
+            // If the user cancels, do nothing
         }
     }
 
@@ -403,5 +418,10 @@
         display: flex;
         justify-content: start;
         align-items: center;
+    }
+
+    .ADSidebar {
+        width: 25%;
+        height: 170%;
     }
 </style>
