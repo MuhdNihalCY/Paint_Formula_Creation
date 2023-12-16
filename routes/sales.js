@@ -726,6 +726,12 @@ router.post('/uploadLedgerData', async (req, res) => {
 
 });
 
+router.get('/GetAllCustomerPurchaseData/api/:CustomerName',SalesVerifyLogin,(req,res) =>{
+    employeeHelpers.getAllCustomerPurchaseDataByName(req.params.CustomerName).then((AllData)=>{
+        res.json(AllData);
+    })
+})
+
 
 router.get('/Logout', SalesVerifyLogin, (req, res) => {
     req.session.SalesData.destroy();

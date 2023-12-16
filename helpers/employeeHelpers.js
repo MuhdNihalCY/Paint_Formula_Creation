@@ -1530,6 +1530,13 @@ module.exports = {
             })
         })
     },
+    getAllCustomerPurchaseDataByName:(CustomerName)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection(collection.CUSTOMER_PURCHASE_COLLECTION).find({CustomerName:CustomerName}).toArray().then((AllData)=>{
+                resolve(AllData);
+            })
+        })
+    },
 
     // convert all cards to East cost DC branch
     GiveAllCardABranch: () => {

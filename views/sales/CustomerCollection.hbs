@@ -8,6 +8,58 @@
         </div>
     </div>
 
+    <div id="EachCustomerDetailsPopUp" class="EachCustomerDetailsPopUp">
+        <div class="Popup EachCustPopup">
+            <div class="MainPopupTopsection">
+                <img onclick="ClosePopupForEachCustomer()" class="MainPopupCloseIcon" src="/images/Icons/x.png" alt="">
+            </div>
+            <div class="PopCustomerName">
+                <p id="popCustNameText" class="popCustNameText"></p>
+            </div>
+            <div class="popupEachCustMainSec">
+                <div class="popUpEachCustLeftSec">
+                    <div class="PopCustAddressSec">
+                        <p class="PopAddressText">Address</p>
+                        <p id="PopCustomerAddressContent" class="PopontentText"></p>
+                    </div>
+                    <div class="PopCustAddressSec">
+                        <p class="PopAddressText">Location</p>
+                        <p id="PopCustomerLocationContent" class="PopontentText"></p>
+                    </div>
+                </div>
+                <div class="popUpEachCustRightSec">
+                    <div class="PopCustAddressSec">
+                        <p class="PopAddressText">Sales.Ex</p>
+                        <p id="PopCustomerSalesExContent" class="PopontentText"></p>
+                    </div>
+                    <div class="PopCustAddressSec">
+                        <p class="PopAddressText">Co-Ordinator</p>
+                        <p id="PopCustomerCoOrdinatorContent" class="PopontentText"></p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="PopCustomerMainActionBTnSec">
+                <button class="PurchasePaymentAnalysisBTN ActiveActionBTN"
+                    onclick="ShowPurchasePaymentAnalysis()">Purchase payment analysis</button>
+                <button class="PurchaseDetailsBTN" onclick="ShowPurchaseDetails()">Purchase details</button>
+                <button class="FollowUpSummeryBTN" onclick="ShowFollowUpSummery()">Follow-up summery</button>
+            </div>
+            <div id="PurchasePaymentAnalysisDiv" class="PurchasePaymentAnalysisDiv">
+                <div class="LineGraph">
+                    <div id="myChart" style="width:100%; height:500px;"></div>
+                </div>
+                <div class="BraGraph">
+                    <div id="columnchart_material" style="width: 100%; height: 500px;"></div>
+                </div>
+            </div>
+
+            <div id="purchaseDetailsDiv" class="purchaseDetailsDiv">
+
+            </div>
+        </div>
+    </div>
+
     <div class="UploadLedgerDataPopUp" id="UploadLedgerDataPopUp">
         <div class=" popup UpLedPopUp">
             <div class="MainPopupTopsection">
@@ -26,6 +78,7 @@
                 </div>
                 <div class="CCMainSection UpnameSection">
                     <p class="ccNameText" for="excelFile">Select an Excel file (.xlsx only):</p>
+                    {{!-- <p class="LedgerConditions"> </p> --}}
                     <input type="file" name="excelFile" id="excelFile" class="CCInputname UpLedInputname" accept=".xlsx"
                         required>
                 </div>
@@ -450,7 +503,7 @@
 
                 // Add click event to each row
                 // Add onclick attribute to each row
-                row.setAttribute('onclick', `alert('${customer.Customername} ${customer.Loaction}')`);
+                row.setAttribute('onclick', `OpenEachCustomerPanel('${customer.Customername}','${customer.Loaction}')`);
             });
         });
 
@@ -811,81 +864,283 @@
             State.AllCustomerNames.push(customer.Customername);
         })
         document.getElementById('UploadLedgerDataPopUp').style.display = "flex";
-        const customers = State.AllCustomerNames;
-        if (document.getElementById('CustomerNameUploadautocomplete-list')) {
-            document.getElementById('CustomerNameUploadautocomplete-list').innerHTML = "";
-        }
-        autocomplete(document.getElementById("CustomerNameUpload"), customers);
+        var Customers = State.AllCustomerNames;
+        console.log(Customers);
     }
 
     function ClosePopupForUploadLedger() {
         document.getElementById('UploadLedgerDataPopUp').style.display = "none";
+        if (document.getElementById('CustomerNameUploadautocomplete-list')) {
+            document.getElementById('CustomerNameUploadautocomplete-list').innerHTML = "";
+        }
+    }
+
+    function OpenEachCustomerPanel(Customername, Location) {
+        var EachCustomerDetailsPopUp = document.getElementById('EachCustomerDetailsPopUp');
+        EachCustomerDetailsPopUp.style.display = "flex";
+
+        // console.log("Customername: ",Customername," Location: ",Location);
+        // console.log("All Customers:",State.Customers);
+
+        var Customer = State.Customers.find((OneCustomer) => {
+            return OneCustomer.Customername === Customername && OneCustomer.Loaction === Location;
+        })
+
+        console.log("Selectec Customer: ", Customer);
+        if (Customer) {
+            document.getElementById('popCustNameText').textContent = Customer.Customername;
+            document.getElementById('PopCustomerAddressContent').textContent = Customer.Address;
+            document.getElementById('PopCustomerLocationContent').textContent = Customer.Loaction;
+            document.getElementById('PopCustomerSalesExContent').textContent = Customer.SalesEx;
+            document.getElementById('PopCustomerCoOrdinatorContent').textContent = Customer.Co_ordinator;
+
+            ApplyLineGraphToOutStandingBalance(Customer)
+        }
+    }
+
+    function ClosePopupForEachCustomer() {
+       ShowPurchasePaymentAnalysis();
+
+        var EachCustomerDetailsPopUp = document.getElementById('EachCustomerDetailsPopUp');
+        EachCustomerDetailsPopUp.style.display = "none";
+
+    }
+
+    async function ApplyLineGraphToOutStandingBalance(Customer) {
+        showLoader();
+
+        var TableData = []; // table data
+
+        await fetch(`/sales/GetAllCustomerPurchaseData/api/${Customer.Customername}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data from the server:', data);
+                TableData = data;
+            })
+            .catch(error => console.error('Error:', error));
+
+
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // Use your actual balance data
+            const balanceData = [];
+
+            TableData.forEach((EachData) => {
+                if (EachData.balance) {
+                    balanceData.push({
+                        date: new Date(EachData.Date),
+                        balance: EachData.balance
+                    })
+                }
+            })
+
+            // Sort balanceData based on the date in ascending order
+            const sortedBalanceData = sortBalanceData(balanceData);
+
+            const data = generateChartData(sortedBalanceData);
+
+            var options = {
+                backgroundColor: '#323940',
+                chartArea: {
+                    backgroundColor: '#323940', // Set the background color inside the chart to #323940
+                },
+                titleTextStyle: {
+                    color: '#B3B7BA', // Set the text color for the title
+                },
+                hAxis: {
+                    title: 'Month',
+                    titleTextStyle: {
+                        color: '#B3B7BA', // Set the text color for the title
+                    },
+                    textStyle: {
+                        color: '#B3B7BA' // Set the text color for horizontal axis labels
+                    },
+                    format: 'MMM yyyy', // Format the x-axis labels to display month abbreviation and year
+                    slantedText: false, // Display labels at an angle
+                    gridlines: {
+                        color: '#575757' // Set the color of the y-axis gridlines
+                    }
+
+                },
+                vAxis: {
+                    title: 'Balance',
+                    minValue: 0,
+                    titleTextStyle: {
+                        color: '#B3B7BA', // Set the text color for the title
+                    },
+                    textStyle: {
+                        color: '#B3B7BA' // Set the text color for vertical axis labels
+                    },
+                    gridlines: {
+                        color: '#575757' // Set the color of the y-axis gridlines
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    textStyle: {
+                        color: 'white' // Set the text color for the legend
+                    },
+                },
+                colors: ['#66ccff'],
+            };
+
+            // Draw
+            const chart = new google.visualization.LineChart(document.getElementById('myChart'));
+            chart.draw(data, options);
+        }
+
+        function sortBalanceData(balanceData) {
+            return balanceData.sort((a, b) => {
+                // Compare dates
+                return a.date - b.date;
+            });
+        }
+
+        function generateChartData(balanceData) {
+            const data = new google.visualization.DataTable();
+            data.addColumn('date', 'Date');
+            data.addColumn('number', 'Balance');
+
+            // Add each date and its corresponding balance
+            balanceData.forEach((entry) => {
+                data.addRow([entry.date, entry.balance]);
+            });
+
+            return data;
+        }
+
+
+
+
+        ShowPurchasePaymentGraphPage(TableData)
+    }
+
+    async function ShowPurchasePaymentGraphPage(TableData) {
+
+        google.charts.load('current', { 'packages': ['bar'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // Process the TableData to aggregate amounts by month
+            var monthData = {};
+
+            // Loop through the TableData
+            TableData.forEach(function (entry) {
+                // Convert the date string to a JavaScript Date object
+                var date = new Date(entry.Date);
+                // Extract the month and year
+                var monthYear = date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+
+                // Initialize the monthData entry if it doesn't exist
+                if (!monthData[monthYear]) {
+                    monthData[monthYear] = { Purchase: 0, Payments: 0 };
+                }
+
+                // Add Debit (purchase) amount to Purchase
+                monthData[monthYear].Purchase += entry.Debit || 0;
+                // Add Credit (payment) amount to Payments
+                monthData[monthYear].Payments += entry.Credit || 0;
+            });
+
+            // Convert monthData to an array for charting
+            var chartData = [['Month', 'Purchase', 'Payments']];
+
+            for (var monthYear in monthData) {
+                var data = monthData[monthYear];
+                // Ensure that Purchase and Payments are treated as numbers, not strings
+                chartData.push([monthYear, parseFloat(data.Purchase), parseFloat(data.Payments)]);
+            }
+
+            var data = google.visualization.arrayToDataTable(chartData);
+
+            var options = {
+                chart: {
+                    title: 'Purchase and Payments for the Past 12 Months',
+                    subtitle: 'Based on Debit and Credit Amounts',
+                },
+                colors: ['#6699ff', '#ff471a'],
+                backgroundColor: '#323940',
+                chartArea: {
+                    backgroundColor: '#323940', // Set the background color inside the chart to #323940
+                },
+                titleTextStyle: {
+                    color: '#B3B7BA', // Set the text color for the title
+                },
+                hAxis: {
+                    textStyle: {
+                        color: '#B3B7BA', // Set the text color for horizontal axis labels
+                    },
+                },
+                vAxis: {
+                    textStyle: {
+                        color: '#B3B7BA', // Set the text color for vertical axis labels
+                    },
+                },
+                legend: {
+                    textStyle: {
+                        color: '#B3B7BA', // Set the text color for the legend
+                    },
+                },
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+        hideLoader();
+
+    }
+
+    function ShowPurchasePaymentAnalysis() {
+        var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
+        PurchasePaymentAnalysisDiv.style.display = "flex";
+
+        var purchaseDetailsDiv = document.getElementById('purchaseDetailsDiv');
+        purchaseDetailsDiv.style.display = "none";
+
+        // Toggle active state for buttons
+        toggleActiveState('PurchasePaymentAnalysisBTN');
+    }
+
+    function ShowPurchaseDetails() {
+        var purchaseDetailsDiv = document.getElementById('purchaseDetailsDiv');
+        purchaseDetailsDiv.style.display = "flex";
+
+        var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
+        PurchasePaymentAnalysisDiv.style.display = "none";
+
+        // Toggle active state for buttons
+        toggleActiveState('PurchaseDetailsBTN');
+    }
+
+    function ShowFollowUpSummery() {
+        var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
+        PurchasePaymentAnalysisDiv.style.display = "none";
+
+        var purchaseDetailsDiv = document.getElementById('purchaseDetailsDiv');
+        purchaseDetailsDiv.style.display = "none";
+
+        // Toggle active state for buttons
+        toggleActiveState('FollowUpSummeryBTN');
     }
 
 
-    // customer name auto complete
-    function autocomplete(inp, arr) {
-        let currentFocus;
-        inp.addEventListener("input", function (e) {
-            closeAllLists();
-            if (!this.value) return;
-            currentFocus = -1;
-            const a = document.createElement("DIV");
-            a.id = this.id + "autocomplete-list";
-            a.className = "autocomplete-items";
-            this.parentNode.appendChild(a);
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i].substr(0, this.value.length).toUpperCase() === this.value.toUpperCase()) {
-                    const b = document.createElement("DIV");
-                    b.innerHTML = `<strong>${arr[i].substr(0, this.value.length)}</strong>${arr[i].substr(this.value.length)}`;
-                    b.innerHTML += `<input type='hidden' value='${arr[i]}'>`;
-                    b.addEventListener("click", function (e) {
-                        inp.value = this.getElementsByTagName("input")[0].value;
-                        closeAllLists();
-                    });
-                    a.appendChild(b);
-                }
-            }
-        });
-        inp.addEventListener("keydown", function (e) {
-            const x = document.getElementById(this.id + "autocomplete-list");
-            if (x) {
-                const items = x.getElementsByTagName("div");
-                if (e.keyCode === 40) {
-                    currentFocus++;
-                    addActive(items);
-                } else if (e.keyCode === 38) {
-                    currentFocus--;
-                    addActive(items);
-                } else if (e.keyCode === 13) {
-                    e.preventDefault();
-                    if (currentFocus > -1) items[currentFocus].click();
-                }
-            }
-        });
-        function addActive(items) {
-            removeActive(items);
-            if (currentFocus >= items.length) currentFocus = 0;
-            if (currentFocus < 0) currentFocus = (items.length - 1);
-            items[currentFocus].classList.add("autocomplete-active");
+    function toggleActiveState(clickedBtnClass) {
+        // Remove ActiveActionBTN class from all buttons
+        var buttons = document.getElementsByClassName('ActiveActionBTN');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove('ActiveActionBTN');
         }
-        function removeActive(items) {
-            for (let i = 0; i < items.length; i++) {
-                items[i].classList.remove("autocomplete-active");
-            }
-        }
-        function closeAllLists(elmnt) {
-            const lists = document.getElementsByClassName("autocomplete-items");
-            for (let i = 0; i < lists.length; i++) {
-                if (elmnt !== lists[i] && elmnt !== inp) {
-                    lists[i].parentNode.removeChild(lists[i]);
-                }
-            }
-        }
-        document.addEventListener("click", function (e) {
-            closeAllLists(e.target);
-        });
+
+        // Add ActiveActionBTN class to the clicked button
+        var clickedBtn = document.getElementsByClassName(clickedBtnClass)[0];
+        clickedBtn.classList.add('ActiveActionBTN');
     }
+
+
+
 
 
 
@@ -1505,7 +1760,8 @@
         gap: 1rem;
     }
 
-    .UploadLedgerDataPopUp {
+    .UploadLedgerDataPopUp,
+    .EachCustomerDetailsPopUp {
         background: rgba(0, 0, 0, 0.7);
         display: none;
         justify-content: center;
@@ -1562,5 +1818,107 @@
         margin-top: 90px;
         margin-left: 25px;
         font-size: 18px;
+    }
+
+    .LedgerConditions {
+        text-align: center;
+        font-size: 15px;
+    }
+
+    .EachCustPopup {
+        padding: 2rem;
+        background-color: #323940;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        width: 80rem;
+        border-radius: 10px;
+        position: relative;
+        max-height: 90vh;
+        overflow-y: auto;
+        margin: 2rem 0;
+    }
+
+    .PopCustomerName {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popCustNameText {
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .popupEachCustMainSec {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2rem;
+        gap: 2rem;
+    }
+
+    .PopAddressText {
+        font-size: 20px;
+        font-size: 600;
+    }
+
+    .PopontentText {
+        font-size: 25px;
+        font-weight: 600;
+        margin-left: 1rem;
+    }
+
+    .popUpEachCustLeftSec {
+        width: 35rem;
+    }
+
+    .popUpEachCustRightSec {
+        width: 23rem;
+    }
+
+    .PopCustomerMainActionBTnSec {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .PurchasePaymentAnalysisBTN,
+    .PurchaseDetailsBTN,
+    .FollowUpSummeryBTN {
+        padding: 1rem 2rem;
+        border-radius: 27px;
+        font-size: 20px;
+        font-weight: 700;
+        border: 1px solid gray;
+        background-color: #B3B7BA;
+    }
+
+    .PopCustomerMainActionBTnSec button:hover {
+        background-color: #3b4046;
+        color: #B3B7BA;
+    }
+
+    .ActiveActionBTN {
+        background-color: #2e3135;
+        color: #B3B7BA;
+    }
+
+    .PurchasePaymentAnalysisDiv,
+    .purchaseDetailsDiv {
+        display: flex;
+        flex-direction: column;
+        margin: 2rem;
+        border: 1px solid gray;
+        border-radius: 10px;
+        padding: 1.5rem;
+        gap: 4rem;
+    }
+
+    .BarGraph {
+        padding-bottom: 5rem;
+    }
+
+    .purchaseDetailsDiv{
+        display: none;
     }
 </style>
