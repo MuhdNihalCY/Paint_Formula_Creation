@@ -947,15 +947,21 @@
                 var User = State.AllUsers[i];
 
                 if (User.Designation === "Production") {
+
                     AllProductionLists.push({
                         Name: User.UserName,
+                        OnDuty: User.OnDuty,
                         Cards: []  // Add an array to store cards for each user
                     });
+
                 } else if (User.Designation === "Driver") {
+
                     AllDriverLists.push({
                         Name: User.UserName,
+                        OnDuty: User.OnDuty,
                         Cards: []  // Add an array to store cards for each user
                     });
+
                 }
             }
 
@@ -1353,148 +1359,158 @@
                 columnIndex = parseInt(Index) + 2;
 
                 var ProductionSectionCards = OneList;
-
-                // // console.log("ProductionSectionCards: ", ProductionSectionCards);
-
-
-                // Create the div with class "ProductionCardsCollections"
-                const productionCardsCollectionsDiv = document.createElement('div');
-                productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
-                productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
-                productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
-                productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
-                productionCardsCollectionsDiv.classList.add('cardsCollections');
+                if (OneList.OnDuty === "true" || !OneList.OnDuty) {
 
 
-                // Create the main div with class "ProductionColumn"
-                const productionColumnDiv = document.createElement('div');
-                productionColumnDiv.className = 'ProductionColumn';
-
-                // Create the div with class "ProductionColumnHeader"
-                const productionColumnHeaderDiv = document.createElement('div');
-                productionColumnHeaderDiv.className = 'ProductionColumnHeader';
-
-                // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
-                const sectionHeaderText = document.createElement('p');
-                sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
-                sectionHeaderText.textContent = ProductionSectionCards.Name;
-
-                // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
-                const checkboxInput = document.createElement('input');
-                checkboxInput.type = 'checkbox';
-                checkboxInput.className = 'ProductionCheckBox';
-                checkboxInput.id = '';
-                checkboxInput.checked = true;
+                    // Create the div with class "ProductionCardsCollections"
+                    const productionCardsCollectionsDiv = document.createElement('div');
+                    productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
+                    productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
+                    productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
+                    productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
+                    productionCardsCollectionsDiv.classList.add('cardsCollections');
 
 
-
-
-                // add cards to all user.
-
-
-                ProductionSectionCards.Cards.forEach((OneCard, taskIndex) => {
-
-                    var checklistItems = OneCard.CheckListItems;
-                    var ChecklistCompleted = 0;
-                    var TotalChecklist = 0;
-
-                    if (OneCard.CheckListItems) {
-                        var checklistItems = OneCard.CheckListItems.checkItems;
-                        ChecklistCompleted = 0;
-                        TotalChecklist = checklistItems.length;
-
-                        checklistItems.forEach((checkItem) => {
-                            if (checkItem.State === 'Complete') {
-                                ChecklistCompleted = ChecklistCompleted + 1;
-                            }
-                        })
-
+                    // Create the main div with class "ProductionColumn"
+                    const productionColumnDiv = document.createElement('div');
+                    productionColumnDiv.className = 'ProductionColumn';
+                    if (ProductionSectionCards.OnDuty === "false") {
+                        productionColumnDiv.className = 'ProductionColumn OffDutyEmp';
                     }
 
-                    // Create the main div with class "Card"
-                    const cardDiv = document.createElement('div');
-                    cardDiv.className = 'card Card';
-                    cardDiv.onclick = function () {
-                        ViewCardDetails(OneCard.Name)
-                    };
+                    // Create the div with class "ProductionColumnHeader"
+                    const productionColumnHeaderDiv = document.createElement('div');
+                    productionColumnHeaderDiv.className = 'ProductionColumnHeader';
 
-                    cardDiv.setAttribute('draggable', 'true');
-                    cardDiv.setAttribute('ondragstart', 'drag(event)');
-                    cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+                    // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
+                    const sectionHeaderText = document.createElement('p');
+                    sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
+                    sectionHeaderText.textContent = ProductionSectionCards.Name;
 
-                    const cardImgDiv = document.createElement('div');
-                    cardImgDiv.className = 'CardImgDiv';
+                    // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
+                    const checkboxInput = document.createElement('input');
+                    checkboxInput.type = 'checkbox';
+                    checkboxInput.className = 'ProductionCheckBox';
+                    checkboxInput.id = '';
+                    checkboxInput.disabled = true
+                    if (ProductionSectionCards.OnDuty === "false") {
+                        checkboxInput.checked = false;
+                    } else {
+                        checkboxInput.checked = true;
+                    }
 
 
 
-                    // Create the paragraph element with class "cardText" and set its text content
-                    const cardText = document.createElement('p');
-                    cardText.className = 'cardText';
-                    cardText.textContent = OneCard.Name;
+                    // add cards to all user.
 
-                    // Create the div with class "CardSub"
-                    const cardSubDiv = document.createElement('div');
-                    cardSubDiv.className = 'CardSub';
 
-                    // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
-                    const descriptionIcon = document.createElement('img');
-                    descriptionIcon.className = 'DescriptionSmIcon';
-                    descriptionIcon.src = '/images/Icons/Discription_Gray.png';
-                    descriptionIcon.alt = '';
+                    ProductionSectionCards.Cards.forEach((OneCard, taskIndex) => {
 
-                    // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
-                    const checkBoxIcon = document.createElement('img');
-                    checkBoxIcon.className = 'checkBoxSMIcon';
-                    checkBoxIcon.src = '/images/Icons/check_Gray.png';
-                    checkBoxIcon.alt = '';
+                        var checklistItems = OneCard.CheckListItems;
+                        var ChecklistCompleted = 0;
+                        var TotalChecklist = 0;
 
-                    // Create the paragraph element with class "CardSMCheckNum" and set its text content
-                    const cardSMCheckNum = document.createElement('p');
-                    cardSMCheckNum.className = 'CardSMCheckNum';
-                    cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+                        if (OneCard.CheckListItems) {
+                            var checklistItems = OneCard.CheckListItems.checkItems;
+                            ChecklistCompleted = 0;
+                            TotalChecklist = checklistItems.length;
 
-                    // Check if the image file exists, and only create the image element if it does
-                    const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
-                    const cardImg = new Image();
-                    cardImg.className = 'CardImg';
-                    cardImg.alt = 'No Attachments';
-                    cardImg.src = imageSrc;
-                    cardImg.setAttribute('draggable', 'false');
+                            checklistItems.forEach((checkItem) => {
+                                if (checkItem.State === 'Complete') {
+                                    ChecklistCompleted = ChecklistCompleted + 1;
+                                }
+                            })
 
-                    cardImg.onload = function () {
-                        // The image exists, so set the src attribute
-                        cardImgDiv.appendChild(cardImg);
-                    };
-                    cardDiv.appendChild(cardImgDiv);
+                        }
 
-                    cardDiv.appendChild(cardText);
-                    cardDiv.appendChild(cardSubDiv);
+                        // Create the main div with class "Card"
+                        const cardDiv = document.createElement('div');
+                        cardDiv.className = 'card Card';
+                        cardDiv.onclick = function () {
+                            ViewCardDetails(OneCard.Name)
+                        };
 
+                        cardDiv.setAttribute('draggable', 'true');
+                        cardDiv.setAttribute('ondragstart', 'drag(event)');
+                        cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                        const cardImgDiv = document.createElement('div');
+                        cardImgDiv.className = 'CardImgDiv';
+
+
+
+                        // Create the paragraph element with class "cardText" and set its text content
+                        const cardText = document.createElement('p');
+                        cardText.className = 'cardText';
+                        cardText.textContent = OneCard.Name;
+
+                        // Create the div with class "CardSub"
+                        const cardSubDiv = document.createElement('div');
+                        cardSubDiv.className = 'CardSub';
+
+                        // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                        const descriptionIcon = document.createElement('img');
+                        descriptionIcon.className = 'DescriptionSmIcon';
+                        descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                        descriptionIcon.alt = '';
+
+                        // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                        const checkBoxIcon = document.createElement('img');
+                        checkBoxIcon.className = 'checkBoxSMIcon';
+                        checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                        checkBoxIcon.alt = '';
+
+                        // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                        const cardSMCheckNum = document.createElement('p');
+                        cardSMCheckNum.className = 'CardSMCheckNum';
+                        cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                        // Check if the image file exists, and only create the image element if it does
+                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const cardImg = new Image();
+                        cardImg.className = 'CardImg';
+                        cardImg.alt = 'No Attachments';
+                        cardImg.src = imageSrc;
+                        cardImg.setAttribute('draggable', 'false');
+
+                        cardImg.onload = function () {
+                            // The image exists, so set the src attribute
+                            cardImgDiv.appendChild(cardImg);
+                        };
+                        cardDiv.appendChild(cardImgDiv);
+
+                        cardDiv.appendChild(cardText);
+                        cardDiv.appendChild(cardSubDiv);
+
+                        // Append the child elements to their respective parent elements
+                        cardSubDiv.appendChild(descriptionIcon);
+                        cardSubDiv.appendChild(checkBoxIcon);
+                        cardSubDiv.appendChild(cardSMCheckNum);
+                        cardDiv.appendChild(cardSubDiv);
+
+
+                        // Append the "cardDiv" to the parent element in your HTML document
+                        productionCardsCollectionsDiv.appendChild(cardDiv);
+
+
+
+
+
+                    })
                     // Append the child elements to their respective parent elements
-                    cardSubDiv.appendChild(descriptionIcon);
-                    cardSubDiv.appendChild(checkBoxIcon);
-                    cardSubDiv.appendChild(cardSMCheckNum);
-                    cardDiv.appendChild(cardSubDiv);
+                    productionColumnHeaderDiv.appendChild(sectionHeaderText);
+                    productionColumnHeaderDiv.appendChild(checkboxInput);
 
+                    productionColumnDiv.appendChild(productionColumnHeaderDiv);
+                    productionColumnDiv.appendChild(productionCardsCollectionsDiv);
 
-                    // Append the "cardDiv" to the parent element in your HTML document
-                    productionCardsCollectionsDiv.appendChild(cardDiv);
+                    // Append the "productionColumnDiv" to a parent div in your HTML document
+                    //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
+                    ProductionListCollections.appendChild(productionColumnDiv);
 
+                }
 
-
-
-
-                })
-                // Append the child elements to their respective parent elements
-                productionColumnHeaderDiv.appendChild(sectionHeaderText);
-                productionColumnHeaderDiv.appendChild(checkboxInput);
-
-                productionColumnDiv.appendChild(productionColumnHeaderDiv);
-                productionColumnDiv.appendChild(productionCardsCollectionsDiv);
-
-                // Append the "productionColumnDiv" to a parent div in your HTML document
-                //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
-                ProductionListCollections.appendChild(productionColumnDiv);
+                // // console.log("ProductionSectionCards: ", ProductionSectionCards);
 
             });
 
@@ -1725,148 +1741,159 @@
                 columnIndex = parseInt(Index) + 2;
 
                 var DriverSectionCards = OneList;
+                if (DriverSectionCards.OnDuty === "true" || !DriverSectionCards.OnDuty) {
 
-                // // console.log("DriverSectionCards: ", DriverSectionCards);
-
-
-                // Create the div with class "ProductionCardsCollections"
-                const productionCardsCollectionsDiv = document.createElement('div');
-                productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
-                productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
-                productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
-                productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
-                productionCardsCollectionsDiv.classList.add('cardsCollections');
+                    // // console.log("DriverSectionCards: ", DriverSectionCards);
 
 
-                // Create the main div with class "ProductionColumn"
-                const productionColumnDiv = document.createElement('div');
-                productionColumnDiv.className = 'ProductionColumn';
-
-                // Create the div with class "ProductionColumnHeader"
-                const productionColumnHeaderDiv = document.createElement('div');
-                productionColumnHeaderDiv.className = 'ProductionColumnHeader';
-
-                // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
-                const sectionHeaderText = document.createElement('p');
-                sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
-                sectionHeaderText.textContent = DriverSectionCards.Name;
-
-                // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
-                const checkboxInput = document.createElement('input');
-                checkboxInput.type = 'checkbox';
-                checkboxInput.className = 'ProductionCheckBox';
-                checkboxInput.id = '';
-                checkboxInput.checked = true;
+                    // Create the div with class "ProductionCardsCollections"
+                    const productionCardsCollectionsDiv = document.createElement('div');
+                    productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
+                    productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
+                    productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
+                    productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
+                    productionCardsCollectionsDiv.classList.add('cardsCollections');
 
 
-
-
-                // add cards to all user.
-
-
-                DriverSectionCards.Cards.forEach((OneCard, taskIndex) => {
-
-                    var checklistItems = OneCard.CheckListItems;
-                    var ChecklistCompleted = 0;
-                    var TotalChecklist = 0;
-
-                    if (OneCard.CheckListItems) {
-                        var checklistItems = OneCard.CheckListItems.checkItems;
-                        ChecklistCompleted = 0;
-                        TotalChecklist = checklistItems.length;
-
-                        checklistItems.forEach((checkItem) => {
-                            if (checkItem.State === 'Complete') {
-                                ChecklistCompleted = ChecklistCompleted + 1;
-                            }
-                        })
-
+                    // Create the main div with class "ProductionColumn"
+                    const productionColumnDiv = document.createElement('div');
+                    productionColumnDiv.className = 'ProductionColumn';
+                    if (DriverSectionCards.OnDuty === "false") {
+                        productionColumnDiv.className = 'ProductionColumn OffDutyEmp';
                     }
 
-                    // Create the main div with class "Card"
-                    const cardDiv = document.createElement('div');
-                    cardDiv.className = 'card Card';
-                    cardDiv.onclick = function () {
-                        ViewCardDetails(OneCard.Name)
-                    };
+                    // Create the div with class "ProductionColumnHeader"
+                    const productionColumnHeaderDiv = document.createElement('div');
+                    productionColumnHeaderDiv.className = 'ProductionColumnHeader';
 
-                    cardDiv.setAttribute('draggable', 'true');
-                    cardDiv.setAttribute('ondragstart', 'drag(event)');
-                    cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+                    // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
+                    const sectionHeaderText = document.createElement('p');
+                    sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
+                    sectionHeaderText.textContent = DriverSectionCards.Name;
 
-                    const cardImgDiv = document.createElement('div');
-                    cardImgDiv.className = 'CardImgDiv';
+                    // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
+                    const checkboxInput = document.createElement('input');
+                    checkboxInput.type = 'checkbox';
+                    checkboxInput.className = 'ProductionCheckBox';
+                    checkboxInput.id = '';
+                    checkboxInput.disabled = true;
+                    if (DriverSectionCards.OnDuty === "false") {
+                        checkboxInput.checked = false;
+                    } else {
+                        checkboxInput.checked = true;
+                    }
 
 
 
-                    // Create the paragraph element with class "cardText" and set its text content
-                    const cardText = document.createElement('p');
-                    cardText.className = 'cardText';
-                    cardText.textContent = OneCard.Name;
 
-                    // Create the div with class "CardSub"
-                    const cardSubDiv = document.createElement('div');
-                    cardSubDiv.className = 'CardSub';
+                    // add cards to all user.
 
-                    // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
-                    const descriptionIcon = document.createElement('img');
-                    descriptionIcon.className = 'DescriptionSmIcon';
-                    descriptionIcon.src = '/images/Icons/Discription_Gray.png';
-                    descriptionIcon.alt = '';
 
-                    // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
-                    const checkBoxIcon = document.createElement('img');
-                    checkBoxIcon.className = 'checkBoxSMIcon';
-                    checkBoxIcon.src = '/images/Icons/check_Gray.png';
-                    checkBoxIcon.alt = '';
+                    DriverSectionCards.Cards.forEach((OneCard, taskIndex) => {
 
-                    // Create the paragraph element with class "CardSMCheckNum" and set its text content
-                    const cardSMCheckNum = document.createElement('p');
-                    cardSMCheckNum.className = 'CardSMCheckNum';
-                    cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+                        var checklistItems = OneCard.CheckListItems;
+                        var ChecklistCompleted = 0;
+                        var TotalChecklist = 0;
 
-                    // Check if the image file exists, and only create the image element if it does
-                    const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
-                    const cardImg = new Image();
-                    cardImg.className = 'CardImg';
-                    cardImg.alt = 'No Attachments';
-                    cardImg.src = imageSrc;
-                    cardImg.setAttribute('draggable', 'false');
+                        if (OneCard.CheckListItems) {
+                            var checklistItems = OneCard.CheckListItems.checkItems;
+                            ChecklistCompleted = 0;
+                            TotalChecklist = checklistItems.length;
 
-                    cardImg.onload = function () {
-                        // The image exists, so set the src attribute
-                        cardImgDiv.appendChild(cardImg);
-                    };
-                    cardDiv.appendChild(cardImgDiv);
+                            checklistItems.forEach((checkItem) => {
+                                if (checkItem.State === 'Complete') {
+                                    ChecklistCompleted = ChecklistCompleted + 1;
+                                }
+                            })
 
-                    cardDiv.appendChild(cardText);
-                    cardDiv.appendChild(cardSubDiv);
+                        }
 
+                        // Create the main div with class "Card"
+                        const cardDiv = document.createElement('div');
+                        cardDiv.className = 'card Card';
+                        cardDiv.onclick = function () {
+                            ViewCardDetails(OneCard.Name)
+                        };
+
+                        cardDiv.setAttribute('draggable', 'true');
+                        cardDiv.setAttribute('ondragstart', 'drag(event)');
+                        cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+
+                        const cardImgDiv = document.createElement('div');
+                        cardImgDiv.className = 'CardImgDiv';
+
+
+
+                        // Create the paragraph element with class "cardText" and set its text content
+                        const cardText = document.createElement('p');
+                        cardText.className = 'cardText';
+                        cardText.textContent = OneCard.Name;
+
+                        // Create the div with class "CardSub"
+                        const cardSubDiv = document.createElement('div');
+                        cardSubDiv.className = 'CardSub';
+
+                        // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                        const descriptionIcon = document.createElement('img');
+                        descriptionIcon.className = 'DescriptionSmIcon';
+                        descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                        descriptionIcon.alt = '';
+
+                        // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                        const checkBoxIcon = document.createElement('img');
+                        checkBoxIcon.className = 'checkBoxSMIcon';
+                        checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                        checkBoxIcon.alt = '';
+
+                        // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                        const cardSMCheckNum = document.createElement('p');
+                        cardSMCheckNum.className = 'CardSMCheckNum';
+                        cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                        // Check if the image file exists, and only create the image element if it does
+                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const cardImg = new Image();
+                        cardImg.className = 'CardImg';
+                        cardImg.alt = 'No Attachments';
+                        cardImg.src = imageSrc;
+                        cardImg.setAttribute('draggable', 'false');
+
+                        cardImg.onload = function () {
+                            // The image exists, so set the src attribute
+                            cardImgDiv.appendChild(cardImg);
+                        };
+                        cardDiv.appendChild(cardImgDiv);
+
+                        cardDiv.appendChild(cardText);
+                        cardDiv.appendChild(cardSubDiv);
+
+                        // Append the child elements to their respective parent elements
+                        cardSubDiv.appendChild(descriptionIcon);
+                        cardSubDiv.appendChild(checkBoxIcon);
+                        cardSubDiv.appendChild(cardSMCheckNum);
+                        cardDiv.appendChild(cardSubDiv);
+
+
+                        // Append the "cardDiv" to the parent element in your HTML document
+                        productionCardsCollectionsDiv.appendChild(cardDiv);
+
+
+
+
+
+                    })
                     // Append the child elements to their respective parent elements
-                    cardSubDiv.appendChild(descriptionIcon);
-                    cardSubDiv.appendChild(checkBoxIcon);
-                    cardSubDiv.appendChild(cardSMCheckNum);
-                    cardDiv.appendChild(cardSubDiv);
+                    productionColumnHeaderDiv.appendChild(sectionHeaderText);
+                    productionColumnHeaderDiv.appendChild(checkboxInput);
 
+                    productionColumnDiv.appendChild(productionColumnHeaderDiv);
+                    productionColumnDiv.appendChild(productionCardsCollectionsDiv);
 
-                    // Append the "cardDiv" to the parent element in your HTML document
-                    productionCardsCollectionsDiv.appendChild(cardDiv);
+                    // Append the "productionColumnDiv" to a parent div in your HTML document
+                    //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
+                    DriverListCollections.appendChild(productionColumnDiv);
 
-
-
-
-
-                })
-                // Append the child elements to their respective parent elements
-                productionColumnHeaderDiv.appendChild(sectionHeaderText);
-                productionColumnHeaderDiv.appendChild(checkboxInput);
-
-                productionColumnDiv.appendChild(productionColumnHeaderDiv);
-                productionColumnDiv.appendChild(productionCardsCollectionsDiv);
-
-                // Append the "productionColumnDiv" to a parent div in your HTML document
-                //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
-                DriverListCollections.appendChild(productionColumnDiv);
+                }
 
             });
         }
@@ -5456,6 +5483,11 @@
         margin: 1rem 0.5rem;
         height: fit-content;
     }
+
+    .OffDutyEmp {
+        background-color: rgba(21, 25, 25, 0.5)
+    }
+
 
     .OfficeSectionListHeader,
     .OrdersListHeader,

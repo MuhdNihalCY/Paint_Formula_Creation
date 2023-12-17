@@ -1537,6 +1537,15 @@ module.exports = {
             })
         })
     },
+    ChangeEmployeeDutyState:(employeeName,OnDutyStateChange) => {
+        return new Promise(async(resolve, reject) => {
+            await db.get().collection(collection.USERS_COLLECTION).updateOne({UserName:employeeName},{$set:{OnDuty:OnDutyStateChange}}).then(()=>{
+                resolve();
+            })
+        })
+    },
+
+    
 
     // convert all cards to East cost DC branch
     GiveAllCardABranch: () => {

@@ -710,6 +710,13 @@ router.post('/uploadLedgerData', async (req, res) => {
 });
 
 
+router.get('/ChangeEmployeeDutyState/:EmployeeName/:OnDutyStatus',OfficeVerifyLogin,(req,res) => {
+    employeeHelpers.ChangeEmployeeDutyState(req.params.EmployeeName,req.params.OnDutyStatus).then(()=>{
+        res.json({State:true});
+    })
+})
+
+
 
 
 

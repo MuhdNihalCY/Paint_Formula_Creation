@@ -148,7 +148,7 @@
                                 <div id="ColorModelCollection" class="ColorModelCollection">
 
                                 </div>
-                                
+
 
                                 <hr>
 
@@ -182,13 +182,13 @@
                 </div>
             </div>
             <div class="poplastUpdateTimeSection">
-               
+
             </div>
 
             <div class="popReadyProductsSection">
                 <p class="popCardHeaderText">Ready Products</p>
                 <div id="popReadyProductsCollectiosn" class="popReadyProductsCollectiosn">
-                    
+
 
                 </div>
                 <div class="PopReadyProductsInputSection">
@@ -205,10 +205,10 @@
             <div class="popProductsItemsSection">
                 <p class="popCardHeaderText">Productions Items</p>
                 <div id="popProductsItemsCollectiosns" class="popProductsItemsCollectiosn">
-                   
+
                 </div>
                 <div class="NewOrderPopProctionItemsActionsSections">
-                   
+
                 </div>
                 <div class="NewOrderNewFormulaNameSection">
                     <input placeholder="Product Name" type="text" id="NewFormulaNameInput">
@@ -225,11 +225,11 @@
             <div class="popCommentsSections">
                 <p class="popCardHeaderText">Comments</p>
                 <div id="newOrderpopCommentsCollection" class="popCommentsCollection newOrderpopCommentsCollection">
-                 
+
                 </div>
                 <div class="popAddCommentSection">
                     <p class="popAddCommentsTex">Add Comments</p>
-                  
+
                     <textarea oninput="checkForMention()" name="commentBox" placeholder="Add your comments"
                         class="commentBox" id="newOrderComment" rows="10"></textarea>
                     <div id="mentionList"></div>
@@ -275,7 +275,7 @@
                 <p class="popCardHeaderText">Activity</p>
                 <div id="popActivityCollections" class="popActivityCollections">
                     <ul>
-                      
+
                     </ul>
                 </div>
             </div>
@@ -504,14 +504,14 @@
                                 <p onclick="CloseSearchResultBox()" class="SearchResusultCloseBTN">x</p>
                             </div>
                             <div id="searchResultsCollectins" class="searchResultsCollectins">
-                              
+
                             </div>
                         </div>
                     </div>
                     <input type="button" class="CreateCustomerBTN btn" onclick="OpenCustomerCreationPopup()"
                         value="Create Customer">
-                    {{!-- <input type="button" class="CreateCustomerBTN followupBTN btn" onclick="OpenCustomerFollowup()"
-                        value="Add Customer follow-up"> --}}
+                    {{!-- <input type="button" class="CreateCustomerBTN followupBTN btn"
+                        onclick="OpenCustomerFollowup()" value="Add Customer follow-up"> --}}
                     <div class="input-button userBTN">
                         <input type="button" value="{{OfficeLogged.UserName}}" class="input-field  InputBTNField btn">
                         <i class="fas fa-user user-icon"></i>
@@ -844,11 +844,13 @@
                 if (User.Designation === "Production") {
                     AllProductionLists.push({
                         Name: User.UserName,
+                        OnDuty: User.OnDuty,
                         Cards: []  // Add an array to store cards for each user
                     });
                 } else if (User.Designation === "Driver") {
                     AllDriverLists.push({
                         Name: User.UserName,
+                        OnDuty: User.OnDuty,
                         Cards: []  // Add an array to store cards for each user
                     });
                 }
@@ -1264,6 +1266,9 @@
                 // Create the main div with class "ProductionColumn"
                 const productionColumnDiv = document.createElement('div');
                 productionColumnDiv.className = 'ProductionColumn';
+                if (ProductionSectionCards.OnDuty === "false") {
+                    productionColumnDiv.className = 'ProductionColumn OffDutyEmp';
+                }
 
                 // Create the div with class "ProductionColumnHeader"
                 const productionColumnHeaderDiv = document.createElement('div');
@@ -1279,7 +1284,28 @@
                 checkboxInput.type = 'checkbox';
                 checkboxInput.className = 'ProductionCheckBox';
                 checkboxInput.id = '';
-                checkboxInput.checked = true;
+                if (ProductionSectionCards.OnDuty === "false") {
+                    checkboxInput.checked = false;
+                } else {
+                    checkboxInput.checked = true;
+                }
+                // Add an event listener for the 'click' event
+                checkboxInput.addEventListener('change', (e) => {
+                    // Toggle the checked state of the checkbox
+                    //   checkboxInput.checked = !checkboxInput.checked;
+                    // Log a message to the console based on the current checked state
+                    if (checkboxInput.checked) {
+                        OneList.OnDuty = true;
+                        StaffOnDutyOffDuty(ProductionSectionCards.Name, true);
+                        console.log('Checkbox is checked.');
+                    } else {
+                        OneList.OnDuty = false;
+                        StaffOnDutyOffDuty(ProductionSectionCards.Name, false);
+                        console.log('Checkbox is unchecked.');
+                    }
+
+                    // Additional actions based on the checkbox state can be added here
+                });
 
 
 
@@ -1636,7 +1662,9 @@
                 // Create the main div with class "ProductionColumn"
                 const productionColumnDiv = document.createElement('div');
                 productionColumnDiv.className = 'ProductionColumn';
-
+                if (DriverSectionCards.OnDuty === "false") {
+                    productionColumnDiv.className = 'ProductionColumn OffDutyEmp';
+                }
                 // Create the div with class "ProductionColumnHeader"
                 const productionColumnHeaderDiv = document.createElement('div');
                 productionColumnHeaderDiv.className = 'ProductionColumnHeader';
@@ -1652,7 +1680,28 @@
                 checkboxInput.className = 'ProductionCheckBox';
                 checkboxInput.id = '';
                 checkboxInput.checked = true;
+                if (DriverSectionCards.OnDuty === "false") {
+                    checkboxInput.checked = false;
+                } else {
+                    checkboxInput.checked = true;
+                }
+                // Add an event listener for the 'click' event
+                checkboxInput.addEventListener('change', (e) => {
+                    // Toggle the checked state of the checkbox
+                    //   checkboxInput.checked = !checkboxInput.checked;
+                    // Log a message to the console based on the current checked state
+                    if (checkboxInput.checked) {
+                        OneList.OnDuty = true;
+                        StaffOnDutyOffDuty(DriverSectionCards.Name, true);
+                        console.log('Checkbox is checked.');
+                    } else {
+                        OneList.OnDuty = false;
+                        StaffOnDutyOffDuty(DriverSectionCards.Name, false);
+                        console.log('Checkbox is unchecked.');
+                    }
 
+                    // Additional actions based on the checkbox state can be added here
+                });
 
 
 
@@ -1763,7 +1812,9 @@
                 //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
                 DriverListCollections.appendChild(productionColumnDiv);
 
+
             });
+
         }
 
         function loadDoneTodayListCards() {
@@ -4621,10 +4672,10 @@
             State.columns.DONE.OLD_MATCHED_CARDS = matchingObjects;
             loadDoneBeforeWeekListCards();
         }
-    }  
+    }
 
 
-  
+
 
     function toggleRadioButton(radioButtonNumber) {
         const radio1 = document.getElementById("InpersonRadio");
@@ -4680,6 +4731,15 @@
         ContactPersonsSelect.appendChild(ContactOPtion);
 
 
+    }
+
+
+    async function StaffOnDutyOffDuty(EmployeeName, OnDutyStatus) {
+        console.log("Employee Duty changed! name:", EmployeeName, " OnDutyStatus: ", OnDutyStatus)
+        const response = await fetch(`/office/ChangeEmployeeDutyState/${EmployeeName}/${OnDutyStatus}`);
+        const data = await response.json();
+
+        fetchAllCards();
     }
 
 
@@ -5106,6 +5166,10 @@
         height: fit-content;
     }
 
+    .OffDutyEmp {
+        background-color: rgba(21, 25, 25, 0.5)
+    }
+
     .OfficeSectionListHeader,
     .OrdersListHeader,
     .ProductionColumnHeader,
@@ -5117,6 +5181,8 @@
         align-items: center;
         padding: 0.5rem 0.5rem;
     }
+
+
 
     .ProductionCheckBox,
     .DriverCheckBox {
