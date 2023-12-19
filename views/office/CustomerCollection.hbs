@@ -16,7 +16,7 @@
             <div class="CreateCustomerHeaderDiv">
                 <p class="popCardHeaderText">Upload Ledger Data</p>
             </div>
-            <form autocomplete="off" action="/sales/uploadLedgerData" method="post" enctype="multipart/form-data">
+            <form autocomplete="off" action="/office/uploadLedgerData" method="post" enctype="multipart/form-data">
                 <div class="CCMainSection">
                     <div class="CCNameSection UpnameSection">
                         <p class="ccNameText">Customer Name</p>
@@ -369,7 +369,7 @@
 
 
     function callAllCustomersData() {
-        fetch('/sales/GetAllCustomersAndFollowUp/api')
+        fetch('/office/GetAllCustomersAndFollowUp/api')
             .then(response => response.json())
             .then(data => {
                 console.log('Data from the server:', data);
@@ -380,7 +380,7 @@
     }
 
     function getAllOrders() {
-        fetch('/sales/getallorders/api')
+        fetch('/office/getallorders/api')
             .then(response => response.json())
             .then(data => {
                 console.log("Order Data", data)
@@ -741,7 +741,7 @@
             // alert("Please fill all fields");
         } else {
             // URL of your backend API endpoint
-            var apiUrl = '/sales/saveCustomer/';
+            var apiUrl = '/office/saveCustomer/';
 
             // Data to be sent in the POST request (adjust as needed)
             var postData = {

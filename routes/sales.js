@@ -19,8 +19,7 @@ const upload = multer({ storage: storage });
 
 
 const SalesVerifyLogin = (req, res, next) => {
-
-
+    
     if (req.session.SalesData) {
         next();
     } else {

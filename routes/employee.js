@@ -22,45 +22,47 @@ const EmployeeVerifyLogin = (req, res, next) => {
 
 /* GET home page. */
 router.get('/', EmployeeVerifyLogin, function (req, res, next) {
-  var EmployeeName = req.session.EmployeeName;
+  res.redirect('/home')
+  // var EmployeeName = req.session.EmployeeName;
 
-  var Products = false;
-  var Binders = false;
-  var Additives = false;
+  // var Products = false;
+  // var Binders = false;
+  // var Additives = false;
 
-  employeeHelpers.getProductsWithLowStocks().then((products) => {
-    // console.log('Products: ',Products)
-    if (products.length > 0) {
-      Products = products
-      for (let i = 0; i < Products.length; i++) {
-        let product = Products[i];
-        product.Stock = parseFloat(product.Stock).toFixed(3);
-      }
-    }
-    employeeHelpers.getAllBinderWithLowStocks().then((binders) => {
-      // console.log("Binders: ",Binders)
-      if (binders.length > 0) {
-        Binders = binders;
-        for (let i = 0; i < Binders.length; i++) {
-          let binder = Binders[i];
-          binder.Stock = parseFloat(binder.Stock).toFixed(3);
-        }
-      }
-      employeeHelpers.getAllAdditivesWithLowStocks().then((additives) => {
-        //console.log("Additive: ", Additives )
-        if (additives.length > 0) {
-          Additives = additives;
-          for (let i = 0; i < Additives.length; i++) {
-            let Additive = Additives[i];
-            Additive.Stock = parseFloat(Additive.Stock).toFixed(3);
-          }
-        }
+  // employeeHelpers.getProductsWithLowStocks().then((products) => {
+  //   // console.log('Products: ',Products)
+  //   if (products.length > 0) {
+  //     Products = products
+  //     for (let i = 0; i < Products.length; i++) {
+  //       let product = Products[i];
+  //       product.Stock = parseFloat(product.Stock).toFixed(3);
+  //     }
+  //   }
+  //   employeeHelpers.getAllBinderWithLowStocks().then((binders) => {
+  //     // console.log("Binders: ",Binders)
+  //     if (binders.length > 0) {
+  //       Binders = binders;
+  //       for (let i = 0; i < Binders.length; i++) {
+  //         let binder = Binders[i];
+  //         binder.Stock = parseFloat(binder.Stock).toFixed(3);
+  //       }
+  //     }
+  //     employeeHelpers.getAllAdditivesWithLowStocks().then((additives) => {
+  //       //console.log("Additive: ", Additives )
+  //       if (additives.length > 0) {
+  //         Additives = additives;
+  //         for (let i = 0; i < Additives.length; i++) {
+  //           let Additive = Additives[i];
+  //           Additive.Stock = parseFloat(Additive.Stock).toFixed(3);
+  //         }
+  //       }
 
-        res.render('employee/home', { EmployeeName, Products, Binders, Additives });
-      })
-    })
+  //       res.render('employee/home', { EmployeeName, Products, Binders, Additives });
+  //     })
+  //   })
 
-  })
+  // })
+
 });
 
 router.get('/getAllFormula/api', EmployeeVerifyLogin, (req, res) => {
@@ -2218,20 +2220,21 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', EmployeeVerif
   })
 })
 
-router.get('/CustomTrello', (req, res) => {
+router.get('/home', EmployeeVerifyLogin, (req, res) => {
   res.render('employee/CustomTrello')
 })
 
 
-router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
-  employeeHelpers.GetAllCards().then((AllCards) => {
-  //  console.log(AllCards);
-    employeeHelpers.getAllLists().then((AllLists) => {
-      employeeHelpers.getAllUsers().then((AllUsers) => {
-        employeeHelpers.getAllCustomers().then((AllCustomers) => {
+router.get('/getAllCardAndListsAndUsersToManagement', EmployeeVerifyLogin, (req, res) => {
+  var BranchName = req.session.EmployeeData.Branch;
+  employeeHelpers.GetAllCards(BranchName).then((AllCards) => {
+    //  console.log(AllCards);
+    employeeHelpers.getAllLists(BranchName).then((AllLists) => {
+      employeeHelpers.getAllUsers(BranchName).then((AllUsers) => {
+        employeeHelpers.getAllCustomers(BranchName).then((AllCustomers) => {
           employeeHelpers.GetAllFormulations().then((Formulas) => {
             employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas).then((UpdatedFromuls) => {
-              employeeHelpers.getAllLabels().then((AllLabels) => {
+              employeeHelpers.getAllLabels(BranchName).then((AllLabels) => {
 
                 // console.log("Formulas = ", Formulas[2]);
 
@@ -2241,7 +2244,7 @@ router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
                   AllUsers: AllUsers,
                   Customers: AllCustomers,
                   Formulas: UpdatedFromuls,
-                  Labels:AllLabels
+                  Labels: AllLabels
                 }
                 res.json(data);
               })
@@ -2254,12 +2257,209 @@ router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
   })
 })
 
-router.post('/saveCustomer', (req, res) => {
-  employeeHelpers.SaveCustomer(req.body).then((id) => {
-    var data = req.body
-    data._id = id;
-    res.json({ data });
+router.post('/UpdareCardOrder/:cardID', EmployeeVerifyLogin, async (req, res) => {
+  console.log("Order Creating Updating: ", req.body);
+  var data = req.body;
+  const imageData = req.files;
+  var cardID = req.params.cardID;
+
+  //console.log("imageData", imageData);
+  // ContactDetails: {
+  //     Name: 'dfgdfdf',
+  //     CallCountryCode: '+971',
+  //     CallNumber: '4334534',
+  //     WhatsappCountryCode: '+971',
+  //     WhatsappNumber: '34534'
+  //   }
+
+  var CheckItems = [];
+
+  let productionsItemsArray = await JSON.parse(data.ProductionsItems);
+  let ContactDetails = await JSON.parse(data.ContactDetails);
+  let comments = await JSON.parse(data.comments);
+  let Labels = await JSON.parse(data.Labels);
+  let ReadyProducts = await JSON.parse(data.ReadyProducts);
+  console.log(productionsItemsArray);
+
+  await productionsItemsArray.forEach((EachItem) => {
+    var PushData = {
+      Name: EachItem.Name,
+      State: "InComplete",
+      Qty: EachItem.Qty,
+      Unit: EachItem.Unit,
+      FileNo: EachItem.FileNo ? EachItem.FileNo : "",
+      ColorCode: EachItem.ColorCode,
+      SubCategoryName: EachItem.SubCategoryName,
+
+    }
+
+    if (EachItem.matt) {
+      PushData.matt = EachItem.Matt
+    }
+    if (EachItem.gloss) {
+      PushData.gloss = EachItem.Gloss
+    }
+
+    CheckItems.push(PushData)
   })
+
+
+
+  var NewOrder = {
+    Name: data.OrderName,
+    OrderIDNumber: data.OrderIDNumber,
+    CustomerName: data.CustomerName,
+    // CurrentList: "ORDERS",
+    // ListArray: [
+    //     {
+    //         ListName: "ORDERS",
+    //         InTIme: Date.now(),
+    //         InEmployeeName: req.session.EmployeeData.UserName,
+    //         InEmployeeDesignation: req.session.EmployeeData.Designation
+    //     }
+    // ],
+    AlternateContactNumber: "",
+    AlternateContactcountrySelect: "",
+    CheckListItems: {
+      // CardName: "ORDERS",
+      checkItems: CheckItems
+    },
+    ContactNumber: ContactDetails.CallNumber,
+    ContactcountrySelect: ContactDetails.CallCountryCode,
+    ContactPersonName: ContactDetails.Name,
+    WhatsAppcountrySelect: ContactDetails.WhatsappCountryCode,
+    WhatsappNumber: ContactDetails.WhatsappNumber,
+    description: "",
+    comments: comments,
+    Labels: Labels,
+    ReadyProducts: ReadyProducts
+  }
+
+  if (req.files) {
+    NewOrder.IsAttachments = true;
+  }
+
+  console.log("New Card updated: ", NewOrder);
+
+  var Activity = {
+    activity: `${req.session.EmployeeData.UserName} Updated this card.`,
+    Time: Date.now()
+  }
+
+  employeeHelpers.UpdateCard(NewOrder, cardID, Activity).then((CardId) => {
+    if (req.files) {
+      const imageData = req.files.file;
+      // console.log('Image data:', imageData);
+
+      imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
+        if (!err) {
+        } else {
+          console.log("Error at img1 " + err)
+        }
+      })
+    }
+    res.json({ State: true });
+  })
+})
+
+router.get('/ChangeListofCard/:CardID/:NewListName/:Designation', EmployeeVerifyLogin, (req, res) => {
+  let cardID = req.params.CardID;
+  let newlistname = req.params.NewListName;
+  let Designation = req.params.Designation;
+
+  var UserNow = req.session.EmployeeData;
+
+  var Data = {
+    cardID: cardID,
+    newlistname: newlistname,
+    UserName: UserNow.UserName,
+    Designation: UserNow.Designation,
+    Activity: {
+      activity: `${UserNow.UserName} Moved card to ${newlistname}.`,
+      Time: Date.now(),
+    }
+  }
+
+  if (Designation === "Production") {
+    Data.ProductionPerson = newlistname;
+  }
+  employeeHelpers.ChangeCardList(Data).then(() => {
+    res.json({ Status: true });
+  })
+})
+
+router.get('/ChangeListofCardName/:CardName/:DropColumeName/:Designation', EmployeeVerifyLogin, (req, res) => {
+  let CardName = req.params.CardName;
+  let DropColumeName = req.params.DropColumeName;
+  let Designation = req.params.Designation;
+  var UserNow = req.session.EmployeeData;
+  var NewActivity = UserNow.UserName + " Moved card to " + DropColumeName + ".";
+  console.log("/ChangeListofCardName/:CardName/:DropColumeName/:Designation");
+  var Data = {
+    CardName: CardName,
+    newlistname: DropColumeName,
+    UserName: UserNow.UserName,
+    Designation: UserNow.Designation,
+    Activity: {
+      activity: NewActivity,
+      Time: Date.now(),
+    }
+  }
+  if (Designation === "Production") {
+    Data.ProductionPerson = DropColumeName;
+  }
+  employeeHelpers.ChangeCardListByName(Data).then((data) => {
+    //console.log(data);
+    res.json({ Status: true });
+  })
+})
+
+router.get('/CreateNewLabel/:Color/:ColorlabelName', EmployeeVerifyLogin, (req, res) => {
+  let Color = req.params.Color;
+  let ColorlabelName = req.params.ColorlabelName;
+  var Branch = req.session.EmployeeData.Branch;
+
+  console.log("Color" + Color + "  Label:" + ColorlabelName);
+
+  employeeHelpers.CreateNewLabel(Color, ColorlabelName, Branch).then(() => {
+    res.json({ Status: true });
+  })
+})
+
+
+router.get('/MoveCardToArchived/:CardID', EmployeeVerifyLogin, (req, res) => {
+  let CardID = req.params.CardID;
+  let UserName = req.session.EmployeeData.UserName;
+  let Designation = req.session.EmployeeData.Designation;
+
+
+  var Data = {
+    CardID: CardID,
+    newlistname: "ARCHIVED",
+    UserName: UserName,
+    Designation: Designation,
+    Activity: {
+      activity: `${UserName} moved the card to Archived`,
+      Time: Date.now(),
+    }
+  }
+
+  // if (Designation === "Production") {
+  //     Data.ProductionPerson = DropColumeName;
+  // }
+  console.log("Data:", Data);
+  employeeHelpers.ChangeCardListByCardID(Data).then((data) => {
+    //console.log(data);
+    res.json({ Status: true });
+  })
+
+  // var NewActivity = {
+  //     activity: `${UserNow.UserName} moved the card ${CardID} to Archived`,
+  //     Time: Date.now()
+  // };
+  // employeeHelpers.moveCardToArchived(CardID,UserNow,Designation).then(()=>{
+  //     res.json({ Status: true });
+  // })
 })
 
 
