@@ -2288,20 +2288,22 @@ router.post('/UpdareCardOrder/:cardID', EmployeeVerifyLogin, async (req, res) =>
       Qty: EachItem.Qty,
       Unit: EachItem.Unit,
       FileNo: EachItem.FileNo ? EachItem.FileNo : "",
-      ColorCode: EachItem.ColorCode,
+      FormulaColorName: EachItem.FormulaColorName,  
+      FormulaColorCode: EachItem.FormulaColorCode,
       SubCategoryName: EachItem.SubCategoryName,
 
     }
 
-    if (EachItem.matt) {
-      PushData.matt = EachItem.Matt
+    if (EachItem.Matt) {
+      PushData.Matt = EachItem.Matt
     }
-    if (EachItem.gloss) {
-      PushData.gloss = EachItem.Gloss
+    if (EachItem.Gloss) {
+      PushData.Gloss = EachItem.Gloss
     }
 
     CheckItems.push(PushData)
   })
+  console.log("CheckItems:",CheckItems);
 
 
 

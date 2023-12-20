@@ -2997,11 +2997,11 @@
         //  console.log("OldSelectedItems", OldSelectedItems);
 
         var VirtualSelectItem = `
+            <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
             <p id="FormulaColorName" class='SelectedFormulaColorName' >${formula.ColorName}</p>
             <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.ColorCode ? formula.ColorCode : ""} </p>
             <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
             <p id="SelectedFormulaMattOrGloss" class='FormulaColorName SelectedFormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
-            <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
             ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
             ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} 
                             
@@ -3019,7 +3019,7 @@
     }
 
     function RemoveSelectedFormula(OldSelectedItems, ColorName, selectedClassName) {
-        // console.log("OldSelectedItems:", OldSelectedItems, selectedClassName);
+        //  console.log("OldSelectedItems:", OldSelectedItems, selectedClassName);
         document.getElementById(selectedClassName).innerHTML = "";
     }
 
@@ -3039,13 +3039,13 @@
         var NextCount = count + 1;
 
         var VirtualFormula = `
-        <div class="EachProductionItem" id="ProductionItem_${formula.ColorName}" >
+        <div class="EachProductionItem" id="ProductionItem_${formula.Name}" >
                     <div  onclick="SelectAProductionItem(this)" class="popEachProductsItemss">
-                        <p id="FormulaColorName" class='FormulaColorName' >${formula.ColorName}</p>
-                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' >${formula.ColorCode ? formula.ColorCode : ""} </p>
-                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
-                        <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
-                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p>
+                        <p id="FormulaColorName" class='FormulaColorName' >${formula.Name}</p>
+                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' ></p>
+                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' ></p>
+                        {{!-- <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
+                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p> --}}
 
                         <div class="QtyOfFormula">
                             {{!-- <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
@@ -3056,21 +3056,25 @@
                            
                             <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
                             <p class="FormulaUnit">${formula.Unit}</p>
-                        </div>
+                        </div> 
 
                         <button onclick="RemoveOneFormula('${formula.ColorName}')"
                             class="btn btn-danger">Delete</button>
                     </div>
-                    <div class="SelectedProductItems SelectedProductItem_${formula.ColorName}" id="SelectedProductItem_${formula.ColorName}">
-                        ${formula.SelectedColorName ? ` 
-                            <p id="SelectedFormulaColorName" class='SelectedFormulaColorName' >${formula.SelectedColorName}</p>
-                            <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.SelectedColorCode ? formula.SelectedColorCode : ""} </p>
-                            <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SelectedSubCategoryName ? formula.SelectedSubCategoryName : ""}</p>
+                    <div class="SelectedProductItems SelectedProductItem_${formula.Name}" id="SelectedProductItem_${formula.Name}">
+                        ${formula.FormulaColorName ? ` 
+                            <p id="SelectedFormulaFileNo" class=' SelectedFormulaFileNo FormulaColorName FormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
+                            <p id="SelectedFormulaColorName" class='SelectedFormulaColorName' >${formula.FormulaColorName}</p>
+                            <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.FormulaColorCode ? formula.FormulaColorCode : ""} </p>
+                            <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
                             <p id="SelectedFormulaMattOrGloss" class='FormulaColorName SelectedFormulaMattOrGloss' >${formula.Selectedmatt ? `Matt: ${formula.Selectedmatt}` : ''} ${formula.Selectedgloss ? `Gloss: ${formula.Selectedgloss}` : ''}</p>
-                            <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.SelectedFileNo ? `${formula.SelectedFileNo}` : ""}</p>
-                            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
-                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} 
-                            
+                            {{!-- <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.SelectedFileNo ? `${formula.SelectedFileNo}` : ""}</p> --}}
+                            ${formula.Matt ? ` <p id="SelectedFormulaMatt" class='FormulaColorName SelectedFormulaFileNo' >${formula.Matt}</p>` : ""}
+                             ${formula.Gloss ? `<p id="SelectedFormulaGloss" class='FormulaColorName SelectedFormulaFileNo' >${formula.Gloss}</p>` : ""}
+                            ${formula.Matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.Matt}" hidden >` : ""}
+                            ${formula.Gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.Gloss}" hidden >` : ""} 
+                            <button onclick="RemoveSelectedFormula(this,'${formula.FormulaColorName}','SelectedProductItem_${formula.Name}')"
+                            class="btn SelectedItemRemoveBTN">x</button>
                         `: ``}
                     </div>
                 </div>
@@ -3733,18 +3737,19 @@
         if (ProsItems.length > 0) {
             ProsItems.forEach((ProItems) => {
                 var formula = {
-                    ColorName: ProItems.Name,
+                    Name: ProItems.Name,
                     Unit: ProItems.Unit,
                     FileNo: ProItems.FileNo,
                     QTY: ProItems.Qty,
-                    ColorCode: ProItems.ColorCode,
+                    FormulaColorName: ProItems.FormulaColorName,
+                    FormulaColorCode: ProItems.FormulaColorCode,
                     SubCategoryName: ProItems.SubCategoryName
                 }
-                if (ProItems.matt) {
-                    formula.matt = ProItems.matt
+                if (ProItems.Matt) {
+                    formula.Matt = ProItems.Matt
                 }
-                if (ProItems.gloss) {
-                    formula.gloss = ProItems.gloss
+                if (ProItems.Gloss) {
+                    formula.Gloss = ProItems.Gloss
                 }
 
                 handleResultItemClick(formula)
@@ -3991,7 +3996,7 @@
     }
 
     function UpdateOrder(cardID) {
-         alert("Ordre updated", cardID);
+        //   alert("Ordre updated", cardID);
 
         function validateNewOrderInput() {
 
@@ -4046,7 +4051,7 @@
 
 
             function NotValidNewOrderInput() {
-                 alert('Please fill all the fields!');
+                alert('Please fill all the fields!');
             }
 
             function ValidnewOrderInput() {
@@ -4128,7 +4133,7 @@
 
                 // Alternatively, you can use the spread operator
                 var ProItemsDivArray = [...proItems];
-                console.log('ProItemsDivArray:',ProItemsDivArray)
+                console.log('ProItemsDivArray:', ProItemsDivArray)
 
                 ProItemsDivArray.forEach((OneItem) => {
                     // make changes 
@@ -4136,11 +4141,16 @@
                         Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
                         Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
                         Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
-                        FileNo: OneItem.getElementsByClassName('SelectedFormulaFileNo')[0].textContent,
-                        FormulaColorName:OneItem.getElementsByClassName('SelectedFormulaColorName')[0].textContent,
-                        FormulaColorCode: OneItem.getElementsByClassName('SelectedFormulaColorCode')[0].textContent,
-                        SubCategoryName: OneItem.getElementsByClassName('SelectedFormulaSubCategoryName')[0].textContent,
+
                     }
+
+                    if (OneItem.getElementsByClassName('SelectedFormulaFileNo')[0]) {
+                        item.FileNo = OneItem.getElementsByClassName('SelectedFormulaFileNo')[0].textContent;
+                        item.FormulaColorName = OneItem.getElementsByClassName('SelectedFormulaColorName')[0].textContent;
+                        item.FormulaColorCode = OneItem.getElementsByClassName('SelectedFormulaColorCode')[0].textContent;
+                        item.SubCategoryName = OneItem.getElementsByClassName('SelectedFormulaSubCategoryName')[0].textContent;
+                    }
+
                     if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
                         item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
                     }
@@ -4188,7 +4198,7 @@
                     //AttachmentImage: imageFile
                 }
 
-                console.log("CompleteOrderData:",CompleteOrderData);
+                console.log("CompleteOrderData:", CompleteOrderData);
 
                 var input = document.getElementById('file');
                 var imageFile = input.files[0];
@@ -4249,7 +4259,7 @@
 
 
                 // Make the fetch request
-                
+
                 fetch(apiUrl, fetchOptions)
                     .then(response => response.json()) // Parse the JSON response
                     .then(data => {
@@ -5154,7 +5164,7 @@
                     `
 
         element.parentNode.insertAdjacentHTML('beforeend', VertualInputSection);
-       // element.parentNode.setAttribute("class", "ProductionSelectedElement")
+        // element.parentNode.setAttribute("class", "ProductionSelectedElement")
         element.parentNode.classList.add('ProductionSelectedElement');
 
     }
