@@ -95,10 +95,7 @@
                     <input type="text" id="OrderIDNumber" class="popCardHeaderText"
                         placeholder="Order Name will generate Automatically">
 
-                    <select name="CustomerName" class="CustomerNameSelect" id="OrderName"
-                        onchange="handleCustomerChange()">
-
-                    </select>
+                    <input type="text" readonly name="CustomerName" class="CustomerNameSelect" id="OrderName">
 
                 </div>
                 <div class="PopupCardListNameSection">
@@ -111,9 +108,8 @@
                     <div class="PopCustomerSections">
                         <div class="PopSelectCustomerContact">
                             <p class="popCustomerName">Customer contact: </p>
-                            <select name="customer_contact" onchange="HnadleContactChange()" id="customer_contact">
-                                <option value="">Select a contact person </option>
-                            </select>
+                            <input type="text" readonly name="customer_contact" id="customer_contact">
+
 
                         </div>
                         <div class="popCustomerCallNumberSection">
@@ -246,13 +242,13 @@
 
                 </div>
                 <div class="PopReadyProductsInputSection">
-                    <input placeholder="Product Name" type="text" id="NewReadyProductsInput">
+                    {{!-- <input placeholder="Product Name" type="text" id="NewReadyProductsInput">
                     <input placeholder="0.00" type="text" oninput="OnlyNumber(this)" id="NewReadyProductsQtyInput">
                     <select name="" id="NewReadyProductUnit">
                         <option selected value="Liter">Liter</option>
                         <option value="Kilogram">Kilogram</option>
                     </select>
-                    <button onclick="AddNewReadyProductMannully()">Add</button>
+                    <button onclick="AddNewReadyProductMannully()">Add</button> --}}
                 </div>
             </div>
 
@@ -317,7 +313,7 @@
                             <img id="AttachmentImage" class="AttachmentIMG" src="" alt="">
                         </div>
                     </div>
-                    <div class="PopAddAttamentsArea">
+                    {{!-- <div class="PopAddAttamentsArea">
                         <label for="file" class="custum-file-upload">
                             <div class="icon">
                                 <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
@@ -336,7 +332,7 @@
                             <input id="file" type="file" onchange="previewAttachmentImage()">
                         </label>
 
-                    </div>
+                    </div> --}}
                 </div>
 
             </div>
@@ -2708,7 +2704,7 @@
     }
 
 
-    function OpenPopUpforNewOrder() {
+    /*function OpenPopUpforNewOrder() {
 
         resetAllDataFromNewOrder();
 
@@ -2818,7 +2814,7 @@
         CreateOrderButton.textContent = "Create new Order";
 
 
-    }
+    }*/
 
     function CloseCreateOrderPopup() {
         var mainPopup = document.getElementById('CreateOrderPopup');
@@ -2826,7 +2822,7 @@
         resetAllDataFromNewOrder();
     }
 
-    function handleCustomerChange() {
+    /*function handleCustomerChange() {
         var customer_contact = document.getElementById('customer_contact');
         var CustomerName = document.getElementById('OrderName').value;
         var customers = State.Customers;
@@ -2848,7 +2844,7 @@
 
         });
 
-    }
+    }*/
 
     function HnadleContactChange() {
         var ContactMobileno = document.getElementById('ContactMobileno');
@@ -2997,13 +2993,13 @@
         //  console.log("OldSelectedItems", OldSelectedItems);
 
         var VirtualSelectItem = `
-            <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
             <p id="FormulaColorName" class='SelectedFormulaColorName' >${formula.ColorName}</p>
             <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.ColorCode ? formula.ColorCode : ""} </p>
             <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
             <p id="SelectedFormulaMattOrGloss" class='FormulaColorName SelectedFormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
             ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
             ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} 
+            {{!-- <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p> --}}
                             
             <button onclick="RemoveSelectedFormula(this,'${formula.ColorName}','SelectedProductItem_${OldColorName}')"
                             class="btn SelectedItemRemoveBTN">x</button>
@@ -3040,7 +3036,8 @@
 
         var VirtualFormula = `
         <div class="EachProductionItem" id="ProductionItem_${formula.Name}" >
-                    <div  onclick="SelectAProductionItem(this)" class="popEachProductsItemss">
+                    <div  ${formula.State === 'Complete' ? '' : 'onclick="SelectAProductionItem(this)"'}   class="popEachProductsItemss">
+                        <input type="Checkbox" class="ProItemCheckBox" id="ProItemCheckBox_${formula.Name}" ${formula.State === 'Complete' ? 'checked="true"' : ''} onchange="ProItemCheckboxChanged('${formula.Name}',this)" >
                         <p id="FormulaColorName" class='FormulaColorName' >${formula.Name}</p>
                         <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' ></p>
                         <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' ></p>
@@ -3054,16 +3051,15 @@
                             {{!-- ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
                             ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} --}}
                            
-                            <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
+                            <input type="text" oninput="OnlyNumber(this)" ${formula.State === 'Complete' ? 'readonly="true"' : ''} placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
                             <p class="FormulaUnit">${formula.Unit}</p>
                         </div> 
 
-                        <button onclick="RemoveOneFormula('${formula.ColorName}')"
+                        <button id="ProItemDeleteBtn_${formula.Name}" onclick="RemoveOneFormula('${formula.Name}')"
                             class="btn btn-danger">Delete</button>
                     </div>
                     <div class="SelectedProductItems SelectedProductItem_${formula.Name}" id="SelectedProductItem_${formula.Name}">
                         ${formula.FormulaColorName ? ` 
-                            <p id="SelectedFormulaFileNo" class=' SelectedFormulaFileNo FormulaColorName FormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
                             <p id="SelectedFormulaColorName" class='SelectedFormulaColorName' >${formula.FormulaColorName}</p>
                             <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.FormulaColorCode ? formula.FormulaColorCode : ""} </p>
                             <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
@@ -3073,14 +3069,15 @@
                              ${formula.Gloss ? `<p id="SelectedFormulaGloss" class='FormulaColorName SelectedFormulaFileNo' >${formula.Gloss}</p>` : ""}
                             ${formula.Matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.Matt}" hidden >` : ""}
                             ${formula.Gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.Gloss}" hidden >` : ""} 
-                            <button onclick="RemoveSelectedFormula(this,'${formula.FormulaColorName}','SelectedProductItem_${formula.Name}')"
+                            <p id="SelectedFormulaFileNo" class=' SelectedFormulaFileNo FormulaColorName FormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
+                            <button id="SelectedItemRemoveBtn_${formula.Name}" onclick="RemoveSelectedFormula(this,'${formula.FormulaColorName}','SelectedProductItem_${formula.Name}')"
                             class="btn SelectedItemRemoveBTN">x</button>
                         `: ``}
                     </div>
                 </div>
         `
         var NewOrders = {
-            ColorName: formula.ColorName,
+            ColorName: formula.Name,
             Unit: formula.Unit,
             FileNo: formula.FileNo
         }
@@ -3088,6 +3085,10 @@
         State.NewOrders.push(NewOrders);
 
         popProductsItemsCollectiosn.insertAdjacentHTML('beforeend', VirtualFormula);
+
+        if (formula.State === 'Complete') {
+            tempCheckBoxState(formula.Name);
+        }
 
 
     }
@@ -3251,7 +3252,7 @@
     }
 
 
-    function CreateNewOrder() {
+    /*function CreateNewOrder() {
 
         console.log("CAlling Create new Order");
 
@@ -3464,11 +3465,7 @@
                 // Append the file to FormData with a specific field name ('file' in this case)
                 formData.append('file', imageFile);
 
-                // Append other data to FormData
-                /* Object.entries(CompleteOrderData).forEach(([key, value]) => {
-                     formData.append(key, value);
-                 });*/
-
+              
                 // Manually handle objects and arrays
                 Object.entries(CompleteOrderData).forEach(([key, value]) => {
                     if (typeof value === 'object') {
@@ -3503,13 +3500,7 @@
                     //    headers: { 'Content-Type': 'multipart/form-data' },
                     body: formData,
                 };
-                /* method: 'POST',
-                 headers: {
-                     // 'Content-Type': 'application/json',
-                     'Content-Type': 'multipart/form-data',
-                     // Add any additional headers if needed
-                 },
-                 body: jsonData,*/
+               
 
 
                 // Make the fetch request
@@ -3537,7 +3528,7 @@
 
         validateNewOrderInput();
 
-    }
+    }*/
 
 
     function AddNewProductMannully() {
@@ -3546,7 +3537,7 @@
         var NewProductUnit = document.getElementById('NewProductUnit').value;
 
         var formula = {
-            ColorName: NewFormulaNameInput,
+            Name: NewFormulaNameInput,
             Unit: NewProductUnit,
             QTY: NewFromulaQtyInput
         }
@@ -3626,13 +3617,14 @@
                 if (UpdatedCustomers.length > 0) {
 
                     var CustomerSelect = CreateOrderPopup.getElementsByClassName('CustomerNameSelect')[0];
-                    CustomerSelect.innerHTML = "";
-                    UpdatedCustomers.forEach((OneCustomer) => {
-                        var optionElement = document.createElement('option');
-                        optionElement.text = OneCustomer.Customername;
-                        optionElement.value = OneCustomer.Customername;
-                        CustomerSelect.appendChild(optionElement);
-                    });
+                    CustomerSelect.value = CardData.CustomerName;
+                    /* CustomerSelect.innerHTML = "";
+                     UpdatedCustomers.forEach((OneCustomer) => {
+                         var optionElement = document.createElement('option');
+                         optionElement.text = OneCustomer.Customername;
+                         optionElement.value = OneCustomer.Customername;
+                         CustomerSelect.appendChild(optionElement);
+                     });*/
                 } else {
                     //  // console.log("No matching customer found.");
                 }
@@ -3686,14 +3678,16 @@
                 // // console.log(Contacts);
 
                 var customer_contact = document.getElementById('customer_contact');
-                customer_contact.innerHTML = "";
+                customer_contact.value = ContactPersonName;
+                //customer_contact.innerHTML = "";
 
-                Contacts.forEach((OneContact) => {
-                    var contactOption = document.createElement('option')
-                    contactOption.value = OneContact.Name;
-                    contactOption.text = OneContact.Name;
-                    customer_contact.append(contactOption);
-                })
+
+                /* Contacts.forEach((OneContact) => {
+                     var contactOption = document.createElement('option')
+                     contactOption.value = OneContact.Name;
+                     contactOption.text = OneContact.Name;
+                     customer_contact.append(contactOption);
+                 })*/
 
                 HnadleContactChange();
             })
@@ -3737,6 +3731,7 @@
         if (ProsItems.length > 0) {
             ProsItems.forEach((ProItems) => {
                 var formula = {
+                    State: ProItems.State,
                     Name: ProItems.Name,
                     Unit: ProItems.Unit,
                     FileNo: ProItems.FileNo,
@@ -4137,31 +4132,50 @@
 
                 ProItemsDivArray.forEach((OneItem) => {
                     // make changes 
-                    var item = {
-                        Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
-                        Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
-                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
+                    console.log(OneItem);
+                    if (OneItem.getElementsByClassName('FormulaColorName')[0]) {
 
+
+                        var item = {
+                            Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
+                            Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
+                            Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
+
+                        }
+
+                        if (OneItem.getElementsByClassName('SelectedFormulaColorName')[0]) {
+                            item.FormulaColorName = OneItem.getElementsByClassName('SelectedFormulaColorName')[0].textContent;
+                            item.FormulaColorCode = OneItem.getElementsByClassName('SelectedFormulaColorCode')[0].textContent;
+                            item.SubCategoryName = OneItem.getElementsByClassName('SelectedFormulaSubCategoryName')[0].textContent;
+                        }
+
+                        if (OneItem.getElementsByClassName('SelectedFormulaFileNo')[0]) {
+                            item.FileNo = OneItem.getElementsByClassName('SelectedFormulaFileNo')[0].textContent;
+                        }
+
+
+                        if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
+                            item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
+                        }
+
+                        if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
+                            item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
+                        }
+
+                        if (OneItem.getElementsByClassName('ProItemCheckBox')[0]) {
+                            if (OneItem.getElementsByClassName('ProItemCheckBox')[0].checked) {
+                                item.State = "Complete";
+                            } else {
+                                item.State = "InComplete";
+                            }
+                        } else {
+                            item.State = "InComplete";
+                        }
+
+                        // console.log("Proitem: ", item);
+
+                        ProductionsItems.push(item);
                     }
-
-                    if (OneItem.getElementsByClassName('SelectedFormulaFileNo')[0]) {
-                        item.FileNo = OneItem.getElementsByClassName('SelectedFormulaFileNo')[0].textContent;
-                        item.FormulaColorName = OneItem.getElementsByClassName('SelectedFormulaColorName')[0].textContent;
-                        item.FormulaColorCode = OneItem.getElementsByClassName('SelectedFormulaColorCode')[0].textContent;
-                        item.SubCategoryName = OneItem.getElementsByClassName('SelectedFormulaSubCategoryName')[0].textContent;
-                    }
-
-                    if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
-                        item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
-                    }
-
-                    if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
-                        item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
-                    }
-
-                    // console.log("Proitem: ", item);
-
-                    ProductionsItems.push(item);
                 });
 
                 // get all Comment
@@ -5159,7 +5173,7 @@
                     <ul class="search-results" id="searchResults"></ul>
                 </div>
              </div>
-            <a href="/createFormula" class="btn popNewFormulaBtn ">Create New Formula</a>
+            <a href="/createFormulas" class="btn popNewFormulaBtn ">Create New Formula</a>
         </div>
                     `
 
@@ -5167,6 +5181,100 @@
         // element.parentNode.setAttribute("class", "ProductionSelectedElement")
         element.parentNode.classList.add('ProductionSelectedElement');
 
+    }
+
+
+    function ProItemCheckboxChanged(ItmeName, CheckBox) {
+        console.log(ItmeName);
+        console.log(CheckBox);
+
+        var productionItem = document.getElementById(`ProductionItem_${ItmeName}`);
+        var SelectedItemRemoveBTN = document.getElementById(`SelectedItemRemoveBtn_${ItmeName}`)
+        var ProItemDeleteBTn = document.getElementById(`ProItemDeleteBtn_${ItmeName}`)
+        var OrderIdNumber = document.getElementById('OrderIDNumber').value;
+        var OrderName = document.getElementById('OrderName').value;
+        var CardFullName = OrderIdNumber + OrderName;
+
+
+        if (CheckBox.checked) {
+            console.log("Checkbox is checked");
+            if (SelectedItemRemoveBTN) {
+                SelectedItemRemoveBTN.disabled = true;
+            }
+
+            if (ProItemDeleteBTn) {
+                ProItemDeleteBTn.disabled = true;
+            }
+
+            // Check if the element exists
+            if (productionItem) {
+                // Get all <p> tags inside the element
+                var paragraphs = productionItem.getElementsByTagName('p');
+
+                // Loop through each <p> tag and add the style property
+                for (var i = 0; i < paragraphs.length; i++) {
+                    paragraphs[i].style.textDecoration = 'line-through';
+                }
+                var FetchUrl = `/updateProItemState/${ItmeName}/${CardFullName}/Complete`
+                UpdateCheckBoxChangedState(FetchUrl)
+            }
+        } else {
+            console.log("Checkbox is not checked");
+            if (SelectedItemRemoveBTN) {
+                SelectedItemRemoveBTN.disabled = true;
+            }
+
+            if (ProItemDeleteBTn) {
+                ProItemDeleteBTn.disabled = true;
+            }
+
+
+            // Check if the element exists
+            if (productionItem) {
+                // Get all <p> tags inside the element
+                var paragraphs = productionItem.getElementsByTagName('p');
+
+                // Loop through each <p> tag and add the style property
+                for (var i = 0; i < paragraphs.length; i++) {
+                    paragraphs[i].style.textDecoration = 'none';
+                }
+
+                var FetchUrl = `/updateProItemState/${ItmeName}/${CardFullName}/InComplete`
+                UpdateCheckBoxChangedState(FetchUrl)
+            }
+        }
+
+        async function UpdateCheckBoxChangedState(FetchUrl) {
+            const response = await fetch(FetchUrl);
+            const data = await response.json();
+
+            fetchAllCards();
+        }
+    }
+
+    function tempCheckBoxState(ItmeName) {
+        var productionItem = document.getElementById(`ProductionItem_${ItmeName}`);
+        var SelectedItemRemoveBTN = document.getElementById(`SelectedItemRemoveBtn_${ItmeName}`)
+        var ProItemDeleteBTn = document.getElementById(`ProItemDeleteBtn_${ItmeName}`)
+        if (SelectedItemRemoveBTN) {
+            SelectedItemRemoveBTN.disabled = true;
+        }
+
+        if (ProItemDeleteBTn) {
+            ProItemDeleteBTn.disabled = true;
+        }
+
+
+        if (productionItem) {
+            // Get all <p> tags inside the element
+            var paragraphs = productionItem.getElementsByTagName('p');
+
+            // Loop through each <p> tag and add the style property
+            for (var i = 0; i < paragraphs.length; i++) {
+                paragraphs[i].style.textDecoration = 'line-through';
+            }
+
+        }
     }
 
 

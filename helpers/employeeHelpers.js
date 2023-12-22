@@ -1530,22 +1530,42 @@ module.exports = {
             })
         })
     },
-    getAllCustomerPurchaseDataByName:(CustomerName)=>{
-        return new Promise(async(resolve,reject)=>{
-            await db.get().collection(collection.CUSTOMER_PURCHASE_COLLECTION).find({CustomerName:CustomerName}).toArray().then((AllData)=>{
+    getAllCustomerPurchaseDataByName: (CustomerName) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.CUSTOMER_PURCHASE_COLLECTION).find({ CustomerName: CustomerName }).toArray().then((AllData) => {
                 resolve(AllData);
             })
         })
     },
-    ChangeEmployeeDutyState:(employeeName,OnDutyStateChange) => {
-        return new Promise(async(resolve, reject) => {
-            await db.get().collection(collection.USERS_COLLECTION).updateOne({UserName:employeeName},{$set:{OnDuty:OnDutyStateChange}}).then(()=>{
+    ChangeEmployeeDutyState: (employeeName, OnDutyStateChange) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USERS_COLLECTION).updateOne({ UserName: employeeName }, { $set: { OnDuty: OnDutyStateChange } }).then(() => {
                 resolve();
             })
         })
     },
+    UpdateCardProductionItemState: (CardName, ItemName, State) => {
+        return new Promise(async (resolve, reject) => {
+            var CardData = await db.get().collection(collection.CARD_COLLECTION).findOne({ "Name": CardName });
 
-    
+            if (CardData) {
+                await CardData.CheckListItems.checkItems.forEach((EachCheckItem) => {
+                    if (EachCheckItem.Name === ItemName) {
+                        EachCheckItem.State = State;
+                    }
+                })
+
+                await db.get().collection(collection.CARD_COLLECTION).updateOne({ "Name": CardName }, { $set: CardData }).then(() => {
+                    resolve();
+                })
+
+            } else {
+                resolve()
+            }
+        })
+    },
+
+
 
     // convert all cards to East cost DC branch
     GiveAllCardABranch: () => {

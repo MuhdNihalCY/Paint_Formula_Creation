@@ -2284,7 +2284,7 @@ router.post('/UpdareCardOrder/:cardID', EmployeeVerifyLogin, async (req, res) =>
   await productionsItemsArray.forEach((EachItem) => {
     var PushData = {
       Name: EachItem.Name,
-      State: "InComplete",
+      State: EachItem.State,
       Qty: EachItem.Qty,
       Unit: EachItem.Unit,
       FileNo: EachItem.FileNo ? EachItem.FileNo : "",
@@ -2462,6 +2462,16 @@ router.get('/MoveCardToArchived/:CardID', EmployeeVerifyLogin, (req, res) => {
   // employeeHelpers.moveCardToArchived(CardID,UserNow,Designation).then(()=>{
   //     res.json({ Status: true });
   // })
+})
+
+router.get('/updateProItemState/:ItmeName/:CardFullName/:State',EmployeeVerifyLogin,(req,res)=>{
+  const ItemName=req.params.ItmeName;
+  const CardFullName=req.params.CardFullName;
+  const State=req.params.State;
+
+  employeeHelpers.UpdateCardProductionItemState(CardFullName,ItemName,State).then(()=>{
+    res.json({Status:true});
+  })
 })
 
 
