@@ -297,7 +297,7 @@ router.post('/GetProductWithSubCatagory/api', (req, res) => {  //EmployeeVerifyL
 })
 
 router.post('/GetProductsSolidContent/api', (req, res) => {  //EmployeeVerifyLogin, 
-  //console.log("ProductsHere: ",req.body);
+  // console.log("ProductsHere: ",req.body);
   employeeHelpers.GetProductByArrayOfProductById(req.body.selectedOption).then((Products) => {
     res.json(Products);
   })
@@ -358,16 +358,24 @@ router.post('/FindAdditiveBinderDensityById/api', async (req, res) => {  // Empl
 router.post('/CreateFormula', (req, res) => {
 
   function StoreRefImage(SavedData) {
+    console.log("Saved data: ", SavedData);
     if (req.files) {
       const imageData = req.files.Image;
       // console.log('Image data:', imageData);
+      // Convert the image to Base64
+      const base64Image = imageData.data.toString('base64');
+      console.log("Base64Image: ", base64Image);
 
-      imageData.mv('./public/images/RefImages/' + SavedData.FileNo + ".jpg", (err) => {
-        if (!err) {
-        } else {
-          console.log("Error at img1 " + err)
-        }
+      employeeHelpers.StoreImageInDatabase(SavedData, base64Image).then(() => {
+        console.log("image Added!");
       })
+
+      // imageData.mv('./public/images/RefImages/' + SavedData.FileNo + ".jpg", (err) => {
+      //   if (!err) {
+      //   } else {
+      //     console.log("Error at img1 " + err)
+      //   }
+      // })
     }
   }
 
@@ -924,6 +932,7 @@ router.get('/api/BulkOrder/:FileNo', (req, res) => {
 })
 
 router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
+  var Branch = req.session.EmployeeData.Branch
   var OrderFile = req.body;
   let id = req.params.id;
   var TotalQty = OrderFile.Quantity;
@@ -949,7 +958,7 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
         var TinterQty = OrderFile["TinterGram" + i];
         //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
 
-        promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
+        promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty, Branch));
       }
 
       let states = await Promise.all(promises);
@@ -970,7 +979,7 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
 
       if (OrderFile.Binder1) {
         var Binder1Qty = OrderFile.Binder1QTY;
-        let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
+        let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty, Branch);
         if (!binder1State.HaveStock) {
           LowStocks(OrderFile.Binder1, TotalQty);
           // console.log(" Binder1 Stocks are not available. ");
@@ -979,7 +988,7 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
         }
         if (OrderFile.Binder2) {
           var Binder2Qty = OrderFile.Binder2QTY;
-          let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
+          let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty, Branch);
           if (!binder2State.HaveStock) {
             LowStocks(OrderFile.Binder2, TotalQty);
             //  console.log(" Binder2 Stocks are not available. ");
@@ -991,7 +1000,7 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
 
       if (OrderFile.Additive) {
         var AdditiveQTY = OrderFile.AdditiveQTY;
-        let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
+        let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY, Branch);
         if (!additiveState.HaveStock) {
           LowStocks(OrderFile.Additive, TotalQty);
           // console.log(" Additive Stocks are not available. ");
@@ -1011,15 +1020,16 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
     }
 
     function BulkOrderNow(orderFile) {
-      employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
+      var Branch = req.session.EmployeeData.Branch;
+      employeeHelpers.BulkOrderUpdate(orderFile, Branch).then(() => {
         // Rest of the code...
         //  console.log("Bulk Updated!");
         // employeeHelpers.CreateNewCard(orderFile).then((CardId) => {
-        employeeHelpers.CreateNewCard(orderFile, req.session.EmployeeData).then((CardId) => {
-          employeeHelpers.SaveCardIDToOrder(orderFile.FileName, CardId).then(() => {
-            res.redirect('/Orders');
-          })
-        })
+        // employeeHelpers.CreateNewCard(orderFile, req.session.EmployeeData).then((CardId) => {
+        //    employeeHelpers.SaveCardIDToOrder(orderFile.FileName).then(() => {
+        res.redirect('/Orders');
+        //  })
+        // })
         // })
       });
     }
@@ -1037,6 +1047,8 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
 });
 
 router.get('/UpdateStocks', EmployeeVerifyLogin, (req, res) => {
+  var Branch = req.session.EmployeeData.Branch;
+
   employeeHelpers.GetAllProducts().then((products) => {
     // console.log(Products);
     employeeHelpers.getAllCategories().then((AllCategory) => {
@@ -1073,6 +1085,22 @@ router.get('/UpdateStocks', EmployeeVerifyLogin, (req, res) => {
             if (subcategory) {
               product.SubCategory_Name = subcategory.SubCategory;
             }
+
+            // Put Branch stock to Stock key of each product
+            var BranchFound = false;
+            product.BranchStocks.forEach(async (OneBranch) => {
+              if (OneBranch.BranchName === Branch) {
+                BranchFound = true;
+                if (parseFloat(OneBranch.Stock) > 0) {
+                  product.Stock = parseFloat(OneBranch.Stock)
+                } else {
+                  product.Stock = 0;
+                }
+              }
+            })
+            if (!BranchFound) {
+              product.Stock = 0;
+            }
           }
 
           // Print the modified Products array
@@ -1082,6 +1110,7 @@ router.get('/UpdateStocks', EmployeeVerifyLogin, (req, res) => {
         // Call the function to modify the Products array
         modifyProductsArray();
 
+
         res.render('employee/UpdateStocks', { Products });
         // res.json(Products)
       })
@@ -1090,42 +1119,84 @@ router.get('/UpdateStocks', EmployeeVerifyLogin, (req, res) => {
 })
 
 router.post('/UpdateProductStock/:id', EmployeeVerifyLogin, (req, res) => {
+  var Branch = req.session.EmployeeData.Branch;
   var Data = req.body;
   Data.ProductId = req.params.id;
   //console.log(Data);
-  employeeHelpers.UpdateProductStockById(Data).then(() => {
+  employeeHelpers.UpdateProductStockById(Data, Branch).then(() => {
     res.redirect('/UpdateStocks');
   })
 
 })
 
 router.get('/BinderStockUpdate', EmployeeVerifyLogin, (req, res) => {
+  var Branch = req.session.EmployeeData.Branch;
+
   employeeHelpers.GetAllBinders().then((Binders) => {
+    // Put Branch stock to Stock key of each product
+    Binders.forEach((Binder) => {
+      if (Binder.BranchStocks) {
+        var BranchFound = false;
+        Binder.BranchStocks.forEach(async (OneBranch) => {
+          if (OneBranch.BranchName === Branch) {
+            BranchFound = true;
+            Binder.Stock = parseFloat(OneBranch.Stock)
+          }
+        })
+
+        if (!BranchFound) {
+          Binder.Stock = 0;
+        }
+      } else {
+        Binder.Stock = 0;
+      }
+    })
+
     res.render('employee/BinderStockUpdate', { Binders });
   })
 })
 
 router.post('/UpdateBinderStock/:id', EmployeeVerifyLogin, (req, res) => {
+  var Branch = req.session.EmployeeData.Branch;
   var Data = req.body;
   Data.ProductId = req.params.id;
   // console.log(Data);
-  employeeHelpers.UpdateBinderStockById(Data).then(() => {
+  employeeHelpers.UpdateBinderStockById(Data, Branch).then(() => {
     res.redirect('/BinderStockUpdate');
   })
 })
 
 router.get('/AdditiveStockUpdate', EmployeeVerifyLogin, (req, res) => {
+  var Branch = req.session.EmployeeData.Branch;
   employeeHelpers.GetAllAdditives().then((Additives) => {
+    Additives.forEach((Additive) => {
+      if (Additive.BranchStocks) {
+        var BranchFound = false;
+        Additive.BranchStocks.forEach(async (OneBranch) => {
+          if (OneBranch.BranchName === Branch) {
+            BranchFound = true;
+            Additive.Stock = parseFloat(OneBranch.Stock)
+          }
+        })
+
+        if (!BranchFound) {
+          Additive.Stock = 0;
+        }
+      } else {
+        Additive.Stock = 0;
+      }
+    })
     res.render('employee/AdditiveStockUpdate', { Additives });
   })
 })
 
 
 router.post('/UpdateAdditiveStock/:id', EmployeeVerifyLogin, (req, res) => {
+  var Branch = req.session.EmployeeData.Branch;
   var Data = req.body;
   Data.ProductId = req.params.id;
   // console.log(Data);
-  employeeHelpers.UpdateAdditiveStockById(Data).then(() => {
+  employeeHelpers.UpdateAdditiveStockById(Data, Branch).then(() => {
     res.redirect('/AdditiveStockUpdate');
   })
 })
@@ -1244,13 +1315,20 @@ router.post('/CreateEditedFormula', EmployeeVerifyLogin, (req, res) => {
     if (req.files) {
       const imageData = req.files.Image;
       // console.log('Image data:', imageData);
+      // Convert the image to Base64
+      const base64Image = imageData.data.toString('base64');
+      console.log("Base64Image: ", base64Image);
 
-      imageData.mv('./public/images/RefImages/' + SavedData.FileNo + ".jpg", (err) => {
-        if (!err) {
-        } else {
-          console.log("Error at img1 " + err)
-        }
+      employeeHelpers.StoreImageInDatabase(SavedData, base64Image).then(() => {
+        console.log("image Added!");
       })
+
+      // imageData.mv('./public/images/RefImages/' + SavedData.FileNo + ".jpg", (err) => {
+      //   if (!err) {
+      //   } else {
+      //     console.log("Error at img1 " + err)
+      //   }
+      // })
     }
   }
 
@@ -1681,6 +1759,7 @@ router.get('/api/BulkOrder/Updated/:FileNo', (req, res) => {
 })
 
 router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
+  var Branch = req.session.EmployeeData.Branch
   var OrderFile = req.body;
   let id = req.params.id;
   var TotalQty = OrderFile.Quantity;
@@ -1706,7 +1785,7 @@ router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
         var TinterQty = OrderFile["TinterGram" + i];
         //  console.log("Tinter Name : " + TinterName + " Qty : " + TinterQty);
 
-        promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty));
+        promises.push(employeeHelpers.TinterCheckStock(TinterName, TinterQty, Branch));
       }
 
       let states = await Promise.all(promises);
@@ -1727,7 +1806,7 @@ router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
 
       if (OrderFile.Binder1) {
         var Binder1Qty = OrderFile.Binder1QTY;
-        let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty);
+        let binder1State = await employeeHelpers.BinderCheckStock(OrderFile.Binder1, Binder1Qty, Branch);
         if (!binder1State.HaveStock) {
           LowStocks(OrderFile.Binder1, TotalQty);
           // console.log(" Binder1 Stocks are not available. ");
@@ -1736,7 +1815,7 @@ router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
         }
         if (OrderFile.Binder2) {
           var Binder2Qty = OrderFile.Binder2QTY;
-          let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty);
+          let binder2State = await employeeHelpers.BinderCheckStock(OrderFile.Binder2, Binder2Qty, Branch);
           if (!binder2State.HaveStock) {
             LowStocks(OrderFile.Binder2, TotalQty);
             //  console.log(" Binder2 Stocks are not available. ");
@@ -1748,7 +1827,7 @@ router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
 
       if (OrderFile.Additive) {
         var AdditiveQTY = OrderFile.AdditiveQTY;
-        let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY);
+        let additiveState = await employeeHelpers.AdditiveCheckStock(OrderFile.Additive, AdditiveQTY, Branch);
         if (!additiveState.HaveStock) {
           LowStocks(OrderFile.Additive, TotalQty);
           // console.log(" Additive Stocks are not available. ");
@@ -1769,7 +1848,8 @@ router.post('/UpdatedBulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
 
     function BulkOrderNow(orderFile) {
       orderFile.isUpdated = true;
-      employeeHelpers.BulkOrderUpdate(orderFile).then(() => {
+      var Branch = req.session.EmployeeData.Branch;
+      employeeHelpers.BulkOrderUpdate(orderFile, Branch).then(() => {
         // Rest of the code...
         //  console.log("Bulk Updated!");
         employeeHelpers.CreateNewCard(orderFile).then((CardId) => {
@@ -2288,7 +2368,7 @@ router.post('/UpdareCardOrder/:cardID', EmployeeVerifyLogin, async (req, res) =>
       Qty: EachItem.Qty,
       Unit: EachItem.Unit,
       FileNo: EachItem.FileNo ? EachItem.FileNo : "",
-      FormulaColorName: EachItem.FormulaColorName,  
+      FormulaColorName: EachItem.FormulaColorName,
       FormulaColorCode: EachItem.FormulaColorCode,
       SubCategoryName: EachItem.SubCategoryName,
 
@@ -2303,7 +2383,7 @@ router.post('/UpdareCardOrder/:cardID', EmployeeVerifyLogin, async (req, res) =>
 
     CheckItems.push(PushData)
   })
-  console.log("CheckItems:",CheckItems);
+  console.log("CheckItems:", CheckItems);
 
 
 
@@ -2464,13 +2544,13 @@ router.get('/MoveCardToArchived/:CardID', EmployeeVerifyLogin, (req, res) => {
   // })
 })
 
-router.get('/updateProItemState/:ItmeName/:CardFullName/:State',EmployeeVerifyLogin,(req,res)=>{
-  const ItemName=req.params.ItmeName;
-  const CardFullName=req.params.CardFullName;
-  const State=req.params.State;
+router.get('/updateProItemState/:ItmeName/:CardFullName/:State', EmployeeVerifyLogin, (req, res) => {
+  const ItemName = req.params.ItmeName;
+  const CardFullName = req.params.CardFullName;
+  const State = req.params.State;
 
-  employeeHelpers.UpdateCardProductionItemState(CardFullName,ItemName,State).then(()=>{
-    res.json({Status:true});
+  employeeHelpers.UpdateCardProductionItemState(CardFullName, ItemName, State).then(() => {
+    res.json({ Status: true });
   })
 })
 

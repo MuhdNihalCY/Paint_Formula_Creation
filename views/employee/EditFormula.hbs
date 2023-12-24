@@ -194,7 +194,8 @@
                             </div>
                             <div class="CFBasicDetailsImg">
                                 {{!-- Display referance image that is selected --}}
-                                <img src="/images/RefImages/{{Formula.FileNo}}.jpg" alt="" id="CFselectedImage">
+                                <img src="data:image/jpeg;base64,{{Formula.ImageBase64}}" alt="" id="CFselectedImage">
+                                {{!-- /images/RefImages/{{Formula.FileNo}}.jpg --}}
                                 <div class="ImageCopyCheckDiv" hidden>
                                     <input type="checkbox" name="CopyImage" id="imageCopyCheckbox" checked> copy Image
                                 </div>

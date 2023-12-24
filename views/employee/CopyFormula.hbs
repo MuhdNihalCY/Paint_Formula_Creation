@@ -195,7 +195,8 @@
                             </div>
                             <div class="CFBasicDetailsImg">
                                 {{!-- Display referance image that is selected --}}
-                                <img src="/images/RefImages/{{Formula.FileNo}}.jpg" alt="" id="CFselectedImage">
+                                <img src="data:image/jpeg;base64,{{Formula.ImageBase64}}" alt="" id="CFselectedImage">
+                                   {{!-- /images/RefImages/{{Formula.FileNo}}.jpg --}}
                                 <div class="ImageCopyCheckDiv" hidden>
                                     <input type="checkbox" name="CopyImage" id="imageCopyCheckbox" checked> copy Image
                                 </div>
@@ -1706,7 +1707,7 @@
             })
             .then(function (products) {
                 // Handle the response data
-                //console.log(products);
+                // console.log("products",products);
                 // Perform additional actions with the response data
 
                 // find SolidContentFor each Product by Solid content= solid content of each product * quantity of the product used in formula creation /100
@@ -1724,6 +1725,7 @@
                     if (OneProduct) {
                         var SolidContentOfProduct = parseFloat(OneProduct.SolidContent);
                         var VocOfProduct = parseFloat(OneProduct.VOC);
+                  //      console.log("GramInputTotal:",GramInputTotal," SolidContentOfProduct:",SolidContentOfProduct)
                         SumOfSolidContentOfProducts += (GramInputTotal * SolidContentOfProduct) / 100
                         VocOfProducts += (GramInputTotal * VocOfProduct) / 100
                         //console.log("Voc of Products: ", (GramInputTotal * VocOfProduct) / 100)
@@ -1731,6 +1733,7 @@
                     }
                 }
                 //Solid content of Formulation= (sum of solid content of each row/  Total Quantity of Formulation)* 100
+                // console.log("SumOfSolidContentOfProducts:",SumOfSolidContentOfProducts," TotalQtyOfFormula:",TotalQtyOfFormula);
                 var SolidContentOfFormulation = (SumOfSolidContentOfProducts / TotalQtyOfFormula) * 100
                 var SumOfVoc = (VocOfProducts / TotalQtyOfFormula) * 100
 
@@ -1741,8 +1744,8 @@
                 document.getElementById('CFFormulaDensity').value = DensityOfFormula;
 
                 var VocOfFormulation = SumOfVoc * 10 * (DensityOfFormula / 1000)
-                //console.log("Solid content of Formulation: ",SolidContentOfFormulation);
-                //// alert("Solid content of Formulation: ",SolidContentOfFormulation.toString());
+                // console.log("Solid content of Formulation: ",SolidContentOfFormulation);
+                // alert("Solid content of Formulation: ",SolidContentOfFormulation.toString());
                 if (!isNaN(SolidContentOfFormulation)) {
                     document.getElementById('CFFormulaSolidContent').value = SolidContentOfFormulation;
                 }
@@ -1754,17 +1757,11 @@
                 var SampledQty = TotalQtyInGram + "/" + TotalQtyInLiter;
                 document.getElementById('SampleQty').value = SampledQty;
 
-
-
-
-
             })
             .catch(function (error) {
                 // Handle any errors that occurred during the AJAX call
                 console.error("Error: ", error);
             });
-
-
     }
 
     // to load one Sample data for reload the table.

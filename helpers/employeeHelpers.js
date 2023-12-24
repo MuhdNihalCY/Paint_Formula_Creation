@@ -79,12 +79,14 @@ module.exports = {
     GetProductByArrayOfProductById: (ArrayOfProduct) => {
         return new Promise(async (resolve, reject) => {
             var Products = [];
+            // console.log("ArrayOfProduct:",ArrayOfProduct);
 
-            for (var i = 0; i < ArrayOfProduct.length - 1; i++) {
+            for (var i = 0; i < ArrayOfProduct.length; i++) {
+                // console.log("In process ProductByID:", parseInt(ArrayOfProduct[i]));
                 var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: parseInt(ArrayOfProduct[i]) });
                 Products.push(Product);
             }
-            // console.log("ProductByID:",Products);
+            // console.log("Finished ProductByID:", Products);
             resolve(Products)
         })
     },
@@ -150,6 +152,13 @@ module.exports = {
                     }
                 })
             }
+        })
+    },
+    StoreImageInDatabase: (SavedData, base64Image) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.FORMULA_COLLECTION).updateOne({ FileNo: SavedData.FileNo }, { $set: { "ImageBase64": base64Image } }).then(() => {
+                resolve();
+            })
         })
     },
     SaveEditedFormulaData: (Data) => {
@@ -269,7 +278,7 @@ module.exports = {
             resolve(Formula);
         })
     },
-    TinterCheckStock: (TinterName, TinterQty) => {
+    TinterCheckStock: (TinterName, TinterQty, Branch) => {
         var State = {
             HaveStock: false,
             AvailableStock: 0
@@ -283,14 +292,24 @@ module.exports = {
             // console.log("Tinter: ", Tinter);
             // console.log("parseFloat(Tinter.Stock): ", parseFloat(Tinter.Stock));
             if (Tinter) {
-                if (parseFloat(Tinter.Stock) > TinterQty) {
-                    // have Stock for this formula
-                    State.HaveStock = true;
-                    State.AvailableStock = parseFloat(Tinter.Stock);
-                } else {
-                    // TinterQty is more than avalialable Stock
+                var FoundBranchStock = false;
+
+                Tinter.BranchStocks.forEach((OneBranch) => {
+                    if (OneBranch.BranchName === Branch) {
+                        FoundBranchStock = true;
+                        if (parseInt(OneBranch.Stock) > TinterQty) {
+                            State.HaveStock = true;
+                            State.AvailableStock = parseFloat(OneBranch.Stock);
+                        } else {
+                            // TinterQty is more than avalialable Stock
+                            State.HaveStock = false;
+                            State.AvailableStock = parseFloat(OneBranch.Stock);
+                        }
+                    }
+                })
+
+                if (!FoundBranchStock) {
                     State.HaveStock = false;
-                    State.AvailableStock = parseFloat(Tinter.Stock);
                 }
             } else {
                 // TinterQty is more than avalialable Stock
@@ -301,7 +320,7 @@ module.exports = {
             resolve(State);
         })
     },
-    BinderCheckStock: (BinderName, BinderQTY) => {
+    BinderCheckStock: (BinderName, BinderQTY, Branch) => {
 
         var State = {
             HaveStock: false,
@@ -311,20 +330,35 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             var Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": BinderName });
             BinderQTY = parseFloat(BinderQTY);
-            if (parseFloat(Binder.Stock) > BinderQTY) {
-                // have Stock for this formula
-                State.HaveStock = true;
-                State.AvailableStock = parseFloat(Binder.Stock);
-            } else {
-                // TinterQty is more than avalialable Stock
-                State.HaveStock = false;
-                State.AvailableStock = parseFloat(Binder.Stock);
-            }
+            if (Binder) {
+                var BranchFound = false;
 
+                Binder.BranchStocks.forEach((OneBranch) => {
+                    if (OneBranch.BranchName === Branch) {
+                        if (parseFloat(OneBranch.Stock) > BinderQTY) {
+                            // have Stock for this formula
+                            BranchFound = true;
+                            State.HaveStock = true;
+                            State.AvailableStock = parseFloat(OneBranch.Stock);
+                        } else {
+                            // TinterQty is more than avalialable Stock
+                            State.HaveStock = false;
+                            State.AvailableStock = parseFloat(OneBranch.Stock);
+                        }
+                    }
+                })
+
+                if (!BranchFound) {
+                    State.HaveStock = false;
+                }
+
+            } else {
+                State.HaveStock = false;
+            }
             resolve(State);
         })
     },
-    AdditiveCheckStock: (AdditiveName, AdditiveQTY) => {
+    AdditiveCheckStock: (AdditiveName, AdditiveQTY, Branch) => {
         var State = {
             HaveStock: false,
             AvailableStock: 0
@@ -333,21 +367,38 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Name": AdditiveName });
             AdditiveQTY = parseFloat(AdditiveQTY);
-            if (parseFloat(Additive.Stock) > AdditiveQTY) {
-                // have Stock for this formula
-                State.HaveStock = true;
-                State.AvailableStock = parseFloat(Additive.Stock);
+
+            if (Additive) {
+                var BranchFound = false;
+
+                Additive.BranchStocks.forEach((OneBranch) => {
+                    if (OneBranch.BranchName === Branch) {
+                        if (parseFloat(OneBranch.Stock) > AdditiveQTY) {
+                            // have Stock for this formula
+                            BranchFound = true;
+                            State.HaveStock = true;
+                            State.AvailableStock = parseFloat(OneBranch.Stock);
+                        } else {
+                            // TinterQty is more than avalialable Stock
+                            State.HaveStock = false;
+                            State.AvailableStock = parseFloat(OneBranch.Stock);
+                        }
+                    }
+                })
+
+                if (!BranchFound) {
+                    State.HaveStock = false;
+                }
+
             } else {
-                // TinterQty is more than avalialable Stock
                 State.HaveStock = false;
-                State.AvailableStock = parseFloat(Additive.Stock);
             }
 
             resolve(State);
         })
     },
 
-    BulkOrderUpdate: (OrderFile) => {
+    BulkOrderUpdate: (OrderFile, Branch) => {
         return new Promise(async (resolve, reject) => {
             try {
                 // console.log("OrderFile From Helpers: ", OrderFile);
@@ -359,31 +410,52 @@ module.exports = {
                 // Update Product stock
                 for (let i = 1; i <= TinterCount; i++) {
                     var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": OrderFile[`TineterName${i}`] });
-                    var OldStock = parseFloat(Product.Stock);
-                    var NewStock = OldStock - parseFloat(OrderFile[`TinterGram${i}`]);
-                    await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Name": OrderFile[`TineterName${i}`] }, { $set: { Stock: NewStock } });
+                    Product.BranchStocks.forEach(async (OneBranch) => {
+                        if (OneBranch.BranchName === Branch) {
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - parseFloat(OrderFile[`TinterGram${i}`]);
+                            await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Name": OrderFile[`TineterName${i}`] }, { $set: { BranchStocks: Product.BranchStocks } });
+                        }
+                    })
                 }
 
                 // Update Binder Stock
                 if (OrderFile.Binder1) {
                     var Binder1 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder1 });
-                    var BindersOldStock = parseFloat(Binder1.Stock);
-                    var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder1QTY);
-                    await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder1 }, { $set: { Stock: BindersNewStock } });
+                    Binder1.BranchStocks.forEach(async (OneBranch) => {
+                        if (OneBranch.BranchName === Branch) {
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - parseFloat(OrderFile.Binder1QTY);
+                            await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder1 }, { $set: { BranchStocks: Binder1.BranchStocks } });
+                        }
+                    })
+                    // var BindersOldStock = parseFloat(Binder1.Stock);
+                    // var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder1QTY);
+                    // await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder1 }, { $set: { Stock: BindersNewStock } });
                 }
 
                 if (OrderFile.Binder2) {
                     var Binder2 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder2 });
-                    var BindersOldStock = parseFloat(Binder2.Stock);
-                    var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder2QTY);
-                    await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder2 }, { $set: { Stock: BindersNewStock } });
+                    Binder2.BranchStocks.forEach(async (OneBranch) => {
+                        if (OneBranch.BranchName === Branch) {
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - parseFloat(OrderFile.Binder2QTY);
+                            await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder2 }, { $set: { BranchStocks: Binder2.BranchStocks } });
+                        }
+                    })
+                    // var BindersOldStock = parseFloat(Binder2.Stock);
+                    // var BindersNewStock = BindersOldStock - parseFloat(OrderFile.Binder2QTY);
+                    // await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder2 }, { $set: { Stock: BindersNewStock } });
                 }
 
                 if (OrderFile.Additive) {
                     var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Name": OrderFile.Additive });
-                    var AdditiveOldStock = parseFloat(Additive.Stock);
-                    var AdditiveNewStock = AdditiveOldStock - parseFloat(OrderFile.AdditiveQTY);
-                    await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Name": OrderFile.Additive }, { $set: { Stock: AdditiveNewStock } });
+                    Additive.BranchStocks.forEach(async (OneBranch) => {
+                        if (OneBranch.BranchName === Branch) {
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - parseFloat(OrderFile.AdditiveQTY);
+                            await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Name": OrderFile.Additive }, { $set: { BranchStocks: Additive.BranchStocks } });
+                        }
+                    })
+                    // var AdditiveOldStock = parseFloat(Additive.Stock);
+                    // var AdditiveNewStock = AdditiveOldStock - parseFloat(OrderFile.AdditiveQTY);
+                    // await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Name": OrderFile.Additive }, { $set: { Stock: AdditiveNewStock } });
                 }
 
                 resolve(); // Resolve the promise after all operations are completed
@@ -392,40 +464,138 @@ module.exports = {
             }
         });
     },
-    UpdateProductStockById: (Data) => {
+    UpdateProductStockById: (Data, Branch) => {
         return new Promise(async (resolve, reject) => {
             var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Id": parseInt(Data.ProductId) })
-            var OldStock = parseFloat(Product.Stock);
-            var NewStock = OldStock + (parseFloat(Product.StandardQuatity) * (parseFloat(Data.NewStock)));
-            if (NewStock >= 0) {
-                await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            if (Product.BranchStocks) {
+                Product.BranchStocks.forEach(async (OneBranch) => {
+                    if (OneBranch.BranchName === Branch) {
+                        OneBranch.Stock = parseFloat(OneBranch.Stock) + (parseFloat(Product.StandardQuatity) * (parseFloat(Data.NewStock)));
+                        if (OneBranch.Stock >= 0) {
+                            await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: Product.BranchStocks } });
+                        }
+                        // await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Name": OrderFile[`TineterName${i}`] }, { $set: { BranchStocks: Product.BranchStocks } });
+                    } else {
+                        var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
+                        var OneBranch = {
+                            BranchName: Branch,
+                            BranchID: BranchData._id,
+                            Stock: parseFloat(Product.StandardQuatity) * parseFloat(Data.NewStock),
+                        }
+                        Binder.BranchStocks.push(OneBranch)
+                        await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: Binder.BranchStocks } });
+                    }
+                })
+            } else {
+                var BranchStocks = [];
+                var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
+                var OneBranch = {
+                    BranchID: BranchData._id,
+                    BranchName: Branch,
+                    Stock: parseFloat(Product.StandardQuatity) * (parseFloat(Data.NewStock))
+                }
+                BranchStocks.push(OneBranch);
+                await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: BranchStocks } });
             }
+
+            // var OldStock = parseFloat(Product.Stock);
+            // var NewStock = OldStock + (parseFloat(Product.StandardQuatity) * (parseFloat(Data.NewStock)));
+            // if (NewStock >= 0) {
+            //     await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            // }
             resolve();
         })
     },
-    UpdateBinderStockById: (Data) => {
+    UpdateBinderStockById: (Data, Branch) => {
         return new Promise(async (resolve, reject) => {
             var Binder = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Id": parseInt(Data.ProductId) })
-            var OldStock = parseFloat(Binder.Stock);
-            var NewStock = OldStock + (parseFloat(Data.NewStock));
-            if (NewStock >= 0) {
-                await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            if (Binder.BranchStocks) {
+                Binder.BranchStocks.forEach(async (OneBranch) => {
+                    if (OneBranch.BranchName === Branch) {
+                        OneBranch.Stock = parseFloat(OneBranch.Stock) + parseFloat(Data.NewStock);
+                        if (OneBranch.Stock >= 0) {
+                            await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: Binder.BranchStocks } });
+                        }
+                    } else {
+                        var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
+                        var OneBranch = {
+                            BranchID: BranchData._id,
+                            BranchName: Branch,
+                            Stock: parseFloat(Data.NewStock)
+                        }
+                        Binder.BranchStocks.push(OneBranch)
+                        if (OneBranch.Stock >= 0) {
+                            await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: Binder.BranchStocks } });
+                        }
+                    }
+                })
+            } else {
+                var BranchStocks = [];
+                var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
+                var OneBranch = {
+                    BranchID: BranchData._id,
+                    BranchName: Branch,
+                    Stock: parseFloat(Data.NewStock)
+                }
+                BranchStocks.push(OneBranch);
+                if (OneBranch.Stock >= 0) {
+                    await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: BranchStocks } });
+                }
             }
+            // var OldStock = parseFloat(Binder.Stock);
+            // var NewStock = OldStock + (parseFloat(Data.NewStock));
+            // if (NewStock >= 0) {
+            //     await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            // }
             resolve();
         })
     },
-    UpdateAdditiveStockById: (Data) => {
+    UpdateAdditiveStockById: (Data, Branch) => {
         return new Promise(async (resolve, reject) => {
             var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Id": parseInt(Data.ProductId) })
-            var OldStock = parseFloat(Additive.Stock);
-            var NewStock = OldStock + (parseFloat(Data.NewStock));
-            // console.log(NewStock);
-            if (NewStock >= 0) {
-                await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
-                resolve();
+            if (Additive.BranchStocks) {
+                Additive.BranchStocks.forEach(async (OneBranch) => {
+                    if (OneBranch.BranchName === Branch) {
+                        OneBranch.Stock = parseFloat(OneBranch.Stock) + parseFloat(Data.NewStock);
+                        if (OneBranch.Stock >= 0) {
+                            await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: Additive.BranchStocks } });
+                        }
+                    } else {
+                        var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
+                        var OneBranch = {
+                            BranchID: BranchData._id,
+                            BranchName: Branch,
+                            Stock: parseFloat(Data.NewStock)
+                        }
+                        Additive.BranchStocks.push(OneBranch)
+                        if (OneBranch.Stock >= 0) {
+                            await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: Additive.BranchStocks } });
+                        }
+                    }
+                })
             } else {
-                resolve()
+                var BranchStocks = [];
+                var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
+                var OneBranch = {
+                    BranchID: BranchData._id,
+                    BranchName: Branch,
+                    Stock: parseFloat(Data.NewStock)
+                }
+                BranchStocks.push(OneBranch);
+                if (OneBranch.Stock >= 0) {
+                    await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: BranchStocks } });
+                }
             }
+
+            // var OldStock = parseFloat(Additive.Stock);
+            // var NewStock = OldStock + (parseFloat(Data.NewStock));
+            // // console.log(NewStock);
+            // if (NewStock >= 0) {
+            //     await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Id": parseInt(Data.ProductId) }, { $set: { Stock: NewStock } });
+            //     resolve();
+            // } else {
+            // }
+            resolve()
 
         })
     },

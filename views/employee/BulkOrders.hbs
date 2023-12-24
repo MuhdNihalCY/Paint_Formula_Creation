@@ -89,7 +89,8 @@
                                     <div class="BoDateDiv">
                                         <label for="">Referance Image:</label>
                                         <div class="BoRefImgDiv">
-                                            <img class="BoRefImg" src="/images/RefImages/{{Formulation.FileNo}}.jpg">
+                                            {{!-- /images/RefImages/{{Formulation.FileNo}}.jpg --}}
+                                            <img class="BoRefImg" src="data:image/jpeg;base64,{{Formulation.ImageBase64}}"> 
                                         </div>
                                     </div>
 
