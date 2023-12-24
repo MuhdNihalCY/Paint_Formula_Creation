@@ -20,5 +20,6 @@ module.exports={
     CUSTOMER_FOLLOW_UP:'Customer_Follow_Up',
     BRANCH_COLLECTION:'Branch_Collection',
     CUSTOMER_PURCHASE_COLLECTION:'Customer_Purchase_Collection',
-    LEDGER_UPLOADED_DATA:'Ledger_Uploaded_Data'
+    LEDGER_UPLOADED_DATA:'Ledger_Uploaded_Data',
+    PRODUCT_GROUP_COLLECTION:'Product_Group_Collection'
 };

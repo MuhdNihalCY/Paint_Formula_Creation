@@ -1141,7 +1141,7 @@ module.exports = {
             })
         })
     },
-    AddBranchToEachDatastoreLedgerData: (LedgerData,CustomerName,UserName, Branch) => {
+    AddBranchToEachDatastoreLedgerData: (LedgerData, CustomerName, UserName, Branch) => {
         return new Promise(async (resolve, reject) => {
 
             // await LedgerData.TableData.forEach((EachPurchaseData)=>{
@@ -1170,8 +1170,8 @@ module.exports = {
             // Update each purchase data with the provided branch
             LedgerData.TableData.forEach((EachPurchaseData) => {
                 EachPurchaseData.Branch = Branch;
-                EachPurchaseData.UploadedPerson = UserName; 
-                EachPurchaseData.CustomerName = CustomerName; 
+                EachPurchaseData.UploadedPerson = UserName;
+                EachPurchaseData.CustomerName = CustomerName;
                 EachPurchaseData.InsertedTime = Date.now();
             });
 
@@ -1192,8 +1192,8 @@ module.exports = {
                 return AllPurchases.some((oldPurchase) => oldPurchase.VchNo === newPurchaseData.VchNo);
             });
 
-            console.log("Purchase Duplicates found: ",PurchaseDuplicates.length);
-            console.log("PurchaseData Without Duplicate: ",PurchaseDataWithoutDuplicate.length);
+            console.log("Purchase Duplicates found: ", PurchaseDuplicates.length);
+            console.log("PurchaseData Without Duplicate: ", PurchaseDataWithoutDuplicate.length);
 
 
             // Insert non-duplicate purchase data into the Customer Purchase collection
@@ -1203,7 +1203,32 @@ module.exports = {
             resolve();
         })
     },
-
+    AddProductGroup: (data) => {
+        return new Promise(async (resolve, reject) => {
+            var SameGroup = await db.get().collection(collection.PRODUCT_GROUP_COLLECTION).findOne({ GroupName: data.GroupName });
+            if (!SameGroup) {
+                await db.get().collection(collection.PRODUCT_GROUP_COLLECTION).insertOne(data).then(() => {
+                    resolve();
+                })
+            } else {
+                // already same group name exist
+                resolve({ Error: "Same group name exist!" });
+            }
+        })
+    },
+    getAllProductGroups:()=>{
+        return new Promise(async(resolve,reject)=>{
+            var AllGroup = await db.get().collection(collection.PRODUCT_GROUP_COLLECTION).find().toArray();
+            resolve(AllGroup);
+        })
+    },
+    deleteProductGroup:(GroupName)=>{
+        return new Promise(async(resolve,reject) => {
+            await db.get().collection(collection.PRODUCT_GROUP_COLLECTION).deleteOne({GroupName: GroupName}).then(()=>{
+                resolve();
+            })
+        })
+    },
 
 
 

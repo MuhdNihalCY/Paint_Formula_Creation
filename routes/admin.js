@@ -301,14 +301,23 @@ router.post('/EditSubCategory', verifyLogin, (req, res) => {
 })
 
 router.get('/Product', verifyLogin, (req, res) => {
+
   adminHelpers.getCategory().then((AllCategory) => {
     // console.log(AllCategory)
     adminHelpers.GetAllSubCategory().then((AllSubCategory) => {
-      // console.log(AllSubCategory)
-      adminHelpers.GetAllProduct().then((products) => {
-        const filteredSubCategories = AllSubCategory.filter(subCategory => subCategory.Category_Id === '100');
-        AllSubCategory = filteredSubCategories;
-        res.render('admin/product', { admin: true, AllCategory, AllSubCategory, products });
+      adminHelpers.getAllProductGroups().then((AllProductGroup) => {
+
+        // console.log(AllSubCategory)
+        adminHelpers.GetAllProduct().then((products) => {
+          const filteredSubCategories = AllSubCategory.filter(subCategory => subCategory.Category_Id === '100');
+          AllSubCategory = filteredSubCategories;
+          if (req.query.Error) {
+            const AddError = req.query.Error;
+            res.render('admin/product', { admin: true, AllCategory, AllSubCategory, products, AllProductGroup, AddError });
+          } else {
+            res.render('admin/product', { admin: true, AllCategory, AllSubCategory, products, AllProductGroup });
+          }
+        })
       })
     })
   })
@@ -906,6 +915,38 @@ router.get('/deleteUser/:UserID', verifyLogin, (req, res) => {
   })
 })
 
+router.post('/AddProductGroup', verifyLogin, (req, res) => {
+  console.log(req.body);
+  adminHelpers.AddProductGroup(req.body).then((State) => {
+    if (State) {
+      if (State.Error) {
+        res.redirect(`/admin/Product?Error=${State.Error}`);
+      }
+    }
+    else {
+      res.redirect('/admin/Product');
+    }
+  })
+})
+
+router.get('/removeProductGroup/:GroupName',verifyLogin,(req,res)=>{
+  adminHelpers.deleteProductGroup(req.params.GroupName).then(()=>{
+    res.redirect('/admin/Product');
+  })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 router.get('/GetLedgerData', verifyLogin, (req, res) => {
   res.render('admin/GetLedgerData', { admin: true })
@@ -968,14 +1009,14 @@ router.post('/uploadLedgerData', async (req, res) => {
       });
       mappedData.push(rowData);
     });
-    
-    const UpdatedMapedData = await ledgerHelper.OranizeTableData(mappedData,datas.Objects);
+
+    const UpdatedMapedData = await ledgerHelper.OranizeTableData(mappedData, datas.Objects);
 
     // After all are executed, proceed to res.send
     const finalOutput = datas.Objects
 
     finalOutput.TableData = UpdatedMapedData
-    adminHelpers.storeLedgerData(finalOutput).then(()=>{
+    adminHelpers.storeLedgerData(finalOutput).then(() => {
       // res.send(finalOutput);
       res.redirect('/sales/Customer');
     })

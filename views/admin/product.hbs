@@ -34,13 +34,13 @@
                     <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
                 </div>
             </a>
-             <a href="/admin/Branches">
+            <a href="/admin/Branches">
                 <div class="Category ">
                     <p class="ADDelectionSideBarLabel">Branches</p>
                     <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
                 </div>
             </a>
-              <a href="/admin/Users">
+            <a href="/admin/Users">
                 <div class="Category">
                     <p class="ADDelectionSideBarLabel">Users</p>
                     <img src="/images/Icons/MoreSelect.png" alt="" class="ADMoreIcon">
@@ -94,6 +94,46 @@
                     </div>
                 </a>
             </div>
+            <div class="AddError text-center d-flex align-items-center justify-content-center" style="color: red;">
+                <p class="text-center">{{AddError}}</p>
+            </div>
+            <div class="ProductGroupDivArea">
+                <div class="ADCustomerCatDiv">
+                    <div class="ADCustomerCatHeader">
+                        <p class="ADCustomerCatHead">Product Groups</p>
+                        <button id="ADAddCusCategoryBTN" class="ADAddCusCategoryBTN">Add New Group</button>
+                        <img class="AdCustomerMoreIcon" onclick="toggleCategoryList()"
+                            src="/images/Icons/MoreSelect.png" id="rotateIcon" alt="">
+                    </div>
+                    <div class="CategoryList" id="categoryList">
+                        <hr>
+
+                        {{#each AllProductGroup}}
+                        <div class="ADCustomerCategoryRow">
+                            <p class="ADCustomerCategory">{{this.GroupName}}</p>
+                            <a href="/admin/removeProductGroup/{{this.GroupName}}" class="btn ADCusotmerdelete-button"
+                                onclick="return confirm('Are you sure you want to delete this Group {{this.GroupName}} ?')"><i
+                                    class="fas fa-trash"></i> Delete</a>
+                        </div>
+
+                        {{/each}}
+                    </div>
+                </div>
+
+                <div id="ADCUSpopup">
+                    <div class="ADCUSpopup">
+                        <form method="post" action="/admin/AddProductGroup" onsubmit="return validateForm()">
+                            <div class="ADCusPopHeader">
+                                <p class="ADCUSpopup-header">Add Group</p>
+                                <button type="button" class="closeBtn" onclick="closePopup()">X</button>
+                            </div>
+                            <input type="text" required name="GroupName" id="categoryInput"
+                                placeholder="Enter Group name">
+                            <button type="submit" id="submitBtn">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="ADSubCategorySelectionArea">
                 <div class="ADSubCategorySelectionDiv">
                     <p class="ADSubCategorySelectionLabel">Select Category</p>
@@ -121,7 +161,7 @@
                             <th>ID</th>
                             <th>Product Name</th>
                             <th>Density</th>
-                            <th>Stock (Ltr or Kg)</th> {{!--   --}}
+                            <th>Stock (Ltr or Kg)</th> {{!-- --}}
                             <th>Price</th>
                             <th>Action</th>
                         </tr>
@@ -433,6 +473,61 @@
         }
         fetchData();
     };
+
+    // Groups works starts
+
+    var CustomeraddButton = document.getElementById('ADAddCusCategoryBTN');
+    var popup = document.getElementById('ADCUSpopup');
+    var categoryInput = document.getElementById('categoryInput');
+
+    function validateForm() {
+        var categoryInput = document.getElementById('categoryInput');
+        var categoryValue = categoryInput.value.trim(); // Trim leading and trailing spaces
+
+        // Validate that the input contains only letters, numbers, spaces, and special characters
+        var validInput = /^[a-zA-Z0-9\s\W]+$/.test(categoryValue);
+
+        if (!validInput) {
+            alert('Invalid input. Only letters, numbers, spaces, and special characters are allowed.');
+            return false; // Prevent form submission
+        }
+
+        return true; // Allow form submission
+    }
+
+    function toggleCategoryList() {
+
+        var categoryList = document.getElementById('categoryList');
+        var icon = document.getElementById('rotateIcon');
+        var BTN = document.getElementById('ADAddCusCategoryBTN');
+
+        if (categoryList.style.maxHeight === '0px') {
+
+            categoryList.style.maxHeight = categoryList.scrollHeight + 'px';
+            icon.style.transform = 'rotate(-90deg)';
+            BTN.style.display = 'block';
+        } else {
+            closePopup()
+            categoryList.style.maxHeight = '0px';
+            icon.style.transform = 'rotate(90deg)';
+            BTN.style.display = 'none';
+
+        }
+    }
+
+    CustomeraddButton.addEventListener('click', function () {
+        popup.style.display = 'flex';
+        // Disable scrolling
+        document.body.style.overflow = 'hidden';
+    });
+
+    function closePopup() {
+        popup.style.display = 'none';
+        // Enable scrolling
+        document.body.style.overflow = 'auto';
+
+    }
+
 
 
 </script>
