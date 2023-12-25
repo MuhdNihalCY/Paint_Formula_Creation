@@ -8,6 +8,7 @@ const xlsx = require('xlsx');
 const ExcelJS = require('exceljs');
 const { Readable } = require('stream');
 const ledgerHelper = require('../helpers/ledgerHelper');
+const employeeHelpers = require('../helpers/employeeHelpers');
 
 const AdminUser = {
   userName: "Admin",
@@ -377,8 +378,12 @@ router.get('/addProduct', verifyLogin, (req, res) => {
       const filteredSubCategories = AllSubCategory.filter(subCategory => subCategory.Category_Id === '100');
       AllSubCategory = filteredSubCategories;
 
-      adminHelpers.getAllCustomerCategory().then((CustomerCatagory) => {
-        res.render('admin/forms/addProducts', { admin: true, AllCategory, AllSubCategory, CustomerCatagory });
+      adminHelpers.getAllProductGroups().then((AllProductGroups) => {
+
+
+        adminHelpers.getAllCustomerCategory().then((CustomerCatagory) => {
+          res.render('admin/forms/addProducts', { admin: true, AllCategory, AllSubCategory, CustomerCatagory, AllProductGroups });
+        })
       })
     })
   })
@@ -445,8 +450,22 @@ router.get('/editProduct/:id', verifyLogin, (req, res) => {
 
         var RealStock = parseFloat(product.Stock) / parseFloat(product.StandardQuatity);
 
+        adminHelpers.getAllProductGroups().then((AllProductGroups) => {
+          console.log("product = ", product);
+          console.log("AllProductGroups = ", AllProductGroups);
 
-        res.render('admin/forms/addProducts', { admin: true, editProduct: true, product, PriceUnitLtr, STDUnitLtr, RealStock })
+          // Find the index of the matching element in AllProductGroups
+          let matchingIndex = AllProductGroups.findIndex(group => group.GroupName === product.GroupName);
+
+          // Move the matching element to the first position
+          if (matchingIndex !== -1) {
+            let matchingElement = AllProductGroups.splice(matchingIndex, 1)[0];
+            AllProductGroups.unshift(matchingElement);
+          }
+
+          res.render('admin/forms/addProducts', { admin: true, editProduct: true, product, PriceUnitLtr, STDUnitLtr, RealStock, AllProductGroups })
+
+        })
       })
     })
   })
@@ -929,8 +948,8 @@ router.post('/AddProductGroup', verifyLogin, (req, res) => {
   })
 })
 
-router.get('/removeProductGroup/:GroupName',verifyLogin,(req,res)=>{
-  adminHelpers.deleteProductGroup(req.params.GroupName).then(()=>{
+router.get('/removeProductGroup/:GroupName', verifyLogin, (req, res) => {
+  adminHelpers.deleteProductGroup(req.params.GroupName).then(() => {
     res.redirect('/admin/Product');
   })
 })

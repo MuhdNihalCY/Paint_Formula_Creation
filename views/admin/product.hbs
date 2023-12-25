@@ -112,10 +112,9 @@
                         <div class="ADCustomerCategoryRow">
                             <p class="ADCustomerCategory">{{this.GroupName}}</p>
                             <a href="/admin/removeProductGroup/{{this.GroupName}}" class="btn ADCusotmerdelete-button"
-                                onclick="return confirm('Are you sure you want to delete this Group {{this.GroupName}} ?')"><i
-                                    class="fas fa-trash"></i> Delete</a>
+                                onclick="return confirm('Are you sure you want to delete this Group {{this.GroupName}} ?')">
+                                <i class="fas fa-trash"></i> Delete</a>
                         </div>
-
                         {{/each}}
                     </div>
                 </div>
@@ -161,7 +160,7 @@
                             <th>ID</th>
                             <th>Product Name</th>
                             <th>Density</th>
-                            <th>Stock (Ltr or Kg)</th> {{!-- --}}
+                            {{!-- <th>Stock (Ltr or Kg)</th>  --}}
                             <th>Price</th>
                             <th>Action</th>
                         </tr>
@@ -344,7 +343,7 @@
       <td>${product.Product_Id}</td>
       <td>${product.Product_Name}</td>
       <td>${product.Product_Density}</td>
-      <td>${ProductStock}</td>
+      {{!-- <td>${ProductStock}</td> --}}
       <td>${product.Price} Per ${product.PriceUnit}</td>
       <td><a class="btn btn-primary ADProductEditBTN" href="/admin/editProduct/${product.Product_Id}">Edit</a></td>
     `;

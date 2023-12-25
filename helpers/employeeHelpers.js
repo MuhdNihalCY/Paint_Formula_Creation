@@ -1734,7 +1734,12 @@ module.exports = {
             }
         })
     },
-
+    getAllProductGroups: () => {
+        return new Promise(async (resolve, reject) => {
+            var AllGroup = await db.get().collection(collection.PRODUCT_GROUP_COLLECTION).find().toArray();
+            resolve(AllGroup);
+        })
+    },
 
 
     // convert all cards to East cost DC branch

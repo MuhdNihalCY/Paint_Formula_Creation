@@ -65,10 +65,43 @@
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Density (ml/1000g)</p>
                                     {{#if editProduct}}
-                                    <input type="number" name="Product_Density" class="ADProductInputBox"
-                                        value="{{product.Product_Density}}" required>
+                                    <input type="text" oninput="validateInput(this)" name="Product_Density"
+                                        class="ADProductInputBox" value="{{product.Product_Density}}" required>
                                     {{else}}
-                                    <input type="number" name="Product_Density" class="ADProductInputBox" required>
+                                    <input type="text" oninput="validateInput(this)" name="Product_Density"
+                                        class="ADProductInputBox" required>
+                                    {{/if}}
+                                </div>
+                            </div>
+                            <div class="ADFormAddingCatgorySelection">
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Group</p>
+                                    {{#if editProduct}}
+                                    <select required class="ADSubCategorySelectionSelectBox" name="GroupName"
+                                        id="SubCategorySelect">
+                                        {{#each AllProductGroups}}
+                                        <option class="ADSelectCategoryOptions" value="{{this.GroupName}}">
+                                            {{this.GroupName}}</option>
+                                        {{/each}}
+                                    </select>
+                                    {{else}}
+                                    <select required class="ADSubCategorySelectionSelectBox" name="GroupName"
+                                        id="SubCategorySelect">
+                                        {{#each AllProductGroups}}
+                                        <option class="ADSelectCategoryOptions" value="{{this.GroupName}}">
+                                            {{this.GroupName}}</option>
+                                        {{/each}}
+                                    </select>
+                                    {{/if}}
+                                </div>
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Abbreviation</p>
+                                    {{#if editProduct}}
+                                    <input type="text" oninput="validateInput(this)" name="Abbreviation"
+                                        class="ADProductInputBox" value="{{product.Abbreviation}}" required>
+                                    {{else}}
+                                    <input type="text" oninput="validateInput(this)" name="Abbreviation"
+                                        class="ADProductInputBox" required>
                                     {{/if}}
                                 </div>
                             </div>
@@ -76,10 +109,11 @@
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Price</p>
                                     {{#if editProduct}}
-                                    <input type="number" step="any" name="Price" class="ADProductInputBox"
-                                        value="{{product.Price}}" required>
+                                    <input type="text" oninput="validateInput(this)" step="any" name="Price"
+                                        class="ADProductInputBox" value="{{product.Price}}" required>
                                     {{else}}
-                                    <input type="number" step="any" name="Price" class="ADProductInputBox" required>
+                                    <input type="text" oninput="validateInput(this)" step="any" name="Price"
+                                        class="ADProductInputBox" required>
                                     {{/if}}
                                 </div>
                                 <div class="ADFromAddingSingleRow">
@@ -119,11 +153,11 @@
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Standard Quantity</p>
                                     {{#if editProduct}}
-                                    <input type="number" step="any" name="StandardQuatity" class="ADProductInputBox"
-                                        value="{{product.StandardQuatity}}" required>
+                                    <input type="text" oninput="validateInput(this)" step="any" name="StandardQuatity"
+                                        class="ADProductInputBox" value="{{product.StandardQuatity}}" required>
                                     {{else}}
-                                    <input type="number" step="any" name="StandardQuatity" class="ADProductInputBox"
-                                        required>
+                                    <input type="text" oninput="validateInput(this)" step="any" name="StandardQuatity"
+                                        class="ADProductInputBox" required>
                                     {{/if}}
                                 </div>
                                 <div class="ADFromAddingSingleRow">
@@ -150,20 +184,21 @@
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">VOC</p>
                                     {{#if editProduct}}
-                                    <input type="number" step="any" name="VOC" class="ADProductInputBox"
-                                        value="{{product.VOC}}" required>
+                                    <input type="text" oninput="validateInput(this)" step="any" name="VOC"
+                                        class="ADProductInputBox" value="{{product.VOC}}" required>
                                     {{else}}
-                                    <input type="number" step="any" name="VOC" class="ADProductInputBox" required>
+                                    <input type="text" oninput="validateInput(this)" step="any" name="VOC"
+                                        class="ADProductInputBox" required>
                                     {{/if}}
                                 </div>
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Solid Content</p>
                                     {{#if editProduct}}
-                                    <input type="number" step="any" name="SolidContent" class="ADProductInputBox"
-                                        value="{{product.SolidContent}}" required>
+                                    <input type="text" oninput="validateInput(this)" step="any" name="SolidContent"
+                                        class="ADProductInputBox" value="{{product.SolidContent}}" required>
                                     {{else}}
-                                    <input type="number" step="any" name="SolidContent" class="ADProductInputBox"
-                                        required>
+                                    <input type="text" oninput="validateInput(this)" step="any" name="SolidContent"
+                                        class="ADProductInputBox" required>
                                     {{/if}}
                                 </div>
                             </div>
@@ -250,7 +285,10 @@
                 HiddenInput.required = true;
 
                 const input = document.createElement('input');
-                input.type = 'number';
+                input.type = 'text';
+                input.oninput = function () {
+                    validateInput(input);
+                }
                 input.step = 'any';
                 input.name = `Category_${i}`;
                 input.className = 'ADFormCustInp ADProductInputBox';
@@ -291,7 +329,10 @@
             HiddenInput.required = true;
 
             const input = document.createElement('input');
-            input.type = 'number';
+            input.type = 'text';
+            input.oninput = function () {
+                validateInput(input);
+            }
             input.step = 'any';
             input.name = `Category_${i}`;
             input.className = 'ADFormCustInp ADProductInputBox';
@@ -361,39 +402,52 @@
             const subCategorySelect = document.getElementById('SubCategorySelect');
 
             // Add an event listener to the category select element
-            if(categorySelect){
-            categorySelect.addEventListener('change', () => {
-                // Get the selected category ID
-                const categoryId = categorySelect.value;
+            if (categorySelect) {
+                categorySelect.addEventListener('change', () => {
+                    // Get the selected category ID
+                    const categoryId = categorySelect.value;
 
-                // Filter the subcategories based on the selected category ID
-                const filteredSubCategories = subCategories.filter(subCategory => subCategory.Category_Id === categoryId);
+                    // Filter the subcategories based on the selected category ID
+                    const filteredSubCategories = subCategories.filter(subCategory => subCategory.Category_Id === categoryId);
 
-                // Clear the subcategory select box
-                subCategorySelect.innerHTML = '';
+                    // Clear the subcategory select box
+                    subCategorySelect.innerHTML = '';
 
-                // Create and append the option elements for the filtered subcategories
+                    // Create and append the option elements for the filtered subcategories
 
-                if (filteredSubCategories.length > 0) {
-                    filteredSubCategories.forEach(subCategory => {
+                    if (filteredSubCategories.length > 0) {
+                        filteredSubCategories.forEach(subCategory => {
+                            const option = document.createElement('option');
+                            option.value = subCategory.SubCategory_Id;
+                            option.textContent = subCategory.SubCategory;
+                            subCategorySelect.appendChild(option);
+                        });
+                        // Enable the subcategory select box
+                        subCategorySelect.disabled = false;
+                    } else {
+                        // Add a "No Subcategory" option
                         const option = document.createElement('option');
-                        option.value = subCategory.SubCategory_Id;
-                        option.textContent = subCategory.SubCategory;
+                        option.textContent = 'No SubCategory available';
                         subCategorySelect.appendChild(option);
-                    });
-                    // Enable the subcategory select box
-                    subCategorySelect.disabled = false;
-                } else {
-                    // Add a "No Subcategory" option
-                    const option = document.createElement('option');
-                    option.textContent = 'No SubCategory available';
-                    subCategorySelect.appendChild(option);
 
-                    // Disable the subcategory select box
-                    subCategorySelect.disabled = true;
-                }
-            });
-       }
+                        // Disable the subcategory select box
+                        subCategorySelect.disabled = true;
+                    }
+                });
+            }
         });
+
+    function isValidNumber(input) {
+        const regex = /^[0-9]+(\.[0-9]+)?$/;
+        return regex.test(input);
+    }
+
+    function validateInput(element) {
+        if (!isValidNumber(element.value)) {
+            element.setCustomValidity('Please enter a valid number.');
+        } else {
+            element.setCustomValidity('');
+        }
+    }
 
 </script>
