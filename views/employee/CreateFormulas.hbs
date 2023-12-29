@@ -1516,12 +1516,15 @@
                     var GramInputTotal = parseFloat(document.getElementById(GramInputTotalID).value);
                     //       //console.log("SumOfSolidContentOfProducts",GramInputTotal)
                     var OneProduct = products[i]
-                    var SolidContentOfProduct = parseFloat(OneProduct.SolidContent);
-                    var VocOfProduct = parseFloat(OneProduct.VOC);
-                    SumOfSolidContentOfProducts += (GramInputTotal * SolidContentOfProduct) / 100
-                    VocOfProducts += (GramInputTotal * VocOfProduct) / 100
-                    //console.log("Voc of Products: ", (GramInputTotal * VocOfProduct) / 100)
-                    ////console.log("SolidContentOfProduct",SolidContentOfProduct)
+                  //  console.log("OneProduct:", OneProduct);
+                    if (OneProduct) {
+                        var SolidContentOfProduct = parseFloat(OneProduct.SolidContent);
+                        var VocOfProduct = parseFloat(OneProduct.VOC);
+                        SumOfSolidContentOfProducts += (GramInputTotal * SolidContentOfProduct) / 100
+                        VocOfProducts += (GramInputTotal * VocOfProduct) / 100
+                        //console.log("Voc of Products: ", (GramInputTotal * VocOfProduct) / 100)
+                        ////console.log("SolidContentOfProduct",SolidContentOfProduct)
+                    }
                 }
                 //Solid content of Formulation= (sum of solid content of each row/  Total Quantity of Formulation)* 100
                 var SolidContentOfFormulation = (SumOfSolidContentOfProducts / TotalQtyOfFormula) * 100

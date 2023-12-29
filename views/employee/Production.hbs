@@ -128,7 +128,7 @@
     });
 
     function addCardDataToCards(AllCards) {
-        console.log("Cards: ", AllCards)
+        // console.log("Cards: ", AllCards)
         const parentDiv = document.getElementById('cardParent');
         // Clear the parent element by setting its innerHTML to an empty string
         parentDiv.innerHTML = '';
@@ -149,7 +149,7 @@
         } else {
             AllCards.forEach((card, index) => {
                 if (card.ImageUrl) {
-                    //console.log("Have attachment image Url" + card.id);
+                    //// console.log("Have attachment image Url" + card.id);
                     NewCard = `
 
                     <div class="EachCard " onclick="SelectaCard('${card._id}')" >
@@ -214,7 +214,7 @@
         } else {
             AllCards.forEach((card, index) => {
                 if (card.ImageUrl) {
-                    console.log("DriverName" + card.DriverName);
+                    // console.log("DriverName" + card.DriverName);
                     NewCard = `
                 <div class="EachCard " onclick="SelectaCard('${card._id}')">
                     <div class="cardNamesection">
@@ -296,7 +296,7 @@
 
     // pop up screen
     function SelectaCard(id) {
-        console.log("card ID: ", id)
+        // console.log("card ID: ", id)
         let AllCards = State.AllCards;
         let Card;
 
@@ -728,7 +728,7 @@
 
             const allcards = State.AllCards;
 
-            console.log("Doing Internal Search", allcards);
+            // console.log("Doing Internal Search", allcards);
 
             // Use the filter method to find matching cards based on search term
             const matchingCards = allcards.filter(card => {
@@ -772,7 +772,7 @@
 
             const allcards = State.AllCardsFromBoard;
 
-            console.log("Doing External Search", allcards);
+            // console.log("Doing External Search", allcards);
 
             // Use the filter method to find matching cards based on search term
             const matchingCards = allcards.filter(card => {

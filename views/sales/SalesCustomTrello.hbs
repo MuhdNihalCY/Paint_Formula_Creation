@@ -893,7 +893,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        //// // console.log('DOMContentLoaded event fired');
+        // console.log('DOMContentLoaded event fired');
         fetchAllCards();
     });
 
@@ -905,7 +905,7 @@
 
         try {
             const backendURL = '/sales/getAllCardAndListsAndUsersToManagement';
-            //// // console.log("Called Fetch api")
+            // console.log("Called Fetch api")
             const response = await fetch(backendURL);
 
             if (!response.ok) {
@@ -913,15 +913,15 @@
             }
 
             const data = await response.json(); // Parse the response as JSON.
-            // // // console.log("data", data); // Log the entire data object
-            // // // console.log("AllCards", data.AllCards); // Log a specific property
+            // console.log("data", data); // Log the entire data object
+            // console.log("AllCards", data.AllCards); // Log a specific property
             State.AllCards = data.AllCards;
             State.AllLists = data.AllLists;
             State.AllUsers = data.AllUsers;
             State.Customers = data.Customers;
             State.Formulas = data.Formulas;
             State.Labels = data.Labels;
-            // // console.log("Old State:", State);
+            // console.log("Old State:", State);
             UpdateStateWithCards();
 
             // Rest of your code
@@ -937,7 +937,7 @@
         var AllCards = State.AllCards;
         var AllLists = State.AllLists;
 
-        // // // console.log("State: ", State);
+        // console.log("State: ", State);
         var AllProductionLists = [];
         var AllDriverLists = [];
 
@@ -978,39 +978,39 @@
 
         for (i = 0; i < AllCards.length; i++) {
             var CardList = AllCards[i].CurrentList;
-            //// // console.log("CardList: ", CardList);
+            // console.log("CardList: ", CardList);
 
-            // // console.log("One Card: ", AllCards[i])
+            // console.log("One Card: ", AllCards[i])
             AllLists.forEach((Onelist) => {
 
                 if (CardList.toLowerCase() === Onelist.Name.toLowerCase()) {
-                    console.log("Onelist: ", Onelist.Name);
-                    console.log("CardList: ", CardList);
+                    // console.log("Onelist: ", Onelist.Name);
+                    // console.log("CardList: ", CardList);
 
 
                     if ("ORDERS" === Onelist.Name) {
                         State.columns['ORDERS'].push(AllCards[i]);
-                        // // console.log("In Orders")
+                        // console.log("In Orders")
                     } else if ("OFFICE SECTION" === Onelist.Name) {
                         State.columns['OFFICE_SECTION'].push(AllCards[i]);
-                        // // console.log("In Office Section")
+                        // console.log("In Office Section")
                     } else if ("FOR DISPATCH" === Onelist.Name.toUpperCase()) {
                         State.columns.READY.FOR_DISPATCH.push(AllCards[i]);
-                        // // console.log("In Dispatch")
+                        // console.log("In Dispatch")
                     } else if ("FOR CUSTOMER COLLECTION" === Onelist.Name.toUpperCase()) {
                         State.columns.READY.FOR_CUSTOMER_COLLECTION.push(AllCards[i]);
-                        // // console.log("In Customer Collections")
+                        // console.log("In Customer Collections")
                     } else if ("DONE TODAY" === Onelist.Name) {
                         State.columns.DONE.AllDone.push(AllCards[i]);
 
 
                         // do the today logic <7 day Login >7 day Logic
                         var DoneMovedTime = AllCards[i].ListArray[0].InTime;
-                        console.log("Done Today InTime: ", DoneMovedTime);
+                        // console.log("Done Today InTime: ", DoneMovedTime);
 
                         // Convert the timestamp to a Date object
                         const date = new Date(DoneMovedTime);
-                        console.log("moved Date:", date);
+                        // console.log("moved Date:", date);
 
                         // Get today's date
                         const today = new Date();
@@ -1020,22 +1020,22 @@
                         const timeDifference = (today - date) / (1000 * 60 * 60 * 24);
 
                         if (date.toDateString() === today.toDateString()) {
-                            console.log("Moved Today");
+                            // console.log("Moved Today");
                             State.columns.DONE.DONE_TODAY.push(AllCards[i]);
                         } else if (timeDifference < 7) {
-                            console.log("< 7 days");
+                            // console.log("< 7 days");
                             State.columns.DONE.IN_A_WEEK.push(AllCards[i]);
                         } else {
-                            console.log("> 7 days");
+                            // console.log("> 7 days");
                             State.columns.DONE.BEFORE_A_WEEK.push(AllCards[i]);
                         }
 
                     } else {
                         // this is for productions and drivers,
-                        // // console.log("Checking Cards", AllCards[i])
+                        // console.log("Checking Cards", AllCards[i])
                         if (AllCards[i].ProductionPerson === AllCards[i].CurrentList) {
                             // for Productions
-                            // // console.log("In Productions")
+                            // console.log("In Productions")
                             var ProductionArray = State.columns.PRODUCTION;
                             if (ProductionArray.length > 0) {
                                 // search for same list and push or create a list and push
@@ -1070,7 +1070,7 @@
                             }
 
                         } else {
-                            // // console.log("In DRivers")
+                            // console.log("In DRivers")
                             // try for drivers
                             var DriverArray = State.columns.DRIVERS;
                             if (DriverArray.length > 0) {
@@ -1111,7 +1111,7 @@
             })
         }
 
-        console.log("New Updated State: ", State);
+        // console.log("New Updated State: ", State);
         updateBoardUsingState()
     }
 
@@ -1142,7 +1142,7 @@
             //      var OrdersCardsCollection = document.getElementById('OrdersCardsCollection');
             var ordersCardsCollection = document.getElementById('OrdersCardsCollection');
             OrdersCardsCollection.innerHTML = '';
-            // // console.log("OrdersCardsCollection:", ordersCardsCollection);
+            // console.log("OrdersCardsCollection:", ordersCardsCollection);
 
             OrdersCardsCollection.setAttribute('ondrop', 'drop(event)');
             OrdersCardsCollection.setAttribute('ondragover', 'allowDrop(event)');
@@ -1499,7 +1499,7 @@
                     })
                     // Append the child elements to their respective parent elements
                     productionColumnHeaderDiv.appendChild(sectionHeaderText);
-                  //  productionColumnHeaderDiv.appendChild(checkboxInput);
+                    //  productionColumnHeaderDiv.appendChild(checkboxInput);
 
                     productionColumnDiv.appendChild(productionColumnHeaderDiv);
                     productionColumnDiv.appendChild(productionCardsCollectionsDiv);
@@ -1510,7 +1510,7 @@
 
                 }
 
-                // // console.log("ProductionSectionCards: ", ProductionSectionCards);
+                // console.log("ProductionSectionCards: ", ProductionSectionCards);
 
             });
 
@@ -1743,7 +1743,7 @@
                 var DriverSectionCards = OneList;
                 if (DriverSectionCards.OnDuty === "true" || !DriverSectionCards.OnDuty) {
 
-                    // // console.log("DriverSectionCards: ", DriverSectionCards);
+                    // console.log("DriverSectionCards: ", DriverSectionCards);
 
 
                     // Create the div with class "ProductionCardsCollections"
@@ -1879,7 +1879,7 @@
                     })
                     // Append the child elements to their respective parent elements
                     productionColumnHeaderDiv.appendChild(sectionHeaderText);
-                  //  productionColumnHeaderDiv.appendChild(checkboxInput);
+                    //  productionColumnHeaderDiv.appendChild(checkboxInput);
 
                     productionColumnDiv.appendChild(productionColumnHeaderDiv);
                     productionColumnDiv.appendChild(productionCardsCollectionsDiv);
@@ -2251,7 +2251,7 @@
         var data = event.dataTransfer.getData("text/plain");
         var target = event.target;
 
-        console.log("Checking for drop:", target);
+        // console.log("Checking for drop:", target);
         if (target.classList.contains("cardsCollections")) {
             target.appendChild(document.getElementById(data));
         }
@@ -2275,15 +2275,15 @@
 
 
     document.addEventListener('drop', function (event) {
-        // // console.log("Drop event occur")
+        // console.log("Drop event occur")
         event.preventDefault();
         const data = event.dataTransfer.getData('text/plain');
         const sourceElement = document.getElementById(data);
 
-        // // console.log("event.target ", event.target);
-        // // console.log("Drop Target: ", event.target.classList);
+        // console.log("event.target ", event.target);
+        // console.log("Drop Target: ", event.target.classList);
         if (event.target.classList.contains('card')) {
-            // // console.log("First If conditions")
+            // console.log("First If conditions")
             // If the drop target is a card, insert the dragged card immediately after the target card
 
 
@@ -2311,16 +2311,16 @@
                         destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
                     }
 
-                    // // console.log('Task reordered within column ' + sourceColumn.title);
-                    // // console.log(State.columns);
+                    // console.log('Task reordered within column ' + sourceColumn.title);
+                    // console.log(State.columns);
                 }
             }
 
         } else if (event.target.classList.contains('cards')) {
 
-            // // console.log("Second If conditions")
+            // console.log("Second If conditions")
             var destinationAddress = event.target
-            // // console.log(destinationAddress)
+            // console.log(destinationAddress)
 
             // Handle moving a card to a different column (same logic as before)
             const sourceColumn = sourceElement.getAttribute('data-column');
@@ -2330,23 +2330,23 @@
                 updateState(sourceColumn, destinationColumn, data);
                 renderKanban();
             }
-            // // console.log(State.columns);
+            // console.log(State.columns);
         } else {
 
-            // // console.log("Third If conditions")
+            // console.log("Third If conditions")
             var destinationAddress = event.target.parentNode
-            // // // console.log("Destination Address..parentNode.parennode..classList",destinationAddress.parentNode.parentNode.classList[0]);
+            // console.log("Destination Address..parentNode.parennode..classList",destinationAddress.parentNode.parentNode.classList[0]);
 
             if (destinationAddress.classList.contains('card')) {
                 var DropColumn = destinationAddress.parentNode.parentNode
                 var ListName = DropColumn.getElementsByClassName('ListHeader')[0].textContent;
-                // // console.log("1 List Name: ", ListName);
+                // console.log("1 List Name: ", ListName);
 
                 var cardName = sourceElement.getElementsByClassName('cardText')[0].textContent;
-                // // console.log('cardName:', cardName);
+                // console.log('cardName:', cardName);
 
                 MoveCardToList(cardName, ListName);
-                //  // // console.log("destinationAddress.classList.contains('card'):1 ", destinationAddress.classList)
+                // console.log("destinationAddress.classList.contains('card'):1 ", destinationAddress.classList)
                 // If the drop target is a card, insert the dragged card immediately after the target card
 
                 // If the drop target is a card, insert the dragged card immediately before the target card
@@ -2373,22 +2373,22 @@
                             destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
                         }
 
-                        // // console.log('Task reordered within column ' + sourceColumn.title);
-                        // // console.log(State.columns);
+                        // console.log('Task reordered within column ' + sourceColumn.title);
+                        // console.log(State.columns);
                     }
                 }
 
             } else if (destinationAddress.parentNode.classList.contains('card')) {
-                // // console.log("destinationAddress.parentNode.classList.contains('card'):2 ", destinationAddress.parentNode.classList)
+                // console.log("destinationAddress.parentNode.classList.contains('card'):2 ", destinationAddress.parentNode.classList)
                 // If the drop target is a card, insert the dragged card immediately after the target card
                 var DropColumn = destinationAddress.parentNode.parentNode.parentNode;
                 var ListName = DropColumn.getElementsByClassName('ListHeader')[0].textContent;
                 //  var ListName = destinationAddress.parentNode.parentNode.parentNode.classList[0];
-                // // console.log("2 List Name: ", ListName);
+                // console.log("2 List Name: ", ListName);
 
 
                 var cardName = sourceElement.getElementsByClassName('cardText')[0].textContent
-                // // console.log('cardName:', cardName);
+                // console.log('cardName:', cardName);
 
                 MoveCardToList(cardName, ListName);
 
@@ -2417,19 +2417,19 @@
                             destinationColumn.tasks.splice(destinationTaskIndex, 0, taskToMove);
                         }
 
-                        // // console.log('Task reordered within column ' + sourceColumn.title);
-                        // // console.log(State.columns);
+                        // console.log('Task reordered within column ' + sourceColumn.title);
+                        // console.log(State.columns);
                     }
                 }
 
             } else {
-                // // console.log("else last destinationAddress.", destinationAddress)
+                // console.log("else last destinationAddress.", destinationAddress)
                 var DropColumn = destinationAddress;
                 var DropColumeName = DropColumn.getElementsByClassName('ListHeader')[0].textContent;
-                // // console.log("Drop List : ", DropColumeName);
+                // console.log("Drop List : ", DropColumeName);
 
                 var cardName = sourceElement.getElementsByClassName('cardText')[0].textContent
-                // // console.log('cardName:', cardName);
+                // console.log('cardName:', cardName);
 
                 MoveCardToList(cardName, DropColumeName);
             }
@@ -2473,7 +2473,7 @@
 
     function ccAddNewContact() {
         var CCContactCollections = document.getElementById('CCContactCollections');
-        // // console.log("Contact Count: ", CCContactCollections)
+        // console.log("Contact Count: ", CCContactCollections)
         createContact(CCContactCollections);
     }
 
@@ -2628,7 +2628,7 @@
         Contact = [];
 
         for (i = 1; i <= ccEachContactCount; i++) {
-            // // console.log(document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`));
+            // console.log(document.getElementById(`ccContactPersonNameInput${ccEachContactCount}`));
             if (document.getElementById(`ccContactPersonNameInput${i}`)) {
                 var OneContact = {
                     Name: document.getElementById(`ccContactPersonNameInput${i}`).value,
@@ -2678,7 +2678,7 @@
                 .then(response => response.json()) // Parse the JSON response
                 .then(data => {
                     // Handle the data from the server
-                    // // console.log('Response from server:', data);
+                    // console.log('Response from server:', data);
                     if (data.Error) {
                         alert(data.Error);
                     } else {
@@ -2720,7 +2720,7 @@
 
         resetAllDataFromNewOrder();
 
-        console.log("State: ", State.AllCards);
+        // console.log("State: ", State.AllCards);
         var mainPopup = document.getElementById('CreateOrderPopup');
         mainPopup.style.display = "flex";
 
@@ -2759,13 +2759,13 @@
                 if (!isNaN(currentNumber)) {
                     const newLastSection = (currentNumber + 1).toString().padStart(3, '0');
                     const newOrderID = OrderID.replace(/-\d+-$/, '-' + newLastSection + '-');
-                    console.log("Old ID: " + OrderID + "  New ID: " + newOrderID);
+                    // console.log("Old ID: " + OrderID + "  New ID: " + newOrderID);
                     CheckForDuplicateOrderID(newOrderID);
                 } else {
-                    console.log("Invalid last section: " + OrderID);
+                    // console.log("Invalid last section: " + OrderID);
                 }
             } else {
-                console.log("Invalid format: " + OrderID);
+                // console.log("Invalid format: " + OrderID);
             }
             //  CheckForDuplicateOrderID(newOrderID);
         }
@@ -2806,7 +2806,7 @@
 
         // hnadle Labesl
         var AllLabels = State.Labels;
-        console.log("All labesl : ", AllLabels);
+        // console.log("All labesl : ", AllLabels);
         var ColorModelCollection = document.getElementById('ColorModelCollection');
         ColorModelCollection.innerHTML = ""
         AllLabels.forEach((OneLabel) => {
@@ -2894,10 +2894,10 @@
 
     function CreateOrderselectColor(label, color) {
         // Call your function with the selected color
-        //  // // console.log('Selected color:', label, color);
+        // console.log('Selected color:', label, color);
         var popCardAllLabelContainer = document.querySelector('.popCardAllLabelCreateOrder');
         var LableCount = popCardAllLabelContainer.getElementsByClassName('LabelData').length;
-        // // // console.log(LableCount);
+        // console.log(LableCount);
         // Close the color modal after selecting a color
         var colorModal = document.getElementById('colorModal');
         colorModal.style.display = 'none';
@@ -2935,12 +2935,12 @@
     function removeLabelFromCard(LabelDiv) {
         var popCardAllLabelContainer = document.querySelector('.popCardAllLabelCreateOrder');
         //var labelDiv = popCardAllLabelContainer.getEleme
-        console.log("This: ", LabelDiv);
-        console.log('LAbelsss: ', popCardAllLabelContainer);
+        // console.log("This: ", LabelDiv);
+        // console.log('LAbelsss: ', popCardAllLabelContainer);
         if (popCardAllLabelContainer.contains(LabelDiv)) {
             popCardAllLabelContainer.removeChild(LabelDiv);
         } else {
-            console.log("LabelDiv is not a child of popCardAllLabelContainer");
+            // console.log("LabelDiv is not a child of popCardAllLabelContainer");
         }
 
     }
@@ -2957,18 +2957,18 @@
 
     function searchFormulas(query) {
         var formulas = State.Formulas;
-        //    // // console.log(formulas);
+        // console.log(formulas);
         const resultsContainer = document.getElementById('searchResults');
         resultsContainer.innerHTML = ''; // Clear previous results
         if (query) {
 
             const matchingFormulas = formulas.filter(formula => {
-                //     // // console.log("Searching in Formula: ", formula)
+                // console.log("Searching in Formula: ", formula)
                 const searchFields = [formula.FileNo, formula.ColorCode, formula.ColorName];
                 return searchFields.some(field => field.toLowerCase().includes(query.toLowerCase()));
             });
 
-            // // // console.log("matchingFormulas: ", matchingFormulas);
+            // console.log("matchingFormulas: ", matchingFormulas);
 
             matchingFormulas.forEach(formula => {
                 const resultItem = document.createElement('li');
@@ -2983,19 +2983,62 @@
 
     function handleResultItemClick(formula) {
         // Handle what happens when a result item is clicked
-        //  // // console.log('Result item clicked:', formula);
+        // console.log('Result item clicked:', formula);
         var popProductsItemsCollectiosn = document.getElementById('popProductsItemsCollectiosns');
 
         var popEachProductsItemsCollection = document.getElementsByClassName('popEachProductsItemss ');
 
         var count = popEachProductsItemsCollection.length;
 
-        // // // console.log('popEachProductsItems: ' + popEachProductsItemsCollection);
+        // console.log('popEachProductsItems: ' + popEachProductsItemsCollection);
 
-        //  // // console.log('Count of popEachProductsItems: ' + count);
-
+        // console.log('Count of popEachProductsItems: ' + count);
+        console.log('formula.State:', formula.State)
         var NextCount = count + 1;
+        var VirtualFormula = `
+        <div class="EachProductionItem" id="ProductionItem_${formula.Name}" >
+                    <div  ${formula.State === 'Complete' ? '' : 'onclick="SelectAProductionItem(this)"'}   class="popEachProductsItemss">
+                        <input type="Checkbox" class="ProItemCheckBox" id="ProItemCheckBox_${formula.Name}" ${formula.State === 'Complete' ? 'checked="true"' : ''} onclick="return false;"  >
+                        <p id="FormulaColorName" class='FormulaColorName' >${formula.Name}</p>
+                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' ></p>
+                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' ></p>
+                        {{!-- <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
+                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p> --}}
 
+                        <div class="QtyOfFormula">
+                            {{!-- <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
+                            <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode ? formula.ColorCode : ""}" hidden>
+                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName ? formula.SubCategoryName : ""}" hidden>  --}}
+                            {{!-- ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
+                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} --}}
+                           
+                            <input type="text" oninput="OnlyNumber(this)" ${formula.State === 'Complete' ? 'readonly="true"' : ''} placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
+                            <p class="FormulaUnit">${formula.Unit}</p>
+                        </div> 
+
+                        <button id="ProItemDeleteBtn_${formula.Name}" onclick="RemoveOneFormula('${formula.Name}')"
+                            class="btn btn-danger">Delete</button>
+                    </div>
+                    <div class="SelectedProductItems SelectedProductItem_${formula.Name}" id="SelectedProductItem_${formula.Name}">
+                        ${formula.FormulaColorName ? ` 
+                            <p id="SelectedFormulaColorName" class='SelectedFormulaColorName' >${formula.FormulaColorName}</p>
+                            <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.FormulaColorCode ? formula.FormulaColorCode : ""} </p>
+                            <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
+                            <p id="SelectedFormulaMattOrGloss" class='FormulaColorName SelectedFormulaMattOrGloss' >${formula.Selectedmatt ? `Matt: ${formula.Selectedmatt}` : ''} ${formula.Selectedgloss ? `Gloss: ${formula.Selectedgloss}` : ''}</p>
+                            {{!-- <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.SelectedFileNo ? `${formula.SelectedFileNo}` : ""}</p> --}}
+                            ${formula.Matt ? ` <p id="SelectedFormulaMatt" class='FormulaColorName SelectedFormulaFileNo' >${formula.Matt}</p>` : ""}
+                             ${formula.Gloss ? `<p id="SelectedFormulaGloss" class='FormulaColorName SelectedFormulaFileNo' >${formula.Gloss}</p>` : ""}
+                            ${formula.Matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.Matt}" hidden >` : ""}
+                            ${formula.Gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.Gloss}" hidden >` : ""} 
+                            <p id="SelectedFormulaFileNo" class=' SelectedFormulaFileNo FormulaColorName FormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
+                            <button id="SelectedItemRemoveBtn_${formula.Name}" onclick="RemoveSelectedFormula(this,'${formula.FormulaColorName}','SelectedProductItem_${formula.Name}')"
+                            class="btn SelectedItemRemoveBTN">x</button>
+                        `: ``}
+                    </div>
+                </div>
+        `
+
+        /*
         var VirtualFormula = `
                     <div class="popEachProductsItemss">
                         <p id="FormulaColorName" class='FormulaColorName' contenteditable="true">${formula.ColorName}</p>
@@ -3018,6 +3061,7 @@
                             class="btn btn-danger">Delete</button>
                     </div>
         `
+        */
         var NewOrders = {
             ColorName: formula.ColorName,
             Unit: formula.Unit,
@@ -3028,11 +3072,14 @@
 
         popProductsItemsCollectiosn.insertAdjacentHTML('beforeend', VirtualFormula);
 
+        if (formula.State === 'Complete') {
+            tempCheckBoxState(formula.Name);
+        }
 
     }
 
     function RemoveOneFormula(Name) {
-        // // // console.log(Name);
+        // console.log(Name);
         var popEachProductsItemsCollection = document.getElementsByClassName('popEachProductsItemss ');
 
         // Convert HTMLCollection to array using spread operator
@@ -3040,7 +3087,7 @@
 
         // Now you can use forEach
         itemsArray.forEach((EachProduct) => {
-            //   // // console.log(EachProduct);
+            // console.log(EachProduct);
             var name = EachProduct.querySelector('p').textContent.trim();
             if (Name === name) {
                 EachProduct.remove();
@@ -3071,7 +3118,7 @@
                 UserName = State.UserNow;
             } else {
                 UserName = document.getElementById('Username').value;
-                // // console.log(UserName);
+                // console.log(UserName);
                 State.UserNow = UserName;
             }
 
@@ -3209,7 +3256,7 @@
             }
 
             var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
-            //  // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
+            // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
             proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
             var ProItemsDivArray = [...proItems];
@@ -3283,9 +3330,9 @@
                 var Labels = [];
 
                 LabelsDivArray.forEach((OneLabel) => {
-                    // // console.log("OneLabel: ", OneLabel);
-                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
-                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
+                    // console.log("OneLabel: ", OneLabel);
+                    // console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
+                    // console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
 
                     var Label = {
                         Name: OneLabel.getElementsByClassName('LabelData')[0].value,
@@ -3389,7 +3436,7 @@
                     //AttachmentImage: imageFile
                 }
 
-                console.log("Creating new Order: ", CompleteOrderData);
+                // console.log("Creating new Order: ", CompleteOrderData);
 
                 var input = document.getElementById('file');
                 var imageFile = input.files[0];
@@ -3511,8 +3558,8 @@
         const CardData = State.AllCards.find((Card) => Card.Name === CardName);
         // console.log("CardData", CardData);
 
-        //   // console.log("mainPopup", CreateOrderPopup);
-        //  // console.log(CreateOrderPopup.getElementsByClassName('CardNameInput'));
+        // console.log("mainPopup", CreateOrderPopup);
+        // console.log(CreateOrderPopup.getElementsByClassName('CardNameInput'));
         if (CardData.CurrentList !== "ORDERS") {
             CreateOrderPopup.getElementsByClassName('popCardHeaderText')[0].readOnly = true;
         }
@@ -3521,7 +3568,7 @@
         var OldCustomerName = CardData.CustomerName;
         var MatchedCustomer;
 
-        //   // console.log(OldCustomerName);
+        // console.log(OldCustomerName);
 
         if (CardData.OrderIDNumber) {
             AlreadyNameAdded = true;
@@ -3535,7 +3582,7 @@
                         if (OneCustomer.Customername == OldCustomerName) {
                             matchingCustomer = OneCustomer;
                             MatchedCustomer = OneCustomer
-                            //       // console.log("matchingCustomer", matchingCustomer);
+                            // console.log("matchingCustomer", matchingCustomer);
                         }
                     })
 
@@ -3549,7 +3596,7 @@
                         }
                     });
 
-                    // // console.log("Matching Completed!", UpdatedCustomers);
+                    // console.log("Matching Completed!", UpdatedCustomers);
                     resolve(UpdatedCustomers); // Resolve with the UpdatedCustomers array
                 });
             }
@@ -3571,7 +3618,7 @@
                         CustomerSelect.appendChild(optionElement);
                     });
                 } else {
-                    //  // console.log("No matching customer found.");
+                    // console.log("No matching customer found.");
                 }
             }).catch((error) => {
                 console.error("Error in executing the first block:", error);
@@ -3598,7 +3645,7 @@
 
         CreateOrderPopup.getElementsByClassName('PopcardListName')[0].textContent = CardData.CurrentList;
 
-        // // console.log();
+        // console.log();
         var Contacts = [];
         var CustomerContactSelect = CreateOrderPopup.getElementsByClassName('popCardHeaderText');
 
@@ -3613,14 +3660,14 @@
                             Contacts.push(OneContact);
                         }
                     })
-                    // // console.log("Contacts", Contacts);
+                    // console.log("Contacts", Contacts);
                     resolve(Contacts);
                 })
             }
 
 
             executeFirstBlock().then((Contacts) => {
-                // // console.log(Contacts);
+                // console.log(Contacts);
 
                 var customer_contact = document.getElementById('customer_contact');
                 customer_contact.innerHTML = "";
@@ -3648,7 +3695,7 @@
 
 
         var AllLabels = State.Labels;
-        console.log("All labesl : ", AllLabels);
+        // console.log("All labesl : ", AllLabels);
         var ColorModelCollection = document.getElementById('ColorModelCollection');
         ColorModelCollection.innerHTML = "";
         AllLabels.forEach((OneLabel) => {
@@ -3674,18 +3721,20 @@
         if (ProsItems.length > 0) {
             ProsItems.forEach((ProItems) => {
                 var formula = {
-                    ColorName: ProItems.Name,
+                    State: ProItems.State,
+                    Name: ProItems.Name,
                     Unit: ProItems.Unit,
                     FileNo: ProItems.FileNo,
                     QTY: ProItems.Qty,
-                    ColorCode: ProItems.ColorCode,
+                    FormulaColorName: ProItems.FormulaColorName,
+                    FormulaColorCode: ProItems.FormulaColorCode,
                     SubCategoryName: ProItems.SubCategoryName
                 }
-                if (ProItems.matt) {
-                    formula.matt = ProItems.matt
+                if (ProItems.Matt) {
+                    formula.Matt = ProItems.Matt
                 }
-                if (ProItems.gloss) {
-                    formula.gloss = ProItems.gloss
+                if (ProItems.Gloss) {
+                    formula.Gloss = ProItems.Gloss
                 }
 
                 handleResultItemClick(formula)
@@ -3951,7 +4000,7 @@
             }
 
             var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
-            //  // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
+            // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
             proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
             var ProItemsDivArray = [...proItems];
@@ -4025,9 +4074,9 @@
                 var Labels = [];
 
                 LabelsDivArray.forEach((OneLabel) => {
-                    // // console.log("OneLabel: ", OneLabel);
-                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
-                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
+                    // console.log("OneLabel: ", OneLabel);
+                    // console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
+                    // console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
 
                     var Label = {
                         Name: OneLabel.getElementsByClassName('LabelData')[0].value,
@@ -4156,11 +4205,11 @@
 
                 // Verify the content of formData
                 for (var pair of formData.entries()) {
-                    // // console.log(pair[0] + ': ' + pair[1]);
+                    // console.log(pair[0] + ': ' + pair[1]);
                 }
 
 
-                //  // // console.log("CompleteOrderData", CompleteOrderData);
+                // console.log("CompleteOrderData", CompleteOrderData);
 
 
 
@@ -4191,7 +4240,7 @@
                     .then(response => response.json()) // Parse the JSON response
                     .then(data => {
                         // Handle the data from the server
-                        //    // // console.log('Response from server:', data.State);
+                        // console.log('Response from server:', data.State);
                         //CloseCustomerCreationPopup();
                         //resetCustomerValues();
                         //location.reload();
@@ -4268,7 +4317,7 @@
 
     function handleMoveOption(selectedOption) {
         // Implement your logic here based on the selected option
-        // // // console.log('Selected Move Option:', selectedOption);
+        // console.log('Selected Move Option:', selectedOption);
     }
 
     async function ChangeList(CardID) {
@@ -4355,10 +4404,10 @@
         var searchValue = GlobalSearch.value;
         var SearchPlaceholder = GlobalSearch.placeholder;
 
-        console.log(SearchPlaceholder + " : " + searchValue);
+        // console.log(SearchPlaceholder + " : " + searchValue);
 
         var AllCards = State.AllCards;
-        console.log("all Cards", AllCards);
+        // console.log("all Cards", AllCards);
         var matchingObjectArray = [];
 
         if (searchValue !== "") {
@@ -4384,9 +4433,9 @@
 
 
         if (matchingObjectArray) {
-            console.log('Matching Object:', matchingObjectArray);
+            // console.log('Matching Object:', matchingObjectArray);
         } else {
-            console.log('No matching object found.');
+            // console.log('No matching object found.');
         }
 
 
@@ -4540,7 +4589,7 @@
         var Color = document.getElementById('colorSelector').value;
         var ColorlabelName = document.getElementById('ColorlabelName').value;
 
-        console.log(Color + " " + ColorlabelName);
+        // console.log(Color + " " + ColorlabelName);
 
 
 
@@ -4554,7 +4603,7 @@
     async function CreateNewLabel(Color, ColorlabelName) {
         //  let colorWithoutHash = Color.slice(1);
         var url = `/sales/CreateNewLabel/${Color.slice(1)}/${ColorlabelName}`;
-        console.log(url);
+        // console.log(url);
 
         const response = await fetch(url);
         const data = response.json();
@@ -4605,7 +4654,7 @@
 
     async function CreateACopyOfCard(CardID) {
         var url = `/sales/CreateACopyOfCard/${CardID}`;
-        console.log(url);
+        // console.log(url);
 
         const response = await fetch(url);
         const data = response.json();
@@ -4614,7 +4663,7 @@
 
     async function MoveCardToArchived(CardID) {
         var url = `/sales/MoveCardToArchived/${CardID}`;
-        console.log(url);
+        // console.log(url);
 
         const response = await fetch(url);
         const data = response.json();
@@ -4623,8 +4672,8 @@
 
     function HandleAddReadyProducts(ReadyProduct) {
         // Handle what happens when a result item is clicked
-        //  // // console.log('Result item clicked:', formula);
-        console.log("Ready Products: ", ReadyProduct);
+        // console.log('Result item clicked:', formula);
+        // console.log("Ready Products: ", ReadyProduct);
         var popReadyProductsCollectiosn = document.getElementById('popReadyProductsCollectiosn');
 
         var popEachReadyProductsCollection = document.getElementsByClassName('popEachReadyProductsItemss ');
@@ -4685,7 +4734,7 @@
 
         // Now you can use forEach
         itemsArray.forEach((EachProduct) => {
-            //   // // console.log(EachProduct);
+            // console.log(EachProduct);
             var name = EachProduct.querySelector('p').textContent.trim();
             if (ProductName === name) {
                 EachProduct.remove();
@@ -4699,7 +4748,7 @@
             loadDoneBeforeWeekListCards();
         } else {
             var AllOldCards = State.columns.DONE.BEFORE_A_WEEK;
-            console.log("AllOLDCARDSSS:", AllOldCards);
+            // console.log("AllOLDCARDSSS:", AllOldCards);
 
 
             const matchingObjects = [];
@@ -4735,14 +4784,14 @@
                 //searchObject(card, SearchInput);
                 if (searchObject(card, SearchInput)) {
                     matchingObjects.push(card);
-                    console.log("Matchig: ", card);
+                    // console.log("Matchig: ", card);
                 } else {
-                    console.log("Not Matching: ", card);
+                    // console.log("Not Matching: ", card);
                 }
             });
 
             // Display the matching objects
-            console.log(matchingObjects);
+            // console.log(matchingObjects);
             State.columns.DONE.OLD_MATCHED_CARDS = matchingObjects;
             loadDoneBeforeWeekListCards();
         }
@@ -4760,7 +4809,7 @@
             contentType: "application/json",
             success: function (data) {
                 // Handle the success response
-                console.log("FollowUPdata:", data);
+                // console.log("FollowUPdata:", data);
                 State.CustomerFollowUp = data;
             },
             error: function (errMsg) {
@@ -4835,20 +4884,20 @@
             }
 
             const currentSerialNumber = getCurrentSerialNumber();
-            console.log("Checking Current SerialNo:", currentSerialNumber);
+            // console.log("Checking Current SerialNo:", currentSerialNumber);
             checkIfDuplicateSerialNo(currentSerialNumber, AllFollowUP)
             function checkIfDuplicateSerialNo(currentSerialNumber, AllFollowUP) {
                 // Check if the generated serial number is present in AllFollowUP
                 const isSerialNumberPresent = AllFollowUP.some(item => item.Serial_No == currentSerialNumber);
-                console.log("Checking for duplicate,")
+                // console.log("Checking for duplicate,")
                 // If present, increment the serial number
                 if (isSerialNumberPresent) {
                     const newSerialNumber = incrementSerialNumber(currentSerialNumber);
-                    console.log("Incremented Serial Number:", newSerialNumber);
+                    // console.log("Incremented Serial Number:", newSerialNumber);
                     checkIfDuplicateSerialNo(newSerialNumber, AllFollowUP)
                     // document.getElementById('followUPserial_no').value = newSerialNumber;
                 } else {
-                    console.log("Serial Number is not present. Use the generated one:", currentSerialNumber);
+                    // console.log("Serial Number is not present. Use the generated one:", currentSerialNumber);
                     document.getElementById('followUPserial_no').value = currentSerialNumber;
                 }
 
@@ -4893,7 +4942,7 @@
                 Contact_Person: ContactPersons
             }
 
-            console.log("Follow_up", Follow_Up);
+            // console.log("Follow_up", Follow_Up);
 
             $.ajax({
                 url: "/sales/Followup/api",
@@ -4917,7 +4966,7 @@
         var Customers = State.Customers;
         const customerNames = Customers.map(customer => customer.Customername);
 
-        console.log(customerNames);
+        // console.log(customerNames);
 
         const input = document.getElementById('followUPCustomerName');
         const dataList = document.getElementById('FollowUpcustomerSuggestions');
@@ -4933,7 +4982,7 @@
             customer.toLowerCase().includes(inputText)
         );
 
-        console.log("filteredCustomers:", filteredCustomers);
+        // console.log("filteredCustomers:", filteredCustomers);
 
         // Create option elements for each suggestion
         filteredCustomers.forEach(customer => {
@@ -4963,19 +5012,19 @@
 
         if (matchingCustomer) {
             Contacts = matchingCustomer.Contact;
-            console.log("Contacts:", Contacts);
+            // console.log("Contacts:", Contacts);
 
             var ContactPersons = [];
 
             Contacts.forEach((contact) => {
-                console.log("EachContact: ", contact);
+                // console.log("EachContact: ", contact);
                 ContactPersons.push(contact.Name);
             });
         } else {
-            console.log("Selected customer not found in the Customers array.");
+            // console.log("Selected customer not found in the Customers array.");
         }
 
-        console.log("ContactPersons:", ContactPersons)
+        // console.log("ContactPersons:", ContactPersons)
         var ContactPersonsSelect = document.getElementById('ContactPersonsSelect');
         ContactPersonsSelect.innerHTML = "";
 
@@ -4988,7 +5037,7 @@
         ContactPersonsSelect.appendChild(FirstContactOption);
 
         ContactPersons.forEach((ContactPerson) => {
-            console.log("ContactPerson:", ContactPerson);
+            // console.log("ContactPerson:", ContactPerson);
             var ContactOption = document.createElement('option');
             ContactOption.value = ContactPerson;
             ContactOption.textContent = ContactPerson;
@@ -5051,6 +5100,143 @@
         ContactPersonsSelect.appendChild(ContactOPtion);
 
 
+    }
+
+
+    function SelectAProductionItem(element) {
+        // remove classes from previously loaded
+        //  console.log("element.parentNode.parentNode", element.parentNode.parentNode);
+        var ParentElement = element.parentNode.parentNode;
+
+        var allProductionSelectedElement = document.getElementsByClassName('ProductionSelectedElement');
+        for (var i = 0; i < allProductionSelectedElement.length; i++) {
+            allProductionSelectedElement[i].classList.remove('ProductionSelectedElement');
+        }
+
+        var PreviousSelectedRow = ParentElement.getElementsByClassName('EachProElementBottomSec');
+        for (var i = 0; i < PreviousSelectedRow.length; i++) {
+            //   console.log("PreviousSelectedRow:", PreviousSelectedRow[i]);
+            PreviousSelectedRow[i].innerHTML = "";
+        }
+
+        //console.log(element);
+        // console.log(element.parentNode)
+        //  element.getElementsByClassName('FormulaColorCode')[0].textContent = "dsfa";
+        //  console.log(element.getElementsByClassName('FormulaColorCode')[0].textContent);
+        var VertualInputSection = ` 
+        <div class="EachProElementBottomSec" >
+            {{!-- <div class="">
+                <div class="popSeachMixingDiv">
+                    <i class="fas fa-search search-icon MixingSeachIcon"></i>
+                    <input type="search" class="popSeachMixingInput-field EachProElementBottomInp" placeholder="Search"
+                    oninput="searchFormulas(this.value)">
+                </div>
+                <div class="SearchResultsDiv">
+                    <ul class="search-results" id="searchResults"></ul>
+                </div>
+             </div>
+            <a href="/createFormulas" class="btn popNewFormulaBtn ">Create New Formula</a> --}}
+        </div>
+                    `
+
+        element.parentNode.insertAdjacentHTML('beforeend', VertualInputSection);
+        // element.parentNode.setAttribute("class", "ProductionSelectedElement")
+        element.parentNode.classList.add('ProductionSelectedElement');
+
+    }
+
+
+    function ProItemCheckboxChanged(ItmeName, CheckBox) {
+        //   console.log(ItmeName);
+        //  console.log(CheckBox);
+
+        var productionItem = document.getElementById(`ProductionItem_${ItmeName}`);
+        var SelectedItemRemoveBTN = document.getElementById(`SelectedItemRemoveBtn_${ItmeName}`)
+        var ProItemDeleteBTn = document.getElementById(`ProItemDeleteBtn_${ItmeName}`)
+        var OrderIdNumber = document.getElementById('OrderIDNumber').value;
+        var OrderName = document.getElementById('OrderName').value;
+        var CardFullName = OrderIdNumber + OrderName;
+
+
+        if (CheckBox.checked) {
+            //  console.log("Checkbox is checked");
+            if (SelectedItemRemoveBTN) {
+                SelectedItemRemoveBTN.disabled = true;
+            }
+
+            if (ProItemDeleteBTn) {
+                ProItemDeleteBTn.disabled = true;
+            }
+
+            // Check if the element exists
+            if (productionItem) {
+                // Get all <p> tags inside the element
+                var paragraphs = productionItem.getElementsByTagName('p');
+
+                // Loop through each <p> tag and add the style property
+                for (var i = 0; i < paragraphs.length; i++) {
+                    paragraphs[i].style.textDecoration = 'line-through';
+                }
+                var FetchUrl = `/updateProItemState/${ItmeName}/${CardFullName}/Complete`
+                UpdateCheckBoxChangedState(FetchUrl)
+            }
+        } else {
+            //  console.log("Checkbox is not checked");
+            if (SelectedItemRemoveBTN) {
+                SelectedItemRemoveBTN.disabled = true;
+            }
+
+            if (ProItemDeleteBTn) {
+                ProItemDeleteBTn.disabled = true;
+            }
+
+
+            // Check if the element exists
+            if (productionItem) {
+                // Get all <p> tags inside the element
+                var paragraphs = productionItem.getElementsByTagName('p');
+
+                // Loop through each <p> tag and add the style property
+                for (var i = 0; i < paragraphs.length; i++) {
+                    paragraphs[i].style.textDecoration = 'none';
+                }
+
+                var FetchUrl = `/updateProItemState/${ItmeName}/${CardFullName}/InComplete`
+                UpdateCheckBoxChangedState(FetchUrl)
+            }
+        }
+
+        async function UpdateCheckBoxChangedState(FetchUrl) {
+            const response = await fetch(FetchUrl);
+            const data = await response.json();
+
+            fetchAllCards();
+        }
+    }
+
+    function tempCheckBoxState(ItmeName) {
+        var productionItem = document.getElementById(`ProductionItem_${ItmeName}`);
+        var SelectedItemRemoveBTN = document.getElementById(`SelectedItemRemoveBtn_${ItmeName}`)
+        var ProItemDeleteBTn = document.getElementById(`ProItemDeleteBtn_${ItmeName}`)
+        if (SelectedItemRemoveBTN) {
+            SelectedItemRemoveBTN.disabled = true;
+        }
+
+        if (ProItemDeleteBTn) {
+            ProItemDeleteBTn.disabled = true;
+        }
+
+
+        if (productionItem) {
+            // Get all <p> tags inside the element
+            var paragraphs = productionItem.getElementsByTagName('p');
+
+            // Loop through each <p> tag and add the style property
+            for (var i = 0; i < paragraphs.length; i++) {
+                paragraphs[i].style.textDecoration = 'line-through';
+            }
+
+        }
     }
 
 
@@ -6852,7 +7038,35 @@
         background-color: #24292d;
     }
 
+    .ProductionSelectedElement {
+        border: 1px solid gray;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
 
+    .EachProElementBottomSec {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .popNewFormulaBtn {
+        width: 20rem;
+    }
+
+    .SelectedProductItems {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin-bottom: 1rem;
+    }
+
+    .SelectedItemRemoveBTN {
+        background-color: gray;
+        font-size: 20px;
+        font-weight: 600;
+    }
 
 
 

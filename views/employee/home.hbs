@@ -129,7 +129,7 @@
             })
             .catch(error => {
                 // Handle errors here
-                console.log('Error:', error);
+                // console.log('Error:', error);
             });
 
         // Get search input element
@@ -154,8 +154,8 @@
         let results = searchInFormulations(searchTerm); // Assuming searchInFormulations is defined
         results = seletedDates(results); // Assuming seletedDates is defined
 
-        console.log('results');
-        console.log(results);
+        // console.log('results');
+        // console.log(results);
 
         populateTable(results); // Assuming populateTable is defined
     }
@@ -188,9 +188,9 @@
         var startDateString = formatDates(document.getElementById("StartDate").value);
         var endDateString = formatDates(document.getElementById("EndDate").value);
 
-        console.log("dateRange = ", dateRange);
-        console.log("startDate = ", startDateString);
-        console.log("endDate = ", endDateString);
+        // console.log("dateRange = ", dateRange);
+        // console.log("startDate = ", startDateString);
+        // console.log("endDate = ", endDateString);
 
         // Check dateRange and filter if there's a value
         if (dateRange !== "") {
@@ -207,7 +207,7 @@
                 return formulationDate >= startDate && formulationDate <= endDate;
             });
 
-            console.log('filteredFormulations', filteredFormulations);
+            // console.log('filteredFormulations', filteredFormulations);
             return filteredFormulations;
 
         } else {
@@ -261,7 +261,7 @@
                 matchingData.length = 0; // Clear the original array
                 matchingData.push(...uniqueMatchingData);
     
-                //console.log(matchingData);
+                //// console.log(matchingData);
     
                 if (matchingData.length > 0) {
                     matchingData.forEach((data) => {

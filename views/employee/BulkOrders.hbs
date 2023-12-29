@@ -364,7 +364,7 @@
             }
 
 
-            console.log(Responses);
+           // console.log(Responses);
 
             var TotalQTY = 0;
             var TotalVolume = 0;
@@ -787,14 +787,14 @@
                     errorMsgElement.textContent = "Price Unit is not assigned to " + TinterName; // Replace 'New Error Message' with your desired text
                 }
             }
-            console.log("Tinter ", i, "Cost : ", TinterCost)
+           // console.log("Tinter ", i, "Cost : ", TinterCost)
 
             TinterTotalCost += TinterCost;
         }
 
         //after all the process is finished to this process
         var TotalCost = Binder1_Cost + Binder2_Cost + Additve_Cost + TinterTotalCost
-        console.log("TotalCost:", TotalCost, " Binder1_Cost:", Binder1_Cost, " Binder2_Cost: ", Binder2_Cost, " Additve_Cost:", Additve_Cost, "  TinterTotalCost :", TinterTotalCost)
+       // console.log("TotalCost:", TotalCost, " Binder1_Cost:", Binder1_Cost, " Binder2_Cost: ", Binder2_Cost, " Additve_Cost:", Additve_Cost, "  TinterTotalCost :", TinterTotalCost)
 
         document.getElementById('BoCosting').value = TotalCost.toFixed(2).toString();
 

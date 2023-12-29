@@ -778,6 +778,7 @@
 
                 product.BranchStocks.forEach((BranchStock) => {
                     if (BranchStock.BranchID === ViewBranchID) {
+                      //  console.log("Matching : ",BranchStock);
                         ProductStock = BranchStock.Stock
                     }
                 })
@@ -793,6 +794,7 @@
             const oldStockCell = document.createElement("td");
             oldStockCell.classList.add("USFormReadOnly");
             oldStockCell.id = `oldProductStock${index}`
+           // console.log("Stocsk:: ",ProductStock ,"  for : ",product.Product_Name)
             oldStockCell.textContent = ProductStock;
             row.appendChild(oldStockCell);
 

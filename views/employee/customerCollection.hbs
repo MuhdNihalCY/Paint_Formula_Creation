@@ -85,7 +85,7 @@
     });
 
     function addCardDataToCards(AllCards) {
-        console.log("Cards: ", AllCards)
+      //  console.log("Cards: ", AllCards)
         const parentDiv = document.getElementById('cardParent');
         // Clear the parent element by setting its innerHTML to an empty string
         parentDiv.innerHTML = '';
@@ -185,7 +185,7 @@
 
     // pop up screen
     function SelectaCard(id) {
-        console.log("card ID: ", id)
+       // console.log("card ID: ", id)
         let AllCards = State.AllCards;
         let Card;
 
@@ -462,7 +462,7 @@
 
 
     function checkForConfirmation(cardID) {
-        console.log("Check cardID: ", cardID);
+       // console.log("Check cardID: ", cardID);
         let AllCards = State.AllCards;
         let Card;
 
@@ -486,7 +486,7 @@
         var cofirmTitle = document.getElementById('cofirmTitle');
         var cofirmdescription = document.getElementById('cofirmdescription');
         var ConfirmHiddenID = document.getElementById('ConfirmHiddenID');
-        console.log(card);
+      //  console.log(card);
 
         var checkItems = card.checkItems;
         var itemsForMessage = ' ';

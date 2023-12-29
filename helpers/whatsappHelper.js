@@ -8,12 +8,13 @@ const client = require('twilio')(accountSid, authToken);
 module.exports = {
     sendDeliveyMessage: (cardData, Location) => {
         return new Promise(async (resolve, reject) => {
+            
             if(cardData && Location ){
-                var OrderID = cardData.name;
+                var OrderID = cardData.Name;
                 var DeliveryTO = Location;
-                var ContactDetails = cardData.ContactDetails;
+              //  var ContactDetails = cardData.ContactDetails;
     
-                var ClientWhatsappNumber = `${ContactDetails.WhatsAppcountrySelect}${ContactDetails.WhatsappNumber}`;
+                var ClientWhatsappNumber = `${cardData.WhatsAppcountrySelect}${ContactDetails.WhatsappNumber}`;
     
                 var checkItems = cardData.checkItems;
                 var itemsForMessage = ' ';

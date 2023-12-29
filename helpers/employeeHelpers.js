@@ -8,6 +8,7 @@ var express = require('express');
 const fs = require('fs');
 var app = express();
 var path = require('path');
+const whatsappHelper = require('./whatsappHelper');
 
 module.exports = {
     DoLogin: (Data) => {
@@ -293,26 +294,31 @@ module.exports = {
             // console.log("parseFloat(Tinter.Stock): ", parseFloat(Tinter.Stock));
             if (Tinter) {
                 var FoundBranchStock = false;
+                if (Tinter.BranchStocks) {
 
-                Tinter.BranchStocks.forEach((OneBranch) => {
-                    if (OneBranch.BranchName === Branch) {
-                        FoundBranchStock = true;
-                        if (parseInt(OneBranch.Stock) > TinterQty) {
-                            State.HaveStock = true;
-                            State.AvailableStock = parseFloat(OneBranch.Stock);
-                        } else {
-                            // TinterQty is more than avalialable Stock
-                            State.HaveStock = false;
-                            State.AvailableStock = parseFloat(OneBranch.Stock);
+                    Tinter.BranchStocks.forEach((OneBranch) => {
+                        if (OneBranch.BranchName === Branch) {
+                            FoundBranchStock = true;
+                            if (parseInt(OneBranch.Stock) > TinterQty) {
+                                State.HaveStock = true;
+                                State.AvailableStock = parseFloat(OneBranch.Stock);
+                            } else {
+                                // TinterQty is more than avalialable Stock
+                                console.log("low stock because TinterQty is more than avalialable Stock!")
+                                State.HaveStock = false;
+                                State.AvailableStock = parseFloat(OneBranch.Stock);
+                            }
                         }
-                    }
-                })
+                    })
+                }
 
                 if (!FoundBranchStock) {
+                    console.log("low stock because no Branch stock found!")
                     State.HaveStock = false;
                 }
             } else {
                 // TinterQty is more than avalialable Stock
+                console.log("low stock because no tiner")
                 State.HaveStock = false;
                 // State.AvailableStock = parseFloat(Tinter.Stock);
             }
@@ -332,21 +338,23 @@ module.exports = {
             BinderQTY = parseFloat(BinderQTY);
             if (Binder) {
                 var BranchFound = false;
+                if (Binder.BranchStocks) {
 
-                Binder.BranchStocks.forEach((OneBranch) => {
-                    if (OneBranch.BranchName === Branch) {
-                        if (parseFloat(OneBranch.Stock) > BinderQTY) {
-                            // have Stock for this formula
-                            BranchFound = true;
-                            State.HaveStock = true;
-                            State.AvailableStock = parseFloat(OneBranch.Stock);
-                        } else {
-                            // TinterQty is more than avalialable Stock
-                            State.HaveStock = false;
-                            State.AvailableStock = parseFloat(OneBranch.Stock);
+                    Binder.BranchStocks.forEach((OneBranch) => {
+                        if (OneBranch.BranchName === Branch) {
+                            if (parseFloat(OneBranch.Stock) > BinderQTY) {
+                                // have Stock for this formula
+                                BranchFound = true;
+                                State.HaveStock = true;
+                                State.AvailableStock = parseFloat(OneBranch.Stock);
+                            } else {
+                                // TinterQty is more than avalialable Stock
+                                State.HaveStock = false;
+                                State.AvailableStock = parseFloat(OneBranch.Stock);
+                            }
                         }
-                    }
-                })
+                    })
+                }
 
                 if (!BranchFound) {
                     State.HaveStock = false;
@@ -370,21 +378,23 @@ module.exports = {
 
             if (Additive) {
                 var BranchFound = false;
+                if (Additive.BranchStocks) {
 
-                Additive.BranchStocks.forEach((OneBranch) => {
-                    if (OneBranch.BranchName === Branch) {
-                        if (parseFloat(OneBranch.Stock) > AdditiveQTY) {
-                            // have Stock for this formula
-                            BranchFound = true;
-                            State.HaveStock = true;
-                            State.AvailableStock = parseFloat(OneBranch.Stock);
-                        } else {
-                            // TinterQty is more than avalialable Stock
-                            State.HaveStock = false;
-                            State.AvailableStock = parseFloat(OneBranch.Stock);
+                    Additive.BranchStocks.forEach((OneBranch) => {
+                        if (OneBranch.BranchName === Branch) {
+                            if (parseFloat(OneBranch.Stock) > AdditiveQTY) {
+                                // have Stock for this formula
+                                BranchFound = true;
+                                State.HaveStock = true;
+                                State.AvailableStock = parseFloat(OneBranch.Stock);
+                            } else {
+                                // TinterQty is more than avalialable Stock
+                                State.HaveStock = false;
+                                State.AvailableStock = parseFloat(OneBranch.Stock);
+                            }
                         }
-                    }
-                })
+                    })
+                }
 
                 if (!BranchFound) {
                     State.HaveStock = false;
@@ -479,18 +489,18 @@ module.exports = {
                         var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
                         var OneBranch = {
                             BranchName: Branch,
-                            BranchID: BranchData._id,
+                            BranchID: BranchData._id.toString(),
                             Stock: parseFloat(Product.StandardQuatity) * parseFloat(Data.NewStock),
                         }
-                        Binder.BranchStocks.push(OneBranch)
-                        await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: Binder.BranchStocks } });
+                        Product.BranchStocks.push(OneBranch)
+                        await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Id": parseInt(Data.ProductId) }, { $set: { BranchStocks: Product.BranchStocks } });
                     }
                 })
             } else {
                 var BranchStocks = [];
                 var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
                 var OneBranch = {
-                    BranchID: BranchData._id,
+                    BranchID: BranchData._id.toString(),
                     BranchName: Branch,
                     Stock: parseFloat(Product.StandardQuatity) * (parseFloat(Data.NewStock))
                 }
@@ -519,7 +529,7 @@ module.exports = {
                     } else {
                         var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
                         var OneBranch = {
-                            BranchID: BranchData._id,
+                            BranchID: BranchData._id.toString(),
                             BranchName: Branch,
                             Stock: parseFloat(Data.NewStock)
                         }
@@ -533,7 +543,7 @@ module.exports = {
                 var BranchStocks = [];
                 var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
                 var OneBranch = {
-                    BranchID: BranchData._id,
+                    BranchID: BranchData._id.toString(),
                     BranchName: Branch,
                     Stock: parseFloat(Data.NewStock)
                 }
@@ -563,7 +573,7 @@ module.exports = {
                     } else {
                         var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
                         var OneBranch = {
-                            BranchID: BranchData._id,
+                            BranchID: BranchData._id.toString(),
                             BranchName: Branch,
                             Stock: parseFloat(Data.NewStock)
                         }
@@ -577,7 +587,7 @@ module.exports = {
                 var BranchStocks = [];
                 var BranchData = await db.get().collection(collection.BRANCH_COLLECTION).findOne({ BranchName: Branch })
                 var OneBranch = {
-                    BranchID: BranchData._id,
+                    BranchID: BranchData._id.toString(),
                     BranchName: Branch,
                     Stock: parseFloat(Data.NewStock)
                 }
@@ -1442,7 +1452,13 @@ module.exports = {
             delete OldCard._id;
             console.log("OldCard: ", OldCard);
 
+
             await db.get().collection(collection.CARD_COLLECTION).updateOne({ _id: new ObjectId(data.cardID) }, { $set: OldCard }).then(() => {
+                if (data.newlistname === "DONE TODAY") {
+                    //sent whatsapp message
+
+                    whatsappHelper.sendDeliveyMessage(OldCard).then(() => { })
+                }
                 resolve(data.cardID);
             })
         })
@@ -1482,7 +1498,14 @@ module.exports = {
             }
 
 
-            await db.get().collection(collection.CARD_COLLECTION).updateOne({ Name: data.CardName }, { $set: OldCard }).then(() => {
+            await db.get().collection(collection.CARD_COLLECTION).updateOne({ Name: data.CardName }, { $set: OldCard }).then(async () => {
+                if (data.newlistname === "DONE TODAY") {
+                    //sent whatsapp message 
+                    //CustomerName
+                    var Customerdata = await db.get().collection(collection.CUSTOMER_COLLECTION).findOne({ Customername: OldCard.CustomerName });
+
+                    whatsappHelper.sendDeliveyMessage(OldCard, Customerdata.Loaction).then(() => { })
+                }
                 resolve(data.cardID);
             })
         })

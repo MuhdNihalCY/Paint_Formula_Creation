@@ -22,6 +22,8 @@ const EmployeeVerifyLogin = (req, res, next) => {
 
 /* GET home page. */
 router.get('/', EmployeeVerifyLogin, function (req, res, next) {
+  // WhatsappHelper.SendTestMessage().then(()=>{
+  // });
   res.redirect('/home')
   // var EmployeeName = req.session.EmployeeName;
 
@@ -1088,16 +1090,19 @@ router.get('/UpdateStocks', EmployeeVerifyLogin, (req, res) => {
 
             // Put Branch stock to Stock key of each product
             var BranchFound = false;
-            product.BranchStocks.forEach(async (OneBranch) => {
-              if (OneBranch.BranchName === Branch) {
-                BranchFound = true;
-                if (parseFloat(OneBranch.Stock) > 0) {
-                  product.Stock = parseFloat(OneBranch.Stock)
-                } else {
-                  product.Stock = 0;
+            console.log("product: ", product);
+            if (product.BranchStocks) {
+              product.BranchStocks.forEach(async (OneBranch) => {
+                if (OneBranch.BranchName === Branch) {
+                  BranchFound = true;
+                  if (parseFloat(OneBranch.Stock) > 0) {
+                    product.Stock = parseFloat(OneBranch.Stock)
+                  } else {
+                    product.Stock = 0;
+                  }
                 }
-              }
-            })
+              })
+            }
             if (!BranchFound) {
               product.Stock = 0;
             }
@@ -2301,7 +2306,8 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', EmployeeVerif
 })
 
 router.get('/home', EmployeeVerifyLogin, (req, res) => {
-  res.render('employee/CustomTrello')
+
+  res.render('employee/CustomTrello',{EmployeeData: req.session.EmployeeData})
 })
 
 

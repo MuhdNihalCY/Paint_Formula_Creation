@@ -561,7 +561,7 @@
         return fetch('/admin/Subcategories/api')
             .then(response => response.json())
             .catch(error => {
-                console.log('Error:', error);
+                // console.log('Error:', error);
             });
     }
 
@@ -569,7 +569,7 @@
         return fetch('/admin/Categories/api')
             .then(response => response.json())
             .catch(error => {
-                console.log('Error:', error);
+                // console.log('Error:', error);
             });
     }
 
@@ -986,7 +986,7 @@
 
         // Get all the rows with class "row-template"
         var rows = document.getElementsByClassName("row-template");
-        console.log("rows.length: ",rows.length);
+        // console.log("rows.length: ",rows.length);
         // Loop through each row
         for (var i = 1; i <= rows.length; i++) {
             // Get the input value for the current row
@@ -1198,8 +1198,8 @@
             gloss = parseFloat(document.getElementById('MattOrGlossINPTag').value);
         }
 
-        console.log("Matt Values: ", mattValue, "  Gloss Values: ", gloss);
-        console.log("Sum QTY: ", Sum_qty);
+        // console.log("Matt Values: ", mattValue, "  Gloss Values: ", gloss);
+        // console.log("Sum QTY: ", Sum_qty);
 
 
         var Binder1Avalue = parseFloat(Sub_Category.Binder1Avalue);
@@ -1210,7 +1210,7 @@
 
         var Binder2Avalue = parseFloat(Sub_Category.Binder2Avalue);
 
-        console.log(`Binder1Avalue ${Binder1Avalue} ,  Binder1Bvalue ${Binder1Bvalue}  ,   Binder1Cvalue ${Binder1Cvalue} , Binder1Dvalue ${Binder1Dvalue}, Binder2Avalue ${Binder2Avalue}`);
+        // console.log(`Binder1Avalue ${Binder1Avalue} ,  Binder1Bvalue ${Binder1Bvalue}  ,   Binder1Cvalue ${Binder1Cvalue} , Binder1Dvalue ${Binder1Dvalue}, Binder2Avalue ${Binder2Avalue}`);
 
 
 
@@ -1371,7 +1371,7 @@
                         TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * Binder1_Density) / 1000);
                         var Binder1Vol = (Binder1INP * Binder1_Density) / 1000;
                         document.getElementById("Binder1Volume").value = Binder1Vol.toFixed(3);
-                        console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
+                        // console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
                         //console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
 
 
@@ -1384,7 +1384,7 @@
                             TotalVolumeOfFormula = TotalVolumeInput + ((Binder1INP * Binder1_Density) / 1000) + ((Binder2INP * Binder2_Density) / 1000)
                             var Binder2Vol = (Binder2INP * Binder2_Density) / 1000;
                             document.getElementById("Binder2Volume").value = Binder2Vol.toFixed(3);
-                            console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
+                            // console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
                             //console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
 
                         } else {
@@ -1436,7 +1436,7 @@
                         var Binder1Vol = (Binder1INP * Binder1_Density) / 1000;
                         document.getElementById("Binder1Volume").value = Binder1Vol.toFixed(3);
                         //console.log("Binder1Vol ", Binder1Vol, " = (Binder1INP * Binder1_Density)"Binder1INP, " * ", Binder1_Density, " / ", 1000)
-                        console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
+                        // console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
                         TotalAdditivesVolume = (TotalAdditivesInp * Additive_Density) / 1000;
                         document.getElementById("TotalAdditivesVolume").value = TotalAdditivesVolume.toFixed(2);;
 
@@ -1450,7 +1450,7 @@
                             var Binder2Vol = (Binder2INP * Binder2_Density) / 1000;
                             document.getElementById("Binder2Volume").value = Binder2Vol.toFixed(3);
                             //console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
-                            console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
+                            // console.log("Binder2Vol ", Binder2INP * Binder2_Density, " = (Binder2INP * Binder2_Density) * ", Binder2INP, " * ", Binder2_Density, " / ", 1000);
                             TotalAdditivesVolume = (TotalAdditivesInp * Additive_Density) / 1000;
                             document.getElementById("TotalAdditivesVolume").value = TotalAdditivesVolume.toFixed(2);;
 
@@ -1507,7 +1507,7 @@
                             var Binder1Vol = (Binder1INP * Binder1_Density) / 1000;
                             document.getElementById("Binder1Volume").value = Binder1Vol.toFixed(3);
                             //console.log("Binder1Vol ", Binder1Vol, " = (Binder1INP * Binder1_Density)"Binder1INP, " * ", Binder1_Density, " / ", 1000)
-                            console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
+                            // console.log("Binder1Vol ", Binder1INP * Binder1_Density, " = (Binder1INP * Binder1_Density) * ", Binder1INP, " * ", Binder1_Density, " / ", 1000);
 
                         } else {
                             // Binder2INP is not a number or cannot be parsed as a number
@@ -1565,7 +1565,7 @@
         // Get all select elements with class "CFTinters"
         var selectElements = document.getElementsByClassName("EDTableTinter");
 
-        console.log("selectElements: ", selectElements);
+        // console.log("selectElements: ", selectElements);
 
         // Iterate over each select element
         for (var i = 0; i < selectElements.length; i++) {
@@ -1574,13 +1574,13 @@
             // Get the selected option from the current select element
             var selectedOption = selectElement[i];
 
-            console.log("selectedOption", selectedOption)
+            // console.log("selectedOption", selectedOption)
             // Get the value of the selected option
             var selectedValue = selectedOption.value;
 
             // Push the selected value into the "Products" array
             Products.push(selectedValue);
-            console.log("Products at ", i, " ", Products);
+            // console.log("Products at ", i, " ", Products);
         }
 
         //console.log("Products: ", Products)
@@ -1617,12 +1617,12 @@
                     var GramInputTotal = parseFloat(document.getElementById(GramInputTotalID).value);
                     //       console.log("SumOfSolidContentOfProducts",GramInputTotal)
                     var OneProduct = products[i]
-                    console.log("OneProduct", OneProduct)
+                    // console.log("OneProduct", OneProduct)
                     var SolidContentOfProduct = parseFloat(OneProduct.SolidContent);
                     var VocOfProduct = parseFloat(OneProduct.VOC);
                     SumOfSolidContentOfProducts += (GramInputTotal * SolidContentOfProduct) / 100
                     VocOfProducts += (GramInputTotal * VocOfProduct) / 100
-                    //console.log("Voc of Products: ", (GramInputTotal * VocOfProduct) / 100)
+                    //// console.log("Voc of Products: ", (GramInputTotal * VocOfProduct) / 100)
                     ////console.log("SolidContentOfProduct",SolidContentOfProduct)
                 }
                 //Solid content of Formulation= (sum of solid content of each row/  Total Quantity of Formulation)* 100
@@ -1703,7 +1703,7 @@
 
 
     function showLoading() {
-        console.log("Showing Loader");
+        // console.log("Showing Loader");
         var loadingScreen = document.getElementById("loadingScreen");
         var form = document.getElementById("uploadForm");
 
@@ -1714,7 +1714,7 @@
     }
 
     function hideLoading() {
-        console.log("Hiding Loader");
+        // console.log("Hiding Loader");
         var loadingScreen = document.getElementById("loadingScreen");
         var form = document.getElementById("uploadForm");
 
