@@ -1,3 +1,12 @@
+<div id="loader-container">
+    {{!-- <div class="loader"></div> --}}
+    <div class="loader">
+        {{!-- <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span> --}}
+    </div>
+</div>
+
 <div id="loadingIndicator" class="popup">
     <div class="popup-content">
         <div class="loader"></div>
@@ -454,6 +463,7 @@
 
     //ajax
     function ADgetAllSubCategories() {
+        showLoader();
         return fetch('/admin/Subcategories/api')
             .then(response => response.json())
             .catch(error => {
@@ -489,9 +499,12 @@
             // Get the subcategory select element
             const subCategorySelect = document.getElementById('SubCategorySelect');
 
+            hideLoader();
+
             // Add an event listener to the category select element
             categorySelect.addEventListener('change', () => {
                 // Get the selected category ID
+                showLoader()
                 const categoryId = categorySelect.value;
 
 
@@ -527,7 +540,7 @@
 
                     //subCategorySelect.readonly = true;
                 }
-
+                hideLoader()
                 ////console.log(subCategorySelect.value);
             });
         });
@@ -801,7 +814,7 @@
 
 
     function CFSubcategorySelect() {
-
+        showLoader()
         var subCategorySelect = document.getElementById("SubCategorySelect");
         var selectedOption = subCategorySelect.value;
 
@@ -894,10 +907,12 @@
                 // Handle any errors that occurred during the AJAX call
                 console.error(error);
             });
+        hideLoader()
     }
 
 
     function calculateTotalGrams(element) {
+        showLoader()
         ////console.log(element);
         var totalGrams = 0;
         var totalLiter = 0;
@@ -1093,6 +1108,9 @@
         if (Sub_Category.Gloss || Sub_Category.Matt) {
             mattValue = parseFloat(document.getElementById('MattOrGlossINPTag').value);
             gloss = parseFloat(document.getElementById('MattOrGlossINPTag').value);
+        }else{
+            mattValue=1;
+            gloss=1;
         }
 
         //console.log("Matt Values: ", mattValue, "  Gloss Values: ", gloss);
@@ -1516,7 +1534,7 @@
                     var GramInputTotal = parseFloat(document.getElementById(GramInputTotalID).value);
                     //       //console.log("SumOfSolidContentOfProducts",GramInputTotal)
                     var OneProduct = products[i]
-                  //  console.log("OneProduct:", OneProduct);
+                    //  console.log("OneProduct:", OneProduct);
                     if (OneProduct) {
                         var SolidContentOfProduct = parseFloat(OneProduct.SolidContent);
                         var VocOfProduct = parseFloat(OneProduct.VOC);
@@ -1560,7 +1578,7 @@
                 console.error("Error: ", error);
             });
 
-
+        hideLoader()
     }
 
     // to load one Sample data for reload the table.
@@ -1599,6 +1617,16 @@
 
 
     function CalculateCost() {
+    }
+
+    // Function to show the loader
+    function showLoader() {
+        document.getElementById('loader-container').style.display = 'flex';
+    }
+
+    // Function to hide the loader
+    function hideLoader() {
+        document.getElementById('loader-container').style.display = 'none';
     }
 
 
@@ -2120,4 +2148,57 @@
         display: none;
         /* Add your custom CSS styles for the loading indicator here */
     }
+
+    /*Loader */
+    #loader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        display: none;
+    }
+
+    .loader {
+        display: flex;
+        align-items: center;
+    }
+
+    .bar {
+        display: inline-block;
+        width: 3px;
+        height: 20px;
+        background-color: rgba(255, 255, 255, .5);
+        border-radius: 10px;
+        animation: scale-up4 1s linear infinite;
+    }
+
+    .bar:nth-child(2) {
+        height: 35px;
+        margin: 0 5px;
+        animation-delay: .25s;
+    }
+
+    .bar:nth-child(3) {
+        animation-delay: .5s;
+    }
+
+    @keyframes scale-up4 {
+        20% {
+            background-color: #ffff;
+            transform: scaleY(1.5);
+        }
+
+        40% {
+            transform: scaleY(1);
+        }
+    }
+
+
+    /*Loader Ends*/
 </style>

@@ -359,6 +359,8 @@ router.post('/FindAdditiveBinderDensityById/api', async (req, res) => {  // Empl
 
 router.post('/CreateFormula', (req, res) => {
 
+
+
   function StoreRefImage(SavedData) {
     console.log("Saved data: ", SavedData);
     if (req.files) {
@@ -382,7 +384,8 @@ router.post('/CreateFormula', (req, res) => {
   }
 
 
-  // console.log(req.body);
+  console.log(req.body);
+  
   function calculateRatios(data) {
     console.log("Calculating Data: ", data);
     const ratios = {};
@@ -816,6 +819,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
           Liter = true
         }
         NoQty = "minimum Quantity is 1";
+        console.log("Formulation: ",Formulation);
         res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, Item, MattOrGlossValue, MattOrGloss, NoQty });
       })
     })
@@ -856,7 +860,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
           if (Sub_Category.Liter) {
             Liter = true
           }
-
+          console.log("Formulation: ",Formulation);
           res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss });
         })
       })
@@ -891,6 +895,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
           if (Sub_Category.Liter) {
             Liter = true
           }
+          console.log("Formulation: ",Formulation);
           res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss });
         })
       })
@@ -1291,7 +1296,7 @@ router.get('/EditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
         employeeHelpers.GetAllAdditives().then((Additives) => {
           console.log("Additives:", Additives);
           // Find the index of the Additive with AdditiveName: 'Multi-Mat'
-          const indexToMove = Additives.findIndex(additive => additive.Additive_Name === 'Multi-Mat');
+          const indexToMove = Additives.findIndex(additive => additive.Additive_Name === Formula.AdditiveName);
 
           // If 'Multi-Mat' is found, move it to the beginning of the array
           if (indexToMove !== -1) {
@@ -1933,7 +1938,7 @@ router.get('/UpdatedEditFormula/:fileNo', EmployeeVerifyLogin, (req, res) => {
         employeeHelpers.GetAllAdditives().then((Additives) => {
           console.log("Additives:", Additives);
           // Find the index of the Additive with AdditiveName: 'Multi-Mat'
-          const indexToMove = Additives.findIndex(additive => additive.Additive_Name === 'Multi-Mat');
+          const indexToMove = Additives.findIndex(additive => additive.Additive_Name === Formula.AdditiveName);
 
           // If 'Multi-Mat' is found, move it to the beginning of the array
           if (indexToMove !== -1) {

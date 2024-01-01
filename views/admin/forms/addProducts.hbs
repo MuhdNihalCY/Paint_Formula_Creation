@@ -50,19 +50,19 @@
                                 </div>
                             </div>
                             <div class="ADFormAddingCatgorySelection">
-                                <div class="ADFromAddingSingleRow">
+                                <div style="width: 80%;"  class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Product Name</p>
                                     {{#if editProduct}}
-                                    <input type="text" id="Product_Namr" name="Product_Name" class="ADProductInputBox"
+                                    <input type="text" id="Product_Namr"  style="width: 69%;" name="Product_Name" class="ADProductInputBox "
                                         value="{{product.Product_Name}}" required>
                                     <input type="text" name="Product_Id" class="ADProductInputBox"
                                         value="{{product.Product_Id}}" hidden required>
                                     {{else}}
-                                    <input type="text" id="Product_Namr" name="Product_Name" class="ADProductInputBox"
+                                    <input type="text" id="Product_Namr" style="width: 69%;"  name="Product_Name" class="ADProductInputBox "
                                         required>
                                     {{/if}}
                                 </div>
-                                <div class="ADFromAddingSingleRow">
+                                {{!-- <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Density (ml/1000g)</p>
                                     {{#if editProduct}}
                                     <input type="text" oninput="validateInput(this)" name="Product_Density"
@@ -71,9 +71,19 @@
                                     <input type="text" oninput="validateInput(this)" name="Product_Density"
                                         class="ADProductInputBox" required>
                                     {{/if}}
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="ADFormAddingCatgorySelection">
+                                 <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Abbreviation</p>
+                                    {{#if editProduct}}
+                                    <input type="text"  name="Abbreviation"
+                                        class="ADProductInputBox" value="{{product.Abbreviation}}" required>
+                                    {{else}}
+                                    <input type="text"  name="Abbreviation"
+                                        class="ADProductInputBox" required>
+                                    {{/if}}
+                                </div>
                                 <div class="ADFromAddingSingleRow">
                                     <p class="ADSubCategorySelectionLabel">Group</p>
                                     {{#if editProduct}}
@@ -94,16 +104,7 @@
                                     </select>
                                     {{/if}}
                                 </div>
-                                <div class="ADFromAddingSingleRow">
-                                    <p class="ADSubCategorySelectionLabel">Abbreviation</p>
-                                    {{#if editProduct}}
-                                    <input type="text" oninput="validateInput(this)" name="Abbreviation"
-                                        class="ADProductInputBox" value="{{product.Abbreviation}}" required>
-                                    {{else}}
-                                    <input type="text" oninput="validateInput(this)" name="Abbreviation"
-                                        class="ADProductInputBox" required>
-                                    {{/if}}
-                                </div>
+                               
                             </div>
                             <div class="ADFormAddingCatgorySelection">
                                 <div class="ADFromAddingSingleRow">
@@ -133,6 +134,31 @@
                                         <option value="Ltr">Liter</option>
                                         {{/if}}
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="ADFormAddingCatgorySelection">
+                                {{!-- <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Product Name</p>
+                                    {{#if editProduct}}
+                                    <input type="text" id="Product_Namr" name="Product_Name" class="ADProductInputBox"
+                                        value="{{product.Product_Name}}" required>
+                                    <input type="text" name="Product_Id" class="ADProductInputBox"
+                                        value="{{product.Product_Id}}" hidden required>
+                                    {{else}}
+                                    <input type="text" id="Product_Namr" name="Product_Name" class="ADProductInputBox"
+                                        required>
+                                    {{/if}}
+                                </div> --}}
+                                <div class="ADFromAddingSingleRow">
+                                    <p class="ADSubCategorySelectionLabel">Density (ml/1000g)</p>
+                                    {{#if editProduct}}
+                                    <input type="text" oninput="validateInput(this)" name="Product_Density"
+                                        class="ADProductInputBox" value="{{product.Product_Density}}" required>
+                                    {{else}}
+                                    <input type="text" oninput="validateInput(this)" name="Product_Density"
+                                        class="ADProductInputBox" required>
+                                    {{/if}}
                                 </div>
                             </div>
 

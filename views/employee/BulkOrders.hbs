@@ -90,7 +90,8 @@
                                         <label for="">Referance Image:</label>
                                         <div class="BoRefImgDiv">
                                             {{!-- /images/RefImages/{{Formulation.FileNo}}.jpg --}}
-                                            <img class="BoRefImg" src="data:image/jpeg;base64,{{Formulation.ImageBase64}}"> 
+                                            <img class="BoRefImg"
+                                                src="data:image/jpeg;base64,{{Formulation.ImageBase64}}">
                                         </div>
                                     </div>
 
@@ -364,7 +365,7 @@
             }
 
 
-           // console.log(Responses);
+            // console.log(Responses);
 
             var TotalQTY = 0;
             var TotalVolume = 0;
@@ -446,6 +447,7 @@
                     InputedQTY = parseFloat(InputedQTY);
                     var Binder1VolumeRatio = parseFloat(Formula.Binder1VolumeRatio);
                     var Binder1Volume = (Binder1VolumeRatio * InputedQTY * 1000).toFixed(3);
+                    console.log("InputedQTY:", InputedQTY, "  Binder1VolumeRatio:", Binder1VolumeRatio, "  Binder1Volume:", Binder1Volume);
 
                     //Mass (in grams) = (Volume * Density) / 1000
                     var Binder1QTY = ((Binder1Volume * parseFloat(Formula[`Binder1_Density`])) / 1000).toFixed(3);
@@ -544,9 +546,11 @@
                     InputedQTY = parseFloat(InputedQTY);
                     var Binder1Ratio = parseFloat(Formula.Binder1Ratio);
                     var Binder1QTY = (Binder1Ratio * InputedQTY * 1000).toFixed(3);
+                    console.log("InputedQTY:", InputedQTY, "  Binder1VolumeRatio:", Binder1Ratio, "  Binder1Volume:", Binder1QTY);
 
                     //volume = (mass * density) /1000
                     var Binder1Volume = ((Binder1QTY * parseFloat(Formula[`Binder1_Density`])) / 1000).toFixed(3);
+
                     document.getElementById('Binder1QTY').value = Binder1QTY
                     document.getElementById('Binder1Volume').value = Binder1Volume
                 }
@@ -629,7 +633,7 @@
                     var Binder1InQty = parseFloat(document.getElementById("Binder1QTY").value);
                     Binder1_Cost = (Binder1InQty / 1000) * Binder1PriceRatio;
                 } else {
-                   // alert("Price Unit is not assigned to " + Binder1name);
+                    // alert("Price Unit is not assigned to " + Binder1name);
                     document.getElementById("BoSaveBTN").disabled = true;
                     // Find the element with the class name "errorMSg"
                     var errorMsgElement = document.querySelector('.errorMSg');
@@ -655,7 +659,7 @@
                 var Binder2name = document.getElementById("Binder2Name").value;
 
                 if (!Binder2PriceRatio) {
-                   // alert("Price is not assigned to " + Binder2name);
+                    // alert("Price is not assigned to " + Binder2name);
                     document.getElementById("BoSaveBTN").disabled = true;
                     // Find the element with the class name "errorMSg"
                     var errorMsgElement = document.querySelector('.errorMSg');
@@ -678,7 +682,7 @@
                     var Binder2InQty = parseFloat(document.getElementById("Binder2QTY").value);
                     Binder2_Cost = (Binder2InQty / 1000) * Binder2PriceRatio;
                 } else {
-                   // alert("Price Unit is not assigned to " + Binder2name);
+                    // alert("Price Unit is not assigned to " + Binder2name);
                     document.getElementById("BoSaveBTN").disabled = true;
                     // Find the element with the class name "errorMSg"
                     var errorMsgElement = document.querySelector('.errorMSg');
@@ -753,7 +757,7 @@
             //console.log(TinterQTYRatio);
 
             if (!TinterPriceRatio) {
-               // alert("Price is not assigned to " + TinterName);
+                // alert("Price is not assigned to " + TinterName);
                 document.getElementById("BoSaveBTN").disabled = true;
                 // Find the element with the class name "errorMSg"
                 var errorMsgElement = document.querySelector('.errorMSg');
@@ -787,14 +791,14 @@
                     errorMsgElement.textContent = "Price Unit is not assigned to " + TinterName; // Replace 'New Error Message' with your desired text
                 }
             }
-           // console.log("Tinter ", i, "Cost : ", TinterCost)
+            // console.log("Tinter ", i, "Cost : ", TinterCost)
 
             TinterTotalCost += TinterCost;
         }
 
         //after all the process is finished to this process
         var TotalCost = Binder1_Cost + Binder2_Cost + Additve_Cost + TinterTotalCost
-       // console.log("TotalCost:", TotalCost, " Binder1_Cost:", Binder1_Cost, " Binder2_Cost: ", Binder2_Cost, " Additve_Cost:", Additve_Cost, "  TinterTotalCost :", TinterTotalCost)
+        // console.log("TotalCost:", TotalCost, " Binder1_Cost:", Binder1_Cost, " Binder2_Cost: ", Binder2_Cost, " Additve_Cost:", Additve_Cost, "  TinterTotalCost :", TinterTotalCost)
 
         document.getElementById('BoCosting').value = TotalCost.toFixed(2).toString();
 

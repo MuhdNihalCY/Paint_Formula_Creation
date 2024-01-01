@@ -158,6 +158,7 @@
                     <thead class="ADTableHead">
                         <tr class="ADTableHeadTR">
                             <th>ID</th>
+                            <td>Abbreviation</td>  
                             <th>Product Name</th>
                             <th>Density</th>
                             {{!-- <th>Stock (Ltr or Kg)</th>  --}}
@@ -341,6 +342,7 @@
                     // Populate table cells with data
                     row.innerHTML = `
       <td>${product.Product_Id}</td>
+      <td>${product.Abbreviation? product.Abbreviation : "" }</td>
       <td>${product.Product_Name}</td>
       <td>${product.Product_Density}</td>
       {{!-- <td>${ProductStock}</td> --}}
