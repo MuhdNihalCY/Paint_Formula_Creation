@@ -288,8 +288,8 @@
                                 {{/if}}
 
                             </div>
-                            <div class="TableStarting"> 
-                                {{!-- table table-bordered text-center    --}}
+                            <div class="TableStarting">
+                                {{!-- table table-bordered text-center --}}
                                 <table class="table table-bordered text-center">
                                     <thead class="EDTableHeader">
                                         <th>Tinters</th>
@@ -1196,6 +1196,9 @@
         if (Sub_Category.Gloss || Sub_Category.Matt) {
             mattValue = parseFloat(document.getElementById('MattOrGlossINPTag').value);
             gloss = parseFloat(document.getElementById('MattOrGlossINPTag').value);
+        } else {
+            mattValue = 1;
+            gloss = 1;
         }
 
         // console.log("Matt Values: ", mattValue, "  Gloss Values: ", gloss);
