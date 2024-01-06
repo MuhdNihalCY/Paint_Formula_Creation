@@ -190,12 +190,13 @@
                     <select class="ADSubCategorySelectionSelectBox" onchange="selectDesignation()" name="Category"
                         id="DesignationSelect">
                         <option value="" selected>All Users</option>
-                        <option value="Customer">Customer</option>
+                        <option value="Manager">Manager</option>
                         <option value="Sales">Sales</option>
                         <option value="Office">Office</option>
                         <option value="Production">Production</option>
                         <option value="Dispatcher">Dispatcher</option>
                         <option value="Driver">Driver</option>
+                        <option value="Customer">Customer</option>
                     </select>
                 </div>
             </div>
@@ -281,6 +282,7 @@
     // alert(AddingError);
 
     var AllUsers = [];
+    var AllBranchData = [];
 
     // JavaScript to show the popup
     const addButton = document.getElementById('ADMainAddButton');
@@ -323,10 +325,12 @@
     });
 
     function loadAllUser() {
-        fetch('/admin/getAllUsers/Api')
+        fetch('/admin/getAllUsersAndBranchData/Api')
             .then(response => response.json())
-            .then(Users => {
-                AllUsers = Users;
+            .then(Data => {
+                console.log('Response Data:', Data);
+                AllUsers = Data.Users;
+                AllBranchData = Data.Branches;
             })
             .catch(error => {
                 console.log('Error:', error);

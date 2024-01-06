@@ -1,0 +1,938 @@
+<section>
+    <div class="CustomContainer">
+        <div class="CFMainHeader">
+            <h2 class="CFheader">Create Formula</h2>
+            <div class="CFMinHeaderBTNs">
+                <a class="CFclearAllBTN btn" href="">Clear All</a>
+                <input type="submit" value="Save" class="CFSaveBTN btn" id="">
+            </div>
+        </div>
+
+        <div class="MainSection">
+            <div class="Detailleftsection">
+                <div class="MixerDetails" hidden>
+                    <p class="MixerNameLabel">Mixer Name</p>
+                    {{#if CustomerName}}
+                    <input type="text" name="MixerName" value="{{CustomerName}}" id="">
+                    {{else}}
+                    <input type="text" name="MixerName" value="{{MixerName}}" id="">
+                    {{/if}}
+                    {{!-- Enter Mixer Name Here By Dynamic Process --}}
+                </div>
+                <div class="CFBasicDetails DateSection">
+                    <p class="CFBasicPtag">Date</p>
+                    <input type="date" name="Date" class=" DateBasicINP" id="dateInput" readonly value=''>
+                </div>
+                <div class="CFBasicDetails fileNoSection">
+                    <p class="CFBasicPtag">File no.</p>
+                    <input type="text" class=" FileNoBasicINP" name="FileNo" placeholder="Enter File No"
+                        value="{{FileNo}}" readonly required>
+                </div>
+
+                <div class="CFBasicDetails">
+                    <p class="CFBasicPtag">Customer Name</p>
+                    {{#if CustomerName}}
+                    <input type="text" class="CFBasicInp CustomerNameInp" name="CustomerName"
+                        placeholder="Enter Customer Name" value="{{CustomerName}}" required readonly>
+                    {{else}}
+                    <input type="text" class="CFBasicInp CustomerNameInp" name="CustomerName"
+                        placeholder="Enter Customer Name" value="" required>
+                    {{/if}}
+                </div>
+                <div class="CFBasicDetails">
+                    <p class="CFBasicPtag">Color Code</p>
+                    <input type="text" class="CFBasicInp CustomerNameInp" name="ColorCode"
+                        placeholder="Enter Color Code" required>
+                </div>
+                <div class="CFBasicDetails">
+                    <p class="CFBasicPtag">Color Name</p>
+                    <input type="text" class="CFBasicInp" name="ColorName" placeholder="Enter Color Name" required>
+                </div>
+                <div class="CFBasicDetails">
+                    <p class="CFBasicPtag">Customer Ref</p>
+                    <input type="text" class="CFBasicInp" name="CustomerRef" placeholder="Enter Customer Ref" required>
+                </div>
+                <div class="CFBasicDetails">
+                    <p class="CFBasicPtag">Project No</p>
+                    <input type="text" class="CFBasicInp" name="ProjectNo" placeholder="Enter Project No" required>
+                </div>
+
+                <div class="PopAddAttachments">
+                    <p class="popCardHeaderText">Attachments</p>
+                    <div class="popAttachements">
+
+                        <div class="PopAddAttamentsArea">
+                            <label for="file" class="custum-file-upload">
+                                <div class="icon">
+                                    <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                        </g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z"
+                                                fill=""></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="text">
+                                    <span>Click to upload image</span>
+                                </div>
+                                <input id="file" type="file" onchange="previewAttachmentImage()">
+                            </label>
+
+                        </div>
+                        <div class="popAttachementsCollections">
+                            <div class="popEachAttachments">
+                                <img id="AttachmentImage" class="AttachmentIMG" src="" alt="">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {{!-- Solid Content start here --}}
+                <div class="CFsolidContentCalcDivArea">
+                    <div class="CFsolidContentCalcDiv">
+                        <p class="CFBinderName">Solid Content(%): </p>
+                        <input class="CFSolidContentInput" type="text" name="SolidContent" value="0"
+                            id="CFFormulaSolidContent" readonly>%
+                    </div>
+                    <div class="CFsolidContentCalcDiv">
+                        <p class="CFBinderName">VOC (g/Ltr): </p>
+                        <input class="CFSolidContentInput" type="text" name="VOC" value="0" id="CFFormulaVOC" readonly>
+                    </div>
+                    <div class="CFsolidContentCalcDiv">
+                        <p class="CFBinderName">Density (g/Ltr): </p>
+                        <input class="CFSolidContentInput" type="text" name="Density" id="CFFormulaDensity" value="0"
+                            readonly>
+                    </div>
+                    {{!-- <div class="CFsolidContentCalcDiv">
+                        <p class="CFBinderName">Costing : </p>
+                        <input class="CFSolidContentInput" type="text" name="Cost" id="CFFormulaDensity" value="0"
+                            readonly>
+                    </div> --}}
+                    {{!-- <div class="CFsolidContentCalcDivNoLabel">
+                        <p class="CFBinderName">Density (g/Ltr): </p>
+                        <input class="CFSolidContentInputNoLabel" type="text" value="271.878173427678/247.330033186"
+                            readonly>
+                    </div> --}}
+                    <div class="CFsolidContentCalcDiv">
+                        <p class="CFBinderName">Sampled QTY: </p>
+                        <input class="CFSolidContentInput" name="SampleQty" id="SampleQty" type="text" value="0"
+                            readonly>
+                    </div>
+                </div>
+                {{!-- Solid Content ends here --}}
+            </div>
+
+            <div class="RightSideSection">
+                <div class="RightTopSelectionArea">
+                    <div class="CategorySelectionDiv">
+                        <label for="categorySelect">Category </label>
+                        <select name="Category" class="CFCategory" id="CategorySelect" onchange="ADcategorySelect()"
+                            required>
+                            <option value="" readonly selected>Select Category</option>
+                            {{#each AllCategory}}
+                            <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
+                                {{this.Category_Id}} -
+                                {{this.Category}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="SubcategorySelectionDiv">
+                        <label for="categorySelect">Sub-Category </label>
+                        <select name="SubCategory" class="CFSubCategory" id="SubCategorySelect"
+                            onchange="CFSubcategorySelect()" required>
+                            <option value="0" readonly selected>Select Sub-Category</option>
+                        </select>
+                    </div>
+                    <div class="MattGlossEntryDiv">
+                        <p class="CFmainSelection MattOrGloss">Gloss</p>
+                        <input type="text" name="mattOrGloss" id="MattOrGlossINPTag" class=" MattOrGlossINP " min="0"
+                            value="0" onkeypress="return isNumeric(event)" oninput="LoadTableSingleData()">
+                    </div>
+                </div>
+                <div class="TopTables">
+                    <div class="TinterTableDiv">
+                        <table id="Tintertable">
+                            <thead class="QuantityHead">
+                                <tr>
+                                    <th rowspan="2">SL No.</th>
+                                    <th rowspan="2">Tinters</th>
+                                    <th colspan="2" class="quantity">Quantity</th>
+                                </tr>
+                                <tr>
+
+                                    <th class="quantity">in Grams</th>
+                                    <th class="quantity">in Volume</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>
+                                        <select class="SelectTinter">
+                                            <option value="tinter1">Tinter 1</option>
+                                            <option value="tinter2">Tinter 2</option>
+                                            <option value="tinter3">Tinter 3</option>
+                                        </select>
+                                    </td>
+                                    <td class="quantity">
+                                        <input class="InputQuantityGram" type="text" value="0" />
+                                    </td>
+                                    <td class="quantity">
+                                        <input class="InputQuantityVolumn" type="text" value="0" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>2</td>
+                                    <td>
+                                        <select class="SelectTinter">
+                                            <option value="tinter1">Tinter 1</option>
+                                            <option value="tinter2">Tinter 2</option>
+                                            <option value="tinter3">Tinter 3</option>
+                                        </select>
+                                    </td>
+                                    <td class="quantity">
+                                        <input class="InputQuantityGram" type="text" value="0" />
+                                    </td>
+                                    <td class="quantity">
+                                        <input class="InputQuantityVolumn" type="text" value="0" />
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="TinterQuantityTableDiv">
+                        <table id="TinterQuantityTable">
+                            <thead class="QuantityHead">
+                                <tr>
+                                    <th rowspan="2" colspan="6">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="QuantityInput" value="0" type="text">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{!-- Additives, Binders and Remarks --}}
+                <div class="AddBinderRemarksSection">
+                    <div class="Add_BinderSectio">
+                        <div class="WithouAdditvesSection">
+                            <p class="DetailText">Total without Additives</p>
+                            <div class="ReadOnlyInPSEct">
+                                <div class=" withoutAdditiveGrams">
+                                    <input type="text" readonly value="0" class="InputReadOnly"
+                                        name="TotalGramsWithoutAddtives">
+                                </div>
+                                <div class=" withoutAdditiveVolume" style="border-top-right-radius: 8px;">
+                                    <input type="text" readonly value="0" class="InputReadOnly"
+                                        name="TotalVolumeWithoutAddtives">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="BinderSection">
+                            <p class="DetailText BindersText">Binders</p>
+                            <div class="BindersCollection">
+                                <div class="BindersArea">
+                                    <input type="text" value="PU-240-90" class="BinderNameText" name="BinderName1">
+                                    <div class="BindersInputArea Binder1Area">
+                                        <div class="BindersInputDiv">
+                                            <input type="text" value="0" class="BinderReadOnlyINp" name="Binder1_Gram">
+                                        </div>
+                                        <div class="BindersInputDiv">
+                                            <input type="text" value="0" class="BinderReadOnlyINp"
+                                                name="Binder1_Volume">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="BindersArea">
+                                    <input type="text" value="PU-240-05" class="BinderNameText" name="BinderName2">
+                                    <div class="BindersInputArea">
+                                        <div class="BindersInputDiv">
+                                            <input type="text" value="0" class="BinderReadOnlyINp" name="Binder2_Gram">
+                                        </div>
+                                        <div class="BindersInputDiv">
+                                            <input type="text" value="0" class="BinderReadOnlyINp"
+                                                name="Binder2_Volume">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="AdditiveSelection">
+                            <div class="AdditiveSelectionArea">
+                                <p class="DetailText AddtiveText">Additives</p>
+                                <div class="AdditiveArea">
+                                    <select class="AdditiveSelect" name="Additive" id="">
+                                        <option value="">select an Additive</option>
+                                        <option value="">Multi-matt</option>
+                                        <option value="">Ex-adf</option>
+                                    </select>
+                                    <input type="text" class="AdditivePerInp" name="AdditivePercentage" value="0">
+                                    <p class="DetailText PercentageSign">%</p>
+                                </div>
+                            </div>
+                            <div class="AdditveInputArea">
+                                <div class="AdditiveInpDiv">
+                                    <input type="text" value="0" class="AdditiveInpReadOnly" name="Additive_Gram">
+                                </div>
+                                <div class="AdditiveInpDiv">
+                                    <input type="text" value="0" class="AdditiveInpReadOnly" name="Additive_Volume">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="TotalSection">
+                            <p class="DetailText">Total</p>
+                            <div class="TotalInputArea" style="border-bottom-right-radius: 8px;">
+                                <div class="InputTotlaDiv">
+                                    <input type="text" value="0" class="TotalInpReadOnly" name="Total_Gram">
+                                </div>
+                                <div class="InputTotlaDiv" style="border-bottom-right-radius: 8px;">
+                                    <input type="text" value="0" name="Total_Volume" class="TotalInpReadOnly">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="RemarksPrintSEction">
+                        <div class="RemarkSection">
+                            <div class="remarkHeader">
+                                <p class="DetailText   RemarkText ">Remarks</p>
+                            </div>
+                            <div class="RemarksContentDiv">
+                                <textarea readonly name="remark" id="" class="RemaarkContent">
+                                    Mixing with 50% Mipa 2K MS Harderner and 25 - 40% Mipa 2K Thinner
+                                </textarea>
+                            </div>
+                        </div>
+                        div.print
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+
+    function previewAttachmentImage() {
+        var input = document.getElementById('file');
+        var attachmentImage = document.getElementById('AttachmentImage');
+
+        if (attachmentImage) {
+            var file = input.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    attachmentImage.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        } else {
+            console.error("AttachmentImage element not found");
+        }
+    }
+
+</script>
+
+<style>
+    body {
+        background-color: #eef0fd;
+    }
+
+    .CustomContainer {
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1rem;
+        margin-top: -90px;
+    }
+
+    .CFMainHeader {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .CFheader {
+        margin-left: 1rem;
+        font-size: 35px;
+        font-weight: 500;
+    }
+
+    .CFclearAllBTN,
+    .CFSaveBTN {
+        background-color: #141919;
+        color: #01fdfd;
+        font-weight: 600;
+        padding: 0.5rem 3rem;
+        margin: 0 1rem;
+    }
+
+    .CFclearAllBTN {
+        background-color: #575b5b;
+        font-weight: 500;
+    }
+
+    .CFMinHeaderBTNs {
+        margin-right: 2rem;
+    }
+
+    .MainSection {
+        margin: 2rem 1rem;
+        display: flex;
+        gap: 2rem;
+    }
+
+    .Detailleftsection {
+        width: 20%;
+        font-size: 13px;
+        font-weight: 600;
+        gap: 1rem;
+    }
+
+    .CFBasicDetails {
+        margin: 1rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+    }
+
+    .DateSection,
+    .fileNoSection {
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    .DateBasicINP {
+        width: 118px;
+        padding: 0.5rem;
+        border-radius: 10px;
+        border: 1px solid gray;
+        background-color: #575b5b;
+        color: #c4c5c5;
+    }
+
+    .DateSection p,
+    .fileNoSection p {
+        margin-top: 0.5rem;
+    }
+
+    .FileNoBasicINP {
+        width: 100px;
+        padding: 0.5rem;
+        border-radius: 10px;
+        border: 1px solid gray;
+        background-color: #575b5b;
+        color: #c4c5c5;
+    }
+
+    .CFBasicDetails p {
+        margin-bottom: 0rem;
+    }
+
+    .CFBasicInp {
+        padding: 0.5rem;
+        border-radius: 10px;
+        border: 1px solid gray;
+        background-color: transparent;
+    }
+
+    .CustomerNameInp {
+        background-color: #ffff00;
+        color: rgba(255, 255, 0, 255);
+    }
+
+    .custum-file-upload {
+        height: 100px;
+        width: 150px;
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        gap: 20px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #6b6b6b;
+        background-color: transparent;
+        padding: 1.5rem;
+        border-radius: 10px;
+    }
+
+
+    .custum-file-upload .icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custum-file-upload .icon svg {
+        height: 20px;
+        fill: #6b6b6b;
+    }
+
+    .custum-file-upload .text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custum-file-upload .text span {
+        font-weight: 400;
+        color: #252525;
+        font-size: 10px;
+    }
+
+    .custum-file-upload input {
+        display: none;
+    }
+
+    .icon {
+        position: relative;
+        width: auto;
+
+        z-index: 99;
+        left: 0;
+        bottom: 0;
+    }
+
+    .popAttachements {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-content: center;
+        justify-content: flex-start;
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .AttachmentIMG {
+        height: 100px;
+    }
+
+    .popAttachementsCollections {
+        border-radius: 10px;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        padding: 1rem;
+        height: 100%;
+    }
+
+    .CFsolidContentCalcDiv {
+        display: flex;
+        gap: 1rem;
+        align-items: baseline;
+        /*
+        justify-content: space-between;
+      */
+        margin: 1rem 0rem;
+    }
+
+    .CFsolidContentCalcDiv p {
+        margin-bottom: 0rem;
+        margin-top: 1rem;
+    }
+
+    .CFSolidContentInput {
+        background-color: transparent;
+        border: none;
+        background-color: #cfd1dc;
+        padding: 0.5rem;
+        border-radius: 10px;
+        min-width: 3rem;
+        max-width: 5rem;
+    }
+
+    .RightSideSection {
+        width: 78% !important;
+    }
+
+    .RightTopSelectionArea {
+        display: flex;
+        gap: 4rem;
+    }
+
+    .MattGlossEntryDiv,
+    .CategorySelectionDiv,
+    .SubcategorySelectionDiv {
+        display: flex;
+        gap: 1rem;
+        align-items: baseline;
+    }
+
+    .CFCategory,
+    .CFSubCategory,
+    .MattOrGlossINP {
+        padding: 0.2rem;
+        background-color: #ffff00;
+    }
+
+    .MattOrGlossINP {
+        width: 5rem;
+    }
+
+    .TopTables {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .TinterTableDiv,
+    .TinterQuantityTableDiv {
+        width: 49%;
+    }
+
+    #Tintertable,
+    #TinterQuantityTable {
+        border: none;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .TinterQuantityTable {
+        border: none;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    th,
+    td {
+        border-bottom: 1px solid #20c3c3;
+        border-left: 1px solid #20c3c3;
+        /* border: 1px solid #20c3c3;*/
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #575b5b;
+        color: white;
+    }
+
+    td {
+        background-color: #575b5b;
+        color: white;
+    }
+
+    .quantity {
+        background-color: #cfd1dc;
+        color: #4e5570;
+        width: 8rem;
+    }
+
+    .SelectTinter {
+        box-sizing: border-box;
+        width: 13rem;
+        background: #575b5b;
+        outline: none;
+        border: none;
+        color: white;
+    }
+
+    .InputQuantityGram,
+    .InputQuantityVolumn,
+    .InputReadOnly {
+        width: 4rem;
+        box-sizing: border-box;
+        text-align: center;
+        background: transparent;
+        outline: none;
+        border: none;
+        color: #4e5570;
+    }
+
+    .InputReadOnly {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .QuantityHead {
+        height: 4.7rem;
+        font-size: 12px;
+    }
+
+    .QuantityInput {
+        width: 3rem;
+        background: transparent;
+        outline: none;
+        border: none;
+        color: white;
+        text-align: center;
+    }
+
+    .AddBinderRemarksSection {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .Add_BinderSectio {
+        width: 49%;
+        background-color: #575b5b;
+        border-radius: 9px;
+    }
+
+    .DetailText {
+        font-size: 15px;
+        color: white;
+    }
+
+    .WithouAdditvesSection,
+    .BinderSection,
+    .BindersArea {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .ReadOnlyInPSEct {
+        display: flex;
+        justify-content: end;
+    }
+
+    .InputRead {
+        width: 100%;
+    }
+
+    .withoutAdditiveVolume,
+    .withoutAdditiveGrams {
+        background-color: #cfd1dc;
+        color: #4e5570;
+        width: 8rem;
+        border-left: 1px solid #20c3c3;
+    }
+
+    .DetailText {
+        margin-top: 1rem;
+        margin-left: 1rem;
+    }
+
+
+
+    .WithouAdditvesSection {
+        border-bottom: 1px solid #20c3c3;
+    }
+
+    .BinderNameText {
+        background-color: transparent;
+        text-align: left;
+        border: none;
+        outline: none;
+        color: white;
+        margin-top: 10px;
+    }
+
+    .BinderSection {
+        gap: 2rem;
+        border-bottom: 1px solid #20c3c3;
+    }
+
+    .BindersText {
+        margin-top: 10px;
+    }
+
+    .BindersInputArea {
+        display: flex;
+        justify-content: end;
+        background-color: #cfd1dc;
+        color: #4e5570;
+    }
+
+    .BindersInputDiv {
+        width: 8rem;
+        border-left: 1px solid #20c3c3;
+    }
+
+    .BinderReadOnlyINp {
+        background-color: transparent;
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 7px;
+        text-align: center;
+        color: #4e5570;
+    }
+
+    .AdditiveSelection {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1px solid #20c3c3;
+    }
+
+    .AdditiveSelectionArea {
+        display: flex;
+        align-items: baseline;
+        padding: .5rem 0;
+    }
+
+    .AdditiveArea,
+    .AdditveInputArea {
+        display: flex;
+        align-items: baseline;
+    }
+
+    .AdditiveSelect {
+        width: 8rem;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        background-color: #cfd1dc;
+        color: #3e4562;
+        margin: 0 1rem;
+        padding: 0.2rem;
+    }
+
+    .AdditivePerInp {
+        width: 3rem;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        background-color: #cfd1dc;
+        color: #3e4562;
+        padding: 0.2rem .5rem;
+    }
+
+    .PercentageSign {
+        margin: 0;
+        margin-left: 0.5rem;
+        margin-right: 1rem;
+    }
+
+    .AdditveInputArea {
+        display: flex;
+        justify-content: end;
+        background-color: #cfd1dc;
+        color: #4e5570;
+    }
+
+    .AdditiveInpDiv {
+        padding: .5rem 0;
+        width: 8rem;
+        border-left: 1px solid #20c3c3;
+    }
+
+    .AdditiveInpReadOnly,
+    .TotalInpReadOnly {
+        background-color: transparent;
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 7px;
+        text-align: center;
+        color: #4e5570;
+    }
+
+    .AddtiveText {
+        margin: 0 1rem;
+    }
+
+    .TotalSection {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .TotalInputArea {
+        display: flex;
+        justify-content: end;
+        display: flex;
+        justify-content: end;
+        background-color: #cfd1dc;
+        color: #4e5570;
+    }
+
+    .InputTotlaDiv {
+        padding: .5rem 0;
+        width: 8rem;
+        border-left: 1px solid #20c3c3;
+    }
+
+    .RemarksPrintSEction {
+        width: 49%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .RemarkSection {
+        width: 100%;
+        background-color: #575b5b;
+        border-radius: 8px;
+    }
+
+    .remarkHeader {
+        border-bottom: 1px solid #20c3c3;
+        width: 100%;
+    }
+
+    .RemarkText {
+        margin-top: 0;
+        padding-top: 1rem;
+    }
+
+    .RemarksContentDiv {
+        padding: 1rem;
+    }
+
+    .RemaarkContent {
+        width: 100%;
+        text-align: left;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        text-align: left;
+        color: white;
+    }
+</style>

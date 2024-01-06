@@ -246,7 +246,7 @@ router.get('/CreateFormulas', EmployeeVerifyLogin, (req, res) => {
       // console.log(AllCategory);
       employeeHelpers.getThisFormulaFileNo().then((FileNo) => {
         var MixerName = req.session.EmployeeName;
-        res.render('employee/CreateFormulas', { AllCategory, Additives, FileNo, MixerName });
+        res.render('employee/CreateFormulaPage', { AllCategory, Additives, FileNo, MixerName });
       })
     })
   })

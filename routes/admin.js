@@ -764,10 +764,16 @@ router.get('/editUser/:id', verifyLogin, (req, res) => {
   })
 })
 
-router.get('/getAllUsers/Api', verifyLogin, (req, res) => {
+router.get('/getAllUsersAndBranchData/Api', verifyLogin, (req, res) => {
   adminHelpers.getAllUser().then(Users => {
-    console.log(Users);
-    res.json(Users);
+    // console.log(Users);
+    adminHelpers.GetAllBranches().then(Branches => {
+
+      res.json({
+        Users: Users, 
+        Branches: Branches
+      });
+    })
   })
 })
 
