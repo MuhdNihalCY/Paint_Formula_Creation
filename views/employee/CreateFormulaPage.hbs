@@ -226,13 +226,12 @@
                                                 </div>
                                                 <div class="BindersInputDiv">
                                                     <input type="text" value="0" class="BinderReadOnlyINp"
-                                                        name="Binder1_Volume">
+                                                        id="Binder1INPVolume" name="Binder1_Volume">
                                                 </div>
                                             </div>
                                         </div> --}}
                                         {{!-- <div id="Binder2Area" class="BindersArea">
-                                            <input type="text" value="PU-240-05" class="BinderNameText"
-                                                name="BinderName2">
+                                            <input type="text" value="" class="BinderNameText" name="BinderName2">
                                             <div class="BindersInputArea">
                                                 <div class="BindersInputDiv">
                                                     <input type="text" value="0" class="BinderReadOnlyINp"
@@ -240,7 +239,7 @@
                                                 </div>
                                                 <div class="BindersInputDiv">
                                                     <input type="text" value="0" class="BinderReadOnlyINp"
-                                                        name="Binder2_Volume">
+                                                        id="Binder2INPVolume" name="Binder2_Volume">
                                                 </div>
                                             </div>
                                         </div> --}}
@@ -250,24 +249,27 @@
                                     <div class="AdditiveSelectionArea">
                                         <p class="DetailText AddtiveText">Additives</p>
                                         <div class="AdditiveArea">
-                                            <select class="AdditiveSelect" name="Additive" id="">
-                                                <option value="">select an Additive</option>
-                                                <option value="">Multi-matt</option>
-                                                <option value="">Ex-adf</option>
+                                            <select class="AdditiveSelect" name="additives" id="AdditiveSelect"
+                                                onchange="HandleAdditiveChange()">
+                                                <option value="" readonly selected>Select Additive</option>
+                                                {{#each Additives}}
+                                                <option value="{{this.Additive_Id}}">{{this.Additive_Name}}</option>
+                                                {{/each}}
                                             </select>
                                             <input type="text" class="AdditivePerInp" name="AdditivePercentage"
-                                                value="0">
+                                                onchange="HandleAdditiveChange()" oninput="HandleAdditiveChange()"
+                                                id="AdditivePercentage" value="0">
                                             <p class="DetailText PercentageSign">%</p>
                                         </div>
                                     </div>
                                     <div class="AdditveInputArea">
                                         <div class="AdditiveInpDiv">
-                                            <input type="text" value="0" class="AdditiveInpReadOnly"
-                                                name="Additive_Gram">
+                                            <input type="text" id="Additive_Gram" value="0" class="AdditiveInpReadOnly"
+                                                name="TotalAdditives">
                                         </div>
                                         <div class="AdditiveInpDiv">
-                                            <input type="text" value="0" class="AdditiveInpReadOnly"
-                                                name="Additive_Volume">
+                                            <input type="text" id="Additive_Volume" value="0"
+                                                class="AdditiveInpReadOnly" name="TotalAdditivesVolume">
                                         </div>
                                     </div>
                                 </div>
@@ -275,10 +277,12 @@
                                     <p class="DetailText">Total</p>
                                     <div class="TotalInputArea" style="border-bottom-right-radius: 8px;">
                                         <div class="InputTotlaDiv">
-                                            <input type="text" value="0" class="TotalInpReadOnly" name="Total_Gram">
+                                            <input type="text" value="0" id="Total_Gram" class="TotalInpReadOnly"
+                                                name="TotalQtyInGram">
                                         </div>
                                         <div class="InputTotlaDiv" style="border-bottom-right-radius: 8px;">
-                                            <input type="text" value="0" name="Total_Volume" class="TotalInpReadOnly">
+                                            <input type="text" value="0" id="Total_Volume" name="TotalQtyInLiter"
+                                                class="TotalInpReadOnly">
                                         </div>
                                     </div>
                                 </div>
@@ -290,7 +294,7 @@
                                         <p class="DetailText   RemarkText ">Remarks</p>
                                     </div>
                                     <div class="RemarksContentDiv">
-                                        <textarea readonly name="remark" id="RemarksContent" class="RemaarkContent">
+                                        <textarea readonly name="Remark" id="RemarksContent" class="RemaarkContent">
                                 </textarea>
                                     </div>
                                 </div>
@@ -428,16 +432,16 @@
                 var Binder1 = State.Binders.find(OneBinder => OneBinder.Binder_Id == SubCategory.Binder1);
                 var VirtualBinder1 = `
              <div id="Binder1Area" class="BindersArea">
-                    <input type="text" value="${Binder1.Binder_Name}" class="BinderNameText"
+                    <input type="text" id="Binder1Name" value="${Binder1.Binder_Name}" class="BinderNameText"
                         name="BinderName1">
                     <div class="BindersInputArea Binder1Area">
                         <div class="BindersInputDiv">
                             <input type="text" value="0" class="BinderReadOnlyINp"
-                                id="Binder1INP" name="Binder1_Gram">
+                                id="Binder1INP" name="Binder1">
                         </div>
                         <div class="BindersInputDiv">
-                            <input type="text" value="0" class="BinderReadOnlyINp"
-                            name="Binder1_Volume">
+                            <input type="text" value="0" class="BinderReadOnlyINp"  id="Binder1INPVolume"
+                            name="Binder1Volume">
                     </div>
                 </div>
             </div>
@@ -446,16 +450,16 @@
             } else {
                 var VirtualBinder1 = `
              <div id="Binder1Area" class="BindersArea">
-                    <input type="text" value="" class="BinderNameText"
+                    <input type="text"  id="Binder1Name"  value="" class="BinderNameText"
                         name="BinderName1" disabled>
                     <div class="BindersInputArea Binder1Area">
                         <div class="BindersInputDiv">
                             <input type="text" value="" class="BinderReadOnlyINp"
-                                id="Binder1INP" name="Binder1_Gram" disabled>
+                                id="Binder1INP" name="Binder1" disabled>
                         </div>
                         <div class="BindersInputDiv">
-                            <input type="text" value="0" class="BinderReadOnlyINp"
-                            name="Binder1_Volume" disabled>
+                            <input type="text" value="0" class="BinderReadOnlyINp"   id="Binder1INPVolume"
+                            name="Binder1Volume" disabled>
                     </div>
                 </div>
             </div>
@@ -467,16 +471,16 @@
                 var Binder2 = State.Binders.find(OneBinder => OneBinder.Binder_Id == SubCategory.Binder2);
                 var VirtualBinder2 = `
                 <div id="Binder2Area" class="BindersArea">
-                    <input type="text" value="${Binder2.Binder_Name}" class="BinderNameText"
+                    <input type="text" id="Binder2Name" value="${Binder2.Binder_Name}" class="BinderNameText"
                         name="BinderName2">
                     <div class="BindersInputArea">
                         <div class="BindersInputDiv">
                             <input type="text" value="" class="BinderReadOnlyINp"
-                                id="Binder2INP" name="Binder2_Gram">
+                                id="Binder2INP" name="Binder2">
                         </div>
                         <div class="BindersInputDiv">
-                            <input type="text" value="" class="BinderReadOnlyINp"
-                                name="Binder2_Volume">
+                            <input type="text" value="" class="BinderReadOnlyINp" id="Binder2INPVolume"
+                                name="Binder2Volume">
                         </div>
                     </div>
                 </div>
@@ -485,16 +489,16 @@
             } else {
                 var VirtualBinder2 = `
                 <div id="Binder2Area" class="BindersArea">
-                    <input type="text" value="" class="BinderNameText"
+                    <input type="text" id="Binder2Name" value="" class="BinderNameText"
                         name="BinderName2" disabled>
                     <div class="BindersInputArea">
                         <div class="BindersInputDiv">
                             <input type="text" value="" class="BinderReadOnlyINp"
-                                id="Binder2INP" name="Binder2_Gram" disabled>
+                                id="Binder2INP" name="Binder1" disabled>
                         </div>
                         <div class="BindersInputDiv">
-                            <input type="text" value="" class="BinderReadOnlyINp"
-                                name="Binder2_Volume" disabled>
+                            <input type="text" value="" class="BinderReadOnlyINp" id="Binder2INPVolume"
+                                name="Binder2Volume" disabled>
                         </div>
                     </div>
                 </div>
@@ -528,6 +532,8 @@
             var RemarksContent = document.getElementById('RemarksContent');
             RemarksContent.value = "";
         }
+
+        UpdateAllTinterSelectionOPtions();
 
     }
 
@@ -787,10 +793,10 @@
         for (i = 1; i <= rowCount; i++) {
             var AllSubColumns = document.getElementsByClassName(`R${i}Sub`);
             var TinterQuatitySum = 0;
-            console.log("Rowcount : ", i)
+            //  console.log("Rowcount : ", i)
             for (j = 0; j < AllSubColumns.length; j++) {
-                console.log("Sub column : ", j)
-                console.log("each row : ", AllSubColumns[j].value);
+                //   console.log("Sub column : ", j)
+                //  console.log("each row : ", AllSubColumns[j].value);
                 TinterQuatitySum += parseFloat(AllSubColumns[j].value);
             }
 
@@ -837,8 +843,6 @@
 
         var Sub_Category_Name = Sub_Category.SubCategory
 
-        // Binder Calculations
-
         //var Sub_Category;
         var Binder1_EQ;
         var Binder2_EQ;
@@ -846,19 +850,11 @@
         var mattValue;
         var gloss;
 
-
         var BinderError = false;
         var err;
 
         // gram or liter
-
         Sum_qty = parseFloat(document.getElementById('TotalGramsWithoutAddtives').value);
-
-
-        // Do if Powder Pigment
-
-
-
 
         // matt or gloss
         if (Sub_Category.Gloss || Sub_Category.Matt) {
@@ -869,10 +865,6 @@
             gloss = 1;
         }
 
-        //console.log("Matt Values: ", mattValue, "  Gloss Values: ", gloss);
-        //console.log("Sum QTY: ", Sum_qty);
-
-
         var Binder1Avalue = parseFloat(Sub_Category.Binder1Avalue);
         var Binder1Bvalue = parseFloat(Sub_Category.Binder1Bvalue);
         var Binder1Cvalue = parseFloat(Sub_Category.Binder1Cvalue);
@@ -881,51 +873,127 @@
 
         var Binder2Avalue = parseFloat(Sub_Category.Binder2Avalue);
 
-        //console.log(`Binder1Avalue ${Binder1Avalue} ,  Binder1Bvalue ${Binder1Bvalue}  ,   Binder1Cvalue ${Binder1Cvalue} , Binder1Dvalue ${Binder1Dvalue}, Binder2Avalue ${Binder2Avalue}`);
-
-
-
-
-
         console.log("Sum_qty", Sum_qty, " mattValue", mattValue, " gloss", gloss);
 
         var Binder1INP = document.getElementById('Binder1INP');
+        var Binder1INPVolume = document.getElementById('Binder1INPVolume');
+        var Binder1Name = document.getElementById('Binder1Name').value;
+
         var Binder2INP = document.getElementById('Binder2INP');
+        var Binder2INPVolume = document.getElementById('Binder2INPVolume');
+        var Binder2Name = document.getElementById('Binder2Name').value;
 
         if (Sub_Category.Binder1) {
             // error handle in no values enter by admin.
             if (isNaN(Binder1Avalue) || isNaN(Binder1Bvalue) || isNaN(Binder1Cvalue) || isNaN(Binder1Dvalue)) {
                 alert("Binder calculations are not possible at Binder 1 without the proper binder equation for this sub-category.");
             } else {
-                Binder1INP.value = (((Sum_qty * Binder1Avalue * mattValue) - (Binder1Bvalue * Binder1Cvalue * Sum_qty)) / Binder1Dvalue).toFixed(3).toString();
+                if (!isNaN(((Sum_qty * Binder1Avalue * mattValue) - (Binder1Bvalue * Binder1Cvalue * Sum_qty)) / Binder1Dvalue)) {
+                    Binder1INP.value = (((Sum_qty * Binder1Avalue * mattValue) - (Binder1Bvalue * Binder1Cvalue * Sum_qty)) / Binder1Dvalue).toFixed(3).toString();
+                    BinderVolumeFinder("Binder1INPVolume", Binder1Name, Binder1INP.value);
+                } else {
+                    Binder1INP.value = 0;
+                    document.getElementById('Binder1INPVolume').value = 0;
+                }
             }
-
-
-
-
         }
 
         if (Sub_Category.Binder2EQ1) {
             if (isNaN(Binder2Avalue)) {
                 alert("Binder calculations are not possible at Binder 2 without the proper binder equation for this sub-category.");
             } else {
-                Binder2INP.value = ((Sum_qty * Binder2Avalue) - parseFloat(Binder1INP.value)).toFixed(3).toString();
+                if (!isNaN((Sum_qty * Binder2Avalue) - parseFloat(Binder1INP.value))) {
+                    Binder2INP.value = ((Sum_qty * Binder2Avalue) - parseFloat(Binder1INP.value)).toFixed(3).toString();
+                    BinderVolumeFinder("Binder2INPVolume", Binder2Name, Binder2INP.value);
+                } else {
+                    Binder2INP.value = 0
+                    document.getElementById('Binder2INPVolume').value = 0;
+                }
             }
         } else if (Sub_Category.Binder2EQ2) {
             if (isNaN(Binder2Avalue)) {
                 alert("Binder calculations are not possible at Binder 2 without the proper binder equation for this sub-category.");
             } else {
-                Binder2INP.value = (Sum_qty * Binder2Avalue).toFixed(3).toString();
+                if (!isNaN(Sum_qty * Binder2Avalue)) {
+                    Binder2INP.value = (Sum_qty * Binder2Avalue).toFixed(3).toString();
+                    BinderVolumeFinder("Binder2INPVolume", Binder2Name, Binder2INP.value);
+                } else {
+                    Binder2INP.value = 0
+                    document.getElementById('Binder2INPVolume').value = 0;
+                }
             }
         }
 
+        function BinderVolumeFinder(VolumeID, BinderName, Quantity) {
+            //  alert("sdf");
+            var Binder = State.Binders.find(OneBinder => OneBinder.Binder_Name == BinderName)
+            // Check if Binder is defined
+            if (Binder) {
+                var BinderVolume = (parseFloat(Quantity) * parseFloat(Binder.Binder_Density) / 1000).toFixed(2);
+                console.log("Binder volume value: ", BinderVolume);
+                document.getElementById(VolumeID).value = BinderVolume;
+            } else {
+                console.error("Binder not found for name:", BinderName);
+            }
+
+        }
 
         function AlertBinder(Binder1_, Binder2_) {
             // alert("Binder 1: ", Binder1_);
             // alert("Binder 2: ", Binder2_);
         }
+        HandleAdditiveChange();
+    }
+
+    function HandleAdditiveChange() {
+        var AdditiveSelectID = document.getElementById('AdditiveSelect').value;
+
+        if (AdditiveSelectID) {
+            var Additive = State.Additives.find(OneAdditive => OneAdditive.Additive_Id == AdditiveSelectID);
+            var AdditivePercentage = parseFloat(document.getElementById('AdditivePercentage').value);
+
+            var TotalwitoutBindersAndAddtives = parseFloat(document.getElementById('TotalGramsWithoutAddtives').value)
+
+            var Binder1INP = document.getElementById('Binder1INP').value ? parseFloat(document.getElementById('Binder1INP').value) : 0;
+            var Binder2INP = document.getElementById('Binder2INP').value ? parseFloat(document.getElementById('Binder2INP').value) : 0;
+
+            var TotalWithBinders = TotalwitoutBindersAndAddtives + Binder1INP + Binder2INP;
+
+            var AdditiveQuantity = ((TotalWithBinders / 100) * AdditivePercentage).toFixed(2);
+            document.getElementById('Additive_Gram').value = AdditiveQuantity;
+
+            console.log("Addtitve: ", Additive);
+
+            var AdditiveVolume = (parseFloat(AdditiveQuantity) * parseFloat(Additive.Additive_Density) / 1000).toFixed(2);
+            document.getElementById('Additive_Volume').value = AdditiveVolume;
+        } else {
+            document.getElementById('Additive_Gram').value = 0
+            document.getElementById('Additive_Volume').value = 0;
+
+        }
+        CalculateTotalQuantity();
+    }
+
+    function CalculateTotalQuantity() {
+        var TotalWitoutBindersAndAddtives_Grams = parseFloat(document.getElementById('TotalGramsWithoutAddtives').value) || 0;
+        var TotalWitoutBindersAndAddtives_Volume = parseFloat(document.getElementById('TotalVolumeWithoutAddtives').value) || 0;
+        var Binder1_Grams = parseFloat(document.getElementById('Binder1INP').value) || 0;
+        var Binder1_Volume = parseFloat(document.getElementById('Binder1INPVolume').value) || 0;
+        var Binder2_Grams = parseFloat(document.getElementById('Binder2INP').value) || 0;
+        var Binder2_Volume = parseFloat(document.getElementById('Binder2INPVolume').value) || 0;
+        var Additive_Gram = parseFloat(document.getElementById('Additive_Gram').value) || 0;
+        var Additive_Volume = parseFloat(document.getElementById('Additive_Volume').value) || 0;
+
+        var TotalInGrams = TotalWitoutBindersAndAddtives_Grams + Binder1_Grams + Binder2_Grams + Additive_Gram;
+        var TotalInVolume = TotalWitoutBindersAndAddtives_Volume + Binder1_Volume + Binder2_Volume + Additive_Volume;
+
+        document.getElementById('Total_Gram').value = TotalInGrams.toFixed(2);
+        document.getElementById('Total_Volume').value = TotalInVolume.toFixed(2);
+
 
     }
+
+
 
     function isNumeric(event) {
         var key = event.keyCode || event.which;
