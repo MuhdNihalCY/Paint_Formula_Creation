@@ -1,366 +1,315 @@
 <section>
-    <div class="CustomContainer">
-        <div class="CFMainHeader">
-            <h2 class="CFheader">Create Formula</h2>
-            <div class="CFMinHeaderBTNs">
-                <a class="CFclearAllBTN btn" href="">Clear All</a>
-                <input type="submit" value="Save" class="CFSaveBTN btn" id="">
-            </div>
-        </div>
-
-        <div class="MainSection">
-            <div class="Detailleftsection">
-                <div class="MixerDetails" hidden>
-                    <p class="MixerNameLabel">Mixer Name</p>
-                    {{#if CustomerName}}
-                    <input type="text" name="MixerName" value="{{CustomerName}}" id="">
-                    {{else}}
-                    <input type="text" name="MixerName" value="{{MixerName}}" id="">
-                    {{/if}}
-                    {{!-- Enter Mixer Name Here By Dynamic Process --}}
-                </div>
-                <div class="CFBasicDetails DateSection">
-                    <p class="CFBasicPtag">Date</p>
-                    <input type="date" name="Date" class=" DateBasicINP" id="dateInput" readonly value=''>
-                </div>
-                <div class="CFBasicDetails fileNoSection">
-                    <p class="CFBasicPtag">File no.</p>
-                    <input type="text" class=" FileNoBasicINP" name="FileNo" placeholder="Enter File No"
-                        value="{{FileNo}}" readonly required>
+    {{#if CustomerName}}
+    <form id="uploadForm" action="/Customer/CreateFormula" method="post" enctype="multipart/form-data">
+        {{else}}
+        <form id="uploadForm" action="/CreateFormula" method="post" enctype="multipart/form-data">
+            {{/if}}
+            <div class="CustomContainer">
+                <div class="CFMainHeader">
+                    <h2 class="CFheader">Create Formula</h2>
+                    <div class="CFMinHeaderBTNs">
+                        <a class="CFclearAllBTN btn" href="">Clear All</a>
+                        <input type="submit" value="Save" class="CFSaveBTN btn" id="">
+                    </div>
                 </div>
 
-                <div class="CFBasicDetails">
-                    <p class="CFBasicPtag">Customer Name</p>
-                    {{#if CustomerName}}
-                    <input type="text" class="CFBasicInp CustomerNameInp" name="CustomerName"
-                        placeholder="Enter Customer Name" value="{{CustomerName}}" required readonly>
-                    {{else}}
-                    <input type="text" class="CFBasicInp CustomerNameInp" name="CustomerName"
-                        placeholder="Enter Customer Name" value="" required>
-                    {{/if}}
-                </div>
-                <div class="CFBasicDetails">
-                    <p class="CFBasicPtag">Color Code</p>
-                    <input type="text" class="CFBasicInp CustomerNameInp" name="ColorCode"
-                        placeholder="Enter Color Code" required>
-                </div>
-                <div class="CFBasicDetails">
-                    <p class="CFBasicPtag">Color Name</p>
-                    <input type="text" class="CFBasicInp" name="ColorName" placeholder="Enter Color Name" required>
-                </div>
-                <div class="CFBasicDetails">
-                    <p class="CFBasicPtag">Customer Ref</p>
-                    <input type="text" class="CFBasicInp" name="CustomerRef" placeholder="Enter Customer Ref" required>
-                </div>
-                <div class="CFBasicDetails">
-                    <p class="CFBasicPtag">Project No</p>
-                    <input type="text" class="CFBasicInp" name="ProjectNo" placeholder="Enter Project No" required>
-                </div>
-
-                <div class="PopAddAttachments">
-                    <p class="popCardHeaderText">Attachments</p>
-                    <div class="popAttachements">
-
-                        <div class="PopAddAttamentsArea">
-                            <label for="file" class="custum-file-upload">
-                                <div class="icon">
-                                    <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z"
-                                                fill=""></path>
-                                        </g>
-                                    </svg>
-                                </div>
-                                <div class="text">
-                                    <span>Click to upload image</span>
-                                </div>
-                                <input id="file" type="file" onchange="previewAttachmentImage()">
-                            </label>
-
+                <div class="MainSection">
+                    <div class="Detailleftsection">
+                        <div class="MixerDetails" hidden>
+                            <p class="MixerNameLabel">Mixer Name</p>
+                            {{#if CustomerName}}
+                            <input type="text" name="MixerName" value="{{CustomerName}}" id="">
+                            {{else}}
+                            <input type="text" name="MixerName" value="{{MixerName}}" id="">
+                            {{/if}}
+                            {{!-- Enter Mixer Name Here By Dynamic Process --}}
                         </div>
-                        <div class="popAttachementsCollections">
-                            <div class="popEachAttachments">
-                                <img id="AttachmentImage" class="AttachmentIMG" src="" alt="">
-                            </div>
+                        <div class="CFBasicDetails DateSection">
+                            <p class="CFBasicPtag">Date</p>
+                            <input type="date" name="Date" class=" DateBasicINP" id="dateInput" readonly value=''>
                         </div>
-                    </div>
-
-                </div>
-                {{!-- Solid Content start here --}}
-                <div class="CFsolidContentCalcDivArea">
-                    <div class="CFsolidContentCalcDiv">
-                        <p class="CFBinderName">Solid Content(%): </p>
-                        <input class="CFSolidContentInput" type="text" name="SolidContent" value="0"
-                            id="CFFormulaSolidContent" readonly>%
-                    </div>
-                    <div class="CFsolidContentCalcDiv">
-                        <p class="CFBinderName">VOC (g/Ltr): </p>
-                        <input class="CFSolidContentInput" type="text" name="VOC" value="0" id="CFFormulaVOC" readonly>
-                    </div>
-                    <div class="CFsolidContentCalcDiv">
-                        <p class="CFBinderName">Density (g/Ltr): </p>
-                        <input class="CFSolidContentInput" type="text" name="Density" id="CFFormulaDensity" value="0"
-                            readonly>
-                    </div>
-                    {{!-- <div class="CFsolidContentCalcDiv">
-                        <p class="CFBinderName">Costing : </p>
-                        <input class="CFSolidContentInput" type="text" name="Cost" id="CFFormulaDensity" value="0"
-                            readonly>
-                    </div> --}}
-                    {{!-- <div class="CFsolidContentCalcDivNoLabel">
-                        <p class="CFBinderName">Density (g/Ltr): </p>
-                        <input class="CFSolidContentInputNoLabel" type="text" value="271.878173427678/247.330033186"
-                            readonly>
-                    </div> --}}
-                    <div class="CFsolidContentCalcDiv">
-                        <p class="CFBinderName">Sampled QTY: </p>
-                        <input class="CFSolidContentInput" name="SampleQty" id="SampleQty" type="text" value="0"
-                            readonly>
-                    </div>
-                </div>
-                {{!-- Solid Content ends here --}}
-            </div>
-
-            <div class="RightSideSection">
-                <div class="RightTopSelectionArea">
-                    <div class="CategorySelectionDiv">
-                        <label for="categorySelect">Category </label>
-                        <select name="Category" class="CFCategory" id="CategorySelect" onchange="ADcategorySelect()"
-                            required>
-                            <option value="" readonly selected>Select Category</option>
-                            {{#each AllCategory}}
-                            <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
-                                {{this.Category_Id}} -
-                                {{this.Category}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                    <div class="SubcategorySelectionDiv">
-                        <label for="categorySelect">Sub-Category </label>
-                        <select name="SubCategory" class="CFSubCategory" id="SubCategorySelect"
-                            onchange="CFSubcategorySelect()" required>
-                            <option value="0" readonly selected>Select Sub-Category</option>
-                        </select>
-                    </div>
-                    <div class="MattGlossEntryDiv">
-                        <p class="CFmainSelection MattOrGloss">Gloss</p>
-                        <input type="text" name="mattOrGloss" id="MattOrGlossINPTag" class=" MattOrGlossINP " min="0"
-                            value="0" onkeypress="return isNumeric(event)" oninput="LoadTableSingleData()">
-                    </div>
-                </div>
-                <div class="TopTables">
-                    <div class="TinterTableDiv">
-                        <table id="Tintertable">
-                            <thead class="QuantityHead">
-                                <tr>
-                                    <th rowspan="2">SL No.</th>
-                                    <th rowspan="2">Tinters</th>
-                                    <th colspan="2" class="quantity">Quantity</th>
-                                </tr>
-                                <tr>
-
-                                    <th class="quantity">in Grams</th>
-                                    <th class="quantity">in Volume</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <select class="SelectTinter">
-                                            <option value="tinter1">Tinter 1</option>
-                                            <option value="tinter2">Tinter 2</option>
-                                            <option value="tinter3">Tinter 3</option>
-                                        </select>
-                                    </td>
-                                    <td class="quantity">
-                                        <input class="InputQuantityGram" type="text" value="0" />
-                                    </td>
-                                    <td class="quantity">
-                                        <input class="InputQuantityVolumn" type="text" value="0" />
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>2</td>
-                                    <td>
-                                        <select class="SelectTinter">
-                                            <option value="tinter1">Tinter 1</option>
-                                            <option value="tinter2">Tinter 2</option>
-                                            <option value="tinter3">Tinter 3</option>
-                                        </select>
-                                    </td>
-                                    <td class="quantity">
-                                        <input class="InputQuantityGram" type="text" value="0" />
-                                    </td>
-                                    <td class="quantity">
-                                        <input class="InputQuantityVolumn" type="text" value="0" />
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="TinterQuantityTableDiv">
-                        <table id="TinterQuantityTable">
-                            <thead class="QuantityHead">
-                                <tr>
-                                    <th rowspan="2" colspan="6">Quantity</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                    <td>
-                                        <input class="QuantityInput" value="0" type="text">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                {{!-- Additives, Binders and Remarks --}}
-                <div class="AddBinderRemarksSection">
-                    <div class="Add_BinderSectio">
-                        <div class="WithouAdditvesSection">
-                            <p class="DetailText">Total without Additives</p>
-                            <div class="ReadOnlyInPSEct">
-                                <div class=" withoutAdditiveGrams">
-                                    <input type="text" readonly value="0" class="InputReadOnly"
-                                        name="TotalGramsWithoutAddtives">
-                                </div>
-                                <div class=" withoutAdditiveVolume" style="border-top-right-radius: 8px;">
-                                    <input type="text" readonly value="0" class="InputReadOnly"
-                                        name="TotalVolumeWithoutAddtives">
-                                </div>
-                            </div>
+                        <div class="CFBasicDetails fileNoSection">
+                            <p class="CFBasicPtag">File no.</p>
+                            <input type="text" class=" FileNoBasicINP" name="FileNo" placeholder="Enter File No"
+                                value="{{FileNo}}" readonly required>
                         </div>
-                        <div class="BinderSection">
-                            <p class="DetailText BindersText">Binders</p>
-                            <div class="BindersCollection">
-                                <div class="BindersArea">
-                                    <input type="text" value="PU-240-90" class="BinderNameText" name="BinderName1">
-                                    <div class="BindersInputArea Binder1Area">
-                                        <div class="BindersInputDiv">
-                                            <input type="text" value="0" class="BinderReadOnlyINp" name="Binder1_Gram">
+
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Customer Name</p>
+                            {{#if CustomerName}}
+                            <input type="text" class="CFBasicInp CustomerNameInp" name="CustomerName"
+                                placeholder="Enter Customer Name" value="{{CustomerName}}" required readonly>
+                            {{else}}
+                            <input type="text" class="CFBasicInp CustomerNameInp" name="CustomerName"
+                                placeholder="Enter Customer Name" value="" required>
+                            {{/if}}
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Color Code</p>
+                            <input type="text" class="CFBasicInp CustomerNameInp" name="ColorCode"
+                                placeholder="Enter Color Code" required>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Color Name</p>
+                            <input type="text" class="CFBasicInp" name="ColorName" placeholder="Enter Color Name"
+                                required>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Customer Ref</p>
+                            <input type="text" class="CFBasicInp" name="CustomerRef" placeholder="Enter Customer Ref"
+                                required>
+                        </div>
+                        <div class="CFBasicDetails">
+                            <p class="CFBasicPtag">Project No</p>
+                            <input type="text" class="CFBasicInp" name="ProjectNo" placeholder="Enter Project No"
+                                required>
+                        </div>
+
+                        <div class="PopAddAttachments">
+                            <p class="popCardHeaderText">Attachments</p>
+                            <div class="popAttachements">
+
+                                <div class="PopAddAttamentsArea">
+                                    <label for="file" class="custum-file-upload">
+                                        <div class="icon">
+                                            <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                </g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z"
+                                                        fill=""></path>
+                                                </g>
+                                            </svg>
                                         </div>
-                                        <div class="BindersInputDiv">
-                                            <input type="text" value="0" class="BinderReadOnlyINp"
-                                                name="Binder1_Volume">
+                                        <div class="text">
+                                            <span>Click to upload image</span>
+                                        </div>
+                                        <input id="file" type="file" onchange="previewAttachmentImage()">
+                                    </label>
+
+                                </div>
+                                <div class="popAttachementsCollections">
+                                    <div class="popEachAttachments">
+                                        <img id="AttachmentImage" class="AttachmentIMG" src="" alt="">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        {{!-- Solid Content start here --}}
+                        <div class="CFsolidContentCalcDivArea">
+                            <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">Solid Content(%): </p>
+                                <input class="CFSolidContentInput" type="text" name="SolidContent" value="0"
+                                    id="CFFormulaSolidContent" readonly>%
+                            </div>
+                            <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">VOC (g/Ltr): </p>
+                                <input class="CFSolidContentInput" type="text" name="VOC" value="0" id="CFFormulaVOC"
+                                    readonly>
+                            </div>
+                            <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">Density (g/Ltr): </p>
+                                <input class="CFSolidContentInput" type="text" name="Density" id="CFFormulaDensity"
+                                    value="0" readonly>
+                            </div>
+                            {{!-- <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">Costing : </p>
+                                <input class="CFSolidContentInput" type="text" name="Cost" id="CFFormulaDensity"
+                                    value="0" readonly>
+                            </div> --}}
+                            {{!-- <div class="CFsolidContentCalcDivNoLabel">
+                                <p class="CFBinderName">Density (g/Ltr): </p>
+                                <input class="CFSolidContentInputNoLabel" type="text"
+                                    value="271.878173427678/247.330033186" readonly>
+                            </div> --}}
+                            <div class="CFsolidContentCalcDiv">
+                                <p class="CFBinderName">Sampled QTY: </p>
+                                <input class="CFSolidContentInput" name="SampleQty" id="SampleQty" type="text" value="0"
+                                    readonly>
+                            </div>
+                        </div>
+                        {{!-- Solid Content ends here --}}
+                    </div>
+
+                    <div class="RightSideSection">
+                        <div class="RightTopSelectionArea">
+                            <div class="CategorySelectionDiv">
+                                <label for="categorySelect">Category </label>
+                                <select name="Category" class="CFCategory" id="CategorySelect"
+                                    onchange="categorySelect()" required>
+                                    <option value="" readonly selected>Select Category</option>
+                                    {{#each AllCategory}}
+                                    <option class="ADSelectCategoryOptions" value="{{this.Category_Id}}">
+                                        {{this.Category_Id}} -
+                                        {{this.Category}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="SubcategorySelectionDiv">
+                                <label for="categorySelect">Sub-Category </label>
+                                <select name="SubCategory" class="CFSubCategory" id="SubCategorySelect"
+                                    onchange="SubcategorySelect()" required>
+                                    <option value="0" readonly selected>Select Sub-Category</option>
+                                </select>
+                            </div>
+                            <div id="MattGlossEntryDiv" class="MattGlossEntryDiv">
+                                {{!-- <p class="CFmainSelection MattOrGloss">Gloss</p>
+                                <input type="text" name="mattOrGloss" id="MattOrGlossINPTag" class=" MattOrGlossINP "
+                                    min="0" value="0" onkeypress="return isNumeric(event)"
+                                    oninput="calculateAllTinterQuantities()"> --}}
+                            </div>
+                        </div>
+                        <div class="TopTables">
+                            <div class="TinterTableDiv">
+                                <table id="Tintertable">
+                                    <thead class="QuantityHead">
+                                        <tr>
+                                            <th rowspan="2">SL No.</th>
+                                            <th rowspan="2">Tinters</th>
+                                            <th colspan="2" class="quantity">Quantity</th>
+                                        </tr>
+                                        <tr>
+
+                                            <th class="quantity">in Grams</th>
+                                            <th class="quantity">in Volume</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="TinterBody">
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="TinterQuantityTableDiv">
+                                <table id="TinterQuantityTable">
+                                    <thead class="QuantityHead">
+                                        <tr>
+                                            <th rowspan="2" colspan="6">Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="TinterQuantityBody">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {{!-- Additives, Binders and Remarks --}}
+                        <div class="AddBinderRemarksSection">
+                            <div class="Add_BinderSectio">
+                                <div class="WithouAdditvesSection">
+                                    <p class="DetailText">Total without Additives</p>
+                                    <div class="ReadOnlyInPSEct">
+                                        <div class=" withoutAdditiveGrams">
+                                            <input type="text" readonly value="0" class="InputReadOnly"
+                                                id="TotalGramsWithoutAddtives" name="TotalGramsWithoutAddtives">
+                                        </div>
+                                        <div class=" withoutAdditiveVolume" style="border-top-right-radius: 8px;">
+                                            <input type="text" readonly value="0" class="InputReadOnly"
+                                                id="TotalVolumeWithoutAddtives" name="TotalVolumeWithoutAddtives">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="BindersArea">
-                                    <input type="text" value="PU-240-05" class="BinderNameText" name="BinderName2">
-                                    <div class="BindersInputArea">
-                                        <div class="BindersInputDiv">
-                                            <input type="text" value="0" class="BinderReadOnlyINp" name="Binder2_Gram">
+                                <div class="BinderSection">
+                                    <p class="DetailText BindersText">Binders</p>
+                                    <div id="BinderCollections" class="BindersCollection">
+                                        {{!-- <div id="Binder1Area" class="BindersArea">
+                                            <input type="text" value="" class="BinderNameText" name="BinderName1">
+                                            <div class="BindersInputArea Binder1Area">
+                                                <div class="BindersInputDiv">
+                                                    <input type="text" value="0" class="BinderReadOnlyINp"
+                                                        id="Binder1INP" name="Binder1_Gram">
+                                                </div>
+                                                <div class="BindersInputDiv">
+                                                    <input type="text" value="0" class="BinderReadOnlyINp"
+                                                        name="Binder1_Volume">
+                                                </div>
+                                            </div>
+                                        </div> --}}
+                                        {{!-- <div id="Binder2Area" class="BindersArea">
+                                            <input type="text" value="PU-240-05" class="BinderNameText"
+                                                name="BinderName2">
+                                            <div class="BindersInputArea">
+                                                <div class="BindersInputDiv">
+                                                    <input type="text" value="0" class="BinderReadOnlyINp"
+                                                        id="Binder2INP" name="Binder2_Gram">
+                                                </div>
+                                                <div class="BindersInputDiv">
+                                                    <input type="text" value="0" class="BinderReadOnlyINp"
+                                                        name="Binder2_Volume">
+                                                </div>
+                                            </div>
+                                        </div> --}}
+                                    </div>
+                                </div>
+                                <div class="AdditiveSelection">
+                                    <div class="AdditiveSelectionArea">
+                                        <p class="DetailText AddtiveText">Additives</p>
+                                        <div class="AdditiveArea">
+                                            <select class="AdditiveSelect" name="Additive" id="">
+                                                <option value="">select an Additive</option>
+                                                <option value="">Multi-matt</option>
+                                                <option value="">Ex-adf</option>
+                                            </select>
+                                            <input type="text" class="AdditivePerInp" name="AdditivePercentage"
+                                                value="0">
+                                            <p class="DetailText PercentageSign">%</p>
                                         </div>
-                                        <div class="BindersInputDiv">
-                                            <input type="text" value="0" class="BinderReadOnlyINp"
-                                                name="Binder2_Volume">
+                                    </div>
+                                    <div class="AdditveInputArea">
+                                        <div class="AdditiveInpDiv">
+                                            <input type="text" value="0" class="AdditiveInpReadOnly"
+                                                name="Additive_Gram">
+                                        </div>
+                                        <div class="AdditiveInpDiv">
+                                            <input type="text" value="0" class="AdditiveInpReadOnly"
+                                                name="Additive_Volume">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="TotalSection">
+                                    <p class="DetailText">Total</p>
+                                    <div class="TotalInputArea" style="border-bottom-right-radius: 8px;">
+                                        <div class="InputTotlaDiv">
+                                            <input type="text" value="0" class="TotalInpReadOnly" name="Total_Gram">
+                                        </div>
+                                        <div class="InputTotlaDiv" style="border-bottom-right-radius: 8px;">
+                                            <input type="text" value="0" name="Total_Volume" class="TotalInpReadOnly">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="AdditiveSelection">
-                            <div class="AdditiveSelectionArea">
-                                <p class="DetailText AddtiveText">Additives</p>
-                                <div class="AdditiveArea">
-                                    <select class="AdditiveSelect" name="Additive" id="">
-                                        <option value="">select an Additive</option>
-                                        <option value="">Multi-matt</option>
-                                        <option value="">Ex-adf</option>
-                                    </select>
-                                    <input type="text" class="AdditivePerInp" name="AdditivePercentage" value="0">
-                                    <p class="DetailText PercentageSign">%</p>
-                                </div>
-                            </div>
-                            <div class="AdditveInputArea">
-                                <div class="AdditiveInpDiv">
-                                    <input type="text" value="0" class="AdditiveInpReadOnly" name="Additive_Gram">
-                                </div>
-                                <div class="AdditiveInpDiv">
-                                    <input type="text" value="0" class="AdditiveInpReadOnly" name="Additive_Volume">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="TotalSection">
-                            <p class="DetailText">Total</p>
-                            <div class="TotalInputArea" style="border-bottom-right-radius: 8px;">
-                                <div class="InputTotlaDiv">
-                                    <input type="text" value="0" class="TotalInpReadOnly" name="Total_Gram">
-                                </div>
-                                <div class="InputTotlaDiv" style="border-bottom-right-radius: 8px;">
-                                    <input type="text" value="0" name="Total_Volume" class="TotalInpReadOnly">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="RemarksPrintSEction">
-                        <div class="RemarkSection">
-                            <div class="remarkHeader">
-                                <p class="DetailText   RemarkText ">Remarks</p>
-                            </div>
-                            <div class="RemarksContentDiv">
-                                <textarea readonly name="remark" id="" class="RemaarkContent">
-                                    Mixing with 50% Mipa 2K MS Harderner and 25 - 40% Mipa 2K Thinner
+                            <div class="RemarksPrintSEction">
+                                <div class="RemarkSection">
+                                    <div class="remarkHeader">
+                                        <p class="DetailText   RemarkText ">Remarks</p>
+                                    </div>
+                                    <div class="RemarksContentDiv">
+                                        <textarea readonly name="remark" id="RemarksContent" class="RemaarkContent">
                                 </textarea>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                        div.print
+
                     </div>
                 </div>
 
             </div>
-        </div>
-
-    </div>
+        </form>
 </section>
 
 <script>
+
+    var State = {
+        Formula: {}
+    };
 
     function previewAttachmentImage() {
         var input = document.getElementById('file');
@@ -382,6 +331,614 @@
             console.error("AttachmentImage element not found");
         }
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchAllDataFromServer()
+
+
+    })
+
+    function fetchAllDataFromServer() {
+        fetch('/dataForFormulaCreation/api')
+            .then(response => response.json())
+            .then(data => {
+                // console.log("Server Data: ", data);
+                State.Additives = data.Additives;
+                State.Binders = data.Binders;
+                State.Categories = data.Categories;
+                State.Products = data.Products;
+                State.SubCategories = data.SubCategories;
+
+                console.log("State: ", State);
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+
+
+
+    function categorySelect() {
+        var SelectedCategory = document.getElementById('CategorySelect').value;
+        var subCategorySelect = document.getElementById('SubCategorySelect');
+        subCategorySelect.innerHTML = "";
+
+        //  var MatchingSubCategory = [];
+        State.SubCategories.forEach((EachSubCategory) => {
+            //   console.log('SelectedCategory', SelectedCategory);
+            //  console.log("EachSubCategory", EachSubCategory);
+            if (SelectedCategory == EachSubCategory.Category_Id) {
+                // MatchingSubCategory.push(EachSubCategory);
+                var option = document.createElement('option');
+                option.value = EachSubCategory.SubCategory_Id;
+                option.text = EachSubCategory.SubCategory;
+                subCategorySelect.appendChild(option);
+            }
+        })
+        SubcategorySelect();
+        createFirstTinterRow();
+    }
+
+    function SubcategorySelect() {
+        var SubCategorySelectID = document.getElementById('SubCategorySelect').value;
+
+
+        var SubCategory = State.SubCategories.find(Subcategory => Subcategory.SubCategory_Id == SubCategorySelectID);
+        if (SubCategory) {
+
+            //  console.log("Sub category : ", SubCategory);
+
+            // Handle Matt and Gloss
+            if (SubCategory.Matt) {
+                // matt
+                var VirtualMatt = `
+                <p class="CFmainSelection MattOrGloss">Matt</p>
+                <input type="text" name="mattOrGloss" id="MattOrGlossINPTag" class=" MattOrGlossINP "
+                    min="0" value="0" onkeypress="return isNumeric(event)"
+                    oninput="calculateAllTinterQuantities()">
+            `
+
+                var MattGlossEntryDiv = document.getElementById('MattGlossEntryDiv');
+                MattGlossEntryDiv.innerHTML = "";
+                MattGlossEntryDiv.insertAdjacentHTML('beforeend', VirtualMatt);
+            } else if (SubCategory.Gloss) {
+                // Gloss
+                var VirtualMatt = `
+                <p class="CFmainSelection MattOrGloss">Gloss</p>
+                <input type="text" name="mattOrGloss" id="MattOrGlossINPTag" class=" MattOrGlossINP "
+                    min="0" value="0" onkeypress="return isNumeric(event)"
+                    oninput="calculateAllTinterQuantities()">
+            `
+                var MattGlossEntryDiv = document.getElementById('MattGlossEntryDiv');
+                MattGlossEntryDiv.innerHTML = "";
+                MattGlossEntryDiv.insertAdjacentHTML('beforeend', VirtualMatt);
+            } else {
+                // no matt gloss
+                var MattGlossEntryDiv = document.getElementById('MattGlossEntryDiv');
+                MattGlossEntryDiv.innerHTML = "";
+            }
+
+
+            // Handle Binders Name
+            var BinderCollections = document.getElementById('BinderCollections');
+            BinderCollections.innerHTML = "";
+
+            if (SubCategory.Binder1) {
+                var Binder1 = State.Binders.find(OneBinder => OneBinder.Binder_Id == SubCategory.Binder1);
+                var VirtualBinder1 = `
+             <div id="Binder1Area" class="BindersArea">
+                    <input type="text" value="${Binder1.Binder_Name}" class="BinderNameText"
+                        name="BinderName1">
+                    <div class="BindersInputArea Binder1Area">
+                        <div class="BindersInputDiv">
+                            <input type="text" value="0" class="BinderReadOnlyINp"
+                                id="Binder1INP" name="Binder1_Gram">
+                        </div>
+                        <div class="BindersInputDiv">
+                            <input type="text" value="0" class="BinderReadOnlyINp"
+                            name="Binder1_Volume">
+                    </div>
+                </div>
+            </div>
+            `
+                BinderCollections.insertAdjacentHTML('beforeend', VirtualBinder1);
+            } else {
+                var VirtualBinder1 = `
+             <div id="Binder1Area" class="BindersArea">
+                    <input type="text" value="" class="BinderNameText"
+                        name="BinderName1" disabled>
+                    <div class="BindersInputArea Binder1Area">
+                        <div class="BindersInputDiv">
+                            <input type="text" value="" class="BinderReadOnlyINp"
+                                id="Binder1INP" name="Binder1_Gram" disabled>
+                        </div>
+                        <div class="BindersInputDiv">
+                            <input type="text" value="0" class="BinderReadOnlyINp"
+                            name="Binder1_Volume" disabled>
+                    </div>
+                </div>
+            </div>
+            `
+                BinderCollections.insertAdjacentHTML('beforeend', VirtualBinder1);
+            }
+
+            if (SubCategory.Binder2) {
+                var Binder2 = State.Binders.find(OneBinder => OneBinder.Binder_Id == SubCategory.Binder2);
+                var VirtualBinder2 = `
+                <div id="Binder2Area" class="BindersArea">
+                    <input type="text" value="${Binder2.Binder_Name}" class="BinderNameText"
+                        name="BinderName2">
+                    <div class="BindersInputArea">
+                        <div class="BindersInputDiv">
+                            <input type="text" value="" class="BinderReadOnlyINp"
+                                id="Binder2INP" name="Binder2_Gram">
+                        </div>
+                        <div class="BindersInputDiv">
+                            <input type="text" value="" class="BinderReadOnlyINp"
+                                name="Binder2_Volume">
+                        </div>
+                    </div>
+                </div>
+`
+                BinderCollections.insertAdjacentHTML('beforeend', VirtualBinder2);
+            } else {
+                var VirtualBinder2 = `
+                <div id="Binder2Area" class="BindersArea">
+                    <input type="text" value="" class="BinderNameText"
+                        name="BinderName2" disabled>
+                    <div class="BindersInputArea">
+                        <div class="BindersInputDiv">
+                            <input type="text" value="" class="BinderReadOnlyINp"
+                                id="Binder2INP" name="Binder2_Gram" disabled>
+                        </div>
+                        <div class="BindersInputDiv">
+                            <input type="text" value="" class="BinderReadOnlyINp"
+                                name="Binder2_Volume" disabled>
+                        </div>
+                    </div>
+                </div>
+`
+                BinderCollections.insertAdjacentHTML('beforeend', VirtualBinder2);
+            }
+
+            // handle Remarks
+            var RemarksContent = document.getElementById('RemarksContent');
+            RemarksContent.value = SubCategory.Remarks;
+
+
+        } else {
+            console.log('no sub category')
+            // handle matt or gloss
+            var MattGlossEntryDiv = document.getElementById('MattGlossEntryDiv');
+            MattGlossEntryDiv.innerHTML = "";
+
+            // handle Tinter
+            var TinterBody = document.getElementById('TinterBody');
+            TinterBody.innerHTML = "";
+
+            var TinterQuantityBody = document.getElementById('TinterQuantityBody');
+            TinterQuantityBody.innerHTML = "";
+
+            // Handle Binders Name
+            var BinderCollections = document.getElementById('BinderCollections');
+            BinderCollections.innerHTML = "";
+
+            // handle Remarks
+            var RemarksContent = document.getElementById('RemarksContent');
+            RemarksContent.value = "";
+        }
+
+    }
+
+    function createFirstTinterRow() {
+        // Assuming you have the tbody element with id "TinterRow"
+        var Tintertbody = document.getElementById('TinterBody');
+        var quantityTbody = document.getElementById('TinterQuantityBody');
+        var newRowCount = 1
+        var rowCount = 1
+
+        var newTinterRow = `
+                <tr>
+                    <td>${newRowCount}</td>
+                    <td>
+                        <select name="TintersR${newRowCount}" class="SelectTinter" id="CFTintersR${newRowCount}"
+                            onchange="CreateNewTinterRow(this)">
+                           
+                        </select>
+                    </td>
+                    <td class="quantity">
+                        <input name="GramInputTotalR${newRowCount}" class="InputQuantityGram" type="text"
+                            id="GramInputTotalR${newRowCount}" value="0" readonly />
+                    </td>
+                    <td class="quantity">
+                        <input name="LiterInputTotalR1" class="InputQuantityVolumn" type="text"
+                            id="LiterInputTotalR${newRowCount}" value="0" readonly />
+                    </td>
+                </tr>
+            `;
+
+
+        var newTinterQuantity = `
+                <tr>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C1"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C2"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C3"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C4"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C5"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C6"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                </tr>
+            `;
+
+
+        // put newTinterRow to tbody id TinterBody
+        // put newTinterQuantity to tbosy id TinterQuantityBody
+        Tintertbody.innerHTML = newTinterRow;
+        quantityTbody.innerHTML = newTinterQuantity;
+
+        UpdateAllTinterSelectionOPtions();
+    }
+
+    function sanitizeInputValue(inputElement) {
+        // Get the entered value
+        var inputValue = inputElement.value;
+
+        // Remove any non-numeric characters
+        var numericValue = inputValue.replace(/[^0-9.]/g, '');
+
+        // Split the value into integer and decimal parts
+        var parts = numericValue.split('.');
+        var integerPart = parts[0];
+        var decimalPart = parts[1];
+
+        // Allow only up to 3 decimal places
+        if (decimalPart !== undefined) {
+            decimalPart = decimalPart.slice(0, 3);
+        }
+
+        // Update the input value with the sanitized result
+        inputElement.value = decimalPart === undefined ? integerPart : integerPart + (decimalPart.length > 0 ? '.' + decimalPart : '');
+        calculateAllTinterQuantities();
+    }
+
+
+    function CreateNewTinterRow(ModifiedInput) {
+        calculateAllTinterQuantities();
+
+        console.log('ModifiedInput:', ModifiedInput);
+        console.log('ModifiedInput value:', ModifiedInput.value);
+        var selectId = ModifiedInput.id;
+        console.log('Select element ID:', selectId);
+
+
+        // Assuming you have the tbody element with id "TinterRow"
+        var Tintertbody = document.getElementById('TinterBody');
+        var quantityTbody = document.getElementById('TinterQuantityBody');
+        var newRowCount = 1
+        var rowCount = 1
+        // Count the number of rows in the tbody
+        rowCount = Tintertbody.getElementsByTagName('tr').length;
+
+        console.log('Number of rows: ' + rowCount);
+        newRowCount = rowCount + 1;
+
+
+
+        //  if (document.getElementById(`CFTintersR${rowCount}`).value && selectId === `CFTintersR${rowCount}`) {
+        if (ModifiedInput.parentElement.parentElement === Tintertbody.lastElementChild) {
+            var newRowTinterBody = document.createElement('tr');
+            newRowTinterBody.innerHTML = `
+                    <td>${newRowCount}</td>
+                    <td>
+                        <select name="TintersR${newRowCount}" class="SelectTinter" id="CFTintersR${newRowCount}"
+                            onchange="CreateNewTinterRow(this)">
+                        </select>
+                    </td>
+                    <td class="quantity">
+                        <input name="GramInputTotalR${newRowCount}" class="InputQuantityGram" type="text"
+                            id="GramInputTotalR${newRowCount}" value="0" readonly />
+                    </td>
+                    <td class="quantity">
+                        <input name="LiterInputTotalR1" class="InputQuantityVolumn" type="text"
+                            id="LiterInputTotalR${newRowCount}" value="0" readonly />
+                    </td>
+            `;
+
+
+            var newRowTinterQuantity = document.createElement('tr');
+            newRowTinterQuantity.innerHTML = `
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C1"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C2"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C3"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C4"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C5"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                    <td>
+                        <input class="QuantityInput R${newRowCount}Sub R${newRowCount}C6"  value="0" type="text" oninput="sanitizeInputValue(this)" onchange="calculateAllTinterQuantities(this)">
+                    </td>
+                `;
+
+
+            // put newTinterRow to tbody id TinterBody
+            // put newTinterQuantity to tbosy id TinterQuantityBody
+            // Append the new rows to TinterBody and TinterQuantityBody
+            Tintertbody.appendChild(newRowTinterBody);
+            quantityTbody.appendChild(newRowTinterQuantity);
+            console.log("ID:", selectId);
+            var selectedTinterBox = document.getElementById(selectId)
+            console.log('ModifiedInput value:', document.getElementById(ModifiedInput.id).value);
+
+            UpdateLastTinterSelectionOpitons()
+        }
+    }
+
+    function UpdateAllTinterSelectionOPtions() {
+        var className = "SelectTinter";
+        var selectBoxes = document.getElementsByClassName(className);
+
+        var TinterIDs;
+        var SubCategoryID = document.getElementById('SubCategorySelect').value;
+        State.SubCategories.forEach((EachSubCategory) => {
+            if (EachSubCategory.SubCategory_Id == SubCategoryID) {
+                TinterIDs = EachSubCategory.Products;
+            }
+        })
+
+        // console.log("TinterIDs = ", TinterIDs);
+        // console.log("Tinters = ", State.Products);
+
+        // Filter Tinters based on TinterIDs
+        const Tinters = State.Products.filter(tinter => TinterIDs.includes(tinter.Product_Id));
+
+        // Iterate over each select box
+        for (var i = 0; i < selectBoxes.length; i++) {
+            var selectBox = selectBoxes[i];
+
+            // Remove existing options
+            selectBox.innerHTML = '';
+
+            // an empty option for first selection
+            var FirstOption = document.createElement('option');
+            FirstOption.value = "";
+            FirstOption.text = "Select a Tinter";
+            FirstOption.selected = true;
+            FirstOption.disabled = true;
+            selectBox.appendChild(FirstOption)
+
+            Tinters.forEach((EachTinter) => {
+                // Add new options
+                var option = document.createElement('option');
+                option.value = EachTinter.Product_Id;
+                option.text = EachTinter.Product_Name;
+
+                selectBox.appendChild(option)
+            })
+        }
+    }
+
+    function UpdateLastTinterSelectionOpitons() {
+        var className = "SelectTinter";
+        var selectBoxes = document.getElementsByClassName(className);
+
+        var TinterIDs;
+        var SubCategoryID = document.getElementById('SubCategorySelect').value;
+        State.SubCategories.forEach((EachSubCategory) => {
+            if (EachSubCategory.SubCategory_Id == SubCategoryID) {
+                TinterIDs = EachSubCategory.Products;
+            }
+        })
+
+        // console.log("TinterIDs = ", TinterIDs);
+        // console.log("Tinters = ", State.Products);
+
+        // Filter Tinters based on TinterIDs
+        const Tinters = State.Products.filter(tinter => TinterIDs.includes(tinter.Product_Id));
+
+        // Iterate over each select box
+        var selectBox = selectBoxes[selectBoxes.length - 1];
+
+        // Remove existing options
+        selectBox.innerHTML = '';
+
+        // an empty option for first selection
+        var FirstOption = document.createElement('option');
+        FirstOption.value = "";
+        FirstOption.text = "Select a Tinter";
+        FirstOption.selected = true;
+        FirstOption.disabled = true;
+        selectBox.appendChild(FirstOption)
+
+        Tinters.forEach((EachTinter) => {
+            // Add new options
+            var option = document.createElement('option');
+            option.value = EachTinter.Product_Id;
+            option.text = EachTinter.Product_Name;
+
+            selectBox.appendChild(option)
+        })
+    }
+
+
+    function calculateAllTinterQuantities() {
+        var Tintertbody = document.getElementById('TinterBody');
+        var rowCount = Tintertbody.getElementsByTagName('tr').length;
+
+        for (i = 1; i <= rowCount; i++) {
+            var AllSubColumns = document.getElementsByClassName(`R${i}Sub`);
+            var TinterQuatitySum = 0;
+            console.log("Rowcount : ", i)
+            for (j = 0; j < AllSubColumns.length; j++) {
+                console.log("Sub column : ", j)
+                console.log("each row : ", AllSubColumns[j].value);
+                TinterQuatitySum += parseFloat(AllSubColumns[j].value);
+            }
+
+            // find product density and volume
+            var Product_Id = document.getElementById(`CFTintersR${i}`).value;
+
+            if (Product_Id) {
+                document.getElementById(`GramInputTotalR${i}`).value = !isNaN(TinterQuatitySum) ? TinterQuatitySum : 0;
+                var Product = State.Products.find(product => product.Product_Id == Product_Id);
+
+                var ProductVolume = parseFloat((TinterQuatitySum * parseFloat(Product.Product_Density)) / 1000).toFixed(1);
+                document.getElementById(`LiterInputTotalR${i}`).value = !isNaN(ProductVolume) ? ProductVolume : 0;
+            }
+
+        }
+
+        FindTotalWithoutAdditives()
+    }
+
+    function FindTotalWithoutAdditives() {
+        var Tintertbody = document.getElementById('TinterBody');
+        var rowCount = Tintertbody.getElementsByTagName('tr').length;
+
+        var TotalQuantityWithoutAddtives = 0;
+        var TotalVolumeWithoutAddtives = 0;
+
+        for (i = 1; i <= rowCount; i++) {
+            TotalQuantityWithoutAddtives += parseFloat(document.getElementById(`GramInputTotalR${i}`).value);
+            TotalVolumeWithoutAddtives += parseFloat(document.getElementById(`LiterInputTotalR${i}`).value);
+
+        }
+
+        document.getElementById('TotalGramsWithoutAddtives').value = TotalQuantityWithoutAddtives.toFixed(2);
+        document.getElementById('TotalVolumeWithoutAddtives').value = TotalVolumeWithoutAddtives.toFixed(2);
+
+        FindBinderValue()
+    }
+
+    function FindBinderValue() {
+        //// alert("Find Biner value")
+        //console.log(Sub_Category);
+        var SubCategorySelectID = document.getElementById('SubCategorySelect').value;
+        var Sub_Category = State.SubCategories.find(SubCategory => SubCategory.SubCategory_Id == SubCategorySelectID);
+
+        var Sub_Category_Name = Sub_Category.SubCategory
+
+        // Binder Calculations
+
+        //var Sub_Category;
+        var Binder1_EQ;
+        var Binder2_EQ;
+        var Sum_qty;
+        var mattValue;
+        var gloss;
+
+
+        var BinderError = false;
+        var err;
+
+        // gram or liter
+
+        Sum_qty = parseFloat(document.getElementById('TotalGramsWithoutAddtives').value);
+
+
+        // Do if Powder Pigment
+
+
+
+
+        // matt or gloss
+        if (Sub_Category.Gloss || Sub_Category.Matt) {
+            mattValue = parseFloat(document.getElementById('MattOrGlossINPTag').value);
+            gloss = parseFloat(document.getElementById('MattOrGlossINPTag').value);
+        } else {
+            mattValue = 1;
+            gloss = 1;
+        }
+
+        //console.log("Matt Values: ", mattValue, "  Gloss Values: ", gloss);
+        //console.log("Sum QTY: ", Sum_qty);
+
+
+        var Binder1Avalue = parseFloat(Sub_Category.Binder1Avalue);
+        var Binder1Bvalue = parseFloat(Sub_Category.Binder1Bvalue);
+        var Binder1Cvalue = parseFloat(Sub_Category.Binder1Cvalue);
+        var Binder1Dvalue = parseFloat(Sub_Category.Binder1dvalue);
+
+
+        var Binder2Avalue = parseFloat(Sub_Category.Binder2Avalue);
+
+        //console.log(`Binder1Avalue ${Binder1Avalue} ,  Binder1Bvalue ${Binder1Bvalue}  ,   Binder1Cvalue ${Binder1Cvalue} , Binder1Dvalue ${Binder1Dvalue}, Binder2Avalue ${Binder2Avalue}`);
+
+
+
+
+
+        console.log("Sum_qty", Sum_qty, " mattValue", mattValue, " gloss", gloss);
+
+        var Binder1INP = document.getElementById('Binder1INP');
+        var Binder2INP = document.getElementById('Binder2INP');
+
+        if (Sub_Category.Binder1) {
+            // error handle in no values enter by admin.
+            if (isNaN(Binder1Avalue) || isNaN(Binder1Bvalue) || isNaN(Binder1Cvalue) || isNaN(Binder1Dvalue)) {
+                alert("Binder calculations are not possible at Binder 1 without the proper binder equation for this sub-category.");
+            } else {
+                Binder1INP.value = (((Sum_qty * Binder1Avalue * mattValue) - (Binder1Bvalue * Binder1Cvalue * Sum_qty)) / Binder1Dvalue).toFixed(3).toString();
+            }
+
+
+
+
+        }
+
+        if (Sub_Category.Binder2EQ1) {
+            if (isNaN(Binder2Avalue)) {
+                alert("Binder calculations are not possible at Binder 2 without the proper binder equation for this sub-category.");
+            } else {
+                Binder2INP.value = ((Sum_qty * Binder2Avalue) - parseFloat(Binder1INP.value)).toFixed(3).toString();
+            }
+        } else if (Sub_Category.Binder2EQ2) {
+            if (isNaN(Binder2Avalue)) {
+                alert("Binder calculations are not possible at Binder 2 without the proper binder equation for this sub-category.");
+            } else {
+                Binder2INP.value = (Sum_qty * Binder2Avalue).toFixed(3).toString();
+            }
+        }
+
+
+        function AlertBinder(Binder1_, Binder2_) {
+            // alert("Binder 1: ", Binder1_);
+            // alert("Binder 2: ", Binder2_);
+        }
+
+    }
+
+    function isNumeric(event) {
+        var key = event.keyCode || event.which;
+        var keyChar = String.fromCharCode(key);
+
+        // Allow only numeric characters and special keys like Backspace, Delete, etc.
+        if (!/[\d.-]/.test(keyChar) && key !== 8 && key !== 9 && key !== 13 && key !== 27 && key !== 46) {
+            event.preventDefault();
+            return false;
+        }
+    }
+
+
 
 </script>
 
@@ -489,7 +1046,7 @@
 
     .CustomerNameInp {
         background-color: #ffff00;
-        color: rgba(255, 255, 0, 255);
+        color: #2d2d2d
     }
 
     .custum-file-upload {
@@ -611,14 +1168,23 @@
     }
 
     .CFCategory,
+    .CFSubCategory {
+        width: 15rem;
+    }
+
+    .CFCategory,
     .CFSubCategory,
     .MattOrGlossINP {
-        padding: 0.2rem;
+        padding: 0.3rem;
         background-color: #ffff00;
+        border: none;
+        border-radius: 10px;
+        outline: none;
     }
 
     .MattOrGlossINP {
         width: 5rem;
+        padding-left: .5rem;
     }
 
     .TopTables {
@@ -707,7 +1273,7 @@
     }
 
     .QuantityInput {
-        width: 3rem;
+        width: 100%;
         background: transparent;
         outline: none;
         border: none;
