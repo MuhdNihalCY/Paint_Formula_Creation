@@ -357,12 +357,13 @@ router.post('/FindAdditiveBinderDensityById/api', async (req, res) => {  // Empl
 });
 
 
-router.post('/CreateFormula', (req, res) => {
-console.log(req.body);
+router.post('/CreateFormula', EmployeeVerifyLogin, (req, res) => {
+  // console.log(req.body);
 
-/*
+
   function StoreRefImage(SavedData) {
     console.log("Saved data: ", SavedData);
+    console.log("req.files: ",req.files);
     if (req.files) {
       const imageData = req.files.Image;
       // console.log('Image data:', imageData);
@@ -377,10 +378,10 @@ console.log(req.body);
   }
 
 
-  console.log(req.body);
-  
+  // console.log(req.body);
+
   function calculateRatios(data) {
-    console.log("Calculating Data: ", data);
+    // console.log("Calculating Data: ", data);
     const ratios = {};
 
     // Get the Total Quantity
@@ -611,7 +612,7 @@ console.log(req.body);
                 })
               }
             })
-          
+
           })
         }
 
@@ -620,7 +621,7 @@ console.log(req.body);
 
     })
   })
-  */
+
 })
 
 router.post('/getCostingWithData', EmployeeVerifyLogin, (req, res) => {
@@ -796,7 +797,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
           Liter = true
         }
         NoQty = "minimum Quantity is 1";
-        console.log("Formulation: ",Formulation);
+       // console.log("Formulation: ", Formulation);
         res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, Item, MattOrGlossValue, MattOrGloss, NoQty });
       })
     })
@@ -837,7 +838,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
           if (Sub_Category.Liter) {
             Liter = true
           }
-          console.log("Formulation: ",Formulation);
+         // console.log("Formulation: ", Formulation.ImageBase64);
           res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss });
         })
       })
@@ -872,7 +873,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
           if (Sub_Category.Liter) {
             Liter = true
           }
-          console.log("Formulation: ",Formulation);
+          console.log("Formulation: ", Formulation);
           res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss });
         })
       })
@@ -2289,7 +2290,7 @@ router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', EmployeeVerif
 
 router.get('/home', EmployeeVerifyLogin, (req, res) => {
 
-  res.render('employee/CustomTrello',{EmployeeData: req.session.EmployeeData})
+  res.render('employee/CustomTrello', { EmployeeData: req.session.EmployeeData })
 })
 
 
@@ -2543,19 +2544,19 @@ router.get('/updateProItemState/:ItmeName/:CardFullName/:State', EmployeeVerifyL
 })
 
 
-router.get('/dataForFormulaCreation/api',EmployeeVerifyLogin,(req,res) => {
-  
-  employeeHelpers.getAllCategories().then((AllCategory)=>{
-    employeeHelpers.GetAllSubCategories().then((AllSubCategories)=>{
-      employeeHelpers.GetAllProducts().then((AllProducts)=>{
-        employeeHelpers.GetAllBinders().then((AllBinders)=>{
-          employeeHelpers.GetAllAdditives().then((AllAdditives)=>{
+router.get('/dataForFormulaCreation/api', EmployeeVerifyLogin, (req, res) => {
+
+  employeeHelpers.getAllCategories().then((AllCategory) => {
+    employeeHelpers.GetAllSubCategories().then((AllSubCategories) => {
+      employeeHelpers.GetAllProducts().then((AllProducts) => {
+        employeeHelpers.GetAllBinders().then((AllBinders) => {
+          employeeHelpers.GetAllAdditives().then((AllAdditives) => {
             var Data = {
-              Categories : AllCategory ,
-              SubCategories : AllSubCategories ,
-              Products : AllProducts ,
-              Binders : AllBinders ,
-              Additives : AllAdditives
+              Categories: AllCategory,
+              SubCategories: AllSubCategories,
+              Products: AllProducts,
+              Binders: AllBinders,
+              Additives: AllAdditives
             }
 
             res.json(Data)

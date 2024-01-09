@@ -87,7 +87,7 @@
                                         <div class="text">
                                             <span>Click to upload image</span>
                                         </div>
-                                        <input id="file" type="file" onchange="previewAttachmentImage()">
+                                        <input id="file" name="Image" type="file" onchange="previewAttachmentImage()">
                                     </label>
 
                                 </div>
@@ -558,7 +558,7 @@
                             id="GramInputTotalR${newRowCount}" value="0" readonly />
                     </td>
                     <td class="quantity">
-                        <input name="LiterInputTotalR1" class="InputQuantityVolumn" type="text"
+                        <input name="LiterInputTotalR${newRowCount}" class="InputQuantityVolumn" type="text"
                             id="LiterInputTotalR${newRowCount}" value="0" readonly />
                     </td>
                 </tr>
@@ -657,7 +657,7 @@
                             id="GramInputTotalR${newRowCount}" value="0" readonly />
                     </td>
                     <td class="quantity">
-                        <input name="LiterInputTotalR1" class="InputQuantityVolumn" type="text"
+                        <input name="LiterInputTotalR${newRowCount}" class="InputQuantityVolumn" type="text"
                             id="LiterInputTotalR${newRowCount}" value="0" readonly />
                     </td>
             `;
@@ -990,8 +990,75 @@
         document.getElementById('Total_Gram').value = TotalInGrams.toFixed(2);
         document.getElementById('Total_Volume').value = TotalInVolume.toFixed(2);
 
+        FindSolidContent()
+    }
+
+    function FindSolidContent() {
+        var ProductSolidContent = 0;
+        var SumOfVOCOfEachRow = 0;
+
+        var ProductsClassData = document.getElementsByClassName('SelectTinter');
+
+        if (ProductsClassData.length > 0) {
+            for (i = 0; i < ProductsClassData.length; i++) {
+                var j = i + 1;
+                if (ProductsClassData[i].value) {
+                    var ProductData = State.Products.find(tinter => tinter.Product_Id == ProductsClassData[i].value)
+                    if (ProductData) {
+                        var ProductQuantity = parseFloat(document.getElementById(`GramInputTotalR${j}`).value)
+                        // solid Content
+                        var SolidContent = parseFloat(ProductData.SolidContent) * ProductQuantity / 100;
+                        ProductSolidContent += SolidContent;
+
+                        // VOC
+                        var Voc = parseFloat(ProductData.VOC) * ProductQuantity / 100;
+                        SumOfVOCOfEachRow += Voc;
+                    }
+                }
+                // console.log("Product: ", ProductsClassData[i].value);
+            }
+        }
+        var TotalFormulaQuantity = parseFloat(document.getElementById('Total_Gram').value);
+        var FormulaSolidContent = (ProductSolidContent / TotalFormulaQuantity) * 100;
+
+        document.getElementById('CFFormulaSolidContent').value = FormulaSolidContent.toFixed(2);
+
+
+        // find Density of formula
+        var FormulaDesity = (parseFloat(document.getElementById('Total_Gram').value) / parseFloat(document.getElementById('Total_Volume').value)) * 1000;
+        document.getElementById('CFFormulaDensity').value = FormulaDesity.toFixed(3);
+
+        //   Find VOC
+        var SumOfVoc = (SumOfVOCOfEachRow / TotalFormulaQuantity) * 100;
+        var FormulaVOC = SumOfVoc * 10 * (FormulaDesity.toFixed(3) / 1000)
+
+        document.getElementById('CFFormulaVOC').value = FormulaVOC.toFixed(3);
+
+
+        // sampled QTY
+        document.getElementById('SampleQty').value = `${TotalFormulaQuantity} / ${document.getElementById('Total_Volume').value}`;
 
     }
+
+    /* function FindVOC() {
+         var SumOfVoc = 0;
+         var ProductsClassData = document.getElementsByClassName('SelectTinter');
+ 
+         if (ProductsClassData.length > 0) {
+             for (i = 0; i < ProductsClassData.length; i++) {
+                 var j = i + 1;
+                 if (ProductsClassData[i].value) {
+                     var ProductData = State.Products.find(tinter => tinter.Product_Id == ProductsClassData[i].value)
+                     if (ProductData) {
+                         var ProductQuantity = parseFloat(document.getElementById(`GramInputTotalR${j}`).value)
+                         var VOC = parseFloat(ProductData.SolidContent) * ProductQuantity / 100;
+                         ProductSolidContent += SolidContent;
+                     }
+                 }
+                 // console.log("Product: ", ProductsClassData[i].value);
+             }
+         }
+     }*/
 
 
 
@@ -1047,9 +1114,17 @@
         font-weight: 500;
     }
 
+    .CFclearAllBTN:hover,
+    .CFSaveBTN:hover {
+        color: whitesmoke;
+        font-weight: 600;
+    }
+
     .CFMinHeaderBTNs {
         margin-right: 2rem;
     }
+
+
 
     .MainSection {
         margin: 2rem 1rem;
@@ -1110,6 +1185,7 @@
         border-radius: 10px;
         border: 1px solid gray;
         background-color: transparent;
+        width: 90%;
     }
 
     .CustomerNameInp {
@@ -1119,7 +1195,7 @@
 
     .custum-file-upload {
         height: 100px;
-        width: 150px;
+        width: 90%;
         display: flex;
         flex-direction: column;
         align-items: space-between;
@@ -1181,7 +1257,10 @@
     }
 
     .AttachmentIMG {
-        height: 100px;
+        min-width: 50%;
+        max-width: 90%;
+        min-height: 100px;
+        max-height: 200px;
     }
 
     .popAttachementsCollections {
@@ -1215,7 +1294,7 @@
         padding: 0.5rem;
         border-radius: 10px;
         min-width: 3rem;
-        max-width: 5rem;
+        max-width: 7rem;
     }
 
     .RightSideSection {
