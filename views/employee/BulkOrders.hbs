@@ -35,19 +35,19 @@
                         <div class="BoMainSection">
                             <div class="BoTopsection">
                                 <div class="BoTopSection1">
-                                    <div class="BoDateDiv">
-                                        <label for="">Date :</label>
-                                        <input type="text" class="BoInpReadOnly" name="order_date" id=""
+                                    <div class="BoDateDiv OrderDateDiv">
+                                        <label for="">Date </label>
+                                        <input type="text" class="BoInpReadOnly OrderDateInp" name="order_date" id=""
                                             value="{{Formulation.Date}}" readonly>
                                     </div>
-                                    <div class="BoDateDiv">
-                                        <label for="">File No.:</label>
-                                        <input type="text" class="BoInpReadOnly" name="FileName"
+                                    <div class="BoDateDiv OrderFileDiv">
+                                        <label for="">File No.</label>
+                                        <input type="text" class="BoInpReadOnly FileNoInp" name="FileName"
                                             value="{{Formulation.FileNo}}" id="FileNO" readonly>
                                     </div>
                                     <div class="BoDateDiv">
-                                        <label for="">Customer Name : </label>
-                                        <input type="text" class="BoInpReadAndWrite" name="CustomerName"
+                                        <label for="">Customer Name </label>
+                                        <input type="text" class="BoInpReadAndWrite customerINp" name="CustomerName"
                                             value="{{Formulation.CustomerName}}" id="">
                                     </div>
 
@@ -57,17 +57,17 @@
                                             readonly>
                                     </div> --}}
                                     <div class="BoDateDiv">
-                                        <label for="">Color Code :</label>
-                                        <input type="text" class="BoInpReadOnly" name="ColorCde"
+                                        <label for="">Color Code </label>
+                                        <input type="text" class="BoInpReadOnly colorCodeInp" name="ColorCde"
                                             value="{{Formulation.ColorCode}}" id="" readonly>
                                     </div>
                                     <div class="BoDateDiv">
-                                        <label for="">ColorName : </label>
+                                        <label for="">ColorName </label>
                                         <input type="text" class="BoInpReadOnly" name="ColorName"
                                             value="{{Formulation.ColorName}}" id="" readonly>
                                     </div>
                                     <div class="BoDateDiv">
-                                        <label for="">Customer Ref :</label>
+                                        <label for="">Customer Ref </label>
                                         <input type="text" class="BoInpReadOnly" name="CustomerRef"
                                             value="{{Formulation.CustomerRef}}" id="" readonly>
                                     </div>
@@ -77,7 +77,7 @@
                                             value="{{Formulation.MixerName}}" id="" readonly>
                                     </div>
                                     <div class="BoDateDiv">
-                                        <label for="">Project no :</label>
+                                        <label for="">Project no </label>
                                         <input type="text" class="BoInpReadOnly" name="ProjectNo"
                                             value="{{Formulation.ProjectNo}}" id="" readonly>
                                     </div>
@@ -87,7 +87,7 @@
                                             id="" readonly>
                                     </div> --}}
                                     <div class="BoDateDiv">
-                                        <label for="">Referance Image:</label>
+                                        <label for="">Referance Image</label>
                                         <div class="BoRefImgDiv">
                                             {{!-- /images/RefImages/{{Formulation.FileNo}}.jpg --}}
                                             <img class="BoRefImg"
@@ -98,29 +98,29 @@
                                     {{!-- Last Area --}}
 
                                     <div class="BoBottomLeftSection">
-                                        <div class="BoDateDiv">
+                                        <div class="BoDateDiv BtSectionDiv">
                                             <label for="">Solid Content (%) : </label>
-                                            <input type="text" class="BoInpReadOnly" name="SolidContent"
+                                            <input type="text" class="BoInpReadOnly BTsectionINp" name="SolidContent"
                                                 value="{{Formulation.SolidContent}}" id="" readonly>
                                         </div>
-                                        <div class="BoDateDiv">
+                                        <div class="BoDateDiv BtSectionDiv">
                                             <label for="">VOC (Kg/Ltr) : </label>
-                                            <input type="text" class="BoInpReadOnly" name="VOC"
+                                            <input type="text" class="BoInpReadOnly BTsectionINp" name="VOC"
                                                 value="{{Formulation.VOC}}" id="" readonly>
                                         </div>
-                                        <div class="BoDateDiv">
+                                        <div class="BoDateDiv BtSectionDiv">
                                             <label for="">Density (Kg/Ltr) :</label>
-                                            <input type="text" class="BoInpReadOnly" name="Density"
+                                            <input type="text" class="BoInpReadOnly BTsectionINp" name="Density"
                                                 value="{{Formulation.Density}}" id="" readonly>
                                         </div>
-                                        <div class="BoDateDiv">
+                                        <div class="BoDateDiv BtSectionDiv">
                                             <label for="">Costing</label>
-                                            <input type="text" class="BoInpReadOnly" name="Costing" value="0"
-                                                id="BoCosting" readonly>
+                                            <input type="text" class="BoInpReadOnly BTsectionINp" name="Costing"
+                                                value="0" id="BoCosting" readonly>
                                         </div>
-                                        <div class="BoDateDiv">
+                                        <div class="BoDateDiv BtSectionDiv">
                                             <label for="">Sampled Qty : </label>
-                                            <input type="text" class="BoInpReadOnly" name="SampledQTY"
+                                            <input type="text" class="BoInpReadOnly BTsectionINp" name="SampledQTY"
                                                 value="{{Formulation.SampleQty}}" id="" readonly>
                                         </div>
                                     </div>
@@ -225,7 +225,8 @@
                                         <input type="text" id="BOPriceApiErrorINP" name="PriceErr" hidden>
                                     </div>
 
-                                    <hr>
+                                    {{!--
+                                    <hr> --}}
                                     {{#if UpdateOrder}}
                                     <input type="text" id="UpdatedOrder" value="UpdatedOrder" hidden>
                                     {{else}}
@@ -236,7 +237,7 @@
 
 
                                         {{!-- ADMainTable table table-bordered text-center ADcustom-border --}}
-                                        <table class="BoQTYTable BOQTYTable table table-bordered text-center">
+                                        {{!-- <table class="BoQTYTable BOQTYTable table table-bordered text-center">
                                             <thead class="BoTableHeader BOTableHeader">
                                                 <th>Tinters</th>
                                                 <th>QTY in Grams</th>
@@ -249,15 +250,32 @@
                                                     <td></td>
                                                 </tr>
                                             </tbody>
+                                        </table> --}}
+
+                                        <table class="BoQTYTable" id="Tintertable">
+                                            <thead class="QuantityHead">
+                                                <tr>
+                                                    <th class="SLTrow" rowspan="2">SL No.</th>
+                                                    <th class="TiterRow" rowspan="2">Tinters</th>
+                                                    <th colspan="2" class="quantity MainQuantity">Quantity</th>
+                                                </tr>
+                                                <tr>
+
+                                                    <th class="quantity">in Grams</th>
+                                                    <th class="quantity">in Volume</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="BoTAbleBody" id="TinterBody">
+
+                                            </tbody>
                                         </table>
                                     </div>
                                     <div class="BoBelowTable">
                                         <div class="BoDataBelowTable">
-                                            {{#if Binder1}}
                                             {{!--
                                             <hr> --}}
                                             <div class="BoBinderDIv">
-                                                <div class="BinderHeaderDiv">
+                                                {{!-- <div class="BinderHeaderDiv">
                                                     <p class="BoBinderHeader">Binder </p>
                                                     <div class="BOBindersubHeadDiv">
                                                         <p class="BinderGVsubHead">In QTY</p>
@@ -291,10 +309,138 @@
                                                             class="Binder2QTY" readonly>
                                                     </div>
                                                 </div>
-                                                {{/if}}
-                                            </div>
-                                            {{/if}}
+                                                {{/if}} --}}
 
+
+                                                <div class="Add_BinderSectio">
+                                                    <div class="WithouAdditvesSection">
+                                                        <p class="DetailText">Total without Additives</p>
+                                                        <div class="ReadOnlyInPSEct ">
+                                                            <div class=" withoutAdditiveGrams BOQuantity">
+                                                                <input type="text" readonly value="0"
+                                                                    class="InputReadOnly" id="TotalGramsWithoutAddtives"
+                                                                    name="TotalGramsWithoutAddtives">
+                                                            </div>
+                                                            <div class=" withoutAdditiveVolume BOQuantity"
+                                                                style="border-top-right-radius: 8px;">
+                                                                <input type="text" readonly value="0"
+                                                                    class="InputReadOnly"
+                                                                    id="TotalVolumeWithoutAddtives"
+                                                                    name="TotalVolumeWithoutAddtives">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="BinderSection">
+                                                        <p class="DetailText BindersText">Binders</p>
+                                                        <div id="BinderCollections" class="BindersCollection">
+                                                            <div id="Binder1Area" class="BindersArea">
+                                                                <input type="text" id="Binder1Name"
+                                                                    value="{{Formulation.Binder1Name}}"
+                                                                    class="BinderNameText" readonly name="Binder1">
+                                                                <input type="text" name="Binder1Ratio" id="Binder1Ratio"
+                                                                    value="{{Formulation.Binder1Ratio}}" hidden>
+
+                                                                <div class="BindersInputArea Binder1Area">
+                                                                    <div class="BindersInputDiv">
+                                                                        <input type="text" value="0"
+                                                                            class="BinderReadOnlyINp" id="Binder1QTY"
+                                                                            name="Binder1QTY">
+                                                                    </div>
+                                                                    <div class="BindersInputDiv">
+                                                                        <input type="text" value="0"
+                                                                            class="BinderReadOnlyINp" id="Binder1Volume"
+                                                                            name="Binder1Volume">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div id="Binder2Area" class="BindersArea">
+                                                                <input type="text" id="Binder2Name"
+                                                                    value="{{Formulation.Binder2Name}}"
+                                                                    class="BinderNameText" name="Binder2" readonly>
+                                                                <input type="text" name="Binder2Ratio" id="Binder2Ratio"
+                                                                    value="{{Formulation.Binder2Ratio}}" hidden>
+                                                                <div class="BindersInputArea Binder2Area">
+                                                                    <div class="BindersInputDiv">
+                                                                        <input type="text" value=""
+                                                                            class="BinderReadOnlyINp" id="Binder2QTY"
+                                                                            name="Binder2QTY" disabled>
+                                                                    </div>
+                                                                    <div class="BindersInputDiv">
+                                                                        <input type="text" value=""
+                                                                            class="BinderReadOnlyINp" id="Binder2Volume"
+                                                                            name="Binder2Volume" disabled>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="AdditiveSelection">
+                                                        <div class="AdditiveSelectionArea">
+                                                            <p class="DetailText AddtiveText">Additives</p>
+                                                            <div class="AdditiveArea">
+                                                                <input type="text" class="AdditveName" name="Additive"
+                                                                    value="{{Formulation.AdditiveName}}"
+                                                                    id="AdditiveName" readonly>
+                                                                <input type="text" name="AdditiveRatio"
+                                                                    id="AdditiveRatio"
+                                                                    value="{{Formulation.AdditiveRatio}}" hidden>
+                                                                {{!-- <select class="AdditiveSelect" name="additives"
+                                                                    id="AdditiveSelect"
+                                                                    onchange="HandleAdditiveChange()">
+                                                                    <option value="" readonly selected>Select Additive
+                                                                    </option>
+                                                                    {{#each Additives}}
+                                                                    <option value="{{this.Additive_Id}}">
+                                                                        {{this.Additive_Name}}</option>
+                                                                    {{/each}}
+                                                                </select> --}}
+                                                                <div class="AddPercentage">
+                                                                    <input type="text" class="AdditivePerInp"
+                                                                        name="AdditivePercentage"
+                                                                        value="{{Formulation.AdditivePercentage}}"
+                                                                        onchange="HandleAdditiveChange()"
+                                                                        oninput="HandleAdditiveChange()"
+                                                                        id="AdditivePercentage" value="0">
+                                                                    <p class="DetailText PercentageSign">%</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="AdditveInputArea">
+                                                            <div class="AdditiveInpDiv">
+                                                                <input type="text" id="AdditiveQTY" value="0"
+                                                                    class="AdditiveInpReadOnly" name="TotalAdditives">
+                                                            </div>
+                                                            <div class="AdditiveInpDiv">
+                                                                <input type="text" id="AdditiveVolume" value="0"
+                                                                    class="AdditiveInpReadOnly"
+                                                                    name="TotalAdditivesVolume">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="TotalSection">
+                                                        <p class="DetailText">Total</p>
+                                                        <div class="TotalInputArea"
+                                                            style="border-bottom-right-radius: 8px;">
+                                                            <div class="InputTotlaDiv">
+                                                                <input type="text" value="0" id="Total_Gram"
+                                                                    class="TotalInpReadOnly" name="TotalQtyInGram">
+                                                            </div>
+                                                            <div class="InputTotlaDiv"
+                                                                style="border-bottom-right-radius: 8px;">
+                                                                <input type="text" value="0" id="Total_Volume"
+                                                                    name="TotalQtyInLiter" class="TotalInpReadOnly">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            {{!--
                                             <hr>
                                             <div class="BoAdditiveDiv">
                                                 <div class="BinderHeaderDiv">
@@ -317,7 +463,7 @@
                                                             id="AdditiveVolume" readonly>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
 
                                         <div class="BoRemarksBoxArea">
@@ -330,6 +476,15 @@
                                                         readonly>{{Formulation.Remark}}</textarea>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <div class="PrintBottons">
+                                            <a href="/Printsmlabel/{{Formulation.FileNo}}" target="_blank"
+                                                class="PrintBTN">Print Style 1</a>
+                                            <a {{!-- href="/StockOut/PrintLabel/ST2/" --}} target="_blank"
+                                                class="PrintBTN">Print Style 2</a>
+                                            <a {{!-- href="/StockOut/PrintLabel/ST3/{{Formulation.FileNo}}" --}}
+                                                target="_blank" class="PrintBTN">Print Style 3</a>
                                         </div>
                                     </div>
                                 </div>
@@ -389,6 +544,7 @@
 
             var TintersCount = Formula.TintersCount;
 
+
             if (isLiter) {
                 // do as the formula in liter
                 for (var i = 1; i <= TintersCount; i++) {
@@ -399,6 +555,7 @@
                     newRow.classList.add('BoTableDataRow');
 
                     // Create cell elements for each column
+                    var SerialNoCell = document.createElement('td');
                     var tinterNameCell = document.createElement('td');
                     var tinterGramCell = document.createElement('td');
                     var tinterVolumeCell = document.createElement('td');
@@ -421,12 +578,19 @@
                     var TineterQTY = ((TinterVolume * parseFloat(Formula[`TinterDensity${i}`])) / 1000).toFixed(3);
 
                     // Customize cell elements by adding attributes
-                    tinterNameCell.innerHTML = `<input type="text" name="TineterName${i}" value="${tinterName}" id="TineterName${i}">`;
-                    tinterGramCell.innerHTML = `<input type="text" name="TinterGram${i}" value="${TineterQTY}" id="TinterGram${i}">`;
-                    tinterVolumeCell.innerHTML = `<input type="text" name="TinterVolume${i}" value="${TinterVolume}" id="TinterVolume${i}">`;
+                    SerialNoCell.textContent = i
+                    tinterNameCell.innerHTML = `<input type="text" name="TineterName${i}" class="TableTinterName" value="${tinterName}" id="TineterName${i}">`;
+                    tinterGramCell.innerHTML = `<input type="text" name="TinterGram${i}" class="TableTinterGrams" value="${TineterQTY}" id="TinterGram${i}">`;
+                    tinterVolumeCell.innerHTML = `<input type="text" name="TinterVolume${i}" class="TableTinterVolume" value="${TinterVolume}" id="TinterVolume${i}">`;
                     // tinterLiterCell.innerHTML = `<input type="text" name="TinterLiter${i}" id="TinterLiter${i}">`;
 
+
+                    // different class for quantities
+                    tinterGramCell.classList.add('quantity');
+                    tinterVolumeCell.classList.add('quantity');
+
                     // Append cell elements to the row element
+                    newRow.appendChild(SerialNoCell);
                     newRow.appendChild(tinterNameCell);
                     newRow.appendChild(tinterGramCell);
                     newRow.appendChild(tinterVolumeCell);
@@ -439,6 +603,7 @@
 
                 // calculate Binder and Additive
                 var FromulaVolume = parseFloat(Formula.TotalQtyInLiter)
+                console.log("Formula: ", Formula);
 
                 var Binder1Value = Formula.Binder1
                 var Binder2Value = Formula.Binder2
@@ -486,6 +651,8 @@
                     document.getElementById('AdditiveQTY').value = additiveQty;
                     document.getElementById('AdditiveVolume').value = AdditiveVolume
                 }
+
+
 
             } else {
                 // do as the formula in Kilogram
@@ -577,14 +744,64 @@
                     document.getElementById('AdditiveQTY').value = additiveQty
                     document.getElementById('AdditiveVolume').value = AdditiveVolume
                 }
+
+
             }
         }
 
 
         await calculateAll(Responses); // Wait for calculateAll to complete
-
+        TotalWithoutAdditivesandBinders()
+        hideLoading();
         calculateCost(Responses); // Call calculateCost after calculateAll is completed
     }
+
+    function TotalWithoutAdditivesandBinders() {
+        var TableTinterGrams = document.getElementsByClassName('TableTinterGrams');
+        var TableTinterVolume = document.getElementsByClassName('TableTinterVolume');
+
+        var TotalTinterInGrams = 0;
+        var TotalTintersInVolume = 0;
+
+
+        var TinterCount = TableTinterGrams.length
+
+        for (i = 0; i < TinterCount; i++) {
+            TotalTinterInGrams += parseFloat(TableTinterGrams[i].value);
+            TotalTintersInVolume += parseFloat(TableTinterVolume[i].value);
+        }
+
+        //  console.log("Total Tinter in GRams: ", TotalTinterInGrams, "  in Volume: ", TotalTintersInVolume);
+        document.getElementById('TotalGramsWithoutAddtives').value = TotalTinterInGrams;
+        document.getElementById('TotalVolumeWithoutAddtives').value = TotalTintersInVolume;
+
+        TotalOfOrder()
+    }
+
+    function TotalOfOrder() {
+        var TotalTinterInGrams = parseFloat(document.getElementById('TotalGramsWithoutAddtives').value) || 0;
+        var TotalTintersInVolume = parseFloat(document.getElementById('TotalVolumeWithoutAddtives').value) || 0;
+
+        var Binder1QTY = parseFloat(document.getElementById('Binder1QTY').value) || 0;
+        var Binder1Volume = parseFloat(document.getElementById('Binder1Volume').value) || 0;
+
+        var Binder2QTY = parseFloat(document.getElementById('Binder2QTY').value) || 0;
+        var Binder2Volume = parseFloat(document.getElementById('Binder2Volume').value) || 0;
+
+        var AdditiveQTY = parseFloat(document.getElementById('AdditiveQTY').value) || 0;
+        var AdditiveVolume = parseFloat(document.getElementById('AdditiveVolume').value) || 0;
+
+        var TotalQty = TotalTinterInGrams + Binder1QTY + Binder2QTY + AdditiveQTY;
+        var TotalVolume = TotalTintersInVolume + Binder1Volume + Binder2Volume + AdditiveVolume;
+
+        console.log("Total Quantity:", TotalQty);
+        console.log("Total Volume:", TotalVolume);
+
+        document.getElementById('Total_Gram').value = TotalQty.toFixed(2);
+        document.getElementById('Total_Volume').value = TotalVolume.toFixed(2);
+
+    }
+
 
     function calculateCost(Responses) {
         // alert("Calculating Cost");
@@ -993,9 +1210,7 @@
     .BoInpReadOnly,
     .BoInpReadAndWrite {
         margin-top: 5px;
-        border: 1px solid rgb(92, 92, 92);
         color: #292929;
-        border-left-width: 3px;
         padding: 5px;
         font-size: 15px;
         width: 100%;
@@ -1005,15 +1220,28 @@
         background-color: #e0e0e0;
     }
 
+    .OrderDateDiv,
+    .OrderFileDiv {
+        display: flex;
+        gap: 1rem;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .OrderDateInp,
+    .FileNoInp {
+        background-color: #575b5b;
+        color: #e2e2e2;
+        width: 10rem;
+    }
+
     .BoInpReadAndWrite {
-        background-color: whitesmoke;
-        border-left-color: blue;
-        border-left-width: 4px;
+        background-color: #cfd1dc;
         color: black;
     }
 
     .BoDateDiv label {
-        font-size: 20px;
+        font-size: 15px;
         font-weight: 600;
         margin-top: 1rem;
     }
@@ -1030,6 +1258,26 @@
         max-height: 10vw;
         width: auto;
     }
+
+    .customerINp,
+    .colorCodeInp {
+        background-color: #ffff00;
+    }
+
+    .BoInpReadOnly,
+    .BoInpReadAndWrite {
+        border: none;
+        outline: none;
+    }
+
+    .BtSectionDiv {
+        flex-direction: row;
+    }
+
+    .BTsectionINp {
+        width: 12rem;
+    }
+
 
     .BoTopSection2 {
         width: 84%;
@@ -1054,7 +1302,7 @@
     .BoCategory label,
     .BoSubCategory label,
     .BoEnterQuantityDiv label {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 600;
         text-align: left !important;
         margin-right: 1.5rem;
@@ -1069,7 +1317,7 @@
         text-align: left !important;
         padding: 11px 11px;
         border: transparent;
-        background-color: #e0e0e0;
+        background-color: #ffff00;
     }
 
     .BoCategory i,
@@ -1115,6 +1363,7 @@
         font-size: 20px;
         font-weight: 600;
         text-align: center;
+        width: 100%;
     }
 
     #ProductQTY,
@@ -1122,15 +1371,14 @@
         font-size: 20px;
         font-weight: 600;
         width: 8rem;
+        background-color: #ffff00;
+        padding: .5rem;
+        border: none;
+        outline: none;
     }
 
     .BoDataBelowTable {
-        width: 60%;
-        border: 1px solid gray;
-        padding: 2rem;
-        font-size: 18px;
-        font-weight: 600;
-        padding-right: 10px;
+        width: 100%;
     }
 
     .BoBindersAndAdditivesUnits {
@@ -1182,13 +1430,17 @@
         margin-bottom: 1rem;
     }
 
+    .AdditveName {
+        margin-bottom: 0;
+    }
+
     .Binder1QTY,
     .Binder2QTY,
     .AdditiveQTY,
     #Binder1Volume,
     #Binder2Volume {
         border: none;
-        background: #e0e0e0;
+        background: none;
         padding: .5rem;
         max-width: 7rem;
     }
@@ -1198,20 +1450,22 @@
     }
 
     .BoRemarksBoxArea {
-        width: 39%;
+        width: 100%;
     }
 
     .BoBelowTable {
         width: 100%;
         display: flex;
         justify-content: space-between;
+        flex-direction: column;
+        gap: 2rem;
     }
 
     .BoRemarksDIVBox {
         margin-top: 0rem;
         width: 100%;
         border: 1px solid rgba(0, 0, 0, 0.319);
-        background-color: #6b6b6b;
+        background-color: #575b5b;
         border-radius: 5px;
         margin-bottom: 5rem;
     }
@@ -1220,11 +1474,12 @@
         display: flex;
         align-items: center;
         padding: 0.5rem 1rem;
-        background-color: #414141;
+        background-color: #575b5b;
         width: 100%;
         color: white;
         font-size: 18px;
         font-weight: 600;
+        border-bottom: 1px solid #20c3c3;
     }
 
     .BoRemarkHeaderDiv p {
@@ -1289,5 +1544,336 @@
         50% {
             transform: scale(1);
         }
+    }
+
+    #Tintertable,
+    #TinterQuantityTable {
+        border: none;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .TinterQuantityTable {
+        border: none;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    .SLTrow {
+        width: 3rem;
+    }
+
+    .TiterRow {
+        /*width: 20rem;*/
+    }
+
+    th,
+    td {
+        border-bottom: 1px solid #20c3c3;
+        border-left: 1px solid #20c3c3;
+        /* border: 1px solid #20c3c3;*/
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #575b5b;
+        color: white;
+    }
+
+    td {
+        background-color: #575b5b;
+        color: white;
+    }
+
+    .quantity {
+        background-color: #cfd1dc;
+        color: #4e5570;
+        /* width: 20%;*/
+    }
+
+    .TableTinterName {
+        color: white;
+    }
+
+
+
+    .Add_BinderSectio {
+        width: 100%;
+        background-color: #575b5b;
+        border-radius: 9px;
+    }
+
+    .DetailText {
+        font-size: 15px;
+        color: white;
+    }
+
+    .WithouAdditvesSection,
+    .BinderSection,
+    .BindersArea {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .ReadOnlyInPSEct {
+        display: flex;
+        justify-content: end;
+        width: 35%;
+    }
+
+    .InputRead {
+        width: 100%;
+    }
+
+    .withoutAdditiveVolume,
+    .withoutAdditiveGrams {
+        background-color: #cfd1dc;
+        color: #4e5570;
+        width: 20rem;
+        border-left: 1px solid #20c3c3;
+    }
+
+    .DetailText {
+        margin-top: 1rem;
+        margin-left: 1rem;
+    }
+
+
+
+    .WithouAdditvesSection {
+        border-bottom: 1px solid #20c3c3;
+    }
+
+    .BinderNameText,
+    .AdditveName {
+        background-color: transparent;
+        text-align: left;
+        border: none;
+        outline: none;
+        color: white;
+        margin-top: 10px;
+    }
+
+    .BinderSection {
+        gap: 2rem;
+        border-bottom: 1px solid #20c3c3;
+    }
+
+    .BindersText {
+        margin-top: 10px;
+    }
+
+    .BindersInputArea {
+        display: flex;
+        justify-content: end;
+        background-color: #cfd1dc;
+        color: #4e5570;
+    }
+
+    .BindersInputDiv {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-left: 1px solid #20c3c3;
+    }
+
+    .BinderReadOnlyINp {
+        background-color: transparent;
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 7px;
+        text-align: center;
+        color: #4e5570;
+    }
+
+    .AdditiveSelection {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1px solid #20c3c3;
+    }
+
+    .AdditiveSelectionArea {
+        display: flex;
+        align-items: baseline;
+        padding: .5rem 0;
+    }
+
+    .AdditiveArea,
+    .AdditveInputArea {
+        display: flex;
+        align-items: baseline;
+    }
+
+    .AdditiveSelect {
+        width: 8rem;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        background-color: #cfd1dc;
+        color: #3e4562;
+        margin: 0 1rem;
+        padding: 0.2rem;
+    }
+
+    .AdditivePerInp {
+        width: 3rem;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        background-color: #cfd1dc;
+        color: #3e4562;
+        padding: 0.2rem .5rem;
+    }
+
+    .PercentageSign {
+        margin: 0;
+        margin-left: 0.5rem;
+        margin-right: 1rem;
+    }
+
+    .AdditveInputArea {
+        display: flex;
+        justify-content: start;
+        background-color: #cfd1dc;
+        color: #4e5570;
+        width: 100%;
+    }
+
+    .AdditiveInpDiv {
+        padding: .5rem 0;
+        width: 50%;
+        border-left: 1px solid #20c3c3;
+    }
+
+    .AdditiveInpReadOnly,
+    .TotalInpReadOnly {
+        background-color: transparent;
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 7px;
+        text-align: center;
+        color: #4e5570;
+    }
+
+    .AddtiveText {
+        margin: 0 1rem;
+    }
+
+    .TotalSection {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .TotalInputArea {
+        display: flex;
+        justify-content: end;
+        display: flex;
+        justify-content: end;
+        background-color: #cfd1dc;
+        color: #4e5570;
+        width: 35%;
+    }
+
+    .InputTotlaDiv {
+        padding: .5rem 0;
+        width: 8rem;
+        border-left: 1px solid #20c3c3;
+        width: 50%;
+    }
+
+
+    .InputReadOnly {
+        box-sizing: border-box;
+        text-align: center;
+        background: transparent;
+        outline: none;
+        border: none;
+        color: #4e5570;
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .MainQuantity {
+        width: 35%;
+    }
+
+    #Binder1Volume,
+    #Binder2Volume {
+        width: 100%;
+    }
+
+    .BindersCollection {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        align-items: end;
+    }
+
+    .BindersArea {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .Binder1Area,
+    .Binder2Area {
+        width: 50%;
+    }
+
+    .AdditiveSelectionArea {
+        width: 65%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .AdditiveArea {
+        width: 60%;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .AddPercentage {
+        display: flex;
+    }
+
+    .AdditveInputArea {
+        width: 35%;
+    }
+
+    .PrintBottons {
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    .PrintBTN {
+        background-color: #141919;
+        color: #bebfbf;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        text-underline-offset: none;
+    }
+
+    .PrintBTN:hover {
+        background-color: #4d4d4d;
+        color: #e9e9e9;
     }
 </style>

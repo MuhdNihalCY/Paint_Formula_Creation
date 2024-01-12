@@ -363,7 +363,7 @@ router.post('/CreateFormula', EmployeeVerifyLogin, (req, res) => {
 
   function StoreRefImage(SavedData) {
     console.log("Saved data: ", SavedData);
-    console.log("req.files: ",req.files);
+    console.log("req.files: ", req.files);
     if (req.files) {
       const imageData = req.files.Image;
       // console.log('Image data:', imageData);
@@ -797,7 +797,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
           Liter = true
         }
         NoQty = "minimum Quantity is 1";
-       // console.log("Formulation: ", Formulation);
+        // console.log("Formulation: ", Formulation);
         res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, Item, MattOrGlossValue, MattOrGloss, NoQty });
       })
     })
@@ -838,7 +838,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
           if (Sub_Category.Liter) {
             Liter = true
           }
-         // console.log("Formulation: ", Formulation.ImageBase64);
+          // console.log("Formulation: ", Formulation.ImageBase64);
           res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss });
         })
       })
@@ -874,6 +874,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
             Liter = true
           }
           console.log("Formulation: ", Formulation);
+          console.log("MattorGlossValue: ", MattOrGlossValue);
           res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss });
         })
       })
@@ -2565,6 +2566,11 @@ router.get('/dataForFormulaCreation/api', EmployeeVerifyLogin, (req, res) => {
       })
     })
   })
+})
+
+
+router.post('/StockOut/PrintLabel/ST3/FileNo',EmployeeVerifyLogin,(req,res)=>{
+  
 })
 
 
