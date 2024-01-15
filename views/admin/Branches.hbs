@@ -805,7 +805,7 @@
             oldStockCell.classList.add("USFormReadOnly");
             oldStockCell.id = `oldProductStock${index}`
             // console.log("Stocsk:: ",ProductStock ,"  for : ",product.Product_Name)
-            oldStockCell.textContent = ProductStock;
+            oldStockCell.textContent = ProductStock.toFixed(3);
             row.appendChild(oldStockCell);
 
             const standardUnitCell = document.createElement("td");
@@ -879,7 +879,7 @@
             const oldStockCell = document.createElement("td");
             oldStockCell.classList.add("USFormReadOnly");
             oldStockCell.id = `oldBinderStock${index}`
-            oldStockCell.textContent = BinderStock;
+            oldStockCell.textContent = BinderStock.toFixed(3);
             row.appendChild(oldStockCell);
 
             const actionCell = document.createElement("td");
@@ -944,7 +944,7 @@
             const oldStockCell = document.createElement("td");
             oldStockCell.classList.add("USFormReadOnly");
             oldStockCell.id = `oldAdditiveStock${index}`
-            oldStockCell.textContent = AdditiveStock;
+            oldStockCell.textContent = AdditiveStock.toFixed(3);
             row.appendChild(oldStockCell);
 
             const actionCell = document.createElement("td");
