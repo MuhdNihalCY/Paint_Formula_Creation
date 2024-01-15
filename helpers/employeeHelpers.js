@@ -299,7 +299,7 @@ module.exports = {
                     Tinter.BranchStocks.forEach((OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
                             FoundBranchStock = true;
-                            if (parseInt(OneBranch.Stock) > TinterQty) {
+                            if (parseInt(OneBranch.Stock) > (TinterQty/1000)) {
                                 State.HaveStock = true;
                                 State.AvailableStock = parseFloat(OneBranch.Stock);
                             } else {
@@ -342,7 +342,7 @@ module.exports = {
 
                     Binder.BranchStocks.forEach((OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            if (parseFloat(OneBranch.Stock) > BinderQTY) {
+                            if (parseFloat(OneBranch.Stock) > (BinderQTY/1000)) {
                                 // have Stock for this formula
                                 BranchFound = true;
                                 State.HaveStock = true;
@@ -383,7 +383,7 @@ module.exports = {
 
                     Additive.BranchStocks.forEach((OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            if (parseFloat(OneBranch.Stock) > AdditiveQTY) {
+                            if (parseFloat(OneBranch.Stock) > (AdditiveQTY/1000)) {
                                 // have Stock for this formula
                                 BranchFound = true;
                                 State.HaveStock = true;
@@ -423,7 +423,7 @@ module.exports = {
                     var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": OrderFile[`TineterName${i}`] });
                     Product.BranchStocks.forEach(async (OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            OneBranch.Stock = parseFloat(OneBranch.Stock) - parseFloat(OrderFile[`TinterGram${i}`]);
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile[`TinterGram${i}`])/1000);
                             await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Name": OrderFile[`TineterName${i}`] }, { $set: { BranchStocks: Product.BranchStocks } });
                         }
                     })
@@ -434,7 +434,7 @@ module.exports = {
                     var Binder1 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder1 });
                     Binder1.BranchStocks.forEach(async (OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            OneBranch.Stock = parseFloat(OneBranch.Stock) - parseFloat(OrderFile.Binder1QTY);
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile.Binder1QTY)/1000);
                             await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder1 }, { $set: { BranchStocks: Binder1.BranchStocks } });
                         }
                     })
@@ -447,7 +447,7 @@ module.exports = {
                     var Binder2 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder2 });
                     Binder2.BranchStocks.forEach(async (OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            OneBranch.Stock = parseFloat(OneBranch.Stock) - parseFloat(OrderFile.Binder2QTY);
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile.Binder2QTY)/1000);
                             await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder2 }, { $set: { BranchStocks: Binder2.BranchStocks } });
                         }
                     })
@@ -460,7 +460,7 @@ module.exports = {
                     var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Name": OrderFile.Additive });
                     Additive.BranchStocks.forEach(async (OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            OneBranch.Stock = parseFloat(OneBranch.Stock) - parseFloat(OrderFile.AdditiveQTY);
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile.AdditiveQTY)/1000);
                             await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Name": OrderFile.Additive }, { $set: { BranchStocks: Additive.BranchStocks } });
                         }
                     })
