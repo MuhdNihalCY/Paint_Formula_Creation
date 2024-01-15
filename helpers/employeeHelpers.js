@@ -367,6 +367,7 @@ module.exports = {
         })
     },
     AdditiveCheckStock: (AdditiveName, AdditiveQTY, Branch) => {
+        // console.log("AdditiveQTY: ",AdditiveQTY);
         var State = {
             HaveStock: false,
             AvailableStock: 0
