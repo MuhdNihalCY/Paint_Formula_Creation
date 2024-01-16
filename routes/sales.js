@@ -19,7 +19,7 @@ const upload = multer({ storage: storage });
 
 
 const SalesVerifyLogin = (req, res, next) => {
-    
+
     if (req.session.SalesData) {
         next();
     } else {
@@ -258,40 +258,82 @@ router.get('/home', SalesVerifyLogin, (req, res) => {
 
 router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
     var BranchName = req.session.SalesData.Branch;
-    employeeHelpers.GetAllCards(BranchName).then((AllCards) => {
-        //  console.log(AllCards);
-        employeeHelpers.getAllLists(BranchName).then((AllLists) => {
-            employeeHelpers.getAllUsers(BranchName).then((AllUsers) => {
-                employeeHelpers.getAllCustomers(BranchName).then((AllCustomers) => {
-                    employeeHelpers.GetAllFormulations().then((Formulas) => {
-                        employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas).then((UpdatedFromuls) => {
-                            employeeHelpers.getAllLabels(BranchName).then((AllLabels) => {
 
-                                // console.log("Formulas = ", Formulas[2]);
+    // Define an array of promise-producing functions
+    const promiseFunctions = [
+        employeeHelpers.GetAllCards(BranchName),
+        employeeHelpers.getAllLists(BranchName),
+        employeeHelpers.getAllUsers(BranchName),
+        employeeHelpers.getAllCustomers(BranchName),
+        employeeHelpers.GetAllFormulations(),
+        employeeHelpers.getAllLabels(BranchName),
+    ];
 
-                                var data = {
-                                    AllCards: AllCards,
-                                    AllLists: AllLists,
-                                    AllUsers: AllUsers,
-                                    Customers: AllCustomers,
-                                    Formulas: UpdatedFromuls,
-                                    Labels: AllLabels
-                                }
-                                res.json(data);
-                            })
-                        })
-                    })
+    // Execute all promises concurrently using Promise.all
+    Promise.all(promiseFunctions)
+        .then(([AllCards, AllLists, AllUsers, AllCustomers, Formulas, AllLabels]) => {
+            console.log("AllCards.length: ", AllCards.length);
+            console.log("AllLists.length: ", AllLists.length);
+            console.log("AllUsers.length:", AllUsers.length);
+            console.log("AllCustomers.length:", AllCustomers.length);
+            console.log("Formulas.length:", Formulas.length);
 
-                })
-            })
+            // Now that you have Formulas, call the next function
+            return employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas)
+                .then((UpdatedFromuls) => {
+                    console.log("UpdatedFromuls.length: ", UpdatedFromuls.length);
+
+                    var data = {
+                        AllCards: AllCards,
+                        AllLists: AllLists,
+                        AllUsers: AllUsers,
+                        Customers: AllCustomers,
+                        Formulas: UpdatedFromuls,
+                        Labels: AllLabels
+                    };
+
+                    res.json(data);
+                });
         })
-    })
+        .catch(error => {
+            // Handle errors here
+            console.error("Error:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        });
+    // employeeHelpers.GetAllCards(BranchName).then((AllCards) => {
+    //     //  console.log(AllCards);
+    //     employeeHelpers.getAllLists(BranchName).then((AllLists) => {
+    //         employeeHelpers.getAllUsers(BranchName).then((AllUsers) => {
+    //             employeeHelpers.getAllCustomers(BranchName).then((AllCustomers) => {
+    //                 employeeHelpers.GetAllFormulations().then((Formulas) => {
+    //                     employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas).then((UpdatedFromuls) => {
+    //                         employeeHelpers.getAllLabels(BranchName).then((AllLabels) => {
+
+    //                             // console.log("Formulas = ", Formulas[2]);
+
+    //                             var data = {
+    //                                 AllCards: AllCards,
+    //                                 AllLists: AllLists,
+    //                                 AllUsers: AllUsers,
+    //                                 Customers: AllCustomers,
+    //                                 Formulas: UpdatedFromuls,
+    //                                 Labels: AllLabels
+    //                             }
+    //                             res.json(data);
+    //                         })
+    //                     })
+    //                 })
+
+    //             })
+    //         })
+    //     })
+    // })
 })
 
 router.post('/saveCustomer', SalesVerifyLogin, (req, res) => {
     employeeHelpers.SaveCustomer(req.body, req.session.SalesData).then((Response) => {
         if (Response.Error) {
-            res.json({ Error: Response.Error});
+            res.json({ Error: Response.Error });
         } else {
             var data = req.body
             data._id = Response.response;
@@ -725,8 +767,8 @@ router.post('/uploadLedgerData', async (req, res) => {
 
 });
 
-router.get('/GetAllCustomerPurchaseData/api/:CustomerName',SalesVerifyLogin,(req,res) =>{
-    employeeHelpers.getAllCustomerPurchaseDataByName(req.params.CustomerName).then((AllData)=>{
+router.get('/GetAllCustomerPurchaseData/api/:CustomerName', SalesVerifyLogin, (req, res) => {
+    employeeHelpers.getAllCustomerPurchaseDataByName(req.params.CustomerName).then((AllData) => {
         res.json(AllData);
     })
 })

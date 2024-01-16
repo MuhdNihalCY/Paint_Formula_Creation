@@ -198,13 +198,14 @@ module.exports = {
     },
     GetAllFormulations: () => {
         return new Promise(async (resolve, reject) => {
-            var Formulations = db.get().collection(collection.FORMULA_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
+            var Formulations = await db.get().collection(collection.FORMULA_COLLECTION).find({}, { projection: { ImageBase64: 0 } }).sort({ "InsertedTime": -1 }).toArray();  //
+            //  console.log("Formulations: ", Formulations);
             resolve(Formulations)
         })
     },
     getAllCategories: () => {
         return new Promise(async (resolve, reject) => {
-            let Categories = db.get().collection(collection.CATEGORY_COLLECTION).find().toArray();
+            let Categories = await db.get().collection(collection.CATEGORY_COLLECTION).find().toArray();
             resolve(Categories);
         })
     },
@@ -299,7 +300,7 @@ module.exports = {
                     Tinter.BranchStocks.forEach((OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
                             FoundBranchStock = true;
-                            if (parseInt(OneBranch.Stock) > (TinterQty/1000)) {
+                            if (parseInt(OneBranch.Stock) > (TinterQty / 1000)) {
                                 State.HaveStock = true;
                                 State.AvailableStock = parseFloat(OneBranch.Stock);
                             } else {
@@ -342,7 +343,7 @@ module.exports = {
 
                     Binder.BranchStocks.forEach((OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            if (parseFloat(OneBranch.Stock) > (BinderQTY/1000)) {
+                            if (parseFloat(OneBranch.Stock) > (BinderQTY / 1000)) {
                                 // have Stock for this formula
                                 BranchFound = true;
                                 State.HaveStock = true;
@@ -383,7 +384,7 @@ module.exports = {
 
                     Additive.BranchStocks.forEach((OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            if (parseFloat(OneBranch.Stock) > (AdditiveQTY/1000)) {
+                            if (parseFloat(OneBranch.Stock) > (AdditiveQTY / 1000)) {
                                 // have Stock for this formula
                                 BranchFound = true;
                                 State.HaveStock = true;
@@ -423,7 +424,7 @@ module.exports = {
                     var Product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Name": OrderFile[`TineterName${i}`] });
                     Product.BranchStocks.forEach(async (OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile[`TinterGram${i}`])/1000);
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile[`TinterGram${i}`]) / 1000);
                             await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ "Product_Name": OrderFile[`TineterName${i}`] }, { $set: { BranchStocks: Product.BranchStocks } });
                         }
                     })
@@ -434,7 +435,7 @@ module.exports = {
                     var Binder1 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder1 });
                     Binder1.BranchStocks.forEach(async (OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile.Binder1QTY)/1000);
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile.Binder1QTY) / 1000);
                             await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder1 }, { $set: { BranchStocks: Binder1.BranchStocks } });
                         }
                     })
@@ -447,7 +448,7 @@ module.exports = {
                     var Binder2 = await db.get().collection(collection.BINDER_COLLECTION).findOne({ "Binder_Name": OrderFile.Binder2 });
                     Binder2.BranchStocks.forEach(async (OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile.Binder2QTY)/1000);
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile.Binder2QTY) / 1000);
                             await db.get().collection(collection.BINDER_COLLECTION).updateOne({ "Binder_Name": OrderFile.Binder2 }, { $set: { BranchStocks: Binder2.BranchStocks } });
                         }
                     })
@@ -460,7 +461,7 @@ module.exports = {
                     var Additive = await db.get().collection(collection.ADDITIVE_COLLECTION).findOne({ "Additive_Name": OrderFile.Additive });
                     Additive.BranchStocks.forEach(async (OneBranch) => {
                         if (OneBranch.BranchName === Branch) {
-                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile.AdditiveQTY)/1000);
+                            OneBranch.Stock = parseFloat(OneBranch.Stock) - (parseFloat(OrderFile.AdditiveQTY) / 1000);
                             await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Name": OrderFile.Additive }, { $set: { BranchStocks: Additive.BranchStocks } });
                         }
                     })
@@ -1389,24 +1390,44 @@ module.exports = {
     },
     getAllMeasuringUnitOfAllFormulas: (Formulas) => {
         return new Promise(async (resolve, reject) => {
+            // Fetch all Subcategories at once
+            const subcategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION)
+                .find({ SubCategory: { $in: Formulas.map(formula => formula.SubCategoryName) } })
+                .toArray();
+
+            // Create a map for quick lookups
+            const subcategoryMap = new Map(subcategories.map(subcategory => [subcategory.SubCategory, subcategory]));
+
             for (let i = 0; i < Formulas.length; i++) {
-                const Formula = Formulas[i];
-                // console.log("Formula: ", Formula);
+                const formula = Formulas[i];
+                const subcategory = subcategoryMap.get(formula.SubCategoryName);
 
-                // this takes a bit of time
-                const Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION)
-                    .findOne({ SubCategory: Formula.SubCategoryName });
-
-                if (Subcategory.Liter) {
-                    Formula.Unit = "Liter";
+                if (subcategory && subcategory.Liter) {
+                    formula.Unit = "Liter";
                 } else {
-                    Formula.Unit = "Kilogram";
+                    formula.Unit = "Kilogram";
                 }
-                //  console.log(Formula);
             }
 
-            // do this after the loop ends 
-            resolve(Formulas)
+            resolve(Formulas);
+            // for (let i = 0; i < Formulas.length; i++) {
+            //     const Formula = Formulas[i];
+            //     // console.log("Formula: ", Formula);
+
+            //     // this takes a bit of time
+            //     const Subcategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION)
+            //         .findOne({ SubCategory: Formula.SubCategoryName });
+
+            //     if (Subcategory.Liter) {
+            //         Formula.Unit = "Liter";
+            //     } else {
+            //         Formula.Unit = "Kilogram";
+            //     }
+            //     //  console.log(Formula);
+            // }
+
+            // // do this after the loop ends 
+            // resolve(Formulas)
         })
     },
     InsertNewCard: (NewCard) => {

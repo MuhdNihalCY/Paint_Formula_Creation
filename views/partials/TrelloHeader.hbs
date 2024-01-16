@@ -19,18 +19,20 @@
                             <div class="HeaderLinkItem">Home </div>
                         </a></li>
                     <li>
-                        <a {{#if SalesLogged}} href="/sales/Customer" {{/if}} {{#if OfficeLogged}}
-                            href="/office/Customer" {{/if}} {{#if DispatcherLoggedIn}}
-                            href="/dispatcher/Customer" {{/if}} {{#if DriverLoggedIn}}
-                            href="/driver/Customer" {{/if}}>
+                        <a {{#if SalesLogged}} href="/sales/Customer" {{/if}}
+                         {{#if OfficeLogged}} href="/office/Customer" {{/if}} 
+                         {{#if DispatcherLoggedIn}} href="#" aria-disabled="true" hidden {{/if}} 
+                         {{#if DriverLoggedIn}} href="#" aria-disabled="true" hidden {{/if}}>
                             <div class="HeaderLinkItem">Customers </div>
                         </a>
                     </li>
-                   
+
                     {{!-- {{#if SalesLogged}}
-                    <li><a href="/sales/AllFormula"><div class="HeaderLinkItem">All Formula </div></a></li>
+                    <li><a href="/sales/AllFormula">
+                            <div class="HeaderLinkItem">All Formula </div>
+                        </a></li>
                     {{/if}} --}}
-                   
+
                     <li><a class="profile-btn" {{#if SalesLogged}} href="/sales/Logout" {{/if}} {{#if OfficeLogged}}
                             href="/office/Logout" {{/if}} {{#if DispatcherLoggedIn}} href="/dispatcher/Logout" {{/if}}
                             {{#if DriverLoggedIn}} href="/driver/Logout" {{/if}}>Logout </a></li>
