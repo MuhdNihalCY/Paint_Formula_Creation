@@ -29,172 +29,162 @@ router.get('/logout', DriverVerifyLogin, (req, res) => {
     res.redirect('/driver');
 })
 
-router.get('/getAllCardsFromDriver', DriverVerifyLogin, async (req, res) => {
-    var DirvarName = req.session.DriverData.UserName
-    try {
-        var Cards = await trelloHelpers.getAllCardsFromDriverSection(DirvarName);
-        Cards = await trelloHelpers.addImageToCardsInArray(Cards)
-        console.log(Cards);
 
+router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
+    var BranchName = req.session.DriverData.Branch;
 
-        const allCardDataPromises = Cards.map(async (card) => {
-            if (card.idChecklists.length > 0) {
-                const cardChecklistIDArray = card.idChecklists;
-                console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
-                const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
-                card.checkItems = checkItems;
-                console.log("Check Items: ", checkItems);
-            }
-            const ContactDetails = await employeeHelpers.getCardContactDetails(card.id);
-            card.ContactDetails = ContactDetails;
-            console.log("ContactDetails: ", ContactDetails);
-            const Driver = await employeeHelpers.getAllDriverPeople();
-            console.log("Driver Peoplae: ", Driver);
-            card.Driver = Driver
-            return card;
+    // Define an array of promise-producing functions
+    const promiseFunctions = [
+        employeeHelpers.GetAllCards(BranchName),
+        employeeHelpers.getAllLists(BranchName),
+        employeeHelpers.getAllUsers(BranchName),
+        employeeHelpers.getAllCustomers(BranchName),
+        employeeHelpers.GetAllFormulations(),
+        employeeHelpers.getAllLabels(BranchName),
+    ];
+
+    // Execute all promises concurrently using Promise.all
+    Promise.all(promiseFunctions)
+        .then(([AllCards, AllLists, AllUsers, AllCustomers, Formulas, AllLabels]) => {
+            console.log("AllCards.length: ", AllCards.length);
+            console.log("AllLists.length: ", AllLists.length);
+            console.log("AllUsers.length:", AllUsers.length);
+            console.log("AllCustomers.length:", AllCustomers.length);
+            console.log("Formulas.length:", Formulas.length);
+
+            // Now that you have Formulas, call the next function
+            return employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas)
+                .then((UpdatedFromuls) => {
+                    console.log("UpdatedFromuls.length: ", UpdatedFromuls.length);
+
+                    var data = {
+                        AllCards: AllCards,
+                        AllLists: AllLists,
+                        AllUsers: AllUsers,
+                        Customers: AllCustomers,
+                        Formulas: UpdatedFromuls,
+                        Labels: AllLabels
+                    };
+
+                    res.json(data);
+                });
+        })
+        .catch(error => {
+            // Handle errors here
+            console.error("Error:", error);
+            res.status(500).json({ error: "Internal Server Error" });
         });
 
-        const AllCards = await Promise.all(allCardDataPromises);
 
 
-        res.json({ AllCards });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
 })
 
+router.get('/ChangeListofCard/:CardID/:NewListName/:Designation', DriverVerifyLogin, (req, res) => {
+    let cardID = req.params.CardID;
+    let newlistname = req.params.NewListName;
+    let Designation = req.params.Designation;
 
-router.get('/moveToDoneToday/:cardId', DriverVerifyLogin, (req, res) => {
-    var cardID = req.params.cardId;
-    console.log("cardID: ", cardID);
-    trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
-        res.redirect('/driver')
-    })
-})
+    var UserNow = req.session.DriverData;
 
-router.get('/CustomerCollection', DriverVerifyLogin, async (req, res) => {
-    res.render('driver/CustomerCollection', { DriverLoggedIn: req.session.DriverData })
-})
-
-
-router.get('/getAllCardsFromCustomerCollection', DriverVerifyLogin, async (req, res) => {
-    try {
-        var Cards = await trelloHelpers.getAllCardsFromCustomerCollectionSection();
-        Cards = await trelloHelpers.addImageToCardsInArray(Cards)
-        console.log(Cards);
-    
-    
-        const allCardDataPromises = Cards.map(async (card) => {
-            if (card.idChecklists.length > 0) {
-                const cardChecklistIDArray = card.idChecklists;
-                console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
-                const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
-                card.checkItems = checkItems;
-                console.log("Check Items: ", checkItems);
-            }
-            const ContactDetails = await employeeHelpers.getCardContactDetails(card.id);
-            card.ContactDetails = ContactDetails;
-            console.log("ContactDetails: ", ContactDetails);
-            const Driver = await employeeHelpers.getAllDriverPeople();
-            console.log("Driver Peoplae: ", Driver);
-            card.Driver = Driver
-            return card;
-        });
-    
-        const AllCards = await Promise.all(allCardDataPromises);
-    
-    
-        res.json({ AllCards });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-})
-
-router.get('/customerCollection/moveToDoneToday/:cardId', DriverVerifyLogin, (req, res) => {
-    var cardID = req.params.cardId;
-    console.log("cardID: ", cardID);
-    trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
-        res.redirect('/driver/CustomerCollection')
-    })
-})
-
-
-router.get('/getAllCardsFromBoard', DriverVerifyLogin, (req, res) => {
-    trelloHelpers.getAllCardsFromBoard().then((Cards) => {
-        // console.table(Cards);
-        trelloHelpers.addImageToCardsInArray(Cards).then((AllCard) => {
-            trelloHelpers.AddListToCards(AllCard).then((AllCards)=>{
-                console.log(AllCards);
-                AllCards.map((cards)=>{
-                    cards.DriverName = req.session.DriverData.UserName
-                })
-                res.json({ AllCards });
-            })
-        })
-    })
-})
-
-router.get('/api/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', DriverVerifyLogin, (req, res) => {
-
-    var cardID = req.params.cardID;
-    var DeliveryLocation = req.params.DeliveryLocation;
-    console.log("cardID: ", cardID);
-    trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
-      trelloHelpers.getCardByID(cardID).then(async (Card) => {
-        if (Card.idChecklists.length > 0) {
-          const cardChecklistIDArray = Card.idChecklists;
-          console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
-          const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
-          Card.checkItems = checkItems;
-          console.log("Check Items: ", checkItems);
+    var Data = {
+        cardID: cardID,
+        newlistname: newlistname,
+        UserName: UserNow.UserName,
+        Designation: UserNow.Designation,
+        Activity: {
+            activity: `${UserNow.UserName} Moved card to ${newlistname}.`,
+            Time: Date.now(),
         }
-        const ContactDetails = await employeeHelpers.getCardContactDetails(Card.id);
-        Card.ContactDetails = ContactDetails;
-        console.log("ContactDetails: ", ContactDetails);
-  
-        console.log("Card: ", Card);
-  
-        whatsappHelper.sendDeliveyMessage(Card, DeliveryLocation).then(() => {
-  
-          res.redirect('/driver/CustomerCollection')
-        })
-  
-      })
-  
+    }
+
+    if (Designation === "Production") {
+        Data.ProductionPerson = newlistname;
+    }
+    employeeHelpers.ChangeCardList(Data).then(() => {
+        res.json({ Status: true });
     })
-  })
+})
 
-  router.get('/OrderDeliver/whatsapp/:cardID/:DeliveryLocation', DriverVerifyLogin, (req, res) => {
-
-    var cardID = req.params.cardID;
-    var DeliveryLocation = req.params.DeliveryLocation;
-    console.log("cardID: ", cardID);
-    trelloHelpers.moveCardtoDoneTodayByCardID(cardID).then((response) => {
-      trelloHelpers.getCardByID(cardID).then(async (Card) => {
-        if (Card.idChecklists.length > 0) {
-          const cardChecklistIDArray = Card.idChecklists;
-          console.log("cardChecklistIDArray: ", cardChecklistIDArray[0]);
-          const checkItems = await trelloHelpers.getChecklistFromCheckListID(cardChecklistIDArray[0]);
-          Card.checkItems = checkItems;
-          console.log("Check Items: ", checkItems);
+router.get('/ChangeListofCardName/:CardName/:DropColumeName/:Designation', DriverVerifyLogin, (req, res) => {
+    let CardName = req.params.CardName;
+    let DropColumeName = req.params.DropColumeName;
+    let Designation = req.params.Designation;
+    var UserNow = req.session.DriverData;
+    var NewActivity = UserNow.UserName + " Moved card to " + DropColumeName + ".";
+    console.log("/ChangeListofCardName/:CardName/:DropColumeName/:Designation");
+    var Data = {
+        CardName: CardName,
+        newlistname: DropColumeName,
+        UserName: UserNow.UserName,
+        Designation: UserNow.Designation,
+        Activity: {
+            activity: NewActivity,
+            Time: Date.now(),
         }
-        const ContactDetails = await employeeHelpers.getCardContactDetails(Card.id);
-        Card.ContactDetails = ContactDetails;
-        console.log("ContactDetails: ", ContactDetails);
-  
-        console.log("Card: ", Card);
-  
-        whatsappHelper.sendDeliveyMessage(Card, DeliveryLocation).then(() => {
-  
-          res.redirect('/driver')
-        })
-  
-      })
-  
+    }
+    if (Designation === "Production") {
+        Data.ProductionPerson = DropColumeName;
+    }
+    employeeHelpers.ChangeCardListByName(Data).then((data) => {
+        //console.log(data);
+        res.json({ Status: true });
     })
-  })
+})
+
+router.get('/CreateNewLabel/:Color/:ColorlabelName', DriverVerifyLogin, (req, res) => {
+    let Color = req.params.Color;
+    let ColorlabelName = req.params.ColorlabelName;
+    var Branch = req.session.DriverData.Branch;
+
+    console.log("Color" + Color + "  Label:" + ColorlabelName);
+
+    employeeHelpers.CreateNewLabel(Color, ColorlabelName, Branch).then(() => {
+        res.json({ Status: true });
+    })
+})
+
+router.get('/CreateACopyOfCard/:CardID', DriverVerifyLogin, (req, res) => {
+    employeeHelpers.CreateACopyByCardID(req.params.CardID, req.session.DriverData.UserName, req.session.DriverData.Designation).then(() => {
+        res.json({ Status: true });
+    })
+})
+
+router.get('/MoveCardToArchived/:CardID', DriverVerifyLogin, (req, res) => {
+    let CardID = req.params.CardID;
+    let UserName = req.session.DriverData.UserName;
+    let Designation = req.session.DriverData.Designation;
+
+
+    var Data = {
+        CardID: CardID,
+        newlistname: "ARCHIVED",
+        UserName: UserName,
+        Designation: Designation,
+        Activity: {
+            activity: `${UserName} moved the card to Archived`,
+            Time: Date.now(),
+        }
+    }
+
+    // if (Designation === "Production") {
+    //     Data.ProductionPerson = DropColumeName;
+    // }
+    console.log("Data:", Data);
+    employeeHelpers.ChangeCardListByCardID(Data).then((data) => {
+        //console.log(data);
+        res.json({ Status: true });
+    })
+
+    // var NewActivity = {
+    //     activity: `${UserNow.UserName} moved the card ${CardID} to Archived`,
+    //     Time: Date.now()
+    // };
+    // employeeHelpers.moveCardToArchived(CardID,UserNow,Designation).then(()=>{
+    //     res.json({ Status: true });
+    // })
+})
+
+
 
 
 module.exports = router;

@@ -875,8 +875,8 @@
             AllLists.forEach((Onelist) => {
 
                 if (CardList.toLowerCase() === Onelist.Name.toLowerCase()) {
-                    console.log("Onelist: ", Onelist.Name);
-                    console.log("CardList: ", CardList);
+                    // console.log("Onelist: ", Onelist.Name);
+                    // console.log("CardList: ", CardList);
 
 
                     if ("ORDERS" === Onelist.Name) {
@@ -897,11 +897,11 @@
 
                         // do the today logic <7 day Login >7 day Logic
                         var DoneMovedTime = AllCards[i].ListArray[0].InTime;
-                        console.log("Done Today InTime: ", DoneMovedTime);
+                        //  console.log("Done Today InTime: ", DoneMovedTime);
 
                         // Convert the timestamp to a Date object
                         const date = new Date(DoneMovedTime);
-                        console.log("moved Date:", date);
+                        //  console.log("moved Date:", date);
 
                         // Get today's date
                         const today = new Date();
@@ -911,13 +911,13 @@
                         const timeDifference = (today - date) / (1000 * 60 * 60 * 24);
 
                         if (date.toDateString() === today.toDateString()) {
-                            console.log("Moved Today");
+                            //  console.log("Moved Today");
                             State.columns.DONE.DONE_TODAY.push(AllCards[i]);
                         } else if (timeDifference < 7) {
-                            console.log("< 7 days");
+                            //   console.log("< 7 days");
                             State.columns.DONE.IN_A_WEEK.push(AllCards[i]);
                         } else {
-                            console.log("> 7 days");
+                            //  console.log("> 7 days");
                             State.columns.DONE.BEFORE_A_WEEK.push(AllCards[i]);
                         }
 
@@ -2916,27 +2916,49 @@
 
         var NextCount = count + 1;
 
+        console.log('formula: ', formula);
+
         var VirtualFormula = `
-                    <div class="popEachProductsItemss">
-                        <p id="FormulaColorName" class='FormulaColorName' contenteditable="true">${formula.ColorName}</p>
-                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' contenteditable="true">${formula.ColorCode ? formula.ColorCode : ""} </p>
-                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' contenteditable="true">${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
-                        <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
-                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p>
-                       
+                     <div class="EachProductionItem" id="ProductionItem_${formula.Name}" >
+                    <div  ${formula.State === 'Complete' ? '' : 'onclick="SelectAProductionItem(this)"'}   class="popEachProductsItemss">
+                        <input type="Checkbox" class="ProItemCheckBox" id="ProItemCheckBox_${formula.Name}" ${formula.State === 'Complete' ? 'checked="true"' : ''} onclick="return false;"  >
+                        <p id="FormulaColorName" class='FormulaColorName' >${formula.Name}</p>
+                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' ></p>
+                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' ></p>
+                        {{!-- <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
+                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p> --}}
 
                         <div class="QtyOfFormula">
-                            <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
+                            {{!-- <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
                             <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode ? formula.ColorCode : ""}" hidden>
-                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName ? formula.SubCategoryName : ""}" hidden>
-                            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
-                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""}
-                            <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
+                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName ? formula.SubCategoryName : ""}" hidden>  --}}
+                            {{!-- ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
+                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} --}}
+                           
+                            <input type="text" oninput="OnlyNumber(this)" ${formula.State === 'Complete' ? 'readonly="true"' : ''} placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
                             <p class="FormulaUnit">${formula.Unit}</p>
-                        </div>
-                        <button onclick="RemoveOneFormula('${formula.ColorName}')"
+                        </div> 
+
+                        <button id="ProItemDeleteBtn_${formula.Name}" onclick="RemoveOneFormula('${formula.Name}')"
                             class="btn btn-danger">Delete</button>
                     </div>
+                    <div class="SelectedProductItems SelectedProductItem_${formula.Name}" id="SelectedProductItem_${formula.Name}">
+                        ${formula.FormulaColorName ? ` 
+                            <p id="SelectedFormulaColorName" class='SelectedFormulaColorName' >${formula.FormulaColorName}</p>
+                            <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.FormulaColorCode ? formula.FormulaColorCode : ""} </p>
+                            <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
+                            <p id="SelectedFormulaMattOrGloss" class='FormulaColorName SelectedFormulaMattOrGloss' >${formula.Selectedmatt ? `Matt: ${formula.Selectedmatt}` : ''} ${formula.Selectedgloss ? `Gloss: ${formula.Selectedgloss}` : ''}</p>
+                            {{!-- <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.SelectedFileNo ? `${formula.SelectedFileNo}` : ""}</p> --}}
+                            ${formula.Matt ? ` <p id="SelectedFormulaMatt" class='FormulaColorName SelectedFormulaFileNo' >${formula.Matt}</p>` : ""}
+                             ${formula.Gloss ? `<p id="SelectedFormulaGloss" class='FormulaColorName SelectedFormulaFileNo' >${formula.Gloss}</p>` : ""}
+                            ${formula.Matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.Matt}" hidden >` : ""}
+                            ${formula.Gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.Gloss}" hidden >` : ""} 
+                            <p id="SelectedFormulaFileNo" class=' SelectedFormulaFileNo FormulaColorName FormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
+                            <button id="SelectedItemRemoveBtn_${formula.Name}" onclick="RemoveSelectedFormula(this,'${formula.FormulaColorName}','SelectedProductItem_${formula.Name}')"
+                            class="btn SelectedItemRemoveBTN">x</button>
+                        `: ``}
+                    </div>
+                </div>
         `
         var NewOrders = {
             ColorName: formula.ColorName,
@@ -3594,18 +3616,20 @@
         if (ProsItems.length > 0) {
             ProsItems.forEach((ProItems) => {
                 var formula = {
-                    ColorName: ProItems.Name,
+                    State: ProItems.State,
+                    Name: ProItems.Name,
                     Unit: ProItems.Unit,
                     FileNo: ProItems.FileNo,
                     QTY: ProItems.Qty,
-                    ColorCode: ProItems.ColorCode,
+                    FormulaColorName: ProItems.FormulaColorName,
+                    FormulaColorCode: ProItems.FormulaColorCode,
                     SubCategoryName: ProItems.SubCategoryName
                 }
-                if (ProItems.matt) {
-                    formula.matt = ProItems.matt
+                if (ProItems.Matt) {
+                    formula.Matt = ProItems.Matt
                 }
-                if (ProItems.gloss) {
-                    formula.gloss = ProItems.gloss
+                if (ProItems.Gloss) {
+                    formula.Gloss = ProItems.Gloss
                 }
 
                 handleResultItemClick(formula)
@@ -6534,6 +6558,36 @@
 
     .FollowUpCustomerFilterOPtion:hover {
         background-color: #24292d;
+    }
+
+    .ProductionSelectedElement {
+        border: 1px solid gray;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+
+    .EachProElementBottomSec {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .popNewFormulaBtn {
+        width: 20rem;
+    }
+
+    .SelectedProductItems {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin-bottom: 1rem;
+    }
+
+    .SelectedItemRemoveBTN {
+        background-color: gray;
+        font-size: 20px;
+        font-weight: 600;
     }
 
 

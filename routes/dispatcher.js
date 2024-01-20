@@ -205,41 +205,7 @@ router.get('/getAllCardAndListsAndUsersToManagement', (req, res) => {
         });
 
 
-    // var BranchName = req.session.DispatcherData.Branch;
-    // employeeHelpers.GetAllCards(BranchName).then((AllCards) => {
-    //     console.log("AllCards.length: ", AllCards.length);
-    //     employeeHelpers.getAllLists(BranchName).then((AllLists) => {
-    //         console.log("AllLists.length: ", AllLists.length);
-    //         employeeHelpers.getAllUsers(BranchName).then((AllUsers) => {
-    //             console.log("AllUsers.length:", AllUsers.length);
-    //             employeeHelpers.getAllCustomers(BranchName).then((AllCustomers) => {
-    //                 console.log("AllCustomers.length:", AllCustomers.length);
-    //                 employeeHelpers.GetAllFormulations().then((Formulas) => {
-    //                     console.log("Formulas.length:", Formulas.length);
-    //                     employeeHelpers.getAllMeasuringUnitOfAllFormulas(Formulas).then((UpdatedFromuls) => {
-    //                         console.log("UpdatedFromuls.length: ", UpdatedFromuls.length);
-    //                         employeeHelpers.getAllLabels(BranchName).then((AllLabels) => {
-    //                             console.log("AllLabels.length:", AllLabels.length);
 
-    //                             // console.log("Formulas = ", Formulas[2]);
-
-    //                             var data = {
-    //                                 AllCards: AllCards,
-    //                                 AllLists: AllLists,
-    //                                 AllUsers: AllUsers,
-    //                                 Customers: AllCustomers,
-    //                                 Formulas: UpdatedFromuls,
-    //                                 Labels: AllLabels
-    //                             }
-    //                             res.json(data);
-    //                         })
-    //                     })
-    //                 })
-
-    //             })
-    //         })
-    //     })
-    // })
 })
 
 router.get('/ChangeListofCard/:CardID/:NewListName/:Designation', DispatcherVerifyLogin, (req, res) => {
@@ -345,6 +311,110 @@ router.get('/MoveCardToArchived/:CardID', DispatcherVerifyLogin, (req, res) => {
     // employeeHelpers.moveCardToArchived(CardID,UserNow,Designation).then(()=>{
     //     res.json({ Status: true });
     // })
+})
+
+router.post('/UpdareCardOrder/:cardID', DispatcherVerifyLogin, async (req, res) => {
+    console.log("Order Creating Updating: ", req.body);
+    var data = req.body;
+    const imageData = req.files;
+    var cardID = req.params.cardID;
+
+    //console.log("imageData", imageData); 
+    // ContactDetails: {
+    //     Name: 'dfgdfdf',
+    //     CallCountryCode: '+971',
+    //     CallNumber: '4334534',
+    //     WhatsappCountryCode: '+971',
+    //     WhatsappNumber: '34534'
+    //   }
+
+    var CheckItems = [];
+
+    let productionsItemsArray = await JSON.parse(data.ProductionsItems);
+    let ContactDetails = await JSON.parse(data.ContactDetails);
+    let comments = await JSON.parse(data.comments);
+    let Labels = await JSON.parse(data.Labels);
+    let ReadyProducts = await JSON.parse(data.ReadyProducts);
+    // console.log(productionsItemsArray);
+
+    await productionsItemsArray.forEach((EachItem) => {
+        var PushData = {
+            Name: EachItem.Name,
+            State: "InComplete",
+            Qty: EachItem.Qty,
+            Unit: EachItem.Unit,
+            FileNo: EachItem.FileNo ? EachItem.FileNo : "",
+            ColorCode: EachItem.ColorCode,
+            SubCategoryName: EachItem.SubCategoryName,
+
+        }
+
+        if (EachItem.matt) {
+            PushData.matt = EachItem.Matt
+        }
+        if (EachItem.gloss) {
+            PushData.gloss = EachItem.Gloss
+        }
+
+        CheckItems.push(PushData)
+    })
+
+
+
+    var NewOrder = {
+        Name: data.OrderName,
+        OrderIDNumber: data.OrderIDNumber,
+        CustomerName: data.CustomerName,
+        // CurrentList: "ORDERS",
+        // ListArray: [
+        //     {
+        //         ListName: "ORDERS",
+        //         InTIme: Date.now(),
+        //         InEmployeeName: req.session.OfficeData.UserName,
+        //         InEmployeeDesignation: req.session.OfficeData.Designation
+        //     }
+        // ],
+        AlternateContactNumber: "",
+        AlternateContactcountrySelect: "",
+        // CheckListItems: {
+        //     // CardName: "ORDERS",
+        //     checkItems: CheckItems
+        // },
+        ContactNumber: ContactDetails.CallNumber,
+        ContactcountrySelect: ContactDetails.CallCountryCode,
+        ContactPersonName: ContactDetails.Name,
+        WhatsAppcountrySelect: ContactDetails.WhatsappCountryCode,
+        WhatsappNumber: ContactDetails.WhatsappNumber,
+        description: "",
+        comments: comments,
+        Labels: Labels,
+    }
+
+    if (req.files) {
+        NewOrder.IsAttachments = true;
+    }
+
+    console.log("New Card updated: ", NewOrder);
+
+    var Activity = {
+        activity: `${req.session.DispatcherData.UserName} Updated this card.`,
+        Time: Date.now()
+    }
+
+    employeeHelpers.UpdateCard(NewOrder, cardID, Activity).then((CardId) => {
+        if (req.files) {
+            const imageData = req.files.file;
+            // console.log('Image data:', imageData);
+
+            imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
+                if (!err) {
+                } else {
+                    console.log("Error at img1 " + err)
+                }
+            })
+        }
+        res.json({ State: true });
+    })
 })
 
 module.exports = router;

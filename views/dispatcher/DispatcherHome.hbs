@@ -191,7 +191,7 @@
 
 
                 </div>
-                <div class="PopReadyProductsInputSection">
+                {{!-- <div class="PopReadyProductsInputSection">
                     <input placeholder="Product Name" type="text" id="NewReadyProductsInput">
                     <input placeholder="0.00" type="text" oninput="OnlyNumber(this)" id="NewReadyProductsQtyInput">
                     <select name="" id="NewReadyProductUnit">
@@ -199,7 +199,7 @@
                         <option value="Kilogram">Kilogram</option>
                     </select>
                     <button onclick="AddNewReadyProductMannully()">Add</button>
-                </div>
+                </div> --}}
             </div>
 
             <div class="popProductsItemsSection">
@@ -210,7 +210,7 @@
                 <div class="NewOrderPopProctionItemsActionsSections">
 
                 </div>
-                <div class="NewOrderNewFormulaNameSection">
+                {{!-- <div class="NewOrderNewFormulaNameSection">
                     <input placeholder="Product Name" type="text" id="NewFormulaNameInput">
                     <input placeholder="0.00" type="text" oninput="OnlyNumber(this)" id="NewFromulaQtyInput">
                     <select name="" id="NewProductUnit">
@@ -218,7 +218,7 @@
                         <option value="Kilogram">Kilogram</option>
                     </select>
                     <button onclick="AddNewProductMannully()">Add</button>
-                </div>
+                </div> --}}
             </div>
 
 
@@ -247,7 +247,7 @@
                             <img id="AttachmentImage" class="AttachmentIMG" src="" alt="">
                         </div>
                     </div>
-                    <div class="PopAddAttamentsArea">
+                    {{!-- <div class="PopAddAttamentsArea">
                         <label for="file" class="custum-file-upload">
                             <div class="icon">
                                 <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
@@ -266,7 +266,7 @@
                             <input id="file" type="file" onchange="previewAttachmentImage()">
                         </label>
 
-                    </div>
+                    </div> --}}
                 </div>
 
             </div>
@@ -872,7 +872,7 @@
             //// // console.log("CardList: ", CardList);
 
             AllLists.forEach((Onelist) => {
-                console.log("One Card: ", i, " Number ", AllCards[i])
+                //  console.log("One Card: ", i, " Number ", AllCards[i])
 
                 if (CardList.toLowerCase() === Onelist.Name.toLowerCase()) {
                     //  console.log("Onelist: ", Onelist.Name);
@@ -887,8 +887,8 @@
                         // // console.log("In Office Section")
                     } else if ("FOR DISPATCH" === Onelist.Name.toUpperCase()) {
                         State.columns.READY.FOR_DISPATCH.push(AllCards[i]);
-                        console.log("In Dispatch")
-                        console.log("AllCards[i]", AllCards[i])
+                        //  console.log("In Dispatch")
+                        //  console.log("AllCards[i]", AllCards[i])
                     } else if ("FOR CUSTOMER COLLECTION" === Onelist.Name.toUpperCase()) {
                         State.columns.READY.FOR_CUSTOMER_COLLECTION.push(AllCards[i]);
                         // // console.log("In Customer Collections")
@@ -898,11 +898,11 @@
 
                         // do the today logic <7 day Login >7 day Logic
                         var DoneMovedTime = AllCards[i].ListArray[0].InTime;
-                        console.log("Done Today InTime: ", DoneMovedTime);
+                        // console.log("Done Today InTime: ", DoneMovedTime);
 
                         // Convert the timestamp to a Date object
                         const date = new Date(DoneMovedTime);
-                        console.log("moved Date:", date);
+                        // console.log("moved Date:", date);
 
                         // Get today's date
                         const today = new Date();
@@ -912,13 +912,13 @@
                         const timeDifference = (today - date) / (1000 * 60 * 60 * 24);
 
                         if (date.toDateString() === today.toDateString()) {
-                            console.log("Moved Today");
+                            //  console.log("Moved Today");
                             State.columns.DONE.DONE_TODAY.push(AllCards[i]);
                         } else if (timeDifference < 7) {
-                            console.log("< 7 days");
+                            //   console.log("< 7 days");
                             State.columns.DONE.IN_A_WEEK.push(AllCards[i]);
                         } else {
-                            console.log("> 7 days");
+                            //  console.log("> 7 days");
                             State.columns.DONE.BEFORE_A_WEEK.push(AllCards[i]);
                         }
 
@@ -1251,172 +1251,158 @@
                 columnIndex = parseInt(Index) + 2;
 
                 var ProductionSectionCards = OneList;
-
-                // // console.log("ProductionSectionCards: ", ProductionSectionCards);
-
-
-                // Create the div with class "ProductionCardsCollections"
-                const productionCardsCollectionsDiv = document.createElement('div');
-                productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
-                productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
-                productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
-                productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
-                productionCardsCollectionsDiv.classList.add('cardsCollections');
+                if (OneList.OnDuty === "true" || !OneList.OnDuty) {
 
 
-                // Create the main div with class "ProductionColumn"
-                const productionColumnDiv = document.createElement('div');
-                productionColumnDiv.className = 'ProductionColumn';
-                if (ProductionSectionCards.OnDuty === "false") {
-                    productionColumnDiv.className = 'ProductionColumn OffDutyEmp';
-                }
+                    // Create the div with class "ProductionCardsCollections"
+                    const productionCardsCollectionsDiv = document.createElement('div');
+                    productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
+                    productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
+                    productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
+                    productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
+                    productionCardsCollectionsDiv.classList.add('cardsCollections');
 
-                // Create the div with class "ProductionColumnHeader"
-                const productionColumnHeaderDiv = document.createElement('div');
-                productionColumnHeaderDiv.className = 'ProductionColumnHeader';
 
-                // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
-                const sectionHeaderText = document.createElement('p');
-                sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
-                sectionHeaderText.textContent = ProductionSectionCards.Name;
+                    // Create the main div with class "ProductionColumn"
+                    const productionColumnDiv = document.createElement('div');
+                    productionColumnDiv.className = 'ProductionColumn';
+                    if (ProductionSectionCards.OnDuty === "false") {
+                        productionColumnDiv.className = 'ProductionColumn OffDutyEmp';
+                    }
 
-                // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
-                const checkboxInput = document.createElement('input');
-                checkboxInput.type = 'checkbox';
-                checkboxInput.className = 'ProductionCheckBox';
-                checkboxInput.id = '';
-                if (ProductionSectionCards.OnDuty === "false") {
-                    checkboxInput.checked = false;
-                } else {
-                    checkboxInput.checked = true;
-                }
-                // Add an event listener for the 'click' event
-                checkboxInput.addEventListener('change', (e) => {
-                    // Toggle the checked state of the checkbox
-                    //   checkboxInput.checked = !checkboxInput.checked;
-                    // Log a message to the console based on the current checked state
-                    if (checkboxInput.checked) {
-                        OneList.OnDuty = true;
-                        StaffOnDutyOffDuty(ProductionSectionCards.Name, true);
-                        console.log('Checkbox is checked.');
+                    // Create the div with class "ProductionColumnHeader"
+                    const productionColumnHeaderDiv = document.createElement('div');
+                    productionColumnHeaderDiv.className = 'ProductionColumnHeader';
+
+                    // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
+                    const sectionHeaderText = document.createElement('p');
+                    sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
+                    sectionHeaderText.textContent = ProductionSectionCards.Name;
+
+                    // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
+                    /*const checkboxInput = document.createElement('input');
+                    checkboxInput.type = 'checkbox';
+                    checkboxInput.className = 'ProductionCheckBox';
+                    checkboxInput.id = '';
+                    checkboxInput.disabled = true
+                    if (ProductionSectionCards.OnDuty === "false") {
+                        checkboxInput.checked = false;
                     } else {
-                        OneList.OnDuty = false;
-                        StaffOnDutyOffDuty(ProductionSectionCards.Name, false);
-                        console.log('Checkbox is unchecked.');
-                    }
-
-                    // Additional actions based on the checkbox state can be added here
-                });
+                        checkboxInput.checked = true;
+                    }*/
 
 
 
-
-                // add cards to all user.
-
-
-                ProductionSectionCards.Cards.forEach((OneCard, taskIndex) => {
-
-                    var checklistItems = OneCard.CheckListItems;
-                    var ChecklistCompleted = 0;
-                    var TotalChecklist = 0;
-
-                    if (OneCard.CheckListItems) {
-                        var checklistItems = OneCard.CheckListItems.checkItems;
-                        ChecklistCompleted = 0;
-                        TotalChecklist = checklistItems.length;
-
-                        checklistItems.forEach((checkItem) => {
-                            if (checkItem.State === 'Complete') {
-                                ChecklistCompleted = ChecklistCompleted + 1;
-                            }
-                        })
-
-                    }
-
-                    // Create the main div with class "Card"
-                    const cardDiv = document.createElement('div');
-                    cardDiv.className = 'card Card';
-                    cardDiv.onclick = function () {
-                        ViewCardDetails(OneCard.Name)
-                    };
-
-                    cardDiv.setAttribute('draggable', 'true');
-                    cardDiv.setAttribute('ondragstart', 'drag(event)');
-                    cardDiv.id = `task-${columnIndex}-${taskIndex}`;
-
-                    const cardImgDiv = document.createElement('div');
-                    cardImgDiv.className = 'CardImgDiv';
+                    // add cards to all user.
 
 
+                    ProductionSectionCards.Cards.forEach((OneCard, taskIndex) => {
 
-                    // Create the paragraph element with class "cardText" and set its text content
-                    const cardText = document.createElement('p');
-                    cardText.className = 'cardText';
-                    cardText.textContent = OneCard.Name;
+                        var checklistItems = OneCard.CheckListItems;
+                        var ChecklistCompleted = 0;
+                        var TotalChecklist = 0;
 
-                    // Create the div with class "CardSub"
-                    const cardSubDiv = document.createElement('div');
-                    cardSubDiv.className = 'CardSub';
+                        if (OneCard.CheckListItems) {
+                            var checklistItems = OneCard.CheckListItems.checkItems;
+                            ChecklistCompleted = 0;
+                            TotalChecklist = checklistItems.length;
 
-                    // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
-                    const descriptionIcon = document.createElement('img');
-                    descriptionIcon.className = 'DescriptionSmIcon';
-                    descriptionIcon.src = '/images/Icons/Discription_Gray.png';
-                    descriptionIcon.alt = '';
+                            checklistItems.forEach((checkItem) => {
+                                if (checkItem.State === 'Complete') {
+                                    ChecklistCompleted = ChecklistCompleted + 1;
+                                }
+                            })
 
-                    // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
-                    const checkBoxIcon = document.createElement('img');
-                    checkBoxIcon.className = 'checkBoxSMIcon';
-                    checkBoxIcon.src = '/images/Icons/check_Gray.png';
-                    checkBoxIcon.alt = '';
+                        }
 
-                    // Create the paragraph element with class "CardSMCheckNum" and set its text content
-                    const cardSMCheckNum = document.createElement('p');
-                    cardSMCheckNum.className = 'CardSMCheckNum';
-                    cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+                        // Create the main div with class "Card"
+                        const cardDiv = document.createElement('div');
+                        cardDiv.className = 'card Card';
+                        cardDiv.onclick = function () {
+                            ViewCardDetails(OneCard.Name)
+                        };
 
-                    // Check if the image file exists, and only create the image element if it does
-                    const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
-                    const cardImg = new Image();
-                    cardImg.className = 'CardImg';
-                    cardImg.alt = 'No Attachments';
-                    cardImg.src = imageSrc;
-                    cardImg.setAttribute('draggable', 'false');
+                        cardDiv.setAttribute('draggable', 'true');
+                        cardDiv.setAttribute('ondragstart', 'drag(event)');
+                        cardDiv.id = `task-${columnIndex}-${taskIndex}`;
 
-                    cardImg.onload = function () {
-                        // The image exists, so set the src attribute
-                        cardImgDiv.appendChild(cardImg);
-                    };
-                    cardDiv.appendChild(cardImgDiv);
+                        const cardImgDiv = document.createElement('div');
+                        cardImgDiv.className = 'CardImgDiv';
 
-                    cardDiv.appendChild(cardText);
-                    cardDiv.appendChild(cardSubDiv);
 
+
+                        // Create the paragraph element with class "cardText" and set its text content
+                        const cardText = document.createElement('p');
+                        cardText.className = 'cardText';
+                        cardText.textContent = OneCard.Name;
+
+                        // Create the div with class "CardSub"
+                        const cardSubDiv = document.createElement('div');
+                        cardSubDiv.className = 'CardSub';
+
+                        // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                        const descriptionIcon = document.createElement('img');
+                        descriptionIcon.className = 'DescriptionSmIcon';
+                        descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                        descriptionIcon.alt = '';
+
+                        // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                        const checkBoxIcon = document.createElement('img');
+                        checkBoxIcon.className = 'checkBoxSMIcon';
+                        checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                        checkBoxIcon.alt = '';
+
+                        // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                        const cardSMCheckNum = document.createElement('p');
+                        cardSMCheckNum.className = 'CardSMCheckNum';
+                        cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+
+                        // Check if the image file exists, and only create the image element if it does
+                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const cardImg = new Image();
+                        cardImg.className = 'CardImg';
+                        cardImg.alt = 'No Attachments';
+                        cardImg.src = imageSrc;
+                        cardImg.setAttribute('draggable', 'false');
+
+                        cardImg.onload = function () {
+                            // The image exists, so set the src attribute
+                            cardImgDiv.appendChild(cardImg);
+                        };
+                        cardDiv.appendChild(cardImgDiv);
+
+                        cardDiv.appendChild(cardText);
+                        cardDiv.appendChild(cardSubDiv);
+
+                        // Append the child elements to their respective parent elements
+                        cardSubDiv.appendChild(descriptionIcon);
+                        cardSubDiv.appendChild(checkBoxIcon);
+                        cardSubDiv.appendChild(cardSMCheckNum);
+                        cardDiv.appendChild(cardSubDiv);
+
+
+                        // Append the "cardDiv" to the parent element in your HTML document
+                        productionCardsCollectionsDiv.appendChild(cardDiv);
+
+
+
+
+
+                    })
                     // Append the child elements to their respective parent elements
-                    cardSubDiv.appendChild(descriptionIcon);
-                    cardSubDiv.appendChild(checkBoxIcon);
-                    cardSubDiv.appendChild(cardSMCheckNum);
-                    cardDiv.appendChild(cardSubDiv);
+                    productionColumnHeaderDiv.appendChild(sectionHeaderText);
+                    //  productionColumnHeaderDiv.appendChild(checkboxInput);
 
+                    productionColumnDiv.appendChild(productionColumnHeaderDiv);
+                    productionColumnDiv.appendChild(productionCardsCollectionsDiv);
 
-                    // Append the "cardDiv" to the parent element in your HTML document
-                    productionCardsCollectionsDiv.appendChild(cardDiv);
+                    // Append the "productionColumnDiv" to a parent div in your HTML document
+                    //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
+                    ProductionListCollections.appendChild(productionColumnDiv);
 
+                }
 
-
-
-
-                })
-                // Append the child elements to their respective parent elements
-                productionColumnHeaderDiv.appendChild(sectionHeaderText);
-                productionColumnHeaderDiv.appendChild(checkboxInput);
-
-                productionColumnDiv.appendChild(productionColumnHeaderDiv);
-                productionColumnDiv.appendChild(productionCardsCollectionsDiv);
-
-                // Append the "productionColumnDiv" to a parent div in your HTML document
-                //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
-                ProductionListCollections.appendChild(productionColumnDiv);
+                // console.log("ProductionSectionCards: ", ProductionSectionCards);
 
             });
 
@@ -1647,169 +1633,154 @@
                 columnIndex = parseInt(Index) + 2;
 
                 var DriverSectionCards = OneList;
+                if (DriverSectionCards.OnDuty === "true" || !DriverSectionCards.OnDuty) {
 
-                // // console.log("DriverSectionCards: ", DriverSectionCards);
-
-
-                // Create the div with class "ProductionCardsCollections"
-                const productionCardsCollectionsDiv = document.createElement('div');
-                productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
-                productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
-                productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
-                productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
-                productionCardsCollectionsDiv.classList.add('cardsCollections');
+                    // console.log("DriverSectionCards: ", DriverSectionCards);
 
 
-                // Create the main div with class "ProductionColumn"
-                const productionColumnDiv = document.createElement('div');
-                productionColumnDiv.className = 'ProductionColumn';
-                if (DriverSectionCards.OnDuty === "false") {
-                    productionColumnDiv.className = 'ProductionColumn OffDutyEmp';
-                }
-                // Create the div with class "ProductionColumnHeader"
-                const productionColumnHeaderDiv = document.createElement('div');
-                productionColumnHeaderDiv.className = 'ProductionColumnHeader';
+                    // Create the div with class "ProductionCardsCollections"
+                    const productionCardsCollectionsDiv = document.createElement('div');
+                    productionCardsCollectionsDiv.className = 'ProductionCardsCollections';
+                    productionCardsCollectionsDiv.setAttribute('ondrop', 'drop(event)');
+                    productionCardsCollectionsDiv.setAttribute('ondragover', 'allowDrop(event)');
+                    productionCardsCollectionsDiv.setAttribute('data-column', columnIndex);
+                    productionCardsCollectionsDiv.classList.add('cardsCollections');
 
-                // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
-                const sectionHeaderText = document.createElement('p');
-                sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
-                sectionHeaderText.textContent = DriverSectionCards.Name;
 
-                // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
-                const checkboxInput = document.createElement('input');
-                checkboxInput.type = 'checkbox';
-                checkboxInput.className = 'ProductionCheckBox';
-                checkboxInput.id = '';
-                checkboxInput.checked = true;
-                if (DriverSectionCards.OnDuty === "false") {
-                    checkboxInput.checked = false;
-                } else {
-                    checkboxInput.checked = true;
-                }
-                // Add an event listener for the 'click' event
-                checkboxInput.addEventListener('change', (e) => {
-                    // Toggle the checked state of the checkbox
-                    //   checkboxInput.checked = !checkboxInput.checked;
-                    // Log a message to the console based on the current checked state
-                    if (checkboxInput.checked) {
-                        OneList.OnDuty = true;
-                        StaffOnDutyOffDuty(DriverSectionCards.Name, true);
-                        console.log('Checkbox is checked.');
+                    // Create the main div with class "ProductionColumn"
+                    const productionColumnDiv = document.createElement('div');
+                    productionColumnDiv.className = 'ProductionColumn';
+                    if (DriverSectionCards.OnDuty === "false") {
+                        productionColumnDiv.className = 'ProductionColumn OffDutyEmp';
+                    }
+
+                    // Create the div with class "ProductionColumnHeader"
+                    const productionColumnHeaderDiv = document.createElement('div');
+                    productionColumnHeaderDiv.className = 'ProductionColumnHeader';
+
+                    // Create the paragraph element with class "ProdctionSectionHeaderText" and set its text content
+                    const sectionHeaderText = document.createElement('p');
+                    sectionHeaderText.className = 'ProdctionSectionHeaderText ListHeader';
+                    sectionHeaderText.textContent = DriverSectionCards.Name;
+
+                    // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
+                    /*const checkboxInput = document.createElement('input');
+                    checkboxInput.type = 'checkbox';
+                    checkboxInput.className = 'ProductionCheckBox';
+                    checkboxInput.id = '';
+                    checkboxInput.disabled = true;
+                    if (DriverSectionCards.OnDuty === "false") {
+                        checkboxInput.checked = false;
                     } else {
-                        OneList.OnDuty = false;
-                        StaffOnDutyOffDuty(DriverSectionCards.Name, false);
-                        console.log('Checkbox is unchecked.');
-                    }
-
-                    // Additional actions based on the checkbox state can be added here
-                });
+                        checkboxInput.checked = true;
+                    }*/
 
 
 
-                // add cards to all user.
+
+                    // add cards to all user.
 
 
-                DriverSectionCards.Cards.forEach((OneCard, taskIndex) => {
+                    DriverSectionCards.Cards.forEach((OneCard, taskIndex) => {
 
-                    var checklistItems = OneCard.CheckListItems;
-                    var ChecklistCompleted = 0;
-                    var TotalChecklist = 0;
+                        var checklistItems = OneCard.CheckListItems;
+                        var ChecklistCompleted = 0;
+                        var TotalChecklist = 0;
 
-                    if (OneCard.CheckListItems) {
-                        var checklistItems = OneCard.CheckListItems.checkItems;
-                        ChecklistCompleted = 0;
-                        TotalChecklist = checklistItems.length;
+                        if (OneCard.CheckListItems) {
+                            var checklistItems = OneCard.CheckListItems.checkItems;
+                            ChecklistCompleted = 0;
+                            TotalChecklist = checklistItems.length;
 
-                        checklistItems.forEach((checkItem) => {
-                            if (checkItem.State === 'Complete') {
-                                ChecklistCompleted = ChecklistCompleted + 1;
-                            }
-                        })
+                            checklistItems.forEach((checkItem) => {
+                                if (checkItem.State === 'Complete') {
+                                    ChecklistCompleted = ChecklistCompleted + 1;
+                                }
+                            })
 
-                    }
+                        }
 
-                    // Create the main div with class "Card"
-                    const cardDiv = document.createElement('div');
-                    cardDiv.className = 'card Card';
-                    cardDiv.onclick = function () {
-                        ViewCardDetails(OneCard.Name)
-                    };
+                        // Create the main div with class "Card"
+                        const cardDiv = document.createElement('div');
+                        cardDiv.className = 'card Card';
+                        cardDiv.onclick = function () {
+                            ViewCardDetails(OneCard.Name)
+                        };
 
-                    cardDiv.setAttribute('draggable', 'true');
-                    cardDiv.setAttribute('ondragstart', 'drag(event)');
-                    cardDiv.id = `task-${columnIndex}-${taskIndex}`;
+                        cardDiv.setAttribute('draggable', 'true');
+                        cardDiv.setAttribute('ondragstart', 'drag(event)');
+                        cardDiv.id = `task-${columnIndex}-${taskIndex}`;
 
-                    const cardImgDiv = document.createElement('div');
-                    cardImgDiv.className = 'CardImgDiv';
+                        const cardImgDiv = document.createElement('div');
+                        cardImgDiv.className = 'CardImgDiv';
 
 
 
-                    // Create the paragraph element with class "cardText" and set its text content
-                    const cardText = document.createElement('p');
-                    cardText.className = 'cardText';
-                    cardText.textContent = OneCard.Name;
+                        // Create the paragraph element with class "cardText" and set its text content
+                        const cardText = document.createElement('p');
+                        cardText.className = 'cardText';
+                        cardText.textContent = OneCard.Name;
 
-                    // Create the div with class "CardSub"
-                    const cardSubDiv = document.createElement('div');
-                    cardSubDiv.className = 'CardSub';
+                        // Create the div with class "CardSub"
+                        const cardSubDiv = document.createElement('div');
+                        cardSubDiv.className = 'CardSub';
 
-                    // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
-                    const descriptionIcon = document.createElement('img');
-                    descriptionIcon.className = 'DescriptionSmIcon';
-                    descriptionIcon.src = '/images/Icons/Discription_Gray.png';
-                    descriptionIcon.alt = '';
+                        // Create the first image element with the "DescriptionSmIcon" class and set its src attribute
+                        const descriptionIcon = document.createElement('img');
+                        descriptionIcon.className = 'DescriptionSmIcon';
+                        descriptionIcon.src = '/images/Icons/Discription_Gray.png';
+                        descriptionIcon.alt = '';
 
-                    // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
-                    const checkBoxIcon = document.createElement('img');
-                    checkBoxIcon.className = 'checkBoxSMIcon';
-                    checkBoxIcon.src = '/images/Icons/check_Gray.png';
-                    checkBoxIcon.alt = '';
+                        // Create the second image element with the "checkBoxSMIcon" class and set its src attribute
+                        const checkBoxIcon = document.createElement('img');
+                        checkBoxIcon.className = 'checkBoxSMIcon';
+                        checkBoxIcon.src = '/images/Icons/check_Gray.png';
+                        checkBoxIcon.alt = '';
 
-                    // Create the paragraph element with class "CardSMCheckNum" and set its text content
-                    const cardSMCheckNum = document.createElement('p');
-                    cardSMCheckNum.className = 'CardSMCheckNum';
-                    cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
+                        // Create the paragraph element with class "CardSMCheckNum" and set its text content
+                        const cardSMCheckNum = document.createElement('p');
+                        cardSMCheckNum.className = 'CardSMCheckNum';
+                        cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
-                    // Check if the image file exists, and only create the image element if it does
-                    const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
-                    const cardImg = new Image();
-                    cardImg.className = 'CardImg';
-                    cardImg.alt = 'No Attachments';
-                    cardImg.src = imageSrc;
-                    cardImg.setAttribute('draggable', 'false');
+                        // Check if the image file exists, and only create the image element if it does
+                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const cardImg = new Image();
+                        cardImg.className = 'CardImg';
+                        cardImg.alt = 'No Attachments';
+                        cardImg.src = imageSrc;
+                        cardImg.setAttribute('draggable', 'false');
 
-                    cardImg.onload = function () {
-                        // The image exists, so set the src attribute
-                        cardImgDiv.appendChild(cardImg);
-                    };
-                    cardDiv.appendChild(cardImgDiv);
+                        cardImg.onload = function () {
+                            // The image exists, so set the src attribute
+                            cardImgDiv.appendChild(cardImg);
+                        };
+                        cardDiv.appendChild(cardImgDiv);
 
-                    cardDiv.appendChild(cardText);
-                    cardDiv.appendChild(cardSubDiv);
+                        cardDiv.appendChild(cardText);
+                        cardDiv.appendChild(cardSubDiv);
 
+                        // Append the child elements to their respective parent elements
+                        cardSubDiv.appendChild(descriptionIcon);
+                        cardSubDiv.appendChild(checkBoxIcon);
+                        cardSubDiv.appendChild(cardSMCheckNum);
+                        cardDiv.appendChild(cardSubDiv);
+
+                        // Append the "cardDiv" to the parent element in your HTML document
+                        productionCardsCollectionsDiv.appendChild(cardDiv);
+
+                    })
                     // Append the child elements to their respective parent elements
-                    cardSubDiv.appendChild(descriptionIcon);
-                    cardSubDiv.appendChild(checkBoxIcon);
-                    cardSubDiv.appendChild(cardSMCheckNum);
-                    cardDiv.appendChild(cardSubDiv);
+                    productionColumnHeaderDiv.appendChild(sectionHeaderText);
+                    //  productionColumnHeaderDiv.appendChild(checkboxInput);
 
+                    productionColumnDiv.appendChild(productionColumnHeaderDiv);
+                    productionColumnDiv.appendChild(productionCardsCollectionsDiv);
 
-                    // Append the "cardDiv" to the parent element in your HTML document
-                    productionCardsCollectionsDiv.appendChild(cardDiv);
-
-                })
-                // Append the child elements to their respective parent elements
-                productionColumnHeaderDiv.appendChild(sectionHeaderText);
-                productionColumnHeaderDiv.appendChild(checkboxInput);
-
-                productionColumnDiv.appendChild(productionColumnHeaderDiv);
-                productionColumnDiv.appendChild(productionCardsCollectionsDiv);
-
-                // Append the "productionColumnDiv" to a parent div in your HTML document
-                //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
-                DriverListCollections.appendChild(productionColumnDiv);
+                    // Append the "productionColumnDiv" to a parent div in your HTML document
+                    //   const parentElement = document.getElementById('parentElementId'); // Replace with the actual parent element's ID
+                    DriverListCollections.appendChild(productionColumnDiv);
+                }
             });
-
         }
 
         function loadDoneTodayListCards() {
@@ -2917,28 +2888,95 @@
 
         var NextCount = count + 1;
 
-        var VirtualFormula = `
-                    <div class="popEachProductsItemss">
-                        <p id="FormulaColorName" class='FormulaColorName' contenteditable="true">${formula.ColorName}</p>
-                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' contenteditable="true">${formula.ColorCode ? formula.ColorCode : ""} </p>
-                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' contenteditable="true">${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
-                        <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
-                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p>
-                       
+        if (formula.State === 'Complete') {
+            var VirtualFormula = `
+                     <div class="EachProductionItem" id="ProductionItem_${formula.Name}" >
+                    <div  ${formula.State === 'Complete' ? '' : 'onclick="SelectAProductionItem(this)"'}   class="popEachProductsItemss">
+                        <input type="Checkbox" class="ProItemCheckBox" id="ProItemCheckBox_${formula.Name}" ${formula.State === 'Complete' ? 'checked="true"' : ''} onclick="return false;"  >
+                        <p id="FormulaColorName" class=' CompletedTask FormulaColorName ' >${formula.Name}</p>
+                        <p id="FormulaColorCode" class=' CompletedTask FormulaColorName FormulaColorCode' ></p>
+                        <p id="FormulaSubCategoryName" class=' CompletedTask FormulaColorName FormulaSubCategoryName' ></p>
+                        {{!-- <p id="FormulaMattOrGloss" class=' CompletedTask FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
+                        <p id="FormulaFileNo" class=' CompletedTask FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p> --}}
 
                         <div class="QtyOfFormula">
-                            <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
+                            {{!-- <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
                             <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode ? formula.ColorCode : ""}" hidden>
-                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName ? formula.SubCategoryName : ""}" hidden>
-                            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
-                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""}
-                            <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
+                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName ? formula.SubCategoryName : ""}" hidden>  --}}
+                            {{!-- ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
+                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} --}}
+                           
+                            <input type="text" oninput="OnlyNumber(this)" ${formula.State === 'Complete' ? 'readonly="true"' : ''} placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} readonly disabled class="FormulaQty" id="FormulaQty${NextCount}">
                             <p class="FormulaUnit">${formula.Unit}</p>
-                        </div>
-                        <button onclick="RemoveOneFormula('${formula.ColorName}')"
-                            class="btn btn-danger">Delete</button>
+                        </div> 
+
+                        {{!-- <button id="ProItemDeleteBtn_${formula.Name}" disabled hidden onclick="RemoveOneFormula('${formula.Name}')"
+                            class="btn btn-danger">Delete</button> --}}
                     </div>
+                    <div class="SelectedProductItems SelectedProductItem_${formula.Name}" id="SelectedProductItem_${formula.Name}">
+                        ${formula.FormulaColorName ? ` 
+                            <p id="SelectedFormulaColorName" class=' CompletedTask SelectedFormulaColorName' >${formula.FormulaColorName}</p>
+                            <p id="SelectedFormulaColorCode" class=' CompletedTask FormulaColorName SelectedFormulaColorCode' >${formula.FormulaColorCode ? formula.FormulaColorCode : ""} </p>
+                            <p id="SelectedFormulaSubCategoryName" class=' CompletedTask FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
+                            <p id="SelectedFormulaMattOrGloss" class=' CompletedTask FormulaColorName SelectedFormulaMattOrGloss' >${formula.Selectedmatt ? `Matt: ${formula.Selectedmatt}` : ''} ${formula.Selectedgloss ? `Gloss: ${formula.Selectedgloss}` : ''}</p>
+                            {{!-- <p id="SelectedFormulaFileNo" class=' CompletedTask FormulaColorName SelectedFormulaFileNo' >${formula.SelectedFileNo ? `${formula.SelectedFileNo}` : ""}</p> --}}
+                            ${formula.Matt ? ` <p id="SelectedFormulaMatt" class=' CompletedTask FormulaColorName SelectedFormulaFileNo' >${formula.Matt}</p>` : ""}
+                             ${formula.Gloss ? `<p id="SelectedFormulaGloss" class=' CompletedTask FormulaColorName SelectedFormulaFileNo' >${formula.Gloss}</p>` : ""}
+                            ${formula.Matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.Matt}" hidden >` : ""}
+                            ${formula.Gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.Gloss}" hidden >` : ""} 
+                            <p id="SelectedFormulaFileNo" class=' CompletedTask  SelectedFormulaFileNo FormulaColorName FormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
+                            {{!-- <button id="SelectedItemRemoveBtn_${formula.Name}" disabled hidden onclick="RemoveSelectedFormula(this,'${formula.FormulaColorName}','SelectedProductItem_${formula.Name}')"
+                            class="btn SelectedItemRemoveBTN">x</button> --}}
+                        `: ``}
+                    </div>
+                </div>
         `
+        } else {
+            var VirtualFormula = `
+                     <div class="EachProductionItem" id="ProductionItem_${formula.Name}" >
+                    <div  ${formula.State === 'Complete' ? '' : 'onclick="SelectAProductionItem(this)"'}   class="popEachProductsItemss">
+                        <input type="Checkbox" class="ProItemCheckBox" id="ProItemCheckBox_${formula.Name}" ${formula.State === 'Complete' ? 'checked="true"' : ''} onclick="return false;"  >
+                        <p id="FormulaColorName" class='FormulaColorName' >${formula.Name}</p>
+                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' ></p>
+                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' ></p>
+                        {{!-- <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
+                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p> --}}
+
+                        <div class="QtyOfFormula">
+                            {{!-- <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
+                            <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode ? formula.ColorCode : ""}" hidden>
+                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName ? formula.SubCategoryName : ""}" hidden>  --}}
+                            {{!-- ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
+                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} --}}
+                           
+                            <input type="text" oninput="OnlyNumber(this)" ${formula.State === 'Complete' ? 'readonly="true"' : ''} placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} readonly disabled class="FormulaQty" id="FormulaQty${NextCount}">
+                            <p class="FormulaUnit">${formula.Unit}</p>
+                        </div> 
+
+                        {{!-- <button id="ProItemDeleteBtn_${formula.Name}" disabled hidden onclick="RemoveOneFormula('${formula.Name}')"
+                            class="btn btn-danger">Delete</button> --}}
+                    </div>
+                    <div class="SelectedProductItems SelectedProductItem_${formula.Name}" id="SelectedProductItem_${formula.Name}">
+                        ${formula.FormulaColorName ? ` 
+                            <p id="SelectedFormulaColorName" class='SelectedFormulaColorName' >${formula.FormulaColorName}</p>
+                            <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.FormulaColorCode ? formula.FormulaColorCode : ""} </p>
+                            <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
+                            <p id="SelectedFormulaMattOrGloss" class='FormulaColorName SelectedFormulaMattOrGloss' >${formula.Selectedmatt ? `Matt: ${formula.Selectedmatt}` : ''} ${formula.Selectedgloss ? `Gloss: ${formula.Selectedgloss}` : ''}</p>
+                            {{!-- <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.SelectedFileNo ? `${formula.SelectedFileNo}` : ""}</p> --}}
+                            ${formula.Matt ? ` <p id="SelectedFormulaMatt" class='FormulaColorName SelectedFormulaFileNo' >${formula.Matt}</p>` : ""}
+                             ${formula.Gloss ? `<p id="SelectedFormulaGloss" class='FormulaColorName SelectedFormulaFileNo' >${formula.Gloss}</p>` : ""}
+                            ${formula.Matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.Matt}" hidden >` : ""}
+                            ${formula.Gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.Gloss}" hidden >` : ""} 
+                            <p id="SelectedFormulaFileNo" class=' SelectedFormulaFileNo FormulaColorName FormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
+                            {{!-- <button id="SelectedItemRemoveBtn_${formula.Name}" disabled hidden onclick="RemoveSelectedFormula(this,'${formula.FormulaColorName}','SelectedProductItem_${formula.Name}')"
+                            class="btn SelectedItemRemoveBTN">x</button> --}}
+                        `: ``}
+                    </div>
+                </div>
+        `
+        }
+
+
         var NewOrders = {
             ColorName: formula.ColorName,
             Unit: formula.Unit,
@@ -3605,18 +3643,20 @@
         if (ProsItems.length > 0) {
             ProsItems.forEach((ProItems) => {
                 var formula = {
-                    ColorName: ProItems.Name,
+                    State: ProItems.State,
+                    Name: ProItems.Name,
                     Unit: ProItems.Unit,
                     FileNo: ProItems.FileNo,
                     QTY: ProItems.Qty,
-                    ColorCode: ProItems.ColorCode,
+                    FormulaColorName: ProItems.FormulaColorName,
+                    FormulaColorCode: ProItems.FormulaColorCode,
                     SubCategoryName: ProItems.SubCategoryName
                 }
-                if (ProItems.matt) {
-                    formula.matt = ProItems.matt
+                if (ProItems.Matt) {
+                    formula.Matt = ProItems.Matt
                 }
-                if (ProItems.gloss) {
-                    formula.gloss = ProItems.gloss
+                if (ProItems.Gloss) {
+                    formula.Gloss = ProItems.Gloss
                 }
 
                 handleResultItemClick(formula)
@@ -4007,7 +4047,7 @@
                     var item = {
                         Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
                         Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
-                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0].textContent,
+                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0] ? OneItem.getElementsByClassName('FormulaFileNo')[0].textContent : "",
                         Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
                         ColorCode: OneItem.getElementsByClassName('FormulaColorCode')[0].textContent,
                         SubCategoryName: OneItem.getElementsByClassName('FormulaSubCategoryName')[0].textContent,
@@ -4059,15 +4099,21 @@
                     //AttachmentImage: imageFile
                 }
 
-                var input = document.getElementById('file');
-                var imageFile = input.files[0];
-                //  CompleteOrderData.file = imageFile;
-
                 // Create a FormData object
                 var formData = new FormData();
 
-                // Append the file to FormData with a specific field name ('file' in this case)
-                formData.append('file', imageFile);
+
+
+                var input = document.getElementById('file');
+                var imageFile
+                if (input) {
+                    imageFile = input.files[0];
+                    // Append the file to FormData with a specific field name ('file' in this case)
+                    formData.append('file', imageFile);
+                }
+
+                //  CompleteOrderData.file = imageFile;
+
 
                 // Append other data to FormData
                 /* Object.entries(CompleteOrderData).forEach(([key, value]) => {
@@ -4570,9 +4616,9 @@
 
                         <div class="QtyOfFormula">
                            
-                            <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${ReadyProduct.QTY ? `value="${ReadyProduct.QTY}"` : ""} class="ReadyProductQty" id="ReadyProductQty${NextCount}">
+                            <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${ReadyProduct.QTY ? `value="${ReadyProduct.QTY}"` : ""} class="ReadyProductQty" readonly id="ReadyProductQty${NextCount}">
                             <p class="ReadyProductUnit">${ReadyProduct.Unit}</p>
-                        <button onclick="RemoveOneReadyProduct('${ReadyProduct.Name}')"
+                        <button disabled hidden onclick="RemoveOneReadyProduct('${ReadyProduct.Name}')"
                             class="btn btn-danger">Delete</button>
                         </div>
                     </div>
@@ -6546,6 +6592,41 @@
     .FollowUpCustomerFilterOPtion:hover {
         background-color: #24292d;
     }
+
+    .ProductionSelectedElement {
+        border: 1px solid gray;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+
+    .EachProElementBottomSec {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .popNewFormulaBtn {
+        width: 20rem;
+    }
+
+    .SelectedProductItems {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin-bottom: 1rem;
+    }
+
+    .SelectedItemRemoveBTN {
+        background-color: gray;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .CompletedTask {
+        text-decoration: line-through;
+    }
+
 
 
 
