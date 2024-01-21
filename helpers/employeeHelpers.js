@@ -1793,6 +1793,14 @@ module.exports = {
             await db.get().collection(collection.CUSTOMER_FOLLOW_UP).updateMany({}, { $set: { Branch: "East cost DC" } });
             resolve()
         })
-    }
+    },
 
+
+    SaveCustomMechineData: (data) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.MECHINE_TEST_DATA).insertOne(data).then(() => {
+                resolve();
+            })
+        })
+    }
 }

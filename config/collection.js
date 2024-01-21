@@ -21,5 +21,6 @@ module.exports={
     BRANCH_COLLECTION:'Branch_Collection',
     CUSTOMER_PURCHASE_COLLECTION:'Customer_Purchase_Collection',
     LEDGER_UPLOADED_DATA:'Ledger_Uploaded_Data',
-    PRODUCT_GROUP_COLLECTION:'Product_Group_Collection'
+    PRODUCT_GROUP_COLLECTION:'Product_Group_Collection',
+    MECHINE_TEST_DATA:'Mechine_Test_Data'
 };
