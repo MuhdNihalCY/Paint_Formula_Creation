@@ -675,7 +675,7 @@ router.post('/addUser', verifyLogin, (req, res) => {
       var User = req.body;
       if (User.Designation === "Production" || User.Designation === "Driver") {
 
-        adminHelpers.CreateNewList(User.UserName).then((respone) => {
+        adminHelpers.CreateNewList(User.UserName,User.Branch).then((respone) => {
           res.redirect('/admin/Users');
         })
         // trelloHelpers.AddListForPeople(User.UserName).then(() => {

@@ -831,6 +831,7 @@
 
         var AllCards = State.AllCards;
         var AllLists = State.AllLists;
+       // console.log("AllList: ",AllLists);
 
         // // // console.log("State: ", State);
         var AllProductionLists = [];
@@ -871,12 +872,18 @@
             var CardList = AllCards[i].CurrentList;
             //// // console.log("CardList: ", CardList);
 
+            if (CardList == "DRV2") {
+              //  console.log('DRV2');
+             //   console.log('card: ', AllCards[i]);
+            }
+
             AllLists.forEach((Onelist) => {
                 //  console.log("One Card: ", i, " Number ", AllCards[i])
+             //   console.log("Onelist: ", Onelist.Name);
+             //   console.log("CardList: ", CardList);
+             //   console.log('card: ', AllCards[i]);
 
                 if (CardList.toLowerCase() === Onelist.Name.toLowerCase()) {
-                    //  console.log("Onelist: ", Onelist.Name);
-                    //  console.log("CardList: ", CardList);
 
 
                     if ("ORDERS" === Onelist.Name) {
@@ -962,7 +969,6 @@
                             }
 
                         } else {
-                            // // console.log("In DRivers")
                             // try for drivers
                             var DriverArray = State.columns.DRIVERS;
                             if (DriverArray.length > 0) {
@@ -999,6 +1005,8 @@
                         }
                         //State.columns[Onelist.Name].push(AllCards[i]);
                     }
+                } else {
+
                 }
             })
         }
@@ -1628,9 +1636,10 @@
 
 
 
-
+           // console.log("Driver Column Index:", columnIndex);
+            columnIndex = columnIndex + 1;
             DriverSectionLists.forEach((OneList, Index) => {
-                columnIndex = parseInt(Index) + 2;
+                columnIndex = parseInt(Index) + columnIndex;
 
                 var DriverSectionCards = OneList;
                 if (DriverSectionCards.OnDuty === "true" || !DriverSectionCards.OnDuty) {
@@ -2167,10 +2176,12 @@
 
 
     document.addEventListener('drop', function (event) {
-        // // console.log("Drop event occur")
+        console.log("Drop event occur: ", event)
         event.preventDefault();
         const data = event.dataTransfer.getData('text/plain');
         const sourceElement = document.getElementById(data);
+        console.log("data:", data);
+        console.log("sourceElement: ", sourceElement);
 
         // // console.log("event.target ", event.target);
         // // console.log("Drop Target: ", event.target.classList);
@@ -4276,6 +4287,11 @@
 
     async function MoveCardToList(CardName, DropColumeName) {
         showLoader()
+
+        console.log("Cardname: ", CardName);
+        console.log("DropColumeName: ", DropColumeName);
+
+
         var Designation = "none";
 
         //        var AllUsers = State.AllUsers;
@@ -4883,6 +4899,7 @@
         display: flex;
         justify-content: end;
         align-items: center;
+        gap: 9rem;
     }
 
     .search-input {

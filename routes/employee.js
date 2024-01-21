@@ -3029,6 +3029,17 @@ router.get('/GetAllDataFromFormula/api/:FileNo', EmployeeVerifyLogin, (req, res)
 })
 
 
+router.get('/getSampleData',(req,res)=>{
+  res.render('SampleText');
+})
+
+router.post('/saveCustomDataFromScale',(req,res)=>{
+  var data = req.body;
+  employeeHelpers.SaveCustomMechineData(data).then(()=>{
+    res.json(data);
+  })
+})
+
 
 
 module.exports = router;

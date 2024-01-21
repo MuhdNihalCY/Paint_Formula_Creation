@@ -881,11 +881,13 @@ module.exports = {
     },
 
     //Management Tool
-    CreateNewList: (UserName) => {
+    CreateNewList: (UserName,Branch) => {
         return new Promise(async (resolve, reject) => {
             var ListData = {
                 Name: UserName,
-                OldCards: []
+                OldCards: [],
+                Branch:Branch
+
             }
             await db.get().collection(collection.LIST_COLLECTION).insertOne(ListData).then((respose) => {
                 resolve(respose);
