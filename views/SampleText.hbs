@@ -58,7 +58,7 @@
     connectButton.addEventListener("click", async () => {
         try {
             // Replace 0x1234 with the device's vendor ID
-            const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x1234 }] });
+            const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x24BC }] });
 
             console.log("Device selected:", device);
             outputDiv.textContent = "Device selected.";
