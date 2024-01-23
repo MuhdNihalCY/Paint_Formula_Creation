@@ -1120,6 +1120,7 @@
                     // The image exists, so set the src attribute
                     cardImgDiv.appendChild(cardImg);
                 };
+
                 cardDiv.appendChild(cardImgDiv);
 
                 cardDiv.appendChild(cardText);
@@ -1280,7 +1281,7 @@
                 sectionHeaderText.textContent = ProductionSectionCards.Name;
 
                 // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
-                const checkboxInput = document.createElement('input');
+                /*const checkboxInput = document.createElement('input');
                 checkboxInput.type = 'checkbox';
                 checkboxInput.className = 'ProductionCheckBox';
                 checkboxInput.id = '';
@@ -1288,24 +1289,24 @@
                     checkboxInput.checked = false;
                 } else {
                     checkboxInput.checked = true;
-                }
+                }*/
                 // Add an event listener for the 'click' event
-                checkboxInput.addEventListener('change', (e) => {
-                    // Toggle the checked state of the checkbox
-                    //   checkboxInput.checked = !checkboxInput.checked;
-                    // Log a message to the console based on the current checked state
-                    if (checkboxInput.checked) {
-                        OneList.OnDuty = true;
-                        StaffOnDutyOffDuty(ProductionSectionCards.Name, true);
-                        console.log('Checkbox is checked.');
-                    } else {
-                        OneList.OnDuty = false;
-                        StaffOnDutyOffDuty(ProductionSectionCards.Name, false);
-                        console.log('Checkbox is unchecked.');
-                    }
-
-                    // Additional actions based on the checkbox state can be added here
-                });
+                /* checkboxInput.addEventListener('change', (e) => {
+                     // Toggle the checked state of the checkbox
+                     //   checkboxInput.checked = !checkboxInput.checked;
+                     // Log a message to the console based on the current checked state
+                     if (checkboxInput.checked) {
+                         OneList.OnDuty = true;
+                         StaffOnDutyOffDuty(ProductionSectionCards.Name, true);
+                         console.log('Checkbox is checked.');
+                     } else {
+                         OneList.OnDuty = false;
+                         StaffOnDutyOffDuty(ProductionSectionCards.Name, false);
+                         console.log('Checkbox is unchecked.');
+                     }
+ 
+                     // Additional actions based on the checkbox state can be added here
+                 });*/
 
 
 
@@ -1408,7 +1409,7 @@
                 })
                 // Append the child elements to their respective parent elements
                 productionColumnHeaderDiv.appendChild(sectionHeaderText);
-                productionColumnHeaderDiv.appendChild(checkboxInput);
+                // productionColumnHeaderDiv.appendChild(checkboxInput);
 
                 productionColumnDiv.appendChild(productionColumnHeaderDiv);
                 productionColumnDiv.appendChild(productionCardsCollectionsDiv);
@@ -1642,8 +1643,9 @@
 
 
 
+            columnIndex = columnIndex + 1;
             DriverSectionLists.forEach((OneList, Index) => {
-                columnIndex = parseInt(Index) + 2;
+                columnIndex = parseInt(Index) + columnIndex;
 
                 var DriverSectionCards = OneList;
 
@@ -2894,12 +2896,64 @@
                 const resultItem = document.createElement('li');
                 resultItem.classList.add('search-result-item');
                 resultItem.textContent = `FileNo: ${formula.FileNo}, Color Code: ${formula.ColorCode}, Color Name: ${formula.ColorName}`;
-                resultItem.addEventListener('click', () => handleResultItemClick(formula));
+                //resultItem.addEventListener('click', () => handleSelectedFormula(this,formula));
+                resultItem.addEventListener('click', function () {
+                    handleSelectedFormula(this, formula);
+                });
                 resultsContainer.appendChild(resultItem);
             });
 
         }
     }
+
+    function handleSelectedFormula(element, formula) {
+        var ThisElement = element.parentNode.parentNode.parentNode.parentNode.parentNode;
+        // console.log("element:", ThisElement);
+        //  console.log("formula:", formula);
+
+        var popEachProductsItemsCollection = ThisElement.getElementsByClassName('popEachProductsItemss');
+        //  console.log('popEachProductsItems: ' + popEachProductsItemsCollection.length);
+        var firstElement = popEachProductsItemsCollection[0];
+        var parentnode = firstElement.parentNode
+        // console.log("firstElement.parentNode", parentnode)
+        //  console.log('popEachProductsItems: ' + firstElement.id); // Log the ID of the first element
+        //  console.log('popEachProductsItems class: ' + firstElement.className);
+
+        var OldColorName = firstElement.getElementsByClassName('FormulaColorName')[0].textContent;
+        //  console.log(OldColorName);
+
+        //  console.log("SelectedProductItem_asdfasf::=> ", `SelectedProductItem_${OldColorName}`)
+        var OldSelectedItems = parentnode.getElementsByClassName(`SelectedProductItem_${OldColorName}`);
+        //  console.log("OldSelectedItems", OldSelectedItems);
+
+        var VirtualSelectItem = `
+            <p id="FormulaColorName" class='SelectedFormulaColorName' >${formula.ColorName}</p>
+            <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.ColorCode ? formula.ColorCode : ""} </p>
+            <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
+            <p id="SelectedFormulaMattOrGloss" class='FormulaColorName SelectedFormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
+            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
+            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} 
+            {{!-- <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p> --}}
+                            
+            <button onclick="RemoveSelectedFormula(this,'${formula.ColorName}','SelectedProductItem_${OldColorName}')"
+                            class="btn SelectedItemRemoveBTN">x</button>
+        `
+
+
+        //  console.log("parentnode.getElementsByClassName('SelectedFormulaColorName')",parentnode.getElementsByClassName('SelectedFormulaColorName'))
+        //  parentnode.getElementsByClassName('SelectedFormulaColorName')[0].textContent = formula.ColorName;
+
+        OldSelectedItems[0].innerHTML = "";
+        OldSelectedItems[0].insertAdjacentHTML('beforeend', VirtualSelectItem);
+
+    }
+
+
+    function RemoveSelectedFormula(OldSelectedItems, ColorName, selectedClassName) {
+        //  console.log("OldSelectedItems:", OldSelectedItems, selectedClassName);
+        document.getElementById(selectedClassName).innerHTML = "";
+    }
+
 
     function handleResultItemClick(formula) {
         // Handle what happens when a result item is clicked
@@ -2919,9 +2973,9 @@
         console.log('formula: ', formula);
 
         var VirtualFormula = `
-                     <div class="EachProductionItem" id="ProductionItem_${formula.Name}" >
+        <div class="EachProductionItem" id="ProductionItem_${formula.Name}" >
                     <div  ${formula.State === 'Complete' ? '' : 'onclick="SelectAProductionItem(this)"'}   class="popEachProductsItemss">
-                        <input type="Checkbox" class="ProItemCheckBox" id="ProItemCheckBox_${formula.Name}" ${formula.State === 'Complete' ? 'checked="true"' : ''} onclick="return false;"  >
+                        <input type="Checkbox" readyonly  class="ProItemCheckBox" id="ProItemCheckBox_${formula.Name}" ${formula.State === 'Complete' ? 'checked="true"' : ''} onclick="return false;" >
                         <p id="FormulaColorName" class='FormulaColorName' >${formula.Name}</p>
                         <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' ></p>
                         <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' ></p>
@@ -2970,6 +3024,9 @@
 
         popProductsItemsCollectiosn.insertAdjacentHTML('beforeend', VirtualFormula);
 
+        if (formula.State === 'Complete') {
+            tempCheckBoxState(formula.Name);
+        }
 
     }
 
@@ -3153,7 +3210,7 @@
             var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
             //  // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
-            proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+            proItems = popProductsItemsCollectiosns.getElementsByClassName('EachProductionItem');
             var ProItemsDivArray = [...proItems];
 
             ProItemsDivArray.forEach((OneItem) => {
@@ -3270,8 +3327,54 @@
                 // Alternatively, you can use the spread operator
                 var ProItemsDivArray = [...proItems];
 
-
                 ProItemsDivArray.forEach((OneItem) => {
+                    // make changes 
+                    //   console.log(OneItem);
+                    if (OneItem.getElementsByClassName('FormulaColorName')[0]) {
+
+
+                        var item = {
+                            Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
+                            Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
+                            Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
+
+                        }
+
+                        if (OneItem.getElementsByClassName('SelectedFormulaColorName')[0]) {
+                            item.FormulaColorName = OneItem.getElementsByClassName('SelectedFormulaColorName')[0].textContent;
+                            item.FormulaColorCode = OneItem.getElementsByClassName('SelectedFormulaColorCode')[0].textContent;
+                            item.SubCategoryName = OneItem.getElementsByClassName('SelectedFormulaSubCategoryName')[0].textContent;
+                        }
+
+                        if (OneItem.getElementsByClassName('SelectedFormulaFileNo')[0]) {
+                            item.FileNo = OneItem.getElementsByClassName('SelectedFormulaFileNo')[0].textContent;
+                        }
+
+
+                        if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
+                            item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
+                        }
+
+                        if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
+                            item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
+                        }
+
+                        if (OneItem.getElementsByClassName('ProItemCheckBox')[0]) {
+                            if (OneItem.getElementsByClassName('ProItemCheckBox')[0].checked) {
+                                item.State = "Complete";
+                            } else {
+                                item.State = "InComplete";
+                            }
+                        } else {
+                            item.State = "InComplete";
+                        }
+
+                        // console.log("Proitem: ", item);
+
+                        ProductionsItems.push(item);
+                    }
+                });
+                /*ProItemsDivArray.forEach((OneItem) => {
 
                     // make changes 
                     var item = {
@@ -3294,7 +3397,7 @@
                     // console.log("Proitem: ", item);
 
                     ProductionsItems.push(item);
-                });
+                });*/
 
                 // get all Comment
                 var comments = [];
@@ -3425,7 +3528,7 @@
         var NewProductUnit = document.getElementById('NewProductUnit').value;
 
         var formula = {
-            ColorName: NewFormulaNameInput,
+            Name: NewFormulaNameInput,
             Unit: NewProductUnit,
             QTY: NewFromulaQtyInput
         }
@@ -3897,7 +4000,7 @@
             var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
             //  // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
-            proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+            proItems = popProductsItemsCollectiosns.getElementsByClassName('EachProductionItem');
             var ProItemsDivArray = [...proItems];
 
             ProItemsDivArray.forEach((OneItem) => {
@@ -4006,7 +4109,7 @@
                 var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
                 // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
-                proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+                proItems = popProductsItemsCollectiosns.getElementsByClassName('EachProductionItem');
 
                 // console.log('proItems: ', proItems);
 
@@ -4014,29 +4117,82 @@
                 // Alternatively, you can use the spread operator
                 var ProItemsDivArray = [...proItems];
 
+                /*
+                                ProItemsDivArray.forEach((OneItem) => {
+                                    // make changes 
+                                    var item = {
+                                        Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
+                                        Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
+                                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0].textContent,
+                                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
+                                        ColorCode: OneItem.getElementsByClassName('FormulaColorCode')[0].textContent,
+                                        SubCategoryName: OneItem.getElementsByClassName('FormulaSubCategoryName')[0].textContent,
+                                    }
+                                    if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
+                                        item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
+                                    }
+                
+                                    if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
+                                        item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
+                                    }
+                
+                                    // console.log("Proitem: ", item);
+                
+                                    ProductionsItems.push(item);
+                                });
+                                */
 
                 ProItemsDivArray.forEach((OneItem) => {
                     // make changes 
-                    var item = {
-                        Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
-                        Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
-                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0].textContent,
-                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
-                        ColorCode: OneItem.getElementsByClassName('FormulaColorCode')[0].textContent,
-                        SubCategoryName: OneItem.getElementsByClassName('FormulaSubCategoryName')[0].textContent,
-                    }
-                    if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
-                        item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
-                    }
+                    console.log("OneItem: ", OneItem);
+                    if (OneItem.getElementsByClassName('FormulaColorName')[0]) {
 
-                    if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
-                        item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
+
+                        var item = {
+                            Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
+                            Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
+                            Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
+
+                        }
+
+                        if (OneItem.getElementsByClassName('SelectedFormulaColorName')) {
+                            alert("adding Formula data");
+                            console.log("OneItem.getElementsByClassName('SelectedFormulaColorName')[0]: ", OneItem.getElementsByClassName('SelectedFormulaColorName')[0]);
+                            item.FormulaColorName = OneItem.getElementsByClassName('SelectedFormulaColorName')[0].textContent;
+                            item.FormulaColorCode = OneItem.getElementsByClassName('SelectedFormulaColorCode')[0].textContent;
+                            item.SubCategoryName = OneItem.getElementsByClassName('SelectedFormulaSubCategoryName')[0].textContent;
+                        }
+
+                        if (OneItem.getElementsByClassName('SelectedFormulaFileNo')[0]) {
+                            item.FileNo = OneItem.getElementsByClassName('SelectedFormulaFileNo')[0].textContent;
+                        }
+
+
+                        if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
+                            item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
+                        }
+
+                        if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
+                            item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
+                        }
+
+                        if (OneItem.getElementsByClassName('ProItemCheckBox')[0]) {
+                            if (OneItem.getElementsByClassName('ProItemCheckBox')[0].checked) {
+                                item.State = "Complete";
+                            } else {
+                                item.State = "InComplete";
+                            }
+                        } else {
+                            item.State = "InComplete";
+                        }
+
+                        // console.log("Proitem: ", item);
+
+                        ProductionsItems.push(item);
                     }
-
-                    // console.log("Proitem: ", item);
-
-                    ProductionsItems.push(item);
                 });
+                console.log('Production Items:', ProductionsItems)
+                alert("ProductionDone");
 
                 // get all Comment
                 var comments = [];
@@ -4759,6 +4915,74 @@
 
         fetchAllCards();
     }
+
+    function tempCheckBoxState(ItmeName) {
+        var productionItem = document.getElementById(`ProductionItem_${ItmeName}`);
+        var SelectedItemRemoveBTN = document.getElementById(`SelectedItemRemoveBtn_${ItmeName}`)
+        var ProItemDeleteBTn = document.getElementById(`ProItemDeleteBtn_${ItmeName}`)
+        if (SelectedItemRemoveBTN) {
+            SelectedItemRemoveBTN.disabled = true;
+        }
+
+        if (ProItemDeleteBTn) {
+            ProItemDeleteBTn.disabled = true;
+        }
+
+
+        if (productionItem) {
+            // Get all <p> tags inside the element
+            var paragraphs = productionItem.getElementsByTagName('p');
+
+            // Loop through each <p> tag and add the style property
+            for (var i = 0; i < paragraphs.length; i++) {
+                paragraphs[i].style.textDecoration = 'line-through';
+            }
+
+        }
+    }
+
+    function SelectAProductionItem(element) {
+        // remove classes from previously loaded
+        //  console.log("element.parentNode.parentNode", element.parentNode.parentNode);
+        var ParentElement = element.parentNode.parentNode;
+
+        var allProductionSelectedElement = document.getElementsByClassName('ProductionSelectedElement');
+        for (var i = 0; i < allProductionSelectedElement.length; i++) {
+            allProductionSelectedElement[i].classList.remove('ProductionSelectedElement');
+        }
+
+        var PreviousSelectedRow = ParentElement.getElementsByClassName('EachProElementBottomSec');
+        for (var i = 0; i < PreviousSelectedRow.length; i++) {
+            //   console.log("PreviousSelectedRow:", PreviousSelectedRow[i]);
+            PreviousSelectedRow[i].innerHTML = "";
+        }
+
+        //console.log(element);
+        // console.log(element.parentNode)
+        //  element.getElementsByClassName('FormulaColorCode')[0].textContent = "dsfa";
+        //  console.log(element.getElementsByClassName('FormulaColorCode')[0].textContent);
+        var VertualInputSection = ` 
+        <div class="EachProElementBottomSec" >
+            <div class="">
+                <div class="popSeachMixingDiv">
+                    <i class="fas fa-search search-icon MixingSeachIcon"></i>
+                    <input type="search" class="popSeachMixingInput-field EachProElementBottomInp" placeholder="Search"
+                    oninput="searchFormulas(this.value)">
+                </div>
+                <div class="SearchResultsDiv">
+                    <ul class="search-results" id="searchResults"></ul>
+                </div>
+             </div>
+            <a href="/createFormulas" class="btn popNewFormulaBtn ">Create New Formula</a>
+        </div>
+                    `
+
+        element.parentNode.insertAdjacentHTML('beforeend', VertualInputSection);
+        // element.parentNode.setAttribute("class", "ProductionSelectedElement")
+        element.parentNode.classList.add('ProductionSelectedElement');
+
+    }
+
 
 
 
@@ -5560,7 +5784,7 @@
 
     .popSeachMixingDiv {
         position: relative;
-        width: 40%;
+        width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -5568,7 +5792,7 @@
 
     .popSeachMixingInput-field,
     .FormulaQty {
-        padding: 5px 30px;
+        padding: 11px 30px;
         /* Adjust the padding to make room for the icons */
         width: 100%;
         box-sizing: border-box;

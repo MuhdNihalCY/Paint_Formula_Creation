@@ -110,6 +110,12 @@
 
 
     function sentDataToServer(data) {
+        // Create a new Date object
+        var currentDate = new Date();
+        // Get the current date and time as a string
+        var formattedDateTime = currentDate.toLocaleString();
+        data.Date = formattedDateTime;
+
         console.log("Data: ", data);
         // URL of your backend API endpoint
         var apiUrl = '/saveCustomDataFromScale';

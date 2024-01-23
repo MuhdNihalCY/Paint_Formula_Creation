@@ -314,11 +314,11 @@
                     <div class="popCommentSaveBtnSection">
                         <button onclick="AddNewComment('newOrderComment')">Post Comment</button>
                     </div>
-                </div> 
+                </div>
             </div>
 
             <div class="PopAddAttachments">
-                <p class="popCardHeaderText">Attachments</p> 
+                <p class="popCardHeaderText">Attachments</p>
                 <div class="popAttachements">
                     <div class="popAttachementsCollections">
                         <div class="popEachAttachments">
@@ -1736,9 +1736,9 @@
 
 
 
-
+            columnIndex = columnIndex + 1;
             DriverSectionLists.forEach((OneList, Index) => {
-                columnIndex = parseInt(Index) + 2;
+                columnIndex = parseInt(Index) + columnIndex;
 
                 var DriverSectionCards = OneList;
                 if (DriverSectionCards.OnDuty === "true" || !DriverSectionCards.OnDuty) {
@@ -3258,7 +3258,7 @@
             var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
             // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
-            proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+            proItems = popProductsItemsCollectiosns.getElementsByClassName('EachProductionItem');
             var ProItemsDivArray = [...proItems];
 
             ProItemsDivArray.forEach((OneItem) => {
@@ -3737,7 +3737,7 @@
                     formula.Gloss = ProItems.Gloss
                 }
 
-             //   console.log("formula:",formula)
+                //   console.log("formula:",formula)
 
                 handleResultItemClick(formula)
             })
@@ -4004,7 +4004,7 @@
             var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
             // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
-            proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+            proItems = popProductsItemsCollectiosns.getElementsByClassName('EachProductionItem');
             var ProItemsDivArray = [...proItems];
 
             ProItemsDivArray.forEach((OneItem) => {
@@ -4113,7 +4113,7 @@
                 var popProductsItemsCollectiosns = document.getElementById('popProductsItemsCollectiosns');
                 // console.log("popProductsItemsCollectiosns: ", popProductsItemsCollectiosns);
 
-                proItems = popProductsItemsCollectiosns.getElementsByClassName('popEachProductsItemss');
+                proItems = popProductsItemsCollectiosns.getElementsByClassName('EachProductionItem');
 
                 // console.log('proItems: ', proItems);
 
@@ -4121,28 +4121,76 @@
                 // Alternatively, you can use the spread operator
                 var ProItemsDivArray = [...proItems];
 
+                /*
+                                ProItemsDivArray.forEach((OneItem) => {
+                                    // make changes 
+                                    var item = {
+                                        Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
+                                        Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
+                                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0].textContent,
+                                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
+                                        ColorCode: OneItem.getElementsByClassName('FormulaColorCode')[0].textContent,
+                                        SubCategoryName: OneItem.getElementsByClassName('FormulaSubCategoryName')[0].textContent,
+                                    }
+                                    if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
+                                        item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
+                                    }
+                
+                                    if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
+                                        item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
+                                    }
+                
+                                    // console.log("Proitem: ", item);
+                
+                                    ProductionsItems.push(item);
+                                });*/
 
                 ProItemsDivArray.forEach((OneItem) => {
                     // make changes 
-                    var item = {
-                        Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
-                        Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
-                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0].textContent,
-                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
-                        ColorCode: OneItem.getElementsByClassName('FormulaColorCode')[0].textContent,
-                        SubCategoryName: OneItem.getElementsByClassName('FormulaSubCategoryName')[0].textContent,
-                    }
-                    if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
-                        item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
-                    }
+                    //   console.log(OneItem);
+                    if (OneItem.getElementsByClassName('FormulaColorName')[0]) {
 
-                    if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
-                        item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
+
+                        var item = {
+                            Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
+                            Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
+                            Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
+
+                        }
+
+                        if (OneItem.getElementsByClassName('SelectedFormulaColorName')[0]) {
+                            item.FormulaColorName = OneItem.getElementsByClassName('SelectedFormulaColorName')[0].textContent;
+                            item.FormulaColorCode = OneItem.getElementsByClassName('SelectedFormulaColorCode')[0].textContent;
+                            item.SubCategoryName = OneItem.getElementsByClassName('SelectedFormulaSubCategoryName')[0].textContent;
+                        }
+
+                        if (OneItem.getElementsByClassName('SelectedFormulaFileNo')[0]) {
+                            item.FileNo = OneItem.getElementsByClassName('SelectedFormulaFileNo')[0].textContent;
+                        }
+
+
+                        if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
+                            item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
+                        }
+
+                        if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
+                            item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
+                        }
+
+                        if (OneItem.getElementsByClassName('ProItemCheckBox')[0]) {
+                            if (OneItem.getElementsByClassName('ProItemCheckBox')[0].checked) {
+                                item.State = "Complete";
+                            } else {
+                                item.State = "InComplete";
+                            }
+                        } else {
+                            item.State = "InComplete";
+                        }
+
+                        // console.log("Proitem: ", item);
+
+                        ProductionsItems.push(item);
                     }
-
-                    // console.log("Proitem: ", item);
-
-                    ProductionsItems.push(item);
                 });
 
                 // get all Comment

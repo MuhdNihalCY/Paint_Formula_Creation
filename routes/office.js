@@ -452,16 +452,18 @@ router.post('/UpdareCardOrder/:cardID', OfficeVerifyLogin, async (req, res) => {
     let comments = await JSON.parse(data.comments);
     let Labels = await JSON.parse(data.Labels);
     let ReadyProducts = await JSON.parse(data.ReadyProducts);
-    // console.log(productionsItemsArray);
 
+    console.log("productionsItemsArray: ", productionsItemsArray);
     await productionsItemsArray.forEach((EachItem) => {
+        console.log("Each Item: ", EachItem);
         var PushData = {
             Name: EachItem.Name,
             State: "InComplete",
             Qty: EachItem.Qty,
             Unit: EachItem.Unit,
             FileNo: EachItem.FileNo ? EachItem.FileNo : "",
-            ColorCode: EachItem.ColorCode,
+            FormulaColorName: EachItem.FormulaColorName,
+            FormulaColorCode: EachItem.FormulaColorCode,
             SubCategoryName: EachItem.SubCategoryName,
 
         }
@@ -475,6 +477,7 @@ router.post('/UpdareCardOrder/:cardID', OfficeVerifyLogin, async (req, res) => {
 
         CheckItems.push(PushData)
     })
+    console.log("CheckItems:", CheckItems);
 
 
 

@@ -184,6 +184,110 @@ router.get('/MoveCardToArchived/:CardID', DriverVerifyLogin, (req, res) => {
     // })
 })
 
+router.post('/UpdareCardOrder/:cardID', DriverVerifyLogin, async (req, res) => {
+    console.log("Order Creating Updating: ", req.body);
+    var data = req.body;
+    const imageData = req.files;
+    var cardID = req.params.cardID;
+
+    //console.log("imageData", imageData); 
+    // ContactDetails: {
+    //     Name: 'dfgdfdf',
+    //     CallCountryCode: '+971',
+    //     CallNumber: '4334534',
+    //     WhatsappCountryCode: '+971',
+    //     WhatsappNumber: '34534'
+    //   }
+
+    var CheckItems = [];
+
+    let productionsItemsArray = await JSON.parse(data.ProductionsItems);
+    let ContactDetails = await JSON.parse(data.ContactDetails);
+    let comments = await JSON.parse(data.comments);
+    let Labels = await JSON.parse(data.Labels);
+    let ReadyProducts = await JSON.parse(data.ReadyProducts);
+    // console.log(productionsItemsArray);
+
+    await productionsItemsArray.forEach((EachItem) => {
+        var PushData = {
+            Name: EachItem.Name,
+            State: "InComplete",
+            Qty: EachItem.Qty,
+            Unit: EachItem.Unit,
+            FileNo: EachItem.FileNo ? EachItem.FileNo : "",
+            ColorCode: EachItem.ColorCode,
+            SubCategoryName: EachItem.SubCategoryName,
+
+        }
+
+        if (EachItem.matt) {
+            PushData.matt = EachItem.Matt
+        }
+        if (EachItem.gloss) {
+            PushData.gloss = EachItem.Gloss
+        }
+
+        CheckItems.push(PushData)
+    })
+
+
+
+    var NewOrder = {
+        Name: data.OrderName,
+        OrderIDNumber: data.OrderIDNumber,
+        CustomerName: data.CustomerName,
+        // CurrentList: "ORDERS",
+        // ListArray: [
+        //     {
+        //         ListName: "ORDERS",
+        //         InTIme: Date.now(),
+        //         InEmployeeName: req.session.OfficeData.UserName,
+        //         InEmployeeDesignation: req.session.OfficeData.Designation
+        //     }
+        // ],
+        AlternateContactNumber: "",
+        AlternateContactcountrySelect: "",
+        // CheckListItems: {
+        //     // CardName: "ORDERS",
+        //     checkItems: CheckItems
+        // },
+        ContactNumber: ContactDetails.CallNumber,
+        ContactcountrySelect: ContactDetails.CallCountryCode,
+        ContactPersonName: ContactDetails.Name,
+        WhatsAppcountrySelect: ContactDetails.WhatsappCountryCode,
+        WhatsappNumber: ContactDetails.WhatsappNumber,
+        description: "",
+        comments: comments,
+        Labels: Labels,
+    }
+
+    if (req.files) {
+        NewOrder.IsAttachments = true;
+    }
+
+    console.log("New Card updated: ", NewOrder);
+
+    var Activity = {
+        activity: `${req.session.DriverData.UserName} Updated this card.`,
+        Time: Date.now()
+    }
+
+    employeeHelpers.UpdateCard(NewOrder, cardID, Activity).then((CardId) => {
+        if (req.files) {
+            const imageData = req.files.file;
+            // console.log('Image data:', imageData);
+
+            imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
+                if (!err) {
+                } else {
+                    console.log("Error at img1 " + err)
+                }
+            })
+        }
+        res.json({ State: true });
+    })
+})
+
 
 
 

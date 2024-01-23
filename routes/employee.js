@@ -2385,7 +2385,7 @@ router.get('/getAllCardAndListsAndUsersToManagement', EmployeeVerifyLogin, (req,
 })
 
 router.post('/UpdareCardOrder/:cardID', EmployeeVerifyLogin, async (req, res) => {
-  console.log("Order Creating Updating: ", req.body);
+  console.log("Order Creating Updating: ", req.body); 
   var data = req.body;
   const imageData = req.files;
   var cardID = req.params.cardID;
