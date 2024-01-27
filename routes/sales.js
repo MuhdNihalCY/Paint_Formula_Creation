@@ -6,7 +6,7 @@ const whatsappHelper = require('../helpers/whatsappHelper');
 const multer = require('multer');
 var FindGeoss = require('../helpers/geoLoactions');
 const useragent = require('useragent');
-const adminHelpers = require('../helpers/adminHelpers');
+const adminHelpers = require('../helpers/adminHelpers'); 
 const ExcelJS = require('exceljs');
 const { Readable } = require('stream');
 const ledgerHelper = require('../helpers/ledgerHelper');
@@ -769,6 +769,10 @@ router.post('/uploadLedgerData', async (req, res) => {
 
 router.get('/GetAllCustomerPurchaseData/api/:CustomerName', SalesVerifyLogin, (req, res) => {
     employeeHelpers.getAllCustomerPurchaseDataByName(req.params.CustomerName).then((AllData) => {
+        for(i=0; i <= 20; i++){
+            console.log(AllData[i]);
+        }
+        AllData.sort((a, b) => new Date(b.Date) - new Date(a.Date));
         res.json(AllData);
     })
 })
