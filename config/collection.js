@@ -22,5 +22,6 @@ module.exports={
     CUSTOMER_PURCHASE_COLLECTION:'Customer_Purchase_Collection',
     LEDGER_UPLOADED_DATA:'Ledger_Uploaded_Data',
     PRODUCT_GROUP_COLLECTION:'Product_Group_Collection',
-    MECHINE_TEST_DATA:'Mechine_Test_Data'
+    EXCEL_FILE_UPLOAD:'Excel_File_Upload',
+    MECHINE_TEST_DATA:'Mechine_Test_Data',
 };

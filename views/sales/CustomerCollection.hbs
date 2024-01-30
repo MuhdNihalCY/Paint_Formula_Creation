@@ -45,17 +45,57 @@
                 <button class="PurchaseDetailsBTN" onclick="ShowPurchaseDetails()">Purchase details</button>
                 <button class="FollowUpSummeryBTN" onclick="ShowFollowUpSummery()">Follow-up summery</button>
             </div>
+
             <div id="PurchasePaymentAnalysisDiv" class="PurchasePaymentAnalysisDiv">
-                <div class="LineGraph">
-                    <div id="myChart" style="width:100%; height:500px;"></div>
+                <div class="PurchaseSubButtonsDiv">
+                    <button onclick="ShowAccountStatement()" id="AccontStatementBtn"
+                        class="PusrchaseSubButton ">Statement of accounts</button>
+                    <button onclick="ShowLedgerDetails()" id="LedgerBtn" class="PusrchaseSubButton ">Ledger</button>
+                    <button onclick="ShowCustomerPurchaseDetail()" id="PurchaseBtn"
+                        class="PusrchaseSubButton  ">Customer purchase
+                        details</button>
                 </div>
-                <div class="BraGraph">
-                    <div id="columnchart_material" style="width: 100%; height: 500px;"></div>
+                <div class="AccountStatements" id="AccountStatements">
+                    <div class="LineGraph">
+                        <div id="myChart" style="width:100%; height:500px;"></div>
+                    </div>
+                    <div class="BraGraph">
+                        <div id="columnchart_material" style="width: 100%; height: 500px;"></div>
+                    </div>
+                </div>
+                <div id="LedgerDetails" class="LedgerDetails">
+                    <hr>
+                    <div id="ledgerCollections" class="ledgerCollections">
+                    </div>
+                </div>
+                <div class="CustomerPurchaseDetails" id="CustomerPurchaseDetails">
+                    <div class="PurchaseDetailsSearchSection">
+                        <input type="search" placeholder="Search.." name="search" class="PurchaseSearchInput"
+                            id="PurchaseSearchInput" />
+                    </div>
+                    <div class="PurchaseTableDiv">
+                        <div class="PurchaseTableHeader PurchaseTableFormat">
+                            <p>Date</p>
+                            <p>Vch no</p>
+                            <p>Po no</p>
+                            <p>Items</p>
+                            <p>Qty</p>
+                            <p>Price</p>
+                            <p>Amount</p>
+                            <p>Vch type</p>
+                            <p>Debit</p>
+                            <p>Credit</p>
+                            <p>Balance</p>
+                        </div>
+                        <div id="PurchaseTableBodyDiv" class="PurchaseTableBodyDiv">
+
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div id="purchaseDetailsDiv" class="purchaseDetailsDiv">
-                <div class="PurchaseDetailsSearchSection">
+                {{!-- <div class="PurchaseDetailsSearchSection">
                     <input type="search" placeholder="Search.." name="search" class="PurchaseSearchInput"
                         id="PurchaseSearchInput" />
                 </div>
@@ -75,7 +115,7 @@
                     </div>
                     <div id="PurchaseTableBodyDiv" class="PurchaseTableBodyDiv">
 
-                    </div>
+                    </div> --}}
                 </div>
                 {{!-- <table style="">
                     <thead>
@@ -110,11 +150,18 @@
                 <p class="popCardHeaderText">Upload Ledger Data</p>
             </div>
             <form autocomplete="off" action="/sales/uploadLedgerData" method="post" enctype="multipart/form-data">
-                <div class="CCMainSection">
+                <div class="CCMainSection UpnameSection">
                     <div class="CCNameSection UpnameSection">
                         <p class="ccNameText">Customer Name</p>
                         <input type="text" id="CustomerNameUpload" name="CustomerName" placeholder="Enter name here"
-                            class="CCInputname UpLedInputname " required>
+                            class="CCInputname UpLedInputname " oninput="CustomerNameSuggestions()" required>
+
+                        <div class="customer-suggestions-container">
+                            <datalist id="customerNames">
+                                <!-- Add options dynamically using JavaScript -->
+                            </datalist>
+                        </div>
+
                     </div>
                 </div>
                 <div class="CCMainSection UpnameSection">
@@ -921,7 +968,7 @@
         EachCustomerDetailsPopUp.style.display = "flex";
 
         // console.log("Customername: ",Customername," Location: ",Location);
-        // console.log("All Customers:",State.Customers);
+        console.log("All Customers:", State.Customers);
 
         var Customer = State.Customers.find((OneCustomer) => {
             return OneCustomer.Customername === Customername && OneCustomer.Loaction === Location;
@@ -936,11 +983,14 @@
             document.getElementById('PopCustomerCoOrdinatorContent').textContent = Customer.Co_ordinator;
 
             ApplyLineGraphToOutStandingBalance(Customer)
+            ShowAccountStatement();
         }
     }
 
     function ClosePopupForEachCustomer() {
         ShowPurchasePaymentAnalysis();
+
+
 
         var EachCustomerDetailsPopUp = document.getElementById('EachCustomerDetailsPopUp');
         EachCustomerDetailsPopUp.style.display = "none";
@@ -1145,17 +1195,14 @@
         toggleActiveState('PurchasePaymentAnalysisBTN');
     }
 
-    async function ShowPurchaseDetails() {
+    async function ShowCustomerPurchaseDetailFromLedger() {
         showLoader();
 
-        var purchaseDetailsDiv = document.getElementById('purchaseDetailsDiv');
+        var purchaseDetailsDiv = document.getElementById('CustomerPurchaseDetails');
         purchaseDetailsDiv.style.display = "flex";
 
-        var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
-        PurchasePaymentAnalysisDiv.style.display = "none";
-
-        // Toggle active state for buttons
-        toggleActiveState('PurchaseDetailsBTN');
+        // var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
+        // PurchasePaymentAnalysisDiv.style.display = "none";
 
         var TableData = []; // table data
         var popCustName = document.getElementById('popCustNameText').textContent;
@@ -1171,59 +1218,6 @@
 
     }
 
-    /*var PurchaseTableBody = document.getElementById('PurchaseTableBody');
-    PurchaseTableBody.innerHTML = '';
-    if (data.length > 0) {
-        data.forEach((item, index) => {
-            var ItemsCount = item.Items.length;
-            var VirtualTableRow = `
-                <tr rowspan="${ItemsCount}">
-                    <td>${item.Date}</td>
-                    <td>${item.VchNo}</td>
-                    <td>${item.poNo}</td>
-                    ${item.Items.forEach((itemData)=>{
-                        <td>${itemData.Item} itemData.ItemSecondaryName? - ${itemData.ItemSecondaryName}:</td>
-                        <td>${itemData.Qty}</td>
-                        <td>${itemData.Price}</td>
-                        <td>${itemData.Amount}</td>
-                    })}
-                    <td>${item.vchType}</td>
-                    <td>${item.Debit? item.Debit : }</td>
-                    <td>${item.Credit? item.Credit : }</td>
-                    <td>${item.balance}</td>
-                </tr>
-            `;
-            PurchaseTableBody.innerHTML.push(VirtualTableRow);         
-        })
-
-    }*/
-
-    /*var PurchaseTableBody = document.getElementById('PurchaseTableBody');
-       PurchaseTableBody.innerHTML = '';
-
-       if (data.length > 0) {
-           data.forEach((item, index) => {
-               var ItemsCount = item.Items.length;
-               var VirtualTableRow = `
-           <tr>
-               <td rowspan="${ItemsCount}">${item.Date}</td>
-               <td rowspan="${ItemsCount}">${item.VchNo}</td>
-               <td rowspan="${ItemsCount}">${item.poNo}</td>
-               ${item.Items.map((itemData) => `
-                   <td>${itemData.Item}${itemData.ItemSecondaryName ? ` - ${itemData.ItemSecondaryName}` : ''}</td>
-                   <td>${itemData.Qty}</td>
-                   <td>${itemData.Price}</td>
-                   <td>${itemData.Amount}</td>
-               `).join('')}
-               <td rowspan="${ItemsCount}">${item.vchType}</td>
-               <td rowspan="${ItemsCount}">${item.Debit || ''}</td>
-               <td rowspan="${ItemsCount}">${item.Credit || ''}</td>
-               <td rowspan="${ItemsCount}">${item.balance}</td>
-           </tr>
-       `;
-               PurchaseTableBody.innerHTML += VirtualTableRow;
-           });
-       }*/
 
     function ApplyPurchaseDetails(data) {
         hideLoader();
@@ -1231,285 +1225,95 @@
         var PurchaseTableBodyDiv = document.getElementById('PurchaseTableBodyDiv');
         PurchaseTableBodyDiv.innerHTML = "";
 
+        var fragment = document.createDocumentFragment();
         var StartFlag = false;
+
         function SetStartFlag() {
             StartFlag = true;
         }
+
         function RemoveStartFlag() {
             StartFlag = false;
         }
 
         function getSingleItems(Item) {
             var virtualItem = `
-                ${StartFlag ? '<hr class="PurchaseTableHR" />' : ''}
-                <div class="EachItemDiv">
-                    <p>${Item.Item} ${Item.ItemSecondaryName ? ' - ' + Item.ItemSecondaryName : ''}</p>
-                    <p>${Item.Qty}</p>
-                    <p>${Item.Price}</p>
-                    <p>${Item.Amount}</p>
-                </div>
-            `;
-
+            ${StartFlag ? '<hr class="PurchaseTableHR" />' : ''}
+            <div class="EachItemDiv">
+                <p>${Item.Item} ${Item.ItemSecondaryName ? ' - ' + Item.ItemSecondaryName : ''}</p>
+                <p>${Item.Qty}</p>
+                <p>${Item.Price}</p>
+                <p>${Item.Amount}</p>
+            </div>
+        `;
             return virtualItem;
         }
 
         function getReciptItems(Item) {
             var virtualItem = `
-                ${StartFlag ? '<hr class="PurchaseTableHR" />' : ''}
-                <div class="EachItemDiv">
-                    <p>Vch no:  ${Item.VchNo}</p>
-                    <p></p>
-                    <p></p>
-                    <p>${Item.Amount}</p>
-                </div>
-            `;
-
+            ${StartFlag ? '<hr class="PurchaseTableHR" />' : ''}
+            <div class="EachItemDiv">
+                <p>Vch no:  ${Item.VchNo}</p>
+                <p></p>
+                <p></p>
+                <p>${Item.Amount}</p>
+            </div>
+        `;
             return virtualItem;
         }
 
         function getSingleRow(Item) {
-
+            var tempDiv = document.createElement('div');
             var virtualRow = `
-                <div class="EachTableRow">
-                    <p>${Item.Date}</p>
-                    <p>${Item.VchNo}</p>
-                    <p>${Item.poNo ? Item.poNo : ''}</p>
-                    <div class="itemsDivCollections">
-                        ${Item.Items.length > 0 ?
-                            Item.Items.map((SingleItem, index) => {
-                                if (index > 0 ) {
-                                    SetStartFlag();
-                                }
-                                return getSingleItems(SingleItem);
-                            }).join('') :
-                            Item.PaidCollection.length > 0 ?
-                                // do other operations for PaidCollection
-                                Item.PaidCollection.map((SingleItem, index) => {
-                                    if (index > 0 ) {
-                                        SetStartFlag();
-                                    }
-                                    return getReciptItems(SingleItem);
-                                }).join('') : '' // default to an empty string if neither condition is met
+            <div class="EachTableRow">
+                <p>${Item.Date}</p>
+                <p>${Item.VchNo}</p>
+                <p>${Item.poNo ? Item.poNo : ''}</p>
+                <div class="itemsDivCollections">
+                    ${Item.Items.length > 0 ?
+                    Item.Items.map((SingleItem, index) => {
+                        if (index > 0) {
+                            SetStartFlag();
                         }
-                    </div>
-                    <p>${Item.vchType}</p>
-                    <p>${Item.Debit ? Item.Debit : ''}</p>
-                    <p>${Item.Credit ? Item.Credit : ''}</p>
-                    <p>${Item.balance}</p>
+                        return getSingleItems(SingleItem);
+                    }).join('') :
+                    Item.PaidCollection.length > 0 ?
+                        Item.PaidCollection.map((SingleItem, index) => {
+                            if (index > 0) {
+                                SetStartFlag();
+                            }
+                            return getReciptItems(SingleItem);
+                        }).join('') : ''
+                }
                 </div>
-            `;
+                <p>${Item.vchType}</p>
+                <p>${Item.Debit ? Item.Debit : ''}</p>
+                <p>${Item.Credit ? Item.Credit : ''}</p>
+                <p>${Item.balance}</p>
+            </div>
+        `;
             RemoveStartFlag();
-
-            PurchaseTableBodyDiv.innerHTML += virtualRow;
+            tempDiv.innerHTML = virtualRow;
+            while (tempDiv.children.length > 0) {
+                fragment.appendChild(tempDiv.children[0]);
+            }
         }
-
-
 
         if (data.length > 0) {
             data.forEach(getSingleRow);
         }
 
+        PurchaseTableBodyDiv.appendChild(fragment);
+
         hideLoader();
     }
 
-    /*var PurchaseTableBody = document.getElementById('PurchaseTableBody');
-    PurchaseTableBody.innerHTML = '';
- 
-    function createTableRow(rowspan, cells, className) {
-        return `< tr rowspan = "${rowspan}" class="${className}" > ${ cells.join('') }</tr > `;
-    }
- 
-    function createItemRow(cells) {
-        return `< td > ${ cells.join('</td><td>') }</td > `;
-    }
- 
-    function processItem(item, index) {
-        var ItemsCount = item.Items.length;
-        var className = `data_${ index + 1 } `;
- 
-        if (ItemsCount > 0) {
-            var virtualItemRows = [];
-            for (var i = 0; i < ItemsCount; i++) {
-                virtualItemRows.push(createItemRow([
-                    `${ item.Items[i].Item }${ item.Items[i].ItemSecondaryName ? ' - ' + item.Items[i].ItemSecondaryName : '' } `,
-                    item.Items[i].Qty,
-                    item.Items[i].Price,
-                    item.Items[i].Amount
-                ]));
-            }
- 
-            var virtualTableRow = createTableRow(ItemsCount, [
-                `< td rowspan = "${ItemsCount}" > ${ item.Date }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.VchNo }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.poNo }</td > `,
-                virtualItemRows.join(''), // Concatenate virtualItemRows for the item details
-                `< td rowspan = "${ItemsCount}" > ${ item.vchType }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.Debit ? item.Debit : '' }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.Credit ? item.Credit : '' }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.balance }</td > `
-            ], className);
- 
-            PurchaseTableBody.innerHTML += virtualTableRow;
-        }
-    }
- 
-    if (data.length > 0) {
-        data.forEach(processItem);
-    }*/
 
 
-    /*var PurchaseTableBody = document.getElementById('PurchaseTableBody');
-    PurchaseTableBody.innerHTML = '';
- 
-    function createTableRow(rowspan, cells, className) {
-        return `< tr rowspan = "${rowspan}" class="${className}" > ${ cells.join('') }</tr > `;
-    }
- 
-    function createItemRow(cells) {
-        return `< td > ${ cells.join('</td><td>') }</td > `;
-    }
- 
-    function processItem(item, index) {
-        var ItemsCount = item.Items.length;
-        var className = `data_${ index + 1 } `;
- 
-        if (ItemsCount > 0) {
-            var virtualTableRow = createTableRow(ItemsCount, [
-                `< td rowspan = "${ItemsCount}" > ${ item.Date }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.VchNo }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.poNo }</td > `,
-                createItemRow([
-                    `${ item.Items[0].Item }${ item.Items[0].ItemSecondaryName ? ' - ' + item.Items[0].ItemSecondaryName : '' } `,
-                    item.Items[0].Qty,
-                    item.Items[0].Price,
-                    item.Items[0].Amount
-                ]),
-                `< td rowspan = "${ItemsCount}" > ${ item.vchType }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.Debit ? item.Debit : '' }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.Credit ? item.Credit : '' }</td > `,
-                `< td rowspan = "${ItemsCount}" > ${ item.balance }</td > `
-            ], className);
- 
-            PurchaseTableBody.innerHTML += virtualTableRow;
- 
-            if (ItemsCount > 1) {
-                for (var i = 1; i < ItemsCount; i++) {
-                    var virtualItemRow = createItemRow([
-                        `${ item.Items[i].Item }${ item.Items[i].ItemSecondaryName ? ' - ' + item.Items[i].ItemSecondaryName : '' } `,
-                        item.Items[i].Qty,
-                        item.Items[i].Price,
-                        item.Items[i].Amount
-                    ]);
-                    PurchaseTableBody.innerHTML += `< tr class="${className}" > ${ virtualItemRow }</tr > `;
-                }
-            }
-        } else if (item.PaidCollection.length > 0) {
-            var CreditCount = item.PaidCollection.length;
- 
-            var virtualTableRow = createTableRow(CreditCount, [
-                `< td rowspan = "${CreditCount}" > ${ item.Date }</td > `,
-                `< td rowspan = "${CreditCount}" > ${ item.VchNo }</td > `,
-                `< td rowspan = "${CreditCount}" > ${ item.poNo }</td > `,
-                `< td > ${ item.PaidCollection[0].VchNo }</td > `,
-                `< td ></td > `,
-                `< td ></td > `,
-                `< td > ${ item.PaidCollection[0].Amount }</td > `,
-                `< td rowspan = "${CreditCount}" > ${ item.vchType }</td > `,
-                `< td rowspan = "${CreditCount}" > ${ item.Debit ? item.Debit : '' }</td > `,
-                `< td rowspan = "${CreditCount}" > ${ item.Credit ? item.Credit : '' }</td > `,
-                `< td rowspan = "${CreditCount}" > ${ item.balance }</td > `
-            ], className);
- 
-            PurchaseTableBody.innerHTML += virtualTableRow;
- 
-            if (CreditCount > 1) {
-                for (var i = 1; i < CreditCount; i++) {
-                    var virtualItemRow = createItemRow([
-                        `${ item.PaidCollection[i].VchNo } `,
-                        '',
-                        '',
-                        `${ item.PaidCollection[i].Amount } `
-                    ]);
-                    PurchaseTableBody.innerHTML += `< tr class="${className}" > ${ virtualItemRow }</tr > `;
-                }
-            }
-        }
-    }
- 
-    if (data.length > 0) {
-        data.forEach(processItem);
-    } */
-    // slower
-    /*var PurchaseTableBody = document.getElementById('PurchaseTableBody');
-    // Clear the table body
-    PurchaseTableBody.innerHTML = '';
- 
-    if (data.length > 0) {
-        data.forEach((item, index) => {
-            var ItemsCount = item.Items.length;
-            if (ItemsCount > 0) {
-                var VirtualTableRow = `
-            < tr rowspan = "${ItemsCount}" >
-                        <td rowspan="${ItemsCount}">${item.Date}</td>
-                        <td rowspan="${ItemsCount}">${item.VchNo}</td>
-                        <td rowspan="${ItemsCount}">${item.poNo}</td>
-                        <td>${item.Items[0].Item}${item.Items[0].ItemSecondaryName ? ' - ' + item.Items[0].ItemSecondaryName : ''}</td>
-                        <td>${item.Items[0].Qty}</td>
-                        <td>${item.Items[0].Price}</td>
-                        <td>${item.Items[0].Amount}</td>
-                        <td rowspan="${ItemsCount}">${item.vchType}</td>
-                        <td rowspan="${ItemsCount}">${item.Debit ? item.Debit : ''}</td>
-                        <td rowspan="${ItemsCount}">${item.Credit ? item.Credit : ''}</td>
-                        <td rowspan="${ItemsCount}">${item.balance}</td>
-                    </tr >
-            `;
-                PurchaseTableBody.innerHTML += VirtualTableRow;
- 
-                if (ItemsCount > 1) {
-                    for (var i = 1; i < ItemsCount; i++) {
-                        var VirtualItemRow = `
-            < td > ${ item.Items[i].Item }${ item.Items[0].ItemSecondaryName ? ' - ' + item.Items[0].ItemSecondaryName : '' }</td >
-                            <td >${item.Items[i].Qty}</td>
-                            <td >${item.Items[i].Price}</td>
-                            <td >${item.Items[i].Amount}</td>
-        `;
-                        PurchaseTableBody.innerHTML += VirtualItemRow;
-                    }
-                }
-            } else if (item.PaidCollection.length > 0) {
-                var CreditCount = item.PaidCollection.length;
- 
-                var VirtualTableRow = `
-            < tr rowspan = "${CreditCount}" >
-                        <td rowspan="${CreditCount}">${item.Date}</td>
-                        <td rowspan="${CreditCount}">${item.VchNo}</td>
-                        <td rowspan="${CreditCount}">${item.poNo}</td>
-                        <td>${item.PaidCollection[0].VchNo}</td>
-                        <td></td>
-                        <td></td>
-                        <td>${item.PaidCollection[0].Amount}</td>
-                        <td rowspan="${CreditCount}">${item.vchType}</td>
-                        <td rowspan="${CreditCount}">${item.Debit ? item.Debit : ''}</td>
-                        <td rowspan="${CreditCount}">${item.Credit ? item.Credit : ''}</td>
-                        <td rowspan="${CreditCount}">${item.balance}</td>
-                    </tr >
-            `;
-                PurchaseTableBody.innerHTML += VirtualTableRow;
- 
-                if (CreditCount > 1) {
-                    for (var i = 1; i < CreditCount; i++) {
-                        var VirtualItemRow = `
-            < td > ${ item.PaidCollection[i].VchNo }</td >
-                            <td ></td>
-                            <td ></td>
-                            <td >${item.PaidCollection[i].Amount}</td>
-                        `;
-                        PurchaseTableBody.innerHTML += VirtualItemRow;
-                    }
-                }
-            }
-        })
-    }*/
+
+
+
+
 
     function ShowFollowUpSummery() {
         var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
@@ -1556,6 +1360,182 @@
 
         console.log("Matching Rows:", matchingRows);
     });
+
+    function ShowAccountStatement() {
+        var AccountStatements = document.getElementById('AccountStatements');
+        var LedgerDetails = document.getElementById('LedgerDetails');
+        var CustomerPurchaseDetails = document.getElementById('CustomerPurchaseDetails');
+
+        AccountStatements.style.display = "block";
+        LedgerDetails.style.display = "none";
+        CustomerPurchaseDetails.style.display = "none";
+
+        var AccontStatementBtn = document.getElementById('AccontStatementBtn');
+        var PurchaseBtn = document.getElementById('PurchaseBtn');
+        var LedgerBtn = document.getElementById('LedgerBtn');
+
+        // Add or remove class for active state
+        AccontStatementBtn.classList.add("PurchaseSubButtonActive");
+        LedgerBtn.classList.remove("PurchaseSubButtonActive");
+        PurchaseBtn.classList.remove("PurchaseSubButtonActive");
+    }
+
+    function ShowLedgerDetails() {
+        getAllCustomerLedgerFile();
+        var LedgerDetails = document.getElementById('LedgerDetails');
+        var AccountStatements = document.getElementById('AccountStatements');
+        var CustomerPurchaseDetails = document.getElementById('CustomerPurchaseDetails');
+
+        LedgerDetails.style.display = "block";
+        AccountStatements.style.display = "none";
+        CustomerPurchaseDetails.style.display = "none";
+
+        var LedgerBtn = document.getElementById('LedgerBtn');
+        var PurchaseBtn = document.getElementById('PurchaseBtn');
+        var AccontStatementBtn = document.getElementById('AccontStatementBtn');
+
+        // Add or remove class for active state
+        LedgerBtn.classList.add("PurchaseSubButtonActive");
+        PurchaseBtn.classList.remove("PurchaseSubButtonActive");
+        AccontStatementBtn.classList.remove("PurchaseSubButtonActive");
+
+    }
+
+    function ShowCustomerPurchaseDetail() {
+        var CustomerPurchaseDetails = document.getElementById('CustomerPurchaseDetails');
+        var AccountStatements = document.getElementById('AccountStatements');
+        var LedgerDetails = document.getElementById('LedgerDetails');
+
+        CustomerPurchaseDetails.style.display = "block";
+        LedgerDetails.style.display = "none";
+        AccountStatements.style.display = "none";
+
+        var PurchaseBtn = document.getElementById('PurchaseBtn');
+        var LedgerBtn = document.getElementById('LedgerBtn');
+        var AccontStatementBtn = document.getElementById('AccontStatementBtn');
+
+        // Add or remove class for active state
+        PurchaseBtn.classList.add("PurchaseSubButtonActive");
+        LedgerBtn.classList.remove("PurchaseSubButtonActive");
+        AccontStatementBtn.classList.remove("PurchaseSubButtonActive");
+
+
+        ShowCustomerPurchaseDetailFromLedger();
+    }
+
+
+    /*function CustomerNameSuggestions() {
+        var customerNamesDatalist = document.getElementById("customerNames");
+        var customerSuggestionsContainer = document.querySelector(".customer-suggestions-container");
+        var customerNameInput = document.getElementById("CustomerNameUpload");
+
+        customerNamesDatalist.innerHTML = "";
+        customerNamesDatalist.style.display = "block";
+        // Populate datalist with customer names
+        State.Customers.forEach(function (customer) {
+            var option = document.createElement("option");
+            option.value = customer.Customername;
+            option.textContent = customer.Customername;
+            customerNamesDatalist.appendChild(option);
+        });
+
+        // Attach an event listener to the input for suggestions
+        var customerNameInput = document.getElementById("CustomerNameUpload");
+        customerNameInput.addEventListener("input", function (event) {
+            var inputValue = event.target.value.toLowerCase();
+            var options = customerNamesDatalist.getElementsByTagName("option");
+
+            for (var i = 0; i < options.length; i++) {
+                var optionValue = options[i].value.toLowerCase();
+                if (optionValue.startsWith(inputValue)) {
+                    options[i].style.display = "";
+                } else {
+                    options[i].style.display = "none";
+                }
+            }
+        });
+    }*/
+
+    function CustomerNameSuggestions() {
+        var customerNamesDatalist = document.getElementById("customerNames");
+        var customerSuggestionsContainer = document.querySelector(".customer-suggestions-container");
+        var customerNameInput = document.getElementById("CustomerNameUpload");
+
+        customerNamesDatalist.innerHTML = "";
+        customerNamesDatalist.style.display = "block";
+        customerNamesDatalist.style.border = "1px solid gray";
+
+        // Populate datalist with customer names
+        State.Customers.forEach(function (customer) {
+            var option = document.createElement("option");
+            option.value = customer.Customername;
+            option.textContent = customer.Customername;
+            customerNamesDatalist.appendChild(option);
+        });
+
+        // Filter and display suggestions
+        var inputValue = customerNameInput.value.toLowerCase();
+        var options = customerNamesDatalist.getElementsByTagName("option");
+
+        for (var i = 0; i < options.length; i++) {
+            var optionValue = options[i].value.toLowerCase();
+            if (optionValue.startsWith(inputValue)) {
+                options[i].style.display = "";
+                options[i].addEventListener("click", function () {
+                    customerNameInput.value = this.value;
+                    customerNamesDatalist.style.display = "none"
+                    customerNamesDatalist.style.border = "none"
+
+                });
+            } else {
+                options[i].style.display = "none";
+            }
+        }
+    }
+
+
+    async function getAllCustomerLedgerFile() {
+        showLoader();
+        var popCustNameText = document.getElementById('popCustNameText').textContent;
+        await fetch(`/sales/GetAllCustomerledgerFile/api/${popCustNameText}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data from the server:', data);
+                addLedgerFiles(data);
+            })
+            .catch(error => console.error('Error:', error));
+
+
+        hideLoader()
+    }
+
+
+    function addLedgerFiles(data) {
+        var ledgerCollections = document.getElementById('ledgerCollections');
+        ledgerCollections.innerHTML = "";
+        //console.log(data);
+        if (data.length > 0) {
+            data.forEach((Item, index) => {
+                var virtualItem = `
+                <div class="EachLedgerItem">
+                    <img class="ExcelIcon" src="/images/Icons/Microsoft Excel_icon.png" alt="">
+                    <div class="EachLedgerInfo">
+                        <p class="LedgerName">${Item.name}</p>
+                        <p class="LedgerInfoData">Uploaded at ${Item.Date}</p>
+                    </div>
+                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${Item.Excel}" class="btn LedgerDownloadBtn">Download</a>
+                </div>
+                `;
+
+                ledgerCollections.innerHTML += virtualItem;
+            })
+        }
+    }
+
+
+
+
+
 
 
 
@@ -2205,6 +2185,7 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        padding: 1rem 0;
     }
 
     .UpLedInputname {
@@ -2319,7 +2300,8 @@
     }
 
     .PurchasePaymentAnalysisDiv,
-    .purchaseDetailsDiv {
+    .purchaseDetailsDiv,
+    .CustomerPurchaseDetails {
         display: flex;
         flex-direction: column;
         margin: 1rem;
@@ -2329,11 +2311,41 @@
         gap: 4rem;
     }
 
+    .PurchaseSubButtonsDiv {
+        display: flex;
+        gap: 3rem;
+        justify-content: center;
+    }
+
+    .PusrchaseSubButton {
+        width: fit-content;
+        padding: 0.5rem 2rem;
+        background: transparent;
+        border: 1px solid gray;
+        outline: none;
+        color: #B3B7BA;
+        font-size: 20px;
+        font-weight: 600;
+        border-radius: 15px;
+    }
+
+    .PusrchaseSubButton:hover {
+        background-color: #3b4046;
+        color: #B3B7BA;
+    }
+
+    .PusrchaseSubButtonActive {
+        background-color: #24272b;
+        color: #B3B7BA;
+    }
+
+
     .BarGraph {
         padding-bottom: 5rem;
     }
 
-    .purchaseDetailsDiv {
+    .purchaseDetailsDiv,
+    .CustomerPurchaseDetails {
         display: none;
         gap: 1rem;
     }
@@ -2406,8 +2418,61 @@
         align-items: start;
     }
 
-    .PurchaseTableHR{
+    .PurchaseTableHR {
         margin: 0;
         margin-bottom: 1rem;
+    }
+
+    .ledgerCollections {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .EachLedgerItem {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .EachLedgerItem p {
+        margin: 0;
+        margin-bottom: 5px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .ExcelIcon {
+        width: 5rem;
+    }
+
+    .LedgerDownloadBtn {
+        border: none;
+        text-decoration: none;
+        padding: 1rem 2rem;
+        background: #b3b7ba;
+    }
+
+    .customer-suggestions-option {
+        cursor: pointer;
+        padding: 8px;
+    }
+
+    .customer-suggestions-option:hover {
+        background-color: #f0f0f0;
+    }
+
+    #customerNames {
+        display: none;
+        max-height: 10rem;
+        overflow-y: auto;
+    }
+
+    #customerNames option {
+        padding: 0.5rem;
+        font-weight: 600;
+        font-size: 18px;
+        cursor: pointer;
     }
 </style>

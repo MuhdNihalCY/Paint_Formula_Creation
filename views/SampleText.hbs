@@ -26,6 +26,7 @@
                 <p>Inform the result to the developer with a working video and screenshots.</p>
                 <p>If any errors are encountered, also inform the result to the developer with a video and screenshots.
                 </p>
+                <p>Do not Enter values manually using keyboard.</p>
             </div>
             <label for="weightValue"> Weight Value :</label>
             <input type="text" id="weightData">
@@ -55,7 +56,73 @@
     const connectButton = document.getElementById("connectButton");
     const outputDiv = document.getElementById("output");
 
-    connectButton.addEventListener("click", async () => {
+    // Event listener for the 'connect' button
+    document.getElementById("connectButton").addEventListener("click", async () => {
+
+        try {
+            // Replace 0x24BC with the actual vendor ID of your device
+            const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x24BC }] });
+
+            console.log("Device selected:", device);
+            outputDiv.textContent = "Device selected.";
+
+            await device.open();
+            console.log("Device opened");
+            outputDiv.textContent += "\nDevice opened.";
+
+            // Replace configuration and interface numbers if needed
+            await device.selectConfiguration(1);
+            await device.claimInterface(0);
+            console.log("Interface claimed");
+            outputDiv.textContent += "\nInterface claimed.";
+
+            // Access endpoints (replace endpoint numbers if needed)
+            const readEndpoint = device.endpoints[0];
+            const writeEndpoint = device.endpoints[1];
+
+            // Example read operation (replace transfer parameters and data processing)
+            const bufferSize = 64;
+            let result = await readEndpoint.transferIn(1, bufferSize);
+
+            // Access the data from the transfer result
+            let receivedData = new Uint8Array(result.data.buffer);
+            let decodedData = new TextDecoder().decode(receivedData);
+
+            console.log("Received data:", decodedData);
+
+            // Assuming the read operation was successful, create a success response
+            var ResultData = {
+                type: "PMAEvolutions",
+                'Result': 'Success',
+                'Message': 'Data Received Successfully!',
+                Resultdata: result,
+                data: decodedData
+            };
+
+            // Send the data to the server or perform any further processing
+            sentDataToServer(ResultData);
+            outputDiv.textContent += "\nReceived data: " + decodedData;
+
+            // Example write operation (replace data to send)
+            // await writeEndpoint.transferOut(/* data to send */);
+            // console.log("Data sent successfully");
+            // outputDiv.textContent += "\nData sent successfully.";
+
+        } catch (error) {
+            // Handle errors
+            console.error("Error:", error);
+            var ErrorData = {
+                type: "PMAEvolutions",
+                Result: false,
+                ErrorData: error,
+                ErrorMsg: error.message
+            };
+            sentDataToServer(ErrorData);
+            outputDiv.textContent = "Error: " + error.message;
+        }
+    });
+
+    /*connectButton.addEventListener("click", async () => {
         try {
             // Replace 0x1234 with the device's vendor ID
             const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x24BC }] });
@@ -78,7 +145,7 @@
             const writeEndpoint = device.endpoints[1];
 
             // Example read operation (replace transfer parameters and data processing)
-            let result = await readEndpoint.transferIn(/* transfer parameters */);
+            let result = await readEndpoint.transferIn(1, 64);
             //   console.log("Received data:", result.data);
             var ResultData = {
                 type: "PMAEvolutions",
@@ -91,9 +158,9 @@
             outputDiv.textContent += "\nReceived data: " + result.data;
 
             // Example write operation (replace data to send)
-            await writeEndpoint.transferOut(/* data to send */);
-            console.log("Data sent successfully");
-            outputDiv.textContent += "\nData sent successfully.";
+           // await writeEndpoint.transferOut( data to send );
+           // console.log("Data sent successfully");
+           // outputDiv.textContent += "\nData sent successfully.";
 
         } catch (error) {
             //  console.error("Error:", error);
@@ -106,7 +173,7 @@
             sentDataToServer(ErrorData);
             // outputDiv.textContent = "Error: " + error.message;
         }
-    });
+    });*/
 
 
     function sentDataToServer(data) {

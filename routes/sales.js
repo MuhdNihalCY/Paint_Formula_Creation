@@ -6,7 +6,7 @@ const whatsappHelper = require('../helpers/whatsappHelper');
 const multer = require('multer');
 var FindGeoss = require('../helpers/geoLoactions');
 const useragent = require('useragent');
-const adminHelpers = require('../helpers/adminHelpers'); 
+const adminHelpers = require('../helpers/adminHelpers');
 const ExcelJS = require('exceljs');
 const { Readable } = require('stream');
 const ledgerHelper = require('../helpers/ledgerHelper');
@@ -692,7 +692,15 @@ router.get('/getallorders/api', (req, res) => {
     })
 })
 
-router.post('/uploadLedgerData', async (req, res) => {
+router.post('/uploadLedgerData', SalesVerifyLogin, async (req, res) => {
+
+    function storeExcelFile(excelFile) {
+        const fileData = excelFile.data;
+        var ExcelData = fileData.toString('base64');
+        employeeHelpers.UploadExcelFileInBase64(ExcelData, req.session.SalesData, req.body.CustomerName).then(() => {
+            console.log("Excel File Uploaded!");
+        })
+    }
 
     try {
         // Check if the file was uploaded
@@ -704,6 +712,7 @@ router.post('/uploadLedgerData', async (req, res) => {
         const excelFile = req.files.excelFile;
         // Example: Log the file details
         console.log('Uploaded File:', excelFile);
+        storeExcelFile(excelFile)
 
         // Get start data and end data
         let data = [];
@@ -769,13 +778,21 @@ router.post('/uploadLedgerData', async (req, res) => {
 
 router.get('/GetAllCustomerPurchaseData/api/:CustomerName', SalesVerifyLogin, (req, res) => {
     employeeHelpers.getAllCustomerPurchaseDataByName(req.params.CustomerName).then((AllData) => {
-        for(i=0; i <= 20; i++){
+        for (i = 0; i <= 20; i++) {
             console.log(AllData[i]);
         }
         AllData.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+        // only sent past 12 months data. 
         res.json(AllData);
     })
 })
+
+router.get('/GetAllCustomerledgerFile/api/:CustomerName', SalesVerifyLogin, (req, res) => {
+    employeeHelpers.getAllCustomerLedgerFileByName(req.params.CustomerName).then((AllFiles) => {
+        res.json(AllFiles)
+    })
+})
+
 
 
 router.get('/Logout', SalesVerifyLogin, (req, res) => {

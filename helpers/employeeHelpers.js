@@ -1,8 +1,6 @@
 var db = require('../config/connection');
 var collection = require('../config/collection');
-const { ObjectId, ReturnDocument } = require('mongodb');
-const { ReservationListInstance } = require('twilio/lib/rest/taskrouter/v1/workspace/task/reservation');
-const { response } = require('express');
+const { ObjectId } = require('mongodb');
 
 var express = require('express');
 const fs = require('fs');
@@ -1801,6 +1799,41 @@ module.exports = {
             await db.get().collection(collection.MECHINE_TEST_DATA).insertOne(data).then(() => {
                 resolve();
             })
+        })
+    },
+
+    UploadExcelFileInBase64: (ExcelFile, UserData, CustomerName) => {
+        const currentDate = new Date();
+
+        const day = ('0' + currentDate.getDate()).slice(-2);
+        const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+        const year = currentDate.getFullYear();
+        const hours = ('0' + currentDate.getHours()).slice(-2);
+        const minutes = ('0' + currentDate.getMinutes()).slice(-2);
+
+        const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
+        console.log(formattedDate);
+
+        return new Promise(async (resolve, reject) => {
+            var UploadData = {
+                name: `Excel_${Date.now()}`,
+                InsertedTime: Date.now(),
+                Excel: ExcelFile,
+                CustomerName: CustomerName,
+                UserName: UserData.UserName,
+                Designation: UserData.Designation,
+                Branch: UserData.Branch,
+                Date: formattedDate
+            }
+            await db.get().collection(collection.EXCEL_FILE_UPLOAD).insertOne(UploadData).then(() => {
+                resolve();
+            })
+        })
+    },
+    getAllCustomerLedgerFileByName: (CustomerName) => {
+        return new Promise(async (resolve, reject) => {
+            let Files = await db.get().collection(collection.EXCEL_FILE_UPLOAD).find({ CustomerName: CustomerName }).toArray();
+            resolve(Files);
         })
     }
 }
