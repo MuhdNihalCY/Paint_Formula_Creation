@@ -1021,16 +1021,10 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
 
     function BulkOrderNow(orderFile) {
       var Branch = req.session.EmployeeData.Branch;
-      employeeHelpers.BulkOrderUpdate(orderFile, Branch).then(() => {
-        // Rest of the code...
-        //  console.log("Bulk Updated!");
-        // employeeHelpers.CreateNewCard(orderFile).then((CardId) => {
-        // employeeHelpers.CreateNewCard(orderFile, req.session.EmployeeData).then((CardId) => {
-        //    employeeHelpers.SaveCardIDToOrder(orderFile.FileName).then(() => {
-        res.redirect('/Orders');
-        //  })
-        // })
-        // })
+      employeeHelpers.BulkOrderUpdate(orderFile, Branch).then((OrderID) => {
+        employeeHelpers.StoreBulkOrderReportData(OrderID).then(()=>{
+          res.redirect('/Orders');
+        })
       });
     }
 
@@ -1205,7 +1199,8 @@ router.post('/UpdateAdditiveStock/:id', EmployeeVerifyLogin, (req, res) => {
 })
 
 router.get('/Orders', EmployeeVerifyLogin, (req, res) => {
-  employeeHelpers.GetAllOrderList().then((Orders) => {
+  var Branch = req.session.EmployeeData.Branch;
+  employeeHelpers.GetAllOrderList(Branch).then((Orders) => {
     res.render('employee/Orders', { Orders })
   })
 })

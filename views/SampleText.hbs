@@ -13,7 +13,7 @@
     <div class="PMA_EvolutionTestSection">
         <h2>PMA Evolution Weight Scale Test</h2>
         <div class="PMATestWithValues">
-            <p>Instructions: Connect the weight scale.</p>
+            <p>Instructions: Connect the weigh scale.</p>
         </div>
 
         <button id="connectButton">Click here to Connect a device</button>
@@ -21,15 +21,15 @@
 
         <div class="WeightValuesTest">
             <div class="PMATestWithValues">
-                <p>Instructions: After the weight scale is connected successfully,</p>
-                <p>Click on the weight input box and put some weight values on the scale.</p>
+                <p>Instructions: After the weigh scale is connected successfully,</p>
+                <p>Click on the weigh input box and put some weigh values on the scale.</p>
                 <p>Inform the result to the developer with a working video and screenshots.</p>
                 <p>If any errors are encountered, also inform the result to the developer with a video and screenshots.
                 </p>
                 <p>Do not Enter values manually using keyboard.</p>
             </div>
-            <label for="weightValue"> Weight Value :</label>
-            <input type="text" id="weightData">
+            <label for="weighValue"> Weight Value :</label>
+            <input type="text" id="weighData">
         </div>
 
     </div>
@@ -215,13 +215,13 @@
     }
 
 
-    var weightData = document.getElementById('weightData');
+    var weighData = document.getElementById('weighData');
 
     // Add an event listener for the 'input' event
-    weightData.addEventListener('input', function () {
+    weighData.addEventListener('input', function () {
         var Data = {
-            Type: 'weight Data reader',
-            data: weightData.value
+            Type: 'weigh Data reader',
+            data: weighData.value
         }
         sentDataToServer(Data);
     });

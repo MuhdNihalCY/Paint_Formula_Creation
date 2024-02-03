@@ -793,6 +793,26 @@ router.get('/GetAllCustomerledgerFile/api/:CustomerName', SalesVerifyLogin, (req
     })
 })
 
+router.get('/GetProductBinderAdditive/PurchasedDetails/api/:CustomerName', SalesVerifyLogin, (req, res) => {
+    let Branch = req.session.SalesData.Branch
+    let CustomerName = req.params.CustomerName;
+    // for past 12 months
+    employeeHelpers.getAllProductStockoutReportData(Branch,CustomerName).then((ProductReportData) => {
+        employeeHelpers.getAllProductGroupReportData(ProductReportData).then((ProductGroupReportData) => {
+            
+            employeeHelpers.getAllBindersReportData(Branch,CustomerName).then((BinderReportData) => {
+                employeeHelpers.getAllAdditiveReportData(Branch,CustomerName).then((AdditiveReportData) => {
+                    res.json({
+                        ProductReportData: ProductReportData,
+                        ProductGroupReportData: ProductGroupReportData,
+                        BinderReportData: BinderReportData,
+                        AdditiveReportData: AdditiveReportData
+                    })
+                })
+            })
+        })
+    })
+})
 
 
 router.get('/Logout', SalesVerifyLogin, (req, res) => {

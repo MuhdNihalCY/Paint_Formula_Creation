@@ -411,10 +411,29 @@ module.exports = {
     BulkOrderUpdate: (OrderFile, Branch) => {
         return new Promise(async (resolve, reject) => {
             try {
+
                 // console.log("OrderFile From Helpers: ", OrderFile);
                 var TinterCount = parseInt(OrderFile.TinterCount);
 
                 OrderFile.InsertedTime = Date.now();
+                OrderFile.Branch = Branch;
+
+                const today = new Date();
+                let dd = today.getDate();
+                let mm = today.getMonth() + 1; // Months start at 0!
+                let yyyy = today.getFullYear();
+
+                if (dd < 10) {
+                    dd = '0' + dd;
+                }
+
+                if (mm < 10) {
+                    mm = '0' + mm;
+                }
+
+                const formattedToday = dd + '-' + mm + '-' + yyyy;
+                OrderFile.StockOutDate = formattedToday
+
                 await db.get().collection(collection.BULK_ORDER_COLLECTION).insertOne(OrderFile);
 
                 // Update Product stock
@@ -468,7 +487,7 @@ module.exports = {
                     // await db.get().collection(collection.ADDITIVE_COLLECTION).updateOne({ "Additive_Name": OrderFile.Additive }, { $set: { Stock: AdditiveNewStock } });
                 }
 
-                resolve(); // Resolve the promise after all operations are completed
+                resolve(OrderFile.InsertedTime); // Resolve the promise after all operations are completed
             } catch (error) {
                 reject(error);
             }
@@ -630,9 +649,9 @@ module.exports = {
             resolve(Additives)
         })
     },
-    GetAllOrderList: () => {
+    GetAllOrderList: (Branch) => {
         return new Promise(async (resolve, reject) => {
-            var Orders = await db.get().collection(collection.BULK_ORDER_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
+            var Orders = await db.get().collection(collection.BULK_ORDER_COLLECTION).find({ "Branch": Branch }).sort({ "InsertedTime": -1 }).toArray();
             resolve(Orders);
         })
     },
@@ -1834,6 +1853,312 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let Files = await db.get().collection(collection.EXCEL_FILE_UPLOAD).find({ CustomerName: CustomerName }).toArray();
             resolve(Files);
+        })
+    },
+    StoreBulkOrderReportData: (OrderID) => {
+        return new Promise(async (resolve, reject) => {
+            var OrderData = await db.get().collection(collection.BULK_ORDER_COLLECTION).findOne({ InsertedTime: OrderID });
+
+
+            // Function to create an array of objects for Tinters
+            function createTintersArray(data) {
+                const tintersArray = [];
+
+                for (let i = 1; i <= data.TinterCount; i++) {
+                    const tinterObject = {
+                        TinterName: data[`TineterName${i}`],
+                        TinterQuantityGrams: data[`TinterGram${i}`],
+                        TinterVolume: data[`TinterVolume${i}`],
+                        MixerName: data.Mixer,
+                        CustomerName: data.CustomerName,
+                        OrderDate: data.StockOutDate,
+                        InsertedTime: data.InsertedTime,
+                        Branch: data.Branch,
+                        CustomerName: data.CustomerName
+                    };
+
+                    tintersArray.push(tinterObject);
+                }
+
+                return tintersArray;
+            }
+
+            // Function to create an array of objects for Binders
+            function createBindersArray(data) {
+                const bindersArray = [];
+
+                if (data.Binder1 !== "") {
+                    const binderObject1 = {
+                        BinderName: data.Binder1,
+                        BinderQuantityGrams: data.Binder1QTY,
+                        BinderVolume: data.Binder1Volume,
+                        MixerName: data.Mixer,
+                        CustomerName: data.CustomerName,
+                        OrderDate: data.StockOutDate,
+                        InsertedTime: data.InsertedTime,
+                        Branch: data.Branch,
+                        CustomerName: data.CustomerName
+                    };
+
+                    bindersArray.push(binderObject1);
+                }
+
+                // Add logic for additional binders if needed
+
+                return bindersArray;
+            }
+
+            // Function to create an array of objects for Additives
+            function createAdditivesArray(data) {
+                const additivesArray = [];
+
+                const additiveObject = {
+                    AdditiveName: data.Additive,
+                    AdditiveQuantityGrams: data.AdditiveQTY,
+                    AdditiveVolume: data.AdditiveVolume,
+                    MixerName: data.Mixer,
+                    CustomerName: data.CustomerName,
+                    OrderDate: data.StockOutDate,
+                    InsertedTime: data.InsertedTime,
+                    Branch: data.Branch,
+                    CustomerName: data.CustomerName
+                };
+
+                additivesArray.push(additiveObject);
+
+                return additivesArray;
+            }
+
+
+            const tintersArray = createTintersArray(OrderData);
+            const bindersArray = createBindersArray(OrderData);
+            const additivesArray = createAdditivesArray(OrderData);
+
+            // Function to fetch product information for each tinter asynchronously
+            const fetchProductInfo = async (tinter) => {
+                const product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Name: tinter.TinterName });
+                tinter.ProductGroup = product.GroupName;
+                tinter.Abbreviation = product.Abbreviation;
+            };
+
+            // Use Promise.all to execute all fetchProductInfo promises concurrently
+            await Promise.all(tintersArray.map(fetchProductInfo));
+
+            // console.log("Tinters Array:", tintersArray);
+            // console.log("Binders Array:", bindersArray);
+            // console.log("Additives Array:", additivesArray);
+
+            // store all report data
+            const storeProductReportData = async (productData) => {
+                await db.get().collection(collection.PRODUCT_STOCKOUT_REPORT_DATA).insertOne(productData);
+            }
+
+            const storeBinderReportData = async (BinderData) => {
+                await db.get().collection(collection.BINDER_STOCKOUT_REPORT_DATA).insertOne(BinderData);
+            }
+
+            const storeAdditiveReportData = async (Additive) => {
+                await db.get().collection(collection.ADDITIVE_STOCKOUT_REPORT_DATA).insertOne(Additive);
+            }
+
+            await Promise.all(tintersArray.map(storeProductReportData));
+            await Promise.all(bindersArray.map(storeBinderReportData));
+            await Promise.all(additivesArray.map(storeAdditiveReportData));
+
+            resolve();
+        })
+    },
+
+    getAllProductStockoutReportData: (Branch, CustomerName) => {
+        return new Promise(async (resolve, reject) => {
+            const twelveMonthsAgo = new Date();
+            twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+            var ProductsData = await db.get().collection(collection.PRODUCT_STOCKOUT_REPORT_DATA).find({
+                Branch: Branch,
+                CustomerName: CustomerName,
+                InsertedTime: {
+                    $gte: twelveMonthsAgo.getTime(),
+                    $lt: new Date().getTime()
+                }
+            }).toArray();
+
+            // Your input data
+            const inputArray = ProductsData;
+
+            // Array to store the result
+            const resultArray = inputArray.reduce((accumulator, currentItem) => {
+                // Check if there is an existing item with the same TinterName and OrderDate
+                const existingItem = accumulator.find(
+                    (groupedItem) =>
+                        groupedItem.TinterName === currentItem.TinterName &&
+                        groupedItem.OrderDate === currentItem.OrderDate
+                );
+
+                // If the item already exists, update the quantities
+                if (existingItem) {
+                    existingItem.TinterQuantityGrams += +currentItem.TinterQuantityGrams;
+                    existingItem.TinterVolume += +currentItem.TinterVolume;
+                } else {
+                    // If the item doesn't exist, add it to the result array
+                    accumulator.push({
+                        ...currentItem,
+                        // Convert quantities to numbers for proper summation
+                        TinterQuantityGrams: +currentItem.TinterQuantityGrams,
+                        TinterVolume: +currentItem.TinterVolume,
+                    });
+                }
+
+                // Return the updated accumulator for the next iteration
+                return accumulator;
+            }, []);
+
+            // Output the result
+            console.log(resultArray);
+
+
+            //  console.log(ProductsData);
+            resolve(resultArray);
+        })
+    },
+    getAllProductGroupReportData: (ProductsData) => {
+        return new Promise((resolve, reject) => {
+
+            const data = ProductsData;
+            const productGroups = {};
+
+
+            // Iterate through the data and calculate totals for each product group
+            data.forEach((item) => {
+                const { ProductGroup, TinterQuantityGrams, TinterVolume, OrderDate } = item;
+
+                const formattedDate = new Date(OrderDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+                // Create a unique key for each date and product group combination
+                const key = `${formattedDate}-${ProductGroup}`;
+
+                if (!productGroups[key]) {
+                    // If the key doesn't exist in the result object, initialize it
+                    productGroups[key] = {
+                        date: formattedDate,
+                        ProductGroup,
+                        TotalQuantityGrams: 0,
+                        TotalVolume: 0
+                    };
+                }
+
+                // Add the quantity and volume to the total for the product group
+                productGroups[key].TotalQuantityGrams += parseFloat(TinterQuantityGrams);
+                productGroups[key].TotalVolume += parseFloat(TinterVolume);
+            });
+
+            // Convert the object into an array of values
+            const resultArray = Object.values(productGroups);
+
+            console.log(resultArray);
+            resolve(resultArray);
+        })
+    },
+    getAllBindersReportData: (Branch, CustomerName) => {
+        return new Promise(async (resolve, reject) => {
+            const twelveMonthsAgo = new Date();
+            twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+            var BindersData = await db.get().collection(collection.BINDER_STOCKOUT_REPORT_DATA).find({
+                Branch: Branch,
+                CustomerName: CustomerName,
+                InsertedTime: {
+                    $gte: twelveMonthsAgo.getTime(),
+                    $lt: new Date().getTime()
+                }
+            }).toArray();
+
+            // Your input data
+            const inputArray = BindersData;
+
+            // Array to store the result
+            const resultArray = inputArray.reduce((accumulator, currentItem) => {
+                // Check if there is an existing item with the same BinderName and OrderDate
+                const existingItem = accumulator.find(
+                    (groupedItem) =>
+                        groupedItem.BinderName === currentItem.BinderName &&
+                        groupedItem.OrderDate === currentItem.OrderDate
+                );
+
+                // If the item already exists, update the quantities
+                if (existingItem) {
+                    existingItem.BinderQuantityGrams += +currentItem.BinderQuantityGrams;
+                    existingItem.BinderVolume += +currentItem.BinderVolume;
+                } else {
+                    // If the item doesn't exist, add it to the result array
+                    accumulator.push({
+                        ...currentItem,
+                        // Convert quantities to numbers for proper summation
+                        BinderQuantityGrams: +currentItem.BinderQuantityGrams,
+                        BinderVolume: +currentItem.BinderVolume,
+                    });
+                }
+
+                // Return the updated accumulator for the next iteration
+                return accumulator;
+            }, []);
+
+            // Output the result
+            console.log(resultArray);
+
+            console.log(BindersData);
+            resolve(resultArray);
+        })
+    },
+    getAllAdditiveReportData: (Branch, CustomerName) => {
+        return new Promise(async (resolve, reject) => {
+            const twelveMonthsAgo = new Date();
+            twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+            var AdditiveData = await db.get().collection(collection.ADDITIVE_STOCKOUT_REPORT_DATA).find({
+                Branch: Branch,
+                CustomerName: CustomerName,
+                InsertedTime: {
+                    $gte: twelveMonthsAgo.getTime(),
+                    $lt: new Date().getTime()
+                }
+            }).toArray();
+
+              // Your input data
+              const inputArray = AdditiveData;
+
+              // Array to store the result
+              const resultArray = inputArray.reduce((accumulator, currentItem) => {
+                  // Check if there is an existing item with the same AdditiveName and OrderDate
+                  const existingItem = accumulator.find(
+                      (groupedItem) =>
+                          groupedItem.AdditiveName === currentItem.AdditiveName &&
+                          groupedItem.OrderDate === currentItem.OrderDate
+                  );
+  
+                  // If the item already exists, update the quantities
+                  if (existingItem) {
+                      existingItem.AdditiveQuantityGrams += +currentItem.AdditiveQuantityGrams;
+                      existingItem.AdditiveVolume += +currentItem.AdditiveVolume;
+                  } else {
+                      // If the item doesn't exist, add it to the result array
+                      accumulator.push({
+                          ...currentItem,
+                          // Convert quantities to numbers for proper summation
+                          AdditiveQuantityGrams: +currentItem.AdditiveQuantityGrams,
+                          AdditiveVolume: +currentItem.AdditiveVolume,
+                      });
+                  }
+  
+                  // Return the updated accumulator for the next iteration
+                  return accumulator;
+              }, []);
+  
+              // Output the result
+              console.log(resultArray);
+
+            console.log(AdditiveData);
+            resolve(resultArray);
         })
     }
 }
