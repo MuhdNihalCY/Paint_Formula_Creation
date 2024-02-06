@@ -250,6 +250,16 @@
 
             </div>
 
+            <div id="FollowUpSummeryDiv" class="FollowUpSummeryDiv">
+                <div class="PurchaseDetailsSearchSection">
+                    <input type="search" placeholder="Search.." name="search" class="PurchaseSearchInput"
+                        id="FollowUpSearch" />
+                </div>
+                <div id="FollowUpsCollections" class="FollowUpsCollections">
+
+                </div>
+            </div>
+
         </div>
     </div>
     </div>
@@ -627,6 +637,7 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Data from the server:', data);
+                State.Customers
                 OrganizeData(data);
                 // Handle the response data as needed
             })
@@ -1303,6 +1314,8 @@
 
         var purchaseDetailsDiv = document.getElementById('purchaseDetailsDiv');
         purchaseDetailsDiv.style.display = "none";
+        var FollowUpSummeryDiv = document.getElementById('FollowUpSummeryDiv');
+        FollowUpSummeryDiv.style.display = "none";
 
         // Toggle active state for buttons
         toggleActiveState('PurchasePaymentAnalysisBTN');
@@ -1437,6 +1450,11 @@
 
         var purchaseDetailsDiv = document.getElementById('purchaseDetailsDiv');
         purchaseDetailsDiv.style.display = "none";
+
+        var FollowUpSummeryDiv = document.getElementById('FollowUpSummeryDiv');
+        FollowUpSummeryDiv.style.display = "block";
+
+        ShowAllFollowUps();
 
         // Toggle active state for buttons
         toggleActiveState('FollowUpSummeryBTN');
@@ -1621,6 +1639,8 @@
         purchaseDetailsDiv.style.display = "flex";
         var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
         PurchasePaymentAnalysisDiv.style.display = "none";
+        var FollowUpSummeryDiv = document.getElementById('FollowUpSummeryDiv');
+        FollowUpSummeryDiv.style.display = "none";
 
         GetProductBinderAdditive();
 
@@ -1714,13 +1734,13 @@
             productGroup.textContent = EachProduct.ProductGroup;
 
             var tinterQuantity = document.createElement('p');
-             // Convert quantities to kilograms and liters if above 1000
+            // Convert quantities to kilograms and liters if above 1000
             const quantityInGrams = EachProduct.TotalQuantityGrams > 1000 ? (EachProduct.TotalQuantityGrams / 1000).toFixed(2) + ' kg' : EachProduct.TotalQuantityGrams.toFixed(2) + ' g';
             const volumeInMilliliters = EachProduct.TotalVolume > 1000 ? (EachProduct.TotalVolume / 1000).toFixed(2) + ' L' : EachProduct.TotalVolume.toFixed(2) + ' mL';
 
             // Display the quantities
             tinterQuantity.textContent = `${quantityInGrams} --- ${volumeInMilliliters}`;
-           // tinterQuantity.textContent = `${EachProduct.TotalQuantityGrams.toFixed(2)} g ---  ${EachProduct.TotalVolume.toFixed(2)} mL`;
+            // tinterQuantity.textContent = `${EachProduct.TotalQuantityGrams.toFixed(2)} g ---  ${EachProduct.TotalVolume.toFixed(2)} mL`;
 
             // Append the p elements to the product row div
             productRow.appendChild(orderDate);
@@ -1871,13 +1891,13 @@
             tinterName.textContent = EachProduct.AdditiveName;
 
             var tinterQuantity = document.createElement('p');
-              // Convert quantities to kilograms and liters if above 1000
+            // Convert quantities to kilograms and liters if above 1000
             const quantityInGrams = EachProduct.AdditiveQuantityGrams > 1000 ? (EachProduct.AdditiveQuantityGrams / 1000).toFixed(2) + ' kg' : EachProduct.AdditiveQuantityGrams.toFixed(2) + ' g';
             const volumeInMilliliters = EachProduct.AdditiveVolume > 1000 ? (EachProduct.AdditiveVolume / 1000).toFixed(2) + ' L' : EachProduct.AdditiveVolume.toFixed(2) + ' mL';
 
             // Display the quantities
             tinterQuantity.textContent = `${quantityInGrams} --- ${volumeInMilliliters}`;
-          //  tinterQuantity.textContent = `${EachProduct.AdditiveQuantityGrams.toFixed(2)} g --- ${EachProduct.AdditiveVolume.toFixed(2)} mL`;
+            //  tinterQuantity.textContent = `${EachProduct.AdditiveQuantityGrams.toFixed(2)} g --- ${EachProduct.AdditiveVolume.toFixed(2)} mL`;
 
             // Append the p elements to the product row div
             productRow.appendChild(orderDate);
@@ -1894,6 +1914,67 @@
         var searchValue = this.value.toLowerCase();
 
         var rows = document.getElementById('PurchaseAdditiveReportDataBodyDiv').querySelectorAll('.EachAdditiveDataRow');
+
+        var matchingRows = [];
+
+        rows.forEach(function (row) {
+            // Hide all rows initially
+            row.style.display = 'none';
+
+            // Show matching rows
+            if (row.textContent.toLowerCase().includes(searchValue)) {
+                row.style.display = '';
+                matchingRows.push(row);
+            }
+        });
+
+        // console.log("Matching Rows:", matchingRows);
+    });
+
+    function ShowAllFollowUps() {
+        var CustomerName = document.getElementById('popCustNameText').textContent;
+
+        var CustomerData = State.Customers.find((eachCustomer) => eachCustomer.Customername === CustomerName);
+
+
+        var Follow_Ups = CustomerData.FollowUps;
+        // Sort in descending order based on InsertedTime
+        Follow_Ups.sort((a, b) => b.InsertedTime - a.InsertedTime);
+
+        console.log("CustomerData followups = ", Follow_Ups);
+        var FollowUpsCollections = document.getElementById('FollowUpsCollections');
+        FollowUpsCollections.innerHTML = ""; // Clear the existing content
+
+        Follow_Ups.forEach((followUp) => {
+            // Convert timestamp to Date object
+            const dateObject = new Date(followUp.InsertedTime);
+
+            var virtualItem = `
+        <div class="EachFollowUp">
+            <p><strong>Serial No: </strong>${followUp.Serial_No}</p>
+            {{!-- <p class="FollowUpInsertedtext">Inserted at: ${formattedDateTime}</p> --}}
+             <p class="FollowUpInsertedtext">Inserted at: ${dateObject.getFullYear()}-${String(dateObject.getMonth() + 1).padStart(2, '0')}-${String(dateObject.getDate()).padStart(2, '0')} ${String(dateObject.getHours()).padStart(2, '0')}:${String(dateObject.getMinutes()).padStart(2, '0')}:${String(dateObject.getSeconds()).padStart(2, '0')}</p>
+            <p><strong>Customer Name: </strong>${followUp.Customer_Name}</p>
+            <p><strong>Purpose: </strong>${followUp.Purpose}</p>
+            <p><strong>Connection Type: </strong>${followUp.Connection_Type}</p>
+            <div class="FollowUpCommentSection">
+                <p><strong>Comment: </strong>${followUp.Comment}</p>
+            </div>
+            <p><strong>Contact Person: </strong>${followUp.Contact_Person}</p>
+            <p><strong>Employee Name: </strong>${followUp.EmployeeName}</p>
+        </div>
+    `;
+
+            FollowUpsCollections.innerHTML += virtualItem; // Append the new content
+        });
+    }
+
+
+    // search  bar functionality for Binders report data
+    document.getElementById('FollowUpSearch').addEventListener('input', function () {
+        var searchValue = this.value.toLowerCase();
+
+        var rows = document.getElementById('FollowUpsCollections').querySelectorAll('.EachFollowUp');
 
         var matchingRows = [];
 
@@ -2934,5 +3015,30 @@
         margin-bottom: 0;
         font-size: 18px;
         font-weight: 600;
+    }
+
+    .FollowUpSummeryDiv {
+        margin-top: 2rem;
+    }
+
+    .FollowUpsCollections {
+        margin-top: 2rem;
+        border: 1px solid gray;
+        border-radius: 15px;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        row-gap: 1rem;
+        column-gap: 1rem;
+    }
+
+    .EachFollowUp {
+        border: 1px solid gray;
+        border-radius: 15px;
+        padding: 1rem;
+    }
+
+    .EachFollowUp {
+        font-size: 16px;
     }
 </style>
