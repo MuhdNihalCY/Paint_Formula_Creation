@@ -111,11 +111,8 @@
                     </div>
                     <div class="PurchaseTableDiv">
                         <div class="PurchaseTableHeader ProductPurchaseTableFormat">
-                            <p>Purchase date</p>
-                            <p>Product</p>
                             <p>Group</p>
-                            <p>Quantity</p>
-                            {{!--
+                            <p>Inventory</p>
                             <script>
                                 // JavaScript code to print past 12 months including the current month in reverse order
                                 var months = [
@@ -123,57 +120,32 @@
                                     "July", "August", "September", "October", "November", "December"
                                 ];
 
+
                                 // Get the current date
-                                var currentDate = new Date();
+                                const currentDate = new Date();
 
-                                for (var i = 11; i >= 0; i--) {  // Start from the last month and iterate in reverse
-                                    // Calculate the month for each iteration
-                                    var monthIndex = (currentDate.getMonth() + 12 - i) % 12;
+                                // Create an array of the past 12 months starting from the current month
+                                const past12Months = Array.from({ length: 12 }, (_, index) => {
+                                    const monthIndex = (currentDate.getMonth() - index + 12) % 12;
+                                    return months[monthIndex].substring(0, 3); // Use substring(0, 3) to get the first 3 letters
+                                });
 
+                                //                                console.log("past12Months: ", past12Months);
+
+                                for (var i = 0; i <= 11; i++) {  // Start from the last month and iterate in reverse
                                     // Print the month
-                                    document.write("<p>" + months[monthIndex] + "</p>");
+                                    document.write("<p>" + past12Months[i] + "</p>");
                                 }
-                            </script> --}}
+                            </script>
+                            <p>Total</p>
+                            <p>Last year total</p>
                         </div>
                         <div id="PurchaseProductTableBodyDiv" class="PurchaseReportTableProducts">
 
                         </div>
                     </div>
 
-                    <div class="PurchaseDetailsSearchSection PurchaseDetailsSearchSectionForProductGroups">
-                        <p class="ProductGroupsText">Product Groups</p>
-                        <input type="search" placeholder="Search.." name="search" class="PurchaseSearchInput"
-                            id="ProductGroupReportDataPurchaseSearch" />
-                    </div>
-                    <div class="PurchaseTableDiv">
-                        <div class="PurchaseTableHeader ProductPurchaseTableFormat ProductGroupPurchaseTableFormat">
-                            <p>Purchase date</p>
-                            <p>Group</p>
-                            <p>Quantity</p>
-                            {{!--
-                            <script>
-                                // JavaScript code to print past 12 months including the current month in reverse order
-                                var months = [
-                                    "January", "February", "March", "April", "May", "June",
-                                    "July", "August", "September", "October", "November", "December"
-                                ];
 
-                                // Get the current date
-                                var currentDate = new Date();
-
-                                for (var i = 11; i >= 0; i--) {  // Start from the last month and iterate in reverse
-                                    // Calculate the month for each iteration
-                                    var monthIndex = (currentDate.getMonth() + 12 - i) % 12;
-
-                                    // Print the month
-                                    document.write("<p>" + months[monthIndex] + "</p>");
-                                }
-                            </script> --}}
-                        </div>
-                        <div id="PurchaseProductGroupTableBodyDiv" class="PurchaseReportTableProductGroups">
-
-                        </div>
-                    </div>
                 </div>
 
                 <div class="BinderPurchaseDetails" id="BinderPurchaseDetails">
@@ -183,28 +155,18 @@
                     </div>
                     <div class="PurchaseTableDiv">
                         <div class="PurchaseTableHeader ProductPurchaseTableFormat ProductGroupPurchaseTableFormat">
-                            <p>Purchase date</p>
                             <p>Binder</p>
-                            <p>Quantity</p>
-                            {{!--
                             <script>
-                                // JavaScript code to print past 12 months including the current month in reverse order
-                                var months = [
-                                    "January", "February", "March", "April", "May", "June",
-                                    "July", "August", "September", "October", "November", "December"
-                                ];
 
-                                // Get the current date
-                                var currentDate = new Date();
 
-                                for (var i = 11; i >= 0; i--) {  // Start from the last month and iterate in reverse
-                                    // Calculate the month for each iteration
-                                    var monthIndex = (currentDate.getMonth() + 12 - i) % 12;
-
+                                for (var i = 0; i <= 11; i++) {  // Start from the last month and iterate in reverse
                                     // Print the month
-                                    document.write("<p>" + months[monthIndex] + "</p>");
+                                    document.write("<p>" + past12Months[i] + "</p>");
                                 }
-                            </script> --}}
+                            </script>
+
+                            <p>Total</p>
+                            <p>Last year total</p>
                         </div>
                         <div id="BinderPurchaseReportDataBodyDiv" class="PurchaseReportTableBinders">
 
@@ -219,28 +181,18 @@
                     </div>
                     <div class="PurchaseTableDiv">
                         <div class="PurchaseTableHeader ProductPurchaseTableFormat ProductGroupPurchaseTableFormat">
-                            <p>Purchase date</p>
-                            <p>Additive</p>
-                            <p>Quantity</p>
-                            {{!--
+                            <p>Binder</p>
                             <script>
-                                // JavaScript code to print past 12 months including the current month in reverse order
-                                var months = [
-                                    "January", "February", "March", "April", "May", "June",
-                                    "July", "August", "September", "October", "November", "December"
-                                ];
 
-                                // Get the current date
-                                var currentDate = new Date();
 
-                                for (var i = 11; i >= 0; i--) {  // Start from the last month and iterate in reverse
-                                    // Calculate the month for each iteration
-                                    var monthIndex = (currentDate.getMonth() + 12 - i) % 12;
-
+                                for (var i = 0; i <= 11; i++) {  // Start from the last month and iterate in reverse
                                     // Print the month
-                                    document.write("<p>" + months[monthIndex] + "</p>");
+                                    document.write("<p>" + past12Months[i] + "</p>");
                                 }
-                            </script> --}}
+                            </script>
+
+                            <p>Total</p>
+                            <p>Last year total</p>
                         </div>
                         <div id="PurchaseAdditiveReportDataBodyDiv" class="PurchaseReportTableAdditives">
 
@@ -1679,77 +1631,258 @@
         AdditivesPurchaseDetails.style.display = 'none';
 
         var ProductReportData = State.ReportData.ProductReportData;
-        var ProductGroupReportData = State.ReportData.ProductGroupReportData;
+        console.log("ProductReportData: ", ProductReportData);
+
+
+
+        function groupByMonths(data) {
+            const result = [];
+
+            // Iterate through each item in the data array
+            data.forEach(item => {
+                const productGroup = item.ProductGroup;
+
+                // Find the product group entry in the result array
+                let productGroupEntry = result.find(entry => entry.ProductGroup === productGroup);
+
+                // If the product group entry doesn't exist, create it
+                if (!productGroupEntry) {
+                    productGroupEntry = {
+                        ProductGroup: productGroup,
+                        Product: []
+                    };
+
+                    // Add the new product group entry to the result array
+                    result.push(productGroupEntry);
+                }
+
+                // Find the product entry in the product group
+                let productEntry = productGroupEntry.Product.find(product => product.Abbreviation === item.Abbreviation);
+
+                // If the product entry doesn't exist, create it
+                if (!productEntry) {
+                    productEntry = {
+                        TinterName: item.TinterName,
+                        Abbreviation: item.Abbreviation,
+                        Past_12_Months_Quantity: {},
+                        Last_year_Quantity: 0, // Initialize Last_year_Quantity to 0
+                        Total_Quantity: 0 // Initialize Total_Quantity to 0
+                    };
+
+                    // Add the new product entry to the product group
+                    productGroupEntry.Product.push(productEntry);
+                }
+
+                // Parse the OrderDate and extract the month key
+                const dateParts = item.OrderDate.split('-');
+                const currentDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
+                const monthKey = currentDate.toLocaleString('en-US', { month: 'long' });
+
+                // Calculate the quantity for the current month
+                const monthQuantity = data
+                    .filter(d => {
+                        const dDateParts = d.OrderDate.split('-');
+                        const dDate = new Date(`${dDateParts[2]}-${dDateParts[1]}-${dDateParts[0]}`);
+                        return dDate >= twelveMonthsAgo && dDate <= currentDate && d.Abbreviation === item.Abbreviation;
+                    })
+                    .reduce((sum, d) => {
+                        if (d.OrderDate !== item.OrderDate) {
+                            return sum + d.TinterQuantityGrams;
+                        }
+                        return sum;
+                    }, 0);
+
+                // Assign the calculated quantity to the corresponding month in the product entry
+                productEntry.Past_12_Months_Quantity[monthKey] = monthQuantity;
+
+                // Calculate the quantity for last year
+                const lastYearQuantity = data
+                    .filter(d => {
+                        const dDateParts = d.OrderDate.split('-');
+                        const dDate = new Date(`${dDateParts[2]}-${dDateParts[1]}-${dDateParts[0]}`);
+                        return dDate >= lastYear && dDate <= elevenMonthsAgo && d.Abbreviation === item.Abbreviation;
+                    })
+                    .reduce((sum, d) => sum + d.TinterQuantityGrams, 0);
+
+                // Assign the calculated quantity to Last_year_Quantity in the product entry
+                productEntry.Last_year_Quantity = lastYearQuantity;
+
+                // Calculate the total quantity for the past 12 months
+                const totalQuantity = Object.values(productEntry.Past_12_Months_Quantity).reduce((sum, value) => sum + value, 0);
+
+                // Assign the calculated total quantity to Total_Quantity in the product entry
+                productEntry.Total_Quantity = totalQuantity;
+            });
+
+            return result;
+        }
+
+        // Calculate the date twelve months ago
+        const twelveMonthsAgo = new Date();
+        twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+        // Calculate the date eleven months ago
+        const elevenMonthsAgo = new Date();
+        elevenMonthsAgo.setMonth(elevenMonthsAgo.getMonth() - 11);
+
+        // Calculate the date for last year
+        const lastYear = new Date();
+        lastYear.setFullYear(lastYear.getFullYear() - 1);
+
+        // Call the groupByMonths function with the ProductReportData array
+        const groupedData = groupByMonths(ProductReportData);
+
+        // Display the grouped data
+        //console.log(groupedData);
+
+        State.ReportData.ProductMonthGroupedData = groupedData;
 
         var PurchaseProductTableBodyDiv = document.getElementById('PurchaseProductTableBodyDiv');
         PurchaseProductTableBodyDiv.innerHTML = '';
 
-        ProductReportData.forEach((EachProduct) => {
-            // Create a div element for each product row
+        var months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        // Get the current date
+        const currentDate = new Date();
+
+        // Create an array of the past 12 months starting from the current month
+        const past12Months = Array.from({ length: 12 }, (_, index) => {
+            const monthIndex = (currentDate.getMonth() - index + 12) % 12;
+            return months[monthIndex];
+        });
+        var GroupDataModifiedByMonth = []
+        console.log("sers");
+        console.log("groupedData: ", groupedData);
+        groupedData.forEach((EachGroup) => {
+            console.log("Each Group is ", EachGroup);
+            var GroupMonthData = {
+                name: EachGroup.ProductGroup,
+                EachMonthSum: [],
+                Products: [],
+                TotalSumOfEachGroup: 0
+            };
+
+            // find for Product Group
+            past12Months.forEach((EachMonth) => {
+                // Manage Group data
+                var monthSum = 0;
+                var productMonthCount = 0;
+                EachGroup.Product.forEach((EachInventory) => {
+                    //  console.log("Each Month: ", EachMonth);
+                    if (EachInventory.Past_12_Months_Quantity[EachMonth]) {
+                        // console.log(" EachInventory: ", EachInventory);
+                        // console.log(`Quantity of : ${EachMonth} is ${EachInventory.Past_12_Months_Quantity[EachMonth]}`)
+                        // add to sum of each month .
+                        monthSum += EachInventory.Past_12_Months_Quantity[EachMonth]
+                        productMonthCount = EachInventory.Past_12_Months_Quantity[EachMonth]
+                    }
+                })
+                GroupMonthData.EachMonthSum.push(monthSum);
+                GroupMonthData.TotalSumOfEachGroup += monthSum;
+
+
+
+                // manage Product data
+
+
+
+
+            })
+            GroupDataModifiedByMonth.push(GroupMonthData);
+            EachGroup.Product.forEach((EachInventory) => {
+
+                GroupMonthData.Products.push(transformData(EachInventory));
+
+            });
+
+        })
+        function transformData(input) {
+            const months = past12Months;
+
+            const past12MonthsQuantity = months.map(month => input.Past_12_Months_Quantity[month] || 0);
+
+            const transformedData = {
+                TinterName: input.TinterName,
+                Abbreviation: input.Abbreviation,
+                Past_12_Months_Quantity: past12MonthsQuantity,
+                Last_year_Quantity: input.Last_year_Quantity,
+                Total_Quantity: past12MonthsQuantity.reduce((sum, quantity) => sum + quantity, 0)
+            };
+
+            return transformedData;
+        }
+
+
+        console.log("GroupDataModifiedByMonth: ", GroupDataModifiedByMonth);
+
+        function createGroupRow(groupData) {
+            // Map EachMonthSum to formatted <p> elements and join them
+            const sumData = groupData.EachMonthSum.map((singleMonthData) => `<p>${singleMonthData.toFixed(1)}</p>`).join('');
+
+            // Create the virtual row
+            const virtualRow = `
+                    <div class="product-group-div">
+                        <p>${groupData.name}</p>
+                        <p></p>
+                        <div class="product-group-div-sum">
+                            ${sumData}
+                            <p>${groupData.TotalSumOfEachGroup.toFixed(1)}</p>
+                            <p>0</p>
+                        </div>
+                    </div>
+                `;
+
+            return virtualRow;
+        }
+
+
+        // Group Table data 
+
+        GroupDataModifiedByMonth.forEach((eachGroup, i) => {
+            console.log("Index : ", i);
+            console.log("eachGroup : ", eachGroup);
+
             var productRow = document.createElement('div');
             productRow.classList.add('EachProductRow');
 
-            // Create p elements for each piece of information
-            var orderDate = document.createElement('p');
-            orderDate.textContent = EachProduct.OrderDate;
-
-            var tinterName = document.createElement('p');
-            tinterName.textContent = EachProduct.TinterName;
-
-            var productGroup = document.createElement('p');
-            productGroup.textContent = EachProduct.ProductGroup;
-
-            var tinterQuantity = document.createElement('p');
-            // Convert quantities to kilograms and liters if above 1000
-            const quantityInGrams = EachProduct.TinterQuantityGrams > 1000 ? (EachProduct.TinterQuantityGrams / 1000).toFixed(2) + ' kg' : EachProduct.TinterQuantityGrams.toFixed(2) + ' g';
-            const volumeInMilliliters = EachProduct.TinterVolume > 1000 ? (EachProduct.TinterVolume / 1000).toFixed(2) + ' L' : EachProduct.TinterVolume.toFixed(2) + ' mL';
-
-            // Display the quantities
-            tinterQuantity.textContent = `${quantityInGrams} --- ${volumeInMilliliters}`;
-            //   tinterQuantity.textContent = `${EachProduct.TinterQuantityGrams.toFixed(2)} g  --- ${EachProduct.TinterVolume.toFixed(2)} mL`;
-
-            // Append the p elements to the product row div
-            productRow.appendChild(orderDate);
-            productRow.appendChild(tinterName);
-            productRow.appendChild(productGroup);
-            productRow.appendChild(tinterQuantity);
-
-            // Append the product row div to the PurchaseTableBodyDiv
+            const groupRow = createGroupRow(eachGroup);
+            productRow.innerHTML += groupRow;
             PurchaseProductTableBodyDiv.appendChild(productRow);
+
+
+            eachGroup.Products.map((EachProduct) => {
+                const groupRow = createProductRow(EachProduct);
+                productRow.innerHTML += groupRow;
+                PurchaseProductTableBodyDiv.appendChild(productRow);
+            })
+
+
         });
 
-        var PurchaseProductGroupTableBodyDiv = document.getElementById('PurchaseProductGroupTableBodyDiv');
-        PurchaseProductGroupTableBodyDiv.innerHTML = '';
 
-        ProductGroupReportData.forEach((EachProduct) => {
-            // Create a div element for each product row
-            var productRow = document.createElement('div');
-            productRow.classList.add('EachProductGroupRow');
 
-            // Create p elements for each piece of information
-            var orderDate = document.createElement('p');
-            orderDate.textContent = EachProduct.date;
+        function createProductRow(ProductData) {
+            console.log("ProductData: ", ProductData);
+            // Check if EachMonthSum is defined, otherwise use an empty array
+            const sumData = (ProductData.Past_12_Months_Quantity || []).map((singleMonthData) => `<p>${singleMonthData.toFixed(1)}</p>`).join('');
 
-            var productGroup = document.createElement('p');
-            productGroup.textContent = EachProduct.ProductGroup;
+            const virtualRow = `
+                    <div class="product-group-div">
+                        <p></p>
+                        <p>${ProductData.TinterName}</p>
+                        <div class="product-group-div-sum">
+                            ${sumData}
+                            <p>${ProductData.Total_Quantity ? ProductData.Total_Quantity.toFixed(1) : ''}</p>
+                            <p>0</p>
+                        </div>
+                    </div>
+                `;
 
-            var tinterQuantity = document.createElement('p');
-            // Convert quantities to kilograms and liters if above 1000
-            const quantityInGrams = EachProduct.TotalQuantityGrams > 1000 ? (EachProduct.TotalQuantityGrams / 1000).toFixed(2) + ' kg' : EachProduct.TotalQuantityGrams.toFixed(2) + ' g';
-            const volumeInMilliliters = EachProduct.TotalVolume > 1000 ? (EachProduct.TotalVolume / 1000).toFixed(2) + ' L' : EachProduct.TotalVolume.toFixed(2) + ' mL';
-
-            // Display the quantities
-            tinterQuantity.textContent = `${quantityInGrams} --- ${volumeInMilliliters}`;
-            // tinterQuantity.textContent = `${EachProduct.TotalQuantityGrams.toFixed(2)} g ---  ${EachProduct.TotalVolume.toFixed(2)} mL`;
-
-            // Append the p elements to the product row div
-            productRow.appendChild(orderDate);
-            productRow.appendChild(productGroup);
-            productRow.appendChild(tinterQuantity);
-
-            // Append the product row div to the PurchaseTableBodyDiv
-            PurchaseProductGroupTableBodyDiv.appendChild(productRow);
-        });
+            return virtualRow;
+        }
     }
 
     // search  bar functionality for product
@@ -1775,7 +1908,7 @@
     });
 
     // search  bar functionality for product group
-    document.getElementById('ProductGroupReportDataPurchaseSearch').addEventListener('input', function () {
+    /*document.getElementById('ProductGroupReportDataPurchaseSearch').addEventListener('input', function () {
         var searchValue = this.value.toLowerCase();
 
         var rows = document.getElementById('PurchaseProductGroupTableBodyDiv').querySelectorAll('.EachProductGroupRow');
@@ -1794,7 +1927,7 @@
         });
 
         // console.log("Matching Rows:", matchingRows);
-    });
+    });*/
 
 
     function ShowBinderPurchaseDetails() {
@@ -1808,29 +1941,77 @@
 
         var BinderReportData = State.ReportData.BinderReportData;
 
-        var PurchaseProductTableBodyDiv = document.getElementById('BinderPurchaseReportDataBodyDiv');
-        PurchaseProductTableBodyDiv.innerHTML = '';
+        console.log('BinderReportData: ', BinderReportData);
 
-        BinderReportData.forEach((EachProduct) => {
+        var months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        var binderData = BinderReportData;
+
+        // Process data to calculate past 12 months sum
+        var result = binderData.reduce((acc, item) => {
+            const orderDate = new Date(item.OrderDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+            const monthIndex = (currentDate.getMonth() - orderDate.getMonth() + 12) % 12;
+
+            if (!acc[item.BinderName]) {
+                acc[item.BinderName] = {
+                    BinderName: item.BinderName,
+                    Past_12_Months_Quantity: Array(12).fill(0),
+                    Total_Quantity: 0
+                };
+            }
+
+            acc[item.BinderName].Past_12_Months_Quantity[monthIndex] += item.BinderQuantityGrams;
+            acc[item.BinderName].Total_Quantity += item.BinderQuantityGrams;
+
+            return acc;
+        }, {});
+
+        // Convert result to array
+        const BinderModifiedData = Object.values(result);
+
+        console.log(BinderModifiedData);
+
+        var BinderPurchaseReportDataBodyDiv = document.getElementById('BinderPurchaseReportDataBodyDiv');
+        BinderPurchaseReportDataBodyDiv.innerHTML = '';
+
+        BinderModifiedData.forEach((EachBinderData) => {
+            ShowBinderRowData(EachBinderData);
+        })
+
+        function ShowBinderRowData(BinderData) {
             // Create a div element for each product row
             var productRow = document.createElement('div');
             productRow.classList.add('EachBinderDataRow');
 
-            // Create p elements for each piece of information
-            var orderDate = document.createElement('p');
-            orderDate.textContent = EachProduct.OrderDate;
+            const sumData = (BinderData.Past_12_Months_Quantity || []).map((singleMonthData) => `<p>${singleMonthData.toFixed(1)}</p>`).join('');
 
-            var tinterName = document.createElement('p');
-            tinterName.textContent = EachProduct.BinderName;
+            const virtualRow = `
+                    {{!-- <div class="product-group-div"> --}}
+                        <p>${BinderData.BinderName}</p>
+                        {{!-- <div class="product-group-div-sum"> --}}
+                            ${sumData}
+                            <p>${BinderData.Total_Quantity ? parseInt(BinderData.Total_Quantity) : ''}</p>
+                            <p>0</p>
+                        {{!-- </div> --}}
+                    {{!-- </div> --}}
+                `;
+            productRow.innerHTML += virtualRow;
 
-            var tinterQuantity = document.createElement('p');
-            // Convert quantities to kilograms and liters if above 1000
-            const quantityInGrams = EachProduct.BinderQuantityGrams > 1000 ? (EachProduct.BinderQuantityGrams / 1000).toFixed(2) + ' kg' : EachProduct.BinderQuantityGrams.toFixed(2) + ' g';
-            const volumeInMilliliters = EachProduct.BinderVolume > 1000 ? (EachProduct.BinderVolume / 1000).toFixed(2) + ' L' : EachProduct.BinderVolume.toFixed(2) + ' mL';
+            BinderPurchaseReportDataBodyDiv.appendChild(productRow);
+        }
 
-            // Display the quantities
-            tinterQuantity.textContent = `${quantityInGrams} --- ${volumeInMilliliters}`;
-            // tinterQuantity.textContent = `${EachProduct.BinderQuantityGrams.toFixed(2)} g --- ${EachProduct.BinderVolume.toFixed(2)} mL`;
+
+
+        /*BinderReportData.forEach((EachProduct) => {
+            // Create a div element for each product row
+            var productRow = document.createElement('div');
+            productRow.classList.add('EachBinderDataRow');
+
+            // list of binders 
+            
 
             // Append the p elements to the product row div
             productRow.appendChild(orderDate);
@@ -1839,7 +2020,7 @@
 
             // Append the product row div to the PurchaseTableBodyDiv
             PurchaseProductTableBodyDiv.appendChild(productRow);
-        });
+        });*/
     }
 
     // search  bar functionality for Binders report data
@@ -1875,38 +2056,102 @@
 
         var AdditiveReportData = State.ReportData.AdditiveReportData;
 
-        var PurchaseProductTableBodyDiv = document.getElementById('PurchaseAdditiveReportDataBodyDiv');
-        PurchaseProductTableBodyDiv.innerHTML = '';
+        console.log('AdditiveReportData: ', AdditiveReportData);
 
-        AdditiveReportData.forEach((EachProduct) => {
+        var months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        var AddtiiveData = AdditiveReportData;
+
+        // Process data to calculate past 12 months sum
+        var result = AddtiiveData.reduce((acc, item) => {
+            const orderDate = new Date(item.OrderDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+            const monthIndex = (currentDate.getMonth() - orderDate.getMonth() + 12) % 12;
+
+            if (!acc[item.AdditiveName]) {
+                acc[item.AdditiveName] = {
+                    AdditiveName: item.AdditiveName,
+                    Past_12_Months_Quantity: Array(12).fill(0),
+                    Total_Quantity: 0
+                };
+            }
+
+            acc[item.AdditiveName].Past_12_Months_Quantity[monthIndex] += item.AdditiveQuantityGrams;
+            acc[item.AdditiveName].Total_Quantity += item.AdditiveQuantityGrams;
+
+            return acc;
+        }, {});
+
+        // Convert result to array
+        const
+            additiveModifiedData = Object.values(result);
+
+        console.log(additiveModifiedData);
+
+        var PurchaseAdditiveReportDataBodyDiv = document.getElementById('PurchaseAdditiveReportDataBodyDiv');
+        PurchaseAdditiveReportDataBodyDiv.innerHTML = '';
+
+        additiveModifiedData.forEach((EachAdditiveData) => {
+            ShowAddtiveRowData(EachAdditiveData);
+        })
+
+        function ShowAddtiveRowData(AdditiveData) {
             // Create a div element for each product row
             var productRow = document.createElement('div');
             productRow.classList.add('EachAdditiveDataRow');
 
-            // Create p elements for each piece of information
-            var orderDate = document.createElement('p');
-            orderDate.textContent = EachProduct.OrderDate;
+            const sumData = (AdditiveData.Past_12_Months_Quantity || []).map((singleMonthData) => `<p>${singleMonthData.toFixed(1)}</p>`).join('');
 
-            var tinterName = document.createElement('p');
-            tinterName.textContent = EachProduct.AdditiveName;
+            const virtualRow = `
+                    {{!-- <div class="product-group-div"> --}}
+                        <p>${AdditiveData.AdditiveName}</p>
+                        {{!-- <div class="product-group-div-sum"> --}}
+                            ${sumData}
+                            <p>${AdditiveData.Total_Quantity ? parseInt(AdditiveData.Total_Quantity) : ''}</p>
+                            <p>0</p>
+                        {{!-- </div> --}}
+                    {{!-- </div> --}}
+                `;
+            productRow.innerHTML += virtualRow;
 
-            var tinterQuantity = document.createElement('p');
-            // Convert quantities to kilograms and liters if above 1000
-            const quantityInGrams = EachProduct.AdditiveQuantityGrams > 1000 ? (EachProduct.AdditiveQuantityGrams / 1000).toFixed(2) + ' kg' : EachProduct.AdditiveQuantityGrams.toFixed(2) + ' g';
-            const volumeInMilliliters = EachProduct.AdditiveVolume > 1000 ? (EachProduct.AdditiveVolume / 1000).toFixed(2) + ' L' : EachProduct.AdditiveVolume.toFixed(2) + ' mL';
+            PurchaseAdditiveReportDataBodyDiv.appendChild(productRow);
+        }
 
-            // Display the quantities
-            tinterQuantity.textContent = `${quantityInGrams} --- ${volumeInMilliliters}`;
-            //  tinterQuantity.textContent = `${EachProduct.AdditiveQuantityGrams.toFixed(2)} g --- ${EachProduct.AdditiveVolume.toFixed(2)} mL`;
 
-            // Append the p elements to the product row div
-            productRow.appendChild(orderDate);
-            productRow.appendChild(tinterName);
-            productRow.appendChild(tinterQuantity);
-
-            // Append the product row div to the PurchaseTableBodyDiv
-            PurchaseProductTableBodyDiv.appendChild(productRow);
-        });
+        /* var PurchaseProductTableBodyDiv = document.getElementById('PurchaseAdditiveReportDataBodyDiv');
+         PurchaseProductTableBodyDiv.innerHTML = '';
+ 
+         AdditiveReportData.forEach((EachProduct) => {
+             // Create a div element for each product row
+             var productRow = document.createElement('div');
+             productRow.classList.add('EachAdditiveDataRow');
+ 
+             // Create p elements for each piece of information
+             var orderDate = document.createElement('p');
+             orderDate.textContent = EachProduct.OrderDate;
+ 
+             var tinterName = document.createElement('p');
+             tinterName.textContent = EachProduct.AdditiveName;
+ 
+             var tinterQuantity = document.createElement('p');
+             // Convert quantities to kilograms and liters if above 1000
+             const quantityInGrams = EachProduct.AdditiveQuantityGrams > 1000 ? (EachProduct.AdditiveQuantityGrams / 1000).toFixed(2) + ' kg' : EachProduct.AdditiveQuantityGrams.toFixed(2) + ' g';
+             const volumeInMilliliters = EachProduct.AdditiveVolume > 1000 ? (EachProduct.AdditiveVolume / 1000).toFixed(2) + ' L' : EachProduct.AdditiveVolume.toFixed(2) + ' mL';
+ 
+             // Display the quantities
+             tinterQuantity.textContent = `${quantityInGrams} --- ${volumeInMilliliters}`;
+             //  tinterQuantity.textContent = `${EachProduct.AdditiveQuantityGrams.toFixed(2)} g --- ${EachProduct.AdditiveVolume.toFixed(2)} mL`;
+ 
+             // Append the p elements to the product row div
+             productRow.appendChild(orderDate);
+             productRow.appendChild(tinterName);
+             productRow.appendChild(tinterQuantity);
+ 
+             // Append the product row div to the PurchaseTableBodyDiv
+             PurchaseProductTableBodyDiv.appendChild(productRow);
+         });*/
     }
 
     // search  bar functionality for Binders report data
@@ -2956,7 +3201,7 @@
     .ProductPurchaseTableFormat {
         margin-top: 2rem;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
         align-items: center;
         gap: 10px;
         padding: 15px 24px;
@@ -2970,7 +3215,7 @@
 
     .ProductGroupPurchaseTableFormat {
         margin-top: 1rem;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 
     .ProductGroupsText {
@@ -2988,7 +3233,6 @@
         overflow-y: auto;
     }
 
-    .EachProductRow,
     .EachProductGroupRow,
     .EachAdditiveDataRow,
     .EachBinderDataRow {
@@ -3013,8 +3257,14 @@
     .EachBinderDataRow p {
         text-align: center;
         margin-bottom: 0;
-        font-size: 18px;
+        font-size: 15px;
         font-weight: 600;
+        margin: 1rem 0;
+    }
+
+    .EachAdditiveDataRow,
+    .EachBinderDataRow {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 
     .FollowUpSummeryDiv {
@@ -3040,5 +3290,39 @@
 
     .EachFollowUp {
         font-size: 16px;
+    }
+
+    .EachProductRow {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid gray;
+    }
+
+    .EachInventoryRow {
+        display: grid;
+        grid-template-columns: 3fr 12fr 1fr 1fr;
+        align-items: start;
+        /* gap: 10px;*/
+        align-content: center;
+        /*  border: 1px solid gray;*/
+    }
+
+    .EachproductMonthRow {
+        display: grid;
+        align-items: start;
+        /*  gap: 10px;*/
+        align-content: center;
+        /*border: 1px solid gray;*/
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .product-group-div {
+        display: grid;
+        grid-template-columns: 1.8fr 2.7fr 14fr;
+    }
+
+    .product-group-div-sum {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 </style>
