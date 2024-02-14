@@ -2983,7 +2983,7 @@
 
     function handleResultItemClick(formula) {
         // Handle what happens when a result item is clicked
-        // console.log('Result item clicked:', formula);
+        console.log('Result item clicked:', formula);
         var popProductsItemsCollectiosn = document.getElementById('popProductsItemsCollectiosns');
 
         var popEachProductsItemsCollection = document.getElementsByClassName('popEachProductsItemss ');
@@ -2993,12 +2993,14 @@
         // console.log('popEachProductsItems: ' + popEachProductsItemsCollection);
 
         // console.log('Count of popEachProductsItems: ' + count);
-        console.log('formula.State:', formula.State)
         var NextCount = count + 1;
+
+        console.log('formula: ', formula);
+
         var VirtualFormula = `
         <div class="EachProductionItem" id="ProductionItem_${formula.Name}" >
                     <div  ${formula.State === 'Complete' ? '' : 'onclick="SelectAProductionItem(this)"'}   class="popEachProductsItemss">
-                        <input type="Checkbox" class="ProItemCheckBox" id="ProItemCheckBox_${formula.Name}" ${formula.State === 'Complete' ? 'checked="true"' : ''} onclick="return false;"  >
+                        <input type="Checkbox" readyonly  class="ProItemCheckBox" id="ProItemCheckBox_${formula.Name}" ${formula.State === 'Complete' ? 'checked="true"' : ''} onclick="return false;" >
                         <p id="FormulaColorName" class='FormulaColorName' >${formula.Name}</p>
                         <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' ></p>
                         <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' ></p>
@@ -3037,31 +3039,6 @@
                     </div>
                 </div>
         `
-
-        /*
-        var VirtualFormula = `
-                    <div class="popEachProductsItemss">
-                        <p id="FormulaColorName" class='FormulaColorName' contenteditable="true">${formula.ColorName}</p>
-                        <p id="FormulaColorCode" class='FormulaColorName FormulaColorCode' contenteditable="true">${formula.ColorCode ? formula.ColorCode : ""} </p>
-                        <p id="FormulaSubCategoryName" class='FormulaColorName FormulaSubCategoryName' contenteditable="true">${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
-                        <p id="FormulaMattOrGloss" class='FormulaColorName FormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
-                        <p id="FormulaFileNo" class='FormulaColorName FormulaFileNo' >${formula.FileNo ? `"${formula.FileNo}"` : ""}</p>
-                       
-
-                        <div class="QtyOfFormula">
-                            <input type="text" class="HiddenFileNo" id="HiddenFileNo" value="${formula.FileNo ? `"${formula.FileNo}"` : ""}" hidden>
-                            <input type="text" class="HiddenColorCode" id="HiddenColorCode" value="${formula.ColorCode ? formula.ColorCode : ""}" hidden>
-                            <input type="text" class="HiddenSubCategoryName" id="HiddenSubCategoryName" value="${formula.SubCategoryName ? formula.SubCategoryName : ""}" hidden>
-                            ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
-                            ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""}
-                            <input type="text" oninput="OnlyNumber(this)" placeholder="0.00" ${formula.QTY ? `value="${formula.QTY}"` : ""} class="FormulaQty" id="FormulaQty${NextCount}">
-                            <p class="FormulaUnit">${formula.Unit}</p>
-                        </div>
-                        <button onclick="RemoveOneFormula('${formula.ColorName}')"
-                            class="btn btn-danger">Delete</button>
-                    </div>
-        `
-        */
         var NewOrders = {
             ColorName: formula.ColorName,
             Unit: formula.Unit,
@@ -3530,7 +3507,7 @@
         var NewProductUnit = document.getElementById('NewProductUnit').value;
 
         var formula = {
-            ColorName: NewFormulaNameInput,
+            Name: NewFormulaNameInput,
             Unit: NewProductUnit,
             QTY: NewFromulaQtyInput
         }
@@ -4038,7 +4015,7 @@
 
 
             function NotValidNewOrderInput() {
-                // alert('Please fill all the fields!');
+                alert('Please fill all the fields!');
             }
 
             function ValidnewOrderInput() {
@@ -4076,9 +4053,9 @@
                 var Labels = [];
 
                 LabelsDivArray.forEach((OneLabel) => {
-                    // console.log("OneLabel: ", OneLabel);
-                    // console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
-                    // console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
+                    // // console.log("OneLabel: ", OneLabel);
+                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].value);
+                    //  // console.log(OneLabel.getElementsByClassName('LabelData')[0].style.backgroundColor);
 
                     var Label = {
                         Name: OneLabel.getElementsByClassName('LabelData')[0].value,
@@ -4115,35 +4092,12 @@
 
                 proItems = popProductsItemsCollectiosns.getElementsByClassName('EachProductionItem');
 
-                // console.log('proItems: ', proItems);
+                //  console.log('proItems: ', proItems);
 
 
                 // Alternatively, you can use the spread operator
                 var ProItemsDivArray = [...proItems];
-
-                /*
-                                ProItemsDivArray.forEach((OneItem) => {
-                                    // make changes 
-                                    var item = {
-                                        Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
-                                        Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
-                                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0].textContent,
-                                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
-                                        ColorCode: OneItem.getElementsByClassName('FormulaColorCode')[0].textContent,
-                                        SubCategoryName: OneItem.getElementsByClassName('FormulaSubCategoryName')[0].textContent,
-                                    }
-                                    if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
-                                        item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
-                                    }
-                
-                                    if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
-                                        item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
-                                    }
-                
-                                    // console.log("Proitem: ", item);
-                
-                                    ProductionsItems.push(item);
-                                });*/
+                //  console.log('ProItemsDivArray:', ProItemsDivArray)
 
                 ProItemsDivArray.forEach((OneItem) => {
                     // make changes 
@@ -4227,15 +4181,17 @@
                     //AttachmentImage: imageFile
                 }
 
-                var input = document.getElementById('file');
-                var imageFile = input.files[0];
-                //  CompleteOrderData.file = imageFile;
-
+                // console.log("CompleteOrderData:", CompleteOrderData);
                 // Create a FormData object
                 var formData = new FormData();
 
-                // Append the file to FormData with a specific field name ('file' in this case)
-                formData.append('file', imageFile);
+                var input = document.getElementById('file');
+                if (input) {
+                    var imageFile = input.files[0];
+                    //  CompleteOrderData.file = imageFile;
+                    // Append the file to FormData with a specific field name ('file' in this case)
+                    formData.append('file', imageFile);
+                }
 
                 // Append other data to FormData
                 /* Object.entries(CompleteOrderData).forEach(([key, value]) => {
@@ -4255,17 +4211,20 @@
 
                 // Verify the content of formData
                 for (var pair of formData.entries()) {
-                    // console.log(pair[0] + ': ' + pair[1]);
+                    // // console.log(pair[0] + ': ' + pair[1]);
                 }
 
 
-                // console.log("CompleteOrderData", CompleteOrderData);
+                //  // // console.log("CompleteOrderData", CompleteOrderData);
 
 
 
                 // api call
                 // URL of your backend API endpoint
-                var apiUrl = `/sales/UpdareCardOrder/${cardID}`;
+                var apiUrl = `/UpdareCardOrder/${cardID}`;
+
+                console.log("Form data: ", formData);
+                console.log("CompleteOrderData: ", CompleteOrderData);
 
                 // Convert the data object to a JSON string
                 var jsonData = JSON.stringify(CompleteOrderData);
@@ -4286,11 +4245,12 @@
 
 
                 // Make the fetch request
+
                 fetch(apiUrl, fetchOptions)
                     .then(response => response.json()) // Parse the JSON response
                     .then(data => {
                         // Handle the data from the server
-                        // console.log('Response from server:', data.State);
+                        //    // // console.log('Response from server:', data.State);
                         //CloseCustomerCreationPopup();
                         //resetCustomerValues();
                         //location.reload();

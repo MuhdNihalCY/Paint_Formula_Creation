@@ -8,6 +8,214 @@
         </div>
     </div>
 
+    <div id="EachCustomerDetailsPopUp" class="EachCustomerDetailsPopUp">
+        <div class="Popup EachCustPopup">
+            <div class="MainPopupTopsection">
+                <img onclick="ClosePopupForEachCustomer()" class="MainPopupCloseIcon" src="/images/Icons/x.png" alt="">
+            </div>
+            <div class="PopCustomerName">
+                <p id="popCustNameText" class="popCustNameText"></p>
+            </div>
+            <div class="popupEachCustMainSec">
+                <div class="popUpEachCustLeftSec">
+                    <div class="PopCustAddressSec">
+                        <p class="PopAddressText">Address</p>
+                        <p id="PopCustomerAddressContent" class="PopontentText"></p>
+                    </div>
+                    <div class="PopCustAddressSec">
+                        <p class="PopAddressText">Location</p>
+                        <p id="PopCustomerLocationContent" class="PopontentText"></p>
+                    </div>
+                </div>
+                <div class="popUpEachCustRightSec">
+                    <div class="PopCustAddressSec">
+                        <p class="PopAddressText">Sales.Ex</p>
+                        <p id="PopCustomerSalesExContent" class="PopontentText"></p>
+                    </div>
+                    <div class="PopCustAddressSec">
+                        <p class="PopAddressText">Co-Ordinator</p>
+                        <p id="PopCustomerCoOrdinatorContent" class="PopontentText"></p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="PopCustomerMainActionBTnSec">
+                <button class="PurchasePaymentAnalysisBTN ActiveActionBTN"
+                    onclick="ShowPurchasePaymentAnalysis()">Purchase payment analysis</button>
+                <button class="PurchaseDetailsBTN" onclick="ShowPurchaseDetails()">Purchase details</button>
+                <button class="FollowUpSummeryBTN" onclick="ShowFollowUpSummery()">Follow-up summery</button>
+            </div>
+
+            <div id="PurchasePaymentAnalysisDiv" class="PurchasePaymentAnalysisDiv">
+                <div class="PurchaseSubButtonsDiv">
+                    <button onclick="ShowAccountStatement()" id="AccontStatementBtn"
+                        class="PusrchaseSubButton ">Statement of accounts</button>
+                    <button onclick="ShowLedgerDetails()" id="LedgerBtn" class="PusrchaseSubButton ">Ledger</button>
+                    <button onclick="ShowCustomerPurchaseDetail()" id="PurchaseBtn"
+                        class="PusrchaseSubButton  ">Customer purchase
+                        details</button>
+                </div>
+                <div class="AccountStatements" id="AccountStatements">
+                    <div class="LineGraph">
+                        <div id="myChart" style="width:100%; height:500px;"></div>
+                    </div>
+                    <div class="BraGraph">
+                        <div id="columnchart_material" style="width: 100%; height: 500px;"></div>
+                    </div>
+                </div>
+                <div id="LedgerDetails" class="LedgerDetails">
+                    <hr>
+                    <div id="ledgerCollections" class="ledgerCollections">
+                    </div>
+                </div>
+                <div class="CustomerPurchaseDetails" id="CustomerPurchaseDetails">
+                    <div class="PurchaseDetailsSearchSection">
+                        <input type="search" placeholder="Search.." name="search" class="PurchaseSearchInput"
+                            id="PurchaseSearchInput" />
+                    </div>
+                    <div class="PurchaseTableDiv">
+                        <div class="PurchaseTableHeader PurchaseTableFormat">
+                            <p>Date</p>
+                            <p>Vch no</p>
+                            <p>Po no</p>
+                            <p>Items</p>
+                            <p>Qty</p>
+                            <p>Price</p>
+                            <p>Amount</p>
+                            <p>Vch type</p>
+                            <p>Debit</p>
+                            <p>Credit</p>
+                            <p>Balance</p>
+                        </div>
+                        <div id="PurchaseTableBodyDiv" class="PurchaseTableBodyDiv">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="purchaseDetailsDiv" class="purchaseDetailsDiv">
+                <div class="PurchaseSubButtonsDiv">
+                    <button onclick="ShowProductPurchaseDetails()" id="ProductPurchaseBtn"
+                        class="PusrchaseSubButton ">Products</button>
+                    <button onclick="ShowBinderPurchaseDetails()" id="BinderPurchaseBtn"
+                        class="PusrchaseSubButton ">Binders</button>
+                    <button onclick="ShowAdditivesPurchaseDetail()" id="AddtivesPurchaseBtn"
+                        class="PusrchaseSubButton  ">Additives</button>
+                </div>
+
+                <div class="ProductPurchaseDetails" id="ProductPurchaseDetails">
+                    <div class="PurchaseDetailsSearchSection">
+                        <input type="search" placeholder="Search.." name="search" class="PurchaseSearchInput"
+                            id="ProductReportDataPurchaseSearch" />
+                    </div>
+                    <div class="PurchaseTableDiv">
+                        <div class="PurchaseTableHeader ProductPurchaseTableFormat">
+                            <p>Group</p>
+                            <p>Inventory</p>
+                            <script>
+                                // JavaScript code to print past 12 months including the current month in reverse order
+                                var months = [
+                                    "January", "February", "March", "April", "May", "June",
+                                    "July", "August", "September", "October", "November", "December"
+                                ];
+
+
+                                // Get the current date
+                                const currentDate = new Date();
+
+                                // Create an array of the past 12 months starting from the current month
+                                const past12Months = Array.from({ length: 12 }, (_, index) => {
+                                    const monthIndex = (currentDate.getMonth() - index + 12) % 12;
+                                    return months[monthIndex].substring(0, 3); // Use substring(0, 3) to get the first 3 letters
+                                });
+
+                                //                                console.log("past12Months: ", past12Months);
+
+                                for (var i = 0; i <= 11; i++) {  // Start from the last month and iterate in reverse
+                                    // Print the month
+                                    document.write("<p>" + past12Months[i] + "</p>");
+                                }
+                            </script>
+                            <p>Total</p>
+                            <p>Last year total</p>
+                        </div>
+                        <div id="PurchaseProductTableBodyDiv" class="PurchaseReportTableProducts">
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="BinderPurchaseDetails" id="BinderPurchaseDetails">
+                    <div class="PurchaseDetailsSearchSection">
+                        <input type="search" placeholder="Search.." name="search" class="PurchaseSearchInput"
+                            id="BinderReportDataPurchaseSearch" />
+                    </div>
+                    <div class="PurchaseTableDiv">
+                        <div class="PurchaseTableHeader ProductPurchaseTableFormat ProductGroupPurchaseTableFormat">
+                            <p>Binder</p>
+                            <script>
+
+
+                                for (var i = 0; i <= 11; i++) {  // Start from the last month and iterate in reverse
+                                    // Print the month
+                                    document.write("<p>" + past12Months[i] + "</p>");
+                                }
+                            </script>
+
+                            <p>Total</p>
+                            <p>Last year total</p>
+                        </div>
+                        <div id="BinderPurchaseReportDataBodyDiv" class="PurchaseReportTableBinders">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="AdditivesPurchaseDetails" id="AdditivesPurchaseDetails">
+                    <div class="PurchaseDetailsSearchSection">
+                        <input type="search" placeholder="Search.." name="search" class="PurchaseSearchInput"
+                            id="AdditveReportDataPurchaseSearch" />
+                    </div>
+                    <div class="PurchaseTableDiv">
+                        <div class="PurchaseTableHeader ProductPurchaseTableFormat ProductGroupPurchaseTableFormat">
+                            <p>Binder</p>
+                             <script>
+
+
+                                for (var i = 0; i <= 11; i++) {  // Start from the last month and iterate in reverse
+                                    // Print the month
+                                    document.write("<p>" + past12Months[i] + "</p>");
+                                }
+                            </script>
+
+                            <p>Total</p>
+                            <p>Last year total</p>
+                        </div>
+                        <div id="PurchaseAdditiveReportDataBodyDiv" class="PurchaseReportTableAdditives">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="FollowUpSummeryDiv" class="FollowUpSummeryDiv">
+                <div class="PurchaseDetailsSearchSection">
+                    <input type="search" placeholder="Search.." name="search" class="PurchaseSearchInput"
+                        id="FollowUpSearch" />
+                </div>
+                <div id="FollowUpsCollections" class="FollowUpsCollections">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
     <div class="UploadLedgerDataPopUp" id="UploadLedgerDataPopUp">
         <div class=" popup UpLedPopUp">
             <div class="MainPopupTopsection">
@@ -17,15 +225,23 @@
                 <p class="popCardHeaderText">Upload Ledger Data</p>
             </div>
             <form autocomplete="off" action="/office/uploadLedgerData" method="post" enctype="multipart/form-data">
-                <div class="CCMainSection">
+                <div class="CCMainSection UpnameSection">
                     <div class="CCNameSection UpnameSection">
                         <p class="ccNameText">Customer Name</p>
                         <input type="text" id="CustomerNameUpload" name="CustomerName" placeholder="Enter name here"
-                            class="CCInputname UpLedInputname " required>
+                            class="CCInputname UpLedInputname " oninput="CustomerNameSuggestions()" required>
+
+                        <div class="customer-suggestions-container">
+                            <datalist id="customerNames">
+                                <!-- Add options dynamically using JavaScript -->
+                            </datalist>
+                        </div>
+
                     </div>
                 </div>
                 <div class="CCMainSection UpnameSection">
                     <p class="ccNameText" for="excelFile">Select an Excel file (.xlsx only):</p>
+                    {{!-- <p class="LedgerConditions"> </p> --}}
                     <input type="file" name="excelFile" id="excelFile" class="CCInputname UpLedInputname" accept=".xlsx"
                         required>
                 </div>
@@ -373,6 +589,7 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Data from the server:', data);
+                State.Customers
                 OrganizeData(data);
                 // Handle the response data as needed
             })
@@ -450,7 +667,7 @@
 
                 // Add click event to each row
                 // Add onclick attribute to each row
-                row.setAttribute('onclick', `alert('${customer.Customername} ${customer.Loaction}')`);
+                row.setAttribute('onclick', `OpenEachCustomerPanel('${customer.Customername}','${customer.Loaction}')`);
             });
         });
 
@@ -811,81 +1028,1220 @@
             State.AllCustomerNames.push(customer.Customername);
         })
         document.getElementById('UploadLedgerDataPopUp').style.display = "flex";
-        const customers = State.AllCustomerNames;
-        if (document.getElementById('CustomerNameUploadautocomplete-list')) {
-            document.getElementById('CustomerNameUploadautocomplete-list').innerHTML = "";
-        }
-        autocomplete(document.getElementById("CustomerNameUpload"), customers);
+        var Customers = State.AllCustomerNames;
+        console.log(Customers);
     }
 
     function ClosePopupForUploadLedger() {
         document.getElementById('UploadLedgerDataPopUp').style.display = "none";
+        if (document.getElementById('CustomerNameUploadautocomplete-list')) {
+            document.getElementById('CustomerNameUploadautocomplete-list').innerHTML = "";
+        }
+    }
+
+    function OpenEachCustomerPanel(Customername, Location) {
+        var EachCustomerDetailsPopUp = document.getElementById('EachCustomerDetailsPopUp');
+        EachCustomerDetailsPopUp.style.display = "flex";
+
+        // console.log("Customername: ",Customername," Location: ",Location);
+        console.log("All Customers:", State.Customers);
+
+        var Customer = State.Customers.find((OneCustomer) => {
+            return OneCustomer.Customername === Customername && OneCustomer.Loaction === Location;
+        })
+
+        console.log("Selectec Customer: ", Customer);
+        if (Customer) {
+            document.getElementById('popCustNameText').textContent = Customer.Customername;
+            document.getElementById('PopCustomerAddressContent').textContent = Customer.Address;
+            document.getElementById('PopCustomerLocationContent').textContent = Customer.Loaction;
+            document.getElementById('PopCustomerSalesExContent').textContent = Customer.SalesEx;
+            document.getElementById('PopCustomerCoOrdinatorContent').textContent = Customer.Co_ordinator;
+
+            ApplyLineGraphToOutStandingBalance(Customer)
+            ShowAccountStatement();
+        }
+    }
+
+    function ClosePopupForEachCustomer() {
+        ShowPurchasePaymentAnalysis();
+
+
+
+        var EachCustomerDetailsPopUp = document.getElementById('EachCustomerDetailsPopUp');
+        EachCustomerDetailsPopUp.style.display = "none";
+
+    }
+
+    async function ApplyLineGraphToOutStandingBalance(Customer) {
+        showLoader();
+
+        var TableData = []; // table data
+
+        await fetch(`/office/GetAllCustomerPurchaseData/api/${Customer.Customername}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data from the server:', data);
+                TableData = data;
+            })
+            .catch(error => console.error('Error:', error));
+
+
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // Use your actual balance data
+            const balanceData = [];
+
+            TableData.forEach((EachData) => {
+                if (EachData.balance) {
+                    balanceData.push({
+                        date: new Date(EachData.Date),
+                        balance: EachData.balance
+                    })
+                }
+            })
+
+            // Sort balanceData based on the date in ascending order
+            const sortedBalanceData = sortBalanceData(balanceData);
+
+            const data = generateChartData(sortedBalanceData);
+
+            var options = {
+                backgroundColor: '#323940',
+                chartArea: {
+                    backgroundColor: '#323940', // Set the background color inside the chart to #323940
+                },
+                titleTextStyle: {
+                    color: '#B3B7BA', // Set the text color for the title
+                },
+                hAxis: {
+                    title: 'Month',
+                    titleTextStyle: {
+                        color: '#B3B7BA', // Set the text color for the title
+                    },
+                    textStyle: {
+                        color: '#B3B7BA' // Set the text color for horizontal axis labels
+                    },
+                    format: 'MMM yyyy', // Format the x-axis labels to display month abbreviation and year
+                    slantedText: false, // Display labels at an angle
+                    gridlines: {
+                        color: '#575757' // Set the color of the y-axis gridlines
+                    }
+
+                },
+                vAxis: {
+                    title: 'Balance',
+                    minValue: 0,
+                    titleTextStyle: {
+                        color: '#B3B7BA', // Set the text color for the title
+                    },
+                    textStyle: {
+                        color: '#B3B7BA' // Set the text color for vertical axis labels
+                    },
+                    gridlines: {
+                        color: '#575757' // Set the color of the y-axis gridlines
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    textStyle: {
+                        color: 'white' // Set the text color for the legend
+                    },
+                },
+                colors: ['#66ccff'],
+            };
+
+            // Draw
+            const chart = new google.visualization.LineChart(document.getElementById('myChart'));
+            chart.draw(data, options);
+        }
+
+        function sortBalanceData(balanceData) {
+            return balanceData.sort((a, b) => {
+                // Compare dates
+                return a.date - b.date;
+            });
+        }
+
+        function generateChartData(balanceData) {
+            const data = new google.visualization.DataTable();
+            data.addColumn('date', 'Date');
+            data.addColumn('number', 'Balance');
+
+            // Add each date and its corresponding balance
+            balanceData.forEach((entry) => {
+                data.addRow([entry.date, entry.balance]);
+            });
+
+            return data;
+        }
+
+
+
+
+        ShowPurchasePaymentGraphPage(TableData)
+    }
+
+    async function ShowPurchasePaymentGraphPage(TableData) {
+
+        google.charts.load('current', { 'packages': ['bar'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // Process the TableData to aggregate amounts by month
+            var monthData = {};
+
+            // Loop through the TableData
+            TableData.forEach(function (entry) {
+                // Convert the date string to a JavaScript Date object
+                var date = new Date(entry.Date);
+                // Extract the month and year
+                var monthYear = date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+
+                // Initialize the monthData entry if it doesn't exist
+                if (!monthData[monthYear]) {
+                    monthData[monthYear] = { Purchase: 0, Payments: 0 };
+                }
+
+                // Add Debit (purchase) amount to Purchase
+                monthData[monthYear].Purchase += entry.Debit || 0;
+                // Add Credit (payment) amount to Payments
+                monthData[monthYear].Payments += entry.Credit || 0;
+            });
+
+            // Convert monthData to an array for charting
+            var chartData = [['Month', 'Purchase', 'Payments']];
+
+            for (var monthYear in monthData) {
+                var data = monthData[monthYear];
+                // Ensure that Purchase and Payments are treated as numbers, not strings
+                chartData.push([monthYear, parseFloat(data.Purchase), parseFloat(data.Payments)]);
+            }
+
+            var data = google.visualization.arrayToDataTable(chartData);
+
+            var options = {
+                chart: {
+                    title: 'Purchase and Payments for the Past 12 Months',
+                    subtitle: 'Based on Debit and Credit Amounts',
+                },
+                colors: ['#6699ff', '#ff471a'],
+                backgroundColor: '#323940',
+                chartArea: {
+                    backgroundColor: '#323940', // Set the background color inside the chart to #323940
+                },
+                titleTextStyle: {
+                    color: '#B3B7BA', // Set the text color for the title
+                },
+                hAxis: {
+                    textStyle: {
+                        color: '#B3B7BA', // Set the text color for horizontal axis labels
+                    },
+                },
+                vAxis: {
+                    textStyle: {
+                        color: '#B3B7BA', // Set the text color for vertical axis labels
+                    },
+                },
+                legend: {
+                    textStyle: {
+                        color: '#B3B7BA', // Set the text color for the legend
+                    },
+                },
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+        hideLoader();
+
+    }
+
+    function ShowPurchasePaymentAnalysis() {
+        var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
+        PurchasePaymentAnalysisDiv.style.display = "flex";
+
+        var purchaseDetailsDiv = document.getElementById('purchaseDetailsDiv');
+        purchaseDetailsDiv.style.display = "none";
+        var FollowUpSummeryDiv = document.getElementById('FollowUpSummeryDiv');
+        FollowUpSummeryDiv.style.display = "none";
+
+        // Toggle active state for buttons
+        toggleActiveState('PurchasePaymentAnalysisBTN');
+    }
+
+    async function ShowCustomerPurchaseDetailFromLedger() {
+        showLoader();
+
+        var purchaseDetailsDiv = document.getElementById('CustomerPurchaseDetails');
+        purchaseDetailsDiv.style.display = "flex";
+
+        // var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
+        // PurchasePaymentAnalysisDiv.style.display = "none";
+
+        // Toggle active state for buttons
+        toggleActiveState('PurchaseDetailsBTN');
+
+        var TableData = []; // table data
+        var popCustName = document.getElementById('popCustNameText').textContent;
+        await fetch(`/office/GetAllCustomerPurchaseData/api/${popCustName}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Table Data: ', data);
+                TableData = data;
+                ApplyPurchaseDetails(data)
+            })
+            .catch(error => console.error('Error:', error));
+
+
     }
 
 
-    // customer name auto complete
-    function autocomplete(inp, arr) {
-        let currentFocus;
-        inp.addEventListener("input", function (e) {
-            closeAllLists();
-            if (!this.value) return;
-            currentFocus = -1;
-            const a = document.createElement("DIV");
-            a.id = this.id + "autocomplete-list";
-            a.className = "autocomplete-items";
-            this.parentNode.appendChild(a);
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i].substr(0, this.value.length).toUpperCase() === this.value.toUpperCase()) {
-                    const b = document.createElement("DIV");
-                    b.innerHTML = `<strong>${arr[i].substr(0, this.value.length)}</strong>${arr[i].substr(this.value.length)}`;
-                    b.innerHTML += `<input type='hidden' value='${arr[i]}'>`;
-                    b.addEventListener("click", function (e) {
-                        inp.value = this.getElementsByTagName("input")[0].value;
-                        closeAllLists();
-                    });
-                    a.appendChild(b);
+    function ApplyPurchaseDetails(data) {
+        hideLoader();
+
+        var PurchaseTableBodyDiv = document.getElementById('PurchaseTableBodyDiv');
+        PurchaseTableBodyDiv.innerHTML = "";
+
+        var fragment = document.createDocumentFragment();
+        var StartFlag = false;
+
+        function SetStartFlag() {
+            StartFlag = true;
+        }
+
+        function RemoveStartFlag() {
+            StartFlag = false;
+        }
+
+        function getSingleItems(Item) {
+            var virtualItem = `
+            ${StartFlag ? '<hr class="PurchaseTableHR" />' : ''}
+            <div class="EachItemDiv">
+                <p>${Item.Item} ${Item.ItemSecondaryName ? ' - ' + Item.ItemSecondaryName : ''}</p>
+                <p>${Item.Qty}</p>
+                <p>${Item.Price}</p>
+                <p>${Item.Amount}</p>
+            </div>
+        `;
+            return virtualItem;
+        }
+
+        function getReciptItems(Item) {
+            var virtualItem = `
+            ${StartFlag ? '<hr class="PurchaseTableHR" />' : ''}
+            <div class="EachItemDiv">
+                <p>Vch no:  ${Item.VchNo}</p>
+                <p></p>
+                <p></p>
+                <p>${Item.Amount}</p>
+            </div>
+        `;
+            return virtualItem;
+        }
+
+        function getSingleRow(Item) {
+            var tempDiv = document.createElement('div');
+            var virtualRow = `
+            <div class="EachTableRow">
+                <p>${Item.Date}</p>
+                <p>${Item.VchNo}</p>
+                <p>${Item.poNo ? Item.poNo : ''}</p>
+                <div class="itemsDivCollections">
+                    ${Item.Items.length > 0 ?
+                    Item.Items.map((SingleItem, index) => {
+                        if (index > 0) {
+                            SetStartFlag();
+                        }
+                        return getSingleItems(SingleItem);
+                    }).join('') :
+                    Item.PaidCollection.length > 0 ?
+                        Item.PaidCollection.map((SingleItem, index) => {
+                            if (index > 0) {
+                                SetStartFlag();
+                            }
+                            return getReciptItems(SingleItem);
+                        }).join('') : ''
                 }
+                </div>
+                <p>${Item.vchType}</p>
+                <p>${Item.Debit ? Item.Debit : ''}</p>
+                <p>${Item.Credit ? Item.Credit : ''}</p>
+                <p>${Item.balance}</p>
+            </div>
+        `;
+            RemoveStartFlag();
+            tempDiv.innerHTML = virtualRow;
+            while (tempDiv.children.length > 0) {
+                fragment.appendChild(tempDiv.children[0]);
+            }
+        }
+
+        if (data.length > 0) {
+            data.forEach(getSingleRow);
+        }
+
+        PurchaseTableBodyDiv.appendChild(fragment);
+
+        hideLoader();
+    }
+
+
+
+
+
+
+
+
+    function ShowFollowUpSummery() {
+        var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
+        PurchasePaymentAnalysisDiv.style.display = "none";
+
+        var purchaseDetailsDiv = document.getElementById('purchaseDetailsDiv');
+        purchaseDetailsDiv.style.display = "none";
+
+        var FollowUpSummeryDiv = document.getElementById('FollowUpSummeryDiv');
+        FollowUpSummeryDiv.style.display = "block";
+
+        ShowAllFollowUps();
+
+        // Toggle active state for buttons
+        toggleActiveState('FollowUpSummeryBTN');
+    }
+
+
+    function toggleActiveState(clickedBtnClass) {
+        // Remove ActiveActionBTN class from all buttons
+        var buttons = document.getElementsByClassName('ActiveActionBTN');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove('ActiveActionBTN');
+        }
+
+        // Add ActiveActionBTN class to the clicked button
+        var clickedBtn = document.getElementsByClassName(clickedBtnClass)[0];
+        clickedBtn.classList.add('ActiveActionBTN');
+    }
+
+
+    document.getElementById('PurchaseSearchInput').addEventListener('input', function () {
+        var searchValue = this.value.toLowerCase();
+
+        var rows = document.getElementById('PurchaseTableBodyDiv').querySelectorAll('.EachTableRow');
+
+        var matchingRows = [];
+
+        rows.forEach(function (row) {
+            // Hide all rows initially
+            row.style.display = 'none';
+
+            // Show matching rows
+            if (row.textContent.toLowerCase().includes(searchValue)) {
+                row.style.display = '';
+                matchingRows.push(row);
             }
         });
-        inp.addEventListener("keydown", function (e) {
-            const x = document.getElementById(this.id + "autocomplete-list");
-            if (x) {
-                const items = x.getElementsByTagName("div");
-                if (e.keyCode === 40) {
-                    currentFocus++;
-                    addActive(items);
-                } else if (e.keyCode === 38) {
-                    currentFocus--;
-                    addActive(items);
-                } else if (e.keyCode === 13) {
-                    e.preventDefault();
-                    if (currentFocus > -1) items[currentFocus].click();
+
+        // console.log("Matching Rows:", matchingRows);
+    });
+
+    function ShowAccountStatement() {
+        var AccountStatements = document.getElementById('AccountStatements');
+        var LedgerDetails = document.getElementById('LedgerDetails');
+        var CustomerPurchaseDetails = document.getElementById('CustomerPurchaseDetails');
+
+        AccountStatements.style.display = "block";
+        LedgerDetails.style.display = "none";
+        CustomerPurchaseDetails.style.display = "none";
+
+        var AccontStatementBtn = document.getElementById('AccontStatementBtn');
+        var PurchaseBtn = document.getElementById('PurchaseBtn');
+        var LedgerBtn = document.getElementById('LedgerBtn');
+
+        // Add or remove class for active state
+        AccontStatementBtn.classList.add("PurchaseSubButtonActive");
+        LedgerBtn.classList.remove("PurchaseSubButtonActive");
+        PurchaseBtn.classList.remove("PurchaseSubButtonActive");
+    }
+
+    function ShowLedgerDetails() {
+        getAllCustomerLedgerFile();
+        var LedgerDetails = document.getElementById('LedgerDetails');
+        var AccountStatements = document.getElementById('AccountStatements');
+        var CustomerPurchaseDetails = document.getElementById('CustomerPurchaseDetails');
+
+        LedgerDetails.style.display = "block";
+        AccountStatements.style.display = "none";
+        CustomerPurchaseDetails.style.display = "none";
+
+        var LedgerBtn = document.getElementById('LedgerBtn');
+        var PurchaseBtn = document.getElementById('PurchaseBtn');
+        var AccontStatementBtn = document.getElementById('AccontStatementBtn');
+
+        // Add or remove class for active state
+        LedgerBtn.classList.add("PurchaseSubButtonActive");
+        PurchaseBtn.classList.remove("PurchaseSubButtonActive");
+        AccontStatementBtn.classList.remove("PurchaseSubButtonActive");
+
+    }
+
+    function ShowCustomerPurchaseDetail() {
+        var CustomerPurchaseDetails = document.getElementById('CustomerPurchaseDetails');
+        var AccountStatements = document.getElementById('AccountStatements');
+        var LedgerDetails = document.getElementById('LedgerDetails');
+
+        CustomerPurchaseDetails.style.display = "block";
+        LedgerDetails.style.display = "none";
+        AccountStatements.style.display = "none";
+
+        var PurchaseBtn = document.getElementById('PurchaseBtn');
+        var LedgerBtn = document.getElementById('LedgerBtn');
+        var AccontStatementBtn = document.getElementById('AccontStatementBtn');
+
+        // Add or remove class for active state
+        PurchaseBtn.classList.add("PurchaseSubButtonActive");
+        LedgerBtn.classList.remove("PurchaseSubButtonActive");
+        AccontStatementBtn.classList.remove("PurchaseSubButtonActive");
+
+
+        ShowCustomerPurchaseDetailFromLedger();
+    }
+
+    function CustomerNameSuggestions() {
+        var customerNamesDatalist = document.getElementById("customerNames");
+        var customerSuggestionsContainer = document.querySelector(".customer-suggestions-container");
+        var customerNameInput = document.getElementById("CustomerNameUpload");
+
+        customerNamesDatalist.innerHTML = "";
+        customerNamesDatalist.style.display = "block";
+        customerNamesDatalist.style.border = "1px solid gray";
+
+        // Populate datalist with customer names
+        State.Customers.forEach(function (customer) {
+            var option = document.createElement("option");
+            option.value = customer.Customername;
+            option.textContent = customer.Customername;
+            customerNamesDatalist.appendChild(option);
+        });
+
+        // Filter and display suggestions
+        var inputValue = customerNameInput.value.toLowerCase();
+        var options = customerNamesDatalist.getElementsByTagName("option");
+
+        for (var i = 0; i < options.length; i++) {
+            var optionValue = options[i].value.toLowerCase();
+            if (optionValue.startsWith(inputValue)) {
+                options[i].style.display = "";
+                options[i].addEventListener("click", function () {
+                    customerNameInput.value = this.value;
+                    customerNamesDatalist.style.display = "none"
+                    customerNamesDatalist.style.border = "none"
+
+                });
+            } else {
+                options[i].style.display = "none";
+            }
+        }
+    }
+
+
+    async function getAllCustomerLedgerFile() {
+        showLoader();
+        var popCustNameText = document.getElementById('popCustNameText').textContent;
+        await fetch(`/office/GetAllCustomerledgerFile/api/${popCustNameText}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data from the server:', data);
+                addLedgerFiles(data);
+            })
+            .catch(error => console.error('Error:', error));
+
+
+        hideLoader()
+    }
+
+
+    function addLedgerFiles(data) {
+        var ledgerCollections = document.getElementById('ledgerCollections');
+        ledgerCollections.innerHTML = "";
+        //console.log(data);
+        if (data.length > 0) {
+            data.forEach((Item, index) => {
+                var virtualItem = `
+                <div class="EachLedgerItem">
+                    <img class="ExcelIcon" src="/images/Icons/Microsoft Excel_icon.png" alt="">
+                    <div class="EachLedgerInfo">
+                        <p class="LedgerName">${Item.name}</p>
+                        <p class="LedgerInfoData">Uploaded at ${Item.Date}</p>
+                    </div>
+                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${Item.Excel}" class="btn LedgerDownloadBtn">Download</a>
+                </div>
+                `;
+
+                ledgerCollections.innerHTML += virtualItem;
+            })
+        }
+    }
+
+
+    function ShowPurchaseDetails() {
+        var purchaseDetailsDiv = document.getElementById('purchaseDetailsDiv');
+        purchaseDetailsDiv.style.display = "flex";
+        var PurchasePaymentAnalysisDiv = document.getElementById('PurchasePaymentAnalysisDiv');
+        PurchasePaymentAnalysisDiv.style.display = "none";
+        var FollowUpSummeryDiv = document.getElementById('FollowUpSummeryDiv');
+        FollowUpSummeryDiv.style.display = "none";
+
+        GetProductBinderAdditive();
+
+        // Toggle active state for buttons
+        toggleActiveState('PurchaseDetailsBTN');
+
+
+
+    }
+
+    async function GetProductBinderAdditive() {
+        showLoader()
+        var Customer_Name = document.getElementById('popCustNameText').textContent;
+        await fetch(`/office/GetProductBinderAdditive/PurchasedDetails/api/${Customer_Name}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data from the server:', data);
+                State.ReportData = data;
+                // Handle the response data as needed
+                //call products
+                ShowProductPurchaseDetails();
+            })
+            .catch(error => console.error('Error:', error));
+
+        hideLoader();
+    }
+
+
+    function ShowProductPurchaseDetails() {
+        var ProductPurchaseDetails = document.getElementById('ProductPurchaseDetails');
+        var BinderPurchaseDetails = document.getElementById('BinderPurchaseDetails');
+        var AdditivesPurchaseDetails = document.getElementById('AdditivesPurchaseDetails');
+
+        ProductPurchaseDetails.style.display = 'block';
+        BinderPurchaseDetails.style.display = 'none';
+        AdditivesPurchaseDetails.style.display = 'none';
+
+        var ProductReportData = State.ReportData.ProductReportData;
+        console.log("ProductReportData: ", ProductReportData);
+
+
+
+        function groupByMonths(data) {
+            const result = [];
+
+            // Iterate through each item in the data array
+            data.forEach(item => {
+                const productGroup = item.ProductGroup;
+
+                // Find the product group entry in the result array
+                let productGroupEntry = result.find(entry => entry.ProductGroup === productGroup);
+
+                // If the product group entry doesn't exist, create it
+                if (!productGroupEntry) {
+                    productGroupEntry = {
+                        ProductGroup: productGroup,
+                        Product: []
+                    };
+
+                    // Add the new product group entry to the result array
+                    result.push(productGroupEntry);
                 }
+
+                // Find the product entry in the product group
+                let productEntry = productGroupEntry.Product.find(product => product.Abbreviation === item.Abbreviation);
+
+                // If the product entry doesn't exist, create it
+                if (!productEntry) {
+                    productEntry = {
+                        TinterName: item.TinterName,
+                        Abbreviation: item.Abbreviation,
+                        Past_12_Months_Quantity: {},
+                        Last_year_Quantity: 0, // Initialize Last_year_Quantity to 0
+                        Total_Quantity: 0 // Initialize Total_Quantity to 0
+                    };
+
+                    // Add the new product entry to the product group
+                    productGroupEntry.Product.push(productEntry);
+                }
+
+                // Parse the OrderDate and extract the month key
+                const dateParts = item.OrderDate.split('-');
+                const currentDate = new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`);
+                const monthKey = currentDate.toLocaleString('en-US', { month: 'long' });
+
+                // Calculate the quantity for the current month
+                const monthQuantity = data
+                    .filter(d => {
+                        const dDateParts = d.OrderDate.split('-');
+                        const dDate = new Date(`${dDateParts[2]}-${dDateParts[1]}-${dDateParts[0]}`);
+                        return dDate >= twelveMonthsAgo && dDate <= currentDate && d.Abbreviation === item.Abbreviation;
+                    })
+                    .reduce((sum, d) => {
+                        if (d.OrderDate !== item.OrderDate) {
+                            return sum + d.TinterQuantityGrams;
+                        }
+                        return sum;
+                    }, 0);
+
+                // Assign the calculated quantity to the corresponding month in the product entry
+                productEntry.Past_12_Months_Quantity[monthKey] = monthQuantity;
+
+                // Calculate the quantity for last year
+                const lastYearQuantity = data
+                    .filter(d => {
+                        const dDateParts = d.OrderDate.split('-');
+                        const dDate = new Date(`${dDateParts[2]}-${dDateParts[1]}-${dDateParts[0]}`);
+                        return dDate >= lastYear && dDate <= elevenMonthsAgo && d.Abbreviation === item.Abbreviation;
+                    })
+                    .reduce((sum, d) => sum + d.TinterQuantityGrams, 0);
+
+                // Assign the calculated quantity to Last_year_Quantity in the product entry
+                productEntry.Last_year_Quantity = lastYearQuantity;
+
+                // Calculate the total quantity for the past 12 months
+                const totalQuantity = Object.values(productEntry.Past_12_Months_Quantity).reduce((sum, value) => sum + value, 0);
+
+                // Assign the calculated total quantity to Total_Quantity in the product entry
+                productEntry.Total_Quantity = totalQuantity;
+            });
+
+            return result;
+        }
+
+        // Calculate the date twelve months ago
+        const twelveMonthsAgo = new Date();
+        twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+        // Calculate the date eleven months ago
+        const elevenMonthsAgo = new Date();
+        elevenMonthsAgo.setMonth(elevenMonthsAgo.getMonth() - 11);
+
+        // Calculate the date for last year
+        const lastYear = new Date();
+        lastYear.setFullYear(lastYear.getFullYear() - 1);
+
+        // Call the groupByMonths function with the ProductReportData array
+        const groupedData = groupByMonths(ProductReportData);
+
+        // Display the grouped data
+        //console.log(groupedData);
+
+        State.ReportData.ProductMonthGroupedData = groupedData;
+
+        var PurchaseProductTableBodyDiv = document.getElementById('PurchaseProductTableBodyDiv');
+        PurchaseProductTableBodyDiv.innerHTML = '';
+
+        var months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        // Get the current date
+        const currentDate = new Date();
+
+        // Create an array of the past 12 months starting from the current month
+        const past12Months = Array.from({ length: 12 }, (_, index) => {
+            const monthIndex = (currentDate.getMonth() - index + 12) % 12;
+            return months[monthIndex];
+        });
+        var GroupDataModifiedByMonth = []
+        console.log("sers");
+        console.log("groupedData: ", groupedData);
+        groupedData.forEach((EachGroup) => {
+            console.log("Each Group is ", EachGroup);
+            var GroupMonthData = {
+                name: EachGroup.ProductGroup,
+                EachMonthSum: [],
+                Products: [],
+                TotalSumOfEachGroup: 0
+            };
+
+            // find for Product Group
+            past12Months.forEach((EachMonth) => {
+                // Manage Group data
+                var monthSum = 0;
+                var productMonthCount = 0;
+                EachGroup.Product.forEach((EachInventory) => {
+                    //  console.log("Each Month: ", EachMonth);
+                    if (EachInventory.Past_12_Months_Quantity[EachMonth]) {
+                        // console.log(" EachInventory: ", EachInventory);
+                        // console.log(`Quantity of : ${EachMonth} is ${EachInventory.Past_12_Months_Quantity[EachMonth]}`)
+                        // add to sum of each month .
+                        monthSum += EachInventory.Past_12_Months_Quantity[EachMonth]
+                        productMonthCount = EachInventory.Past_12_Months_Quantity[EachMonth]
+                    }
+                })
+                GroupMonthData.EachMonthSum.push(monthSum);
+                GroupMonthData.TotalSumOfEachGroup += monthSum;
+
+
+
+                // manage Product data
+
+
+
+
+            })
+            GroupDataModifiedByMonth.push(GroupMonthData);
+            EachGroup.Product.forEach((EachInventory) => {
+
+                GroupMonthData.Products.push(transformData(EachInventory));
+
+            });
+
+        })
+        function transformData(input) {
+            const months = past12Months;
+
+            const past12MonthsQuantity = months.map(month => input.Past_12_Months_Quantity[month] || 0);
+
+            const transformedData = {
+                TinterName: input.TinterName,
+                Abbreviation: input.Abbreviation,
+                Past_12_Months_Quantity: past12MonthsQuantity,
+                Last_year_Quantity: input.Last_year_Quantity,
+                Total_Quantity: past12MonthsQuantity.reduce((sum, quantity) => sum + quantity, 0)
+            };
+
+            return transformedData;
+        }
+
+
+        console.log("GroupDataModifiedByMonth: ", GroupDataModifiedByMonth);
+
+        function createGroupRow(groupData) {
+            // Map EachMonthSum to formatted <p> elements and join them
+            const sumData = groupData.EachMonthSum.map((singleMonthData) => `<p>${singleMonthData.toFixed(1)}</p>`).join('');
+
+            // Create the virtual row
+            const virtualRow = `
+                    <div class="product-group-div">
+                        <p>${groupData.name}</p>
+                        <p></p>
+                        <div class="product-group-div-sum">
+                            ${sumData}
+                            <p>${groupData.TotalSumOfEachGroup.toFixed(1)}</p>
+                            <p>0</p>
+                        </div>
+                    </div>
+                `;
+
+            return virtualRow;
+        }
+
+
+        // Group Table data 
+
+        GroupDataModifiedByMonth.forEach((eachGroup, i) => {
+            console.log("Index : ", i);
+            console.log("eachGroup : ", eachGroup);
+
+            var productRow = document.createElement('div');
+            productRow.classList.add('EachProductRow');
+
+            const groupRow = createGroupRow(eachGroup);
+            productRow.innerHTML += groupRow;
+            PurchaseProductTableBodyDiv.appendChild(productRow);
+
+
+            eachGroup.Products.map((EachProduct) => {
+                const groupRow = createProductRow(EachProduct);
+                productRow.innerHTML += groupRow;
+                PurchaseProductTableBodyDiv.appendChild(productRow);
+            })
+
+
+        });
+
+
+
+        function createProductRow(ProductData) {
+            console.log("ProductData: ", ProductData);
+            // Check if EachMonthSum is defined, otherwise use an empty array
+            const sumData = (ProductData.Past_12_Months_Quantity || []).map((singleMonthData) => `<p>${singleMonthData.toFixed(1)}</p>`).join('');
+
+            const virtualRow = `
+                    <div class="product-group-div">
+                        <p></p>
+                        <p>${ProductData.TinterName}</p>
+                        <div class="product-group-div-sum">
+                            ${sumData}
+                            <p>${ProductData.Total_Quantity ? ProductData.Total_Quantity.toFixed(1) : ''}</p>
+                            <p>0</p>
+                        </div>
+                    </div>
+                `;
+
+            return virtualRow;
+        }
+    }
+
+    // search  bar functionality for product
+    document.getElementById('ProductReportDataPurchaseSearch').addEventListener('input', function () {
+        var searchValue = this.value.toLowerCase();
+
+        var rows = document.getElementById('PurchaseProductTableBodyDiv').querySelectorAll('.EachProductRow');
+
+        var matchingRows = [];
+
+        rows.forEach(function (row) {
+            // Hide all rows initially
+            row.style.display = 'none';
+
+            // Show matching rows
+            if (row.textContent.toLowerCase().includes(searchValue)) {
+                row.style.display = '';
+                matchingRows.push(row);
             }
         });
-        function addActive(items) {
-            removeActive(items);
-            if (currentFocus >= items.length) currentFocus = 0;
-            if (currentFocus < 0) currentFocus = (items.length - 1);
-            items[currentFocus].classList.add("autocomplete-active");
-        }
-        function removeActive(items) {
-            for (let i = 0; i < items.length; i++) {
-                items[i].classList.remove("autocomplete-active");
+
+        // console.log("Matching Rows:", matchingRows);
+    });
+
+    // search  bar functionality for product group
+    /*document.getElementById('ProductGroupReportDataPurchaseSearch').addEventListener('input', function () {
+        var searchValue = this.value.toLowerCase();
+
+        var rows = document.getElementById('PurchaseProductGroupTableBodyDiv').querySelectorAll('.EachProductGroupRow');
+
+        var matchingRows = [];
+
+        rows.forEach(function (row) {
+            // Hide all rows initially
+            row.style.display = 'none';
+
+            // Show matching rows
+            if (row.textContent.toLowerCase().includes(searchValue)) {
+                row.style.display = '';
+                matchingRows.push(row);
             }
-        }
-        function closeAllLists(elmnt) {
-            const lists = document.getElementsByClassName("autocomplete-items");
-            for (let i = 0; i < lists.length; i++) {
-                if (elmnt !== lists[i] && elmnt !== inp) {
-                    lists[i].parentNode.removeChild(lists[i]);
-                }
+        });
+
+        // console.log("Matching Rows:", matchingRows);
+    });*/
+
+
+    function ShowBinderPurchaseDetails() {
+        var BinderPurchaseDetails = document.getElementById('BinderPurchaseDetails');
+        var ProductPurchaseDetails = document.getElementById('ProductPurchaseDetails');
+        var AdditivesPurchaseDetails = document.getElementById('AdditivesPurchaseDetails');
+
+        BinderPurchaseDetails.style.display = 'block';
+        ProductPurchaseDetails.style.display = 'none';
+        AdditivesPurchaseDetails.style.display = 'none';
+
+        var BinderReportData = State.ReportData.BinderReportData;
+
+        console.log('BinderReportData: ', BinderReportData);
+
+        var months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        var binderData = BinderReportData;
+
+        // Process data to calculate past 12 months sum
+        var result = binderData.reduce((acc, item) => {
+            const orderDate = new Date(item.OrderDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+            const monthIndex = (currentDate.getMonth() - orderDate.getMonth() + 12) % 12;
+
+            if (!acc[item.BinderName]) {
+                acc[item.BinderName] = {
+                    BinderName: item.BinderName,
+                    Past_12_Months_Quantity: Array(12).fill(0),
+                    Total_Quantity: 0
+                };
             }
+
+            acc[item.BinderName].Past_12_Months_Quantity[monthIndex] += item.BinderQuantityGrams;
+            acc[item.BinderName].Total_Quantity += item.BinderQuantityGrams;
+
+            return acc;
+        }, {});
+
+        // Convert result to array
+        const BinderModifiedData = Object.values(result);
+
+        console.log(BinderModifiedData);
+
+        var BinderPurchaseReportDataBodyDiv = document.getElementById('BinderPurchaseReportDataBodyDiv');
+        BinderPurchaseReportDataBodyDiv.innerHTML = '';
+
+        BinderModifiedData.forEach((EachBinderData) => {
+            ShowBinderRowData(EachBinderData);
+        })
+
+        function ShowBinderRowData(BinderData) {
+            // Create a div element for each product row
+            var productRow = document.createElement('div');
+            productRow.classList.add('EachBinderDataRow');
+
+            const sumData = (BinderData.Past_12_Months_Quantity || []).map((singleMonthData) => `<p>${singleMonthData.toFixed(1)}</p>`).join('');
+
+            const virtualRow = `
+                    {{!-- <div class="product-group-div"> --}}
+                        <p>${BinderData.BinderName}</p>
+                        {{!-- <div class="product-group-div-sum"> --}}
+                            ${sumData}
+                            <p>${BinderData.Total_Quantity ? parseInt(BinderData.Total_Quantity) : ''}</p>
+                            <p>0</p>
+                        {{!-- </div> --}}
+                    {{!-- </div> --}}
+                `;
+            productRow.innerHTML += virtualRow;
+
+            BinderPurchaseReportDataBodyDiv.appendChild(productRow);
         }
-        document.addEventListener("click", function (e) {
-            closeAllLists(e.target);
+
+
+
+        /*BinderReportData.forEach((EachProduct) => {
+            // Create a div element for each product row
+            var productRow = document.createElement('div');
+            productRow.classList.add('EachBinderDataRow');
+
+            // list of binders 
+            
+
+            // Append the p elements to the product row div
+            productRow.appendChild(orderDate);
+            productRow.appendChild(tinterName);
+            productRow.appendChild(tinterQuantity);
+
+            // Append the product row div to the PurchaseTableBodyDiv
+            PurchaseProductTableBodyDiv.appendChild(productRow);
+        });*/
+    }
+
+    // search  bar functionality for Binders report data
+    document.getElementById('BinderReportDataPurchaseSearch').addEventListener('input', function () {
+        var searchValue = this.value.toLowerCase();
+
+        var rows = document.getElementById('BinderPurchaseReportDataBodyDiv').querySelectorAll('.EachBinderDataRow');
+
+        var matchingRows = [];
+
+        rows.forEach(function (row) {
+            // Hide all rows initially
+            row.style.display = 'none';
+
+            // Show matching rows
+            if (row.textContent.toLowerCase().includes(searchValue)) {
+                row.style.display = '';
+                matchingRows.push(row);
+            }
+        });
+
+        // console.log("Matching Rows:", matchingRows);
+    });
+
+    function ShowAdditivesPurchaseDetail() {
+        var AdditivesPurchaseDetails = document.getElementById('AdditivesPurchaseDetails');
+        var ProductPurchaseDetails = document.getElementById('ProductPurchaseDetails');
+        var BinderPurchaseDetails = document.getElementById('BinderPurchaseDetails');
+
+        AdditivesPurchaseDetails.style.display = 'block';
+        ProductPurchaseDetails.style.display = 'none';
+        BinderPurchaseDetails.style.display = 'none';
+
+        var AdditiveReportData = State.ReportData.AdditiveReportData;
+
+        console.log('AdditiveReportData: ', AdditiveReportData);
+
+        var months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        var AddtiiveData = AdditiveReportData;
+
+        // Process data to calculate past 12 months sum
+        var result = AddtiiveData.reduce((acc, item) => {
+            const orderDate = new Date(item.OrderDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+            const monthIndex = (currentDate.getMonth() - orderDate.getMonth() + 12) % 12;
+
+            if (!acc[item.AdditiveName]) {
+                acc[item.AdditiveName] = {
+                    AdditiveName: item.AdditiveName,
+                    Past_12_Months_Quantity: Array(12).fill(0),
+                    Total_Quantity: 0
+                };
+            }
+
+            acc[item.AdditiveName].Past_12_Months_Quantity[monthIndex] += item.AdditiveQuantityGrams;
+            acc[item.AdditiveName].Total_Quantity += item.AdditiveQuantityGrams;
+
+            return acc;
+        }, {});
+
+        // Convert result to array
+        const
+            additiveModifiedData = Object.values(result);
+
+        console.log(additiveModifiedData);
+
+        var PurchaseAdditiveReportDataBodyDiv = document.getElementById('PurchaseAdditiveReportDataBodyDiv');
+        PurchaseAdditiveReportDataBodyDiv.innerHTML = '';
+
+        additiveModifiedData.forEach((EachAdditiveData) => {
+            ShowAddtiveRowData(EachAdditiveData);
+        })
+
+        function ShowAddtiveRowData(AdditiveData) {
+            // Create a div element for each product row
+            var productRow = document.createElement('div');
+            productRow.classList.add('EachAdditiveDataRow');
+
+            const sumData = (AdditiveData.Past_12_Months_Quantity || []).map((singleMonthData) => `<p>${singleMonthData.toFixed(1)}</p>`).join('');
+
+            const virtualRow = `
+                    {{!-- <div class="product-group-div"> --}}
+                        <p>${AdditiveData.AdditiveName}</p>
+                        {{!-- <div class="product-group-div-sum"> --}}
+                            ${sumData}
+                            <p>${AdditiveData.Total_Quantity ? parseInt(AdditiveData.Total_Quantity) : ''}</p>
+                            <p>0</p>
+                        {{!-- </div> --}}
+                    {{!-- </div> --}}
+                `;
+            productRow.innerHTML += virtualRow;
+
+            PurchaseAdditiveReportDataBodyDiv.appendChild(productRow);
+        }
+
+
+        /* var PurchaseProductTableBodyDiv = document.getElementById('PurchaseAdditiveReportDataBodyDiv');
+         PurchaseProductTableBodyDiv.innerHTML = '';
+ 
+         AdditiveReportData.forEach((EachProduct) => {
+             // Create a div element for each product row
+             var productRow = document.createElement('div');
+             productRow.classList.add('EachAdditiveDataRow');
+ 
+             // Create p elements for each piece of information
+             var orderDate = document.createElement('p');
+             orderDate.textContent = EachProduct.OrderDate;
+ 
+             var tinterName = document.createElement('p');
+             tinterName.textContent = EachProduct.AdditiveName;
+ 
+             var tinterQuantity = document.createElement('p');
+             // Convert quantities to kilograms and liters if above 1000
+             const quantityInGrams = EachProduct.AdditiveQuantityGrams > 1000 ? (EachProduct.AdditiveQuantityGrams / 1000).toFixed(2) + ' kg' : EachProduct.AdditiveQuantityGrams.toFixed(2) + ' g';
+             const volumeInMilliliters = EachProduct.AdditiveVolume > 1000 ? (EachProduct.AdditiveVolume / 1000).toFixed(2) + ' L' : EachProduct.AdditiveVolume.toFixed(2) + ' mL';
+ 
+             // Display the quantities
+             tinterQuantity.textContent = `${quantityInGrams} --- ${volumeInMilliliters}`;
+             //  tinterQuantity.textContent = `${EachProduct.AdditiveQuantityGrams.toFixed(2)} g --- ${EachProduct.AdditiveVolume.toFixed(2)} mL`;
+ 
+             // Append the p elements to the product row div
+             productRow.appendChild(orderDate);
+             productRow.appendChild(tinterName);
+             productRow.appendChild(tinterQuantity);
+ 
+             // Append the product row div to the PurchaseTableBodyDiv
+             PurchaseProductTableBodyDiv.appendChild(productRow);
+         });*/
+    }
+
+    // search  bar functionality for Binders report data
+    document.getElementById('AdditveReportDataPurchaseSearch').addEventListener('input', function () {
+        var searchValue = this.value.toLowerCase();
+
+        var rows = document.getElementById('PurchaseAdditiveReportDataBodyDiv').querySelectorAll('.EachAdditiveDataRow');
+
+        var matchingRows = [];
+
+        rows.forEach(function (row) {
+            // Hide all rows initially
+            row.style.display = 'none';
+
+            // Show matching rows
+            if (row.textContent.toLowerCase().includes(searchValue)) {
+                row.style.display = '';
+                matchingRows.push(row);
+            }
+        });
+
+        // console.log("Matching Rows:", matchingRows);
+    });
+
+    function ShowAllFollowUps() {
+        var CustomerName = document.getElementById('popCustNameText').textContent;
+
+        var CustomerData = State.Customers.find((eachCustomer) => eachCustomer.Customername === CustomerName);
+
+
+        var Follow_Ups = CustomerData.FollowUps;
+        // Sort in descending order based on InsertedTime
+        Follow_Ups.sort((a, b) => b.InsertedTime - a.InsertedTime);
+
+        console.log("CustomerData followups = ", Follow_Ups);
+        var FollowUpsCollections = document.getElementById('FollowUpsCollections');
+        FollowUpsCollections.innerHTML = ""; // Clear the existing content
+
+        Follow_Ups.forEach((followUp) => {
+            // Convert timestamp to Date object
+            const dateObject = new Date(followUp.InsertedTime);
+
+            var virtualItem = `
+        <div class="EachFollowUp">
+            <p><strong>Serial No: </strong>${followUp.Serial_No}</p>
+            {{!-- <p class="FollowUpInsertedtext">Inserted at: ${formattedDateTime}</p> --}}
+             <p class="FollowUpInsertedtext">Inserted at: ${dateObject.getFullYear()}-${String(dateObject.getMonth() + 1).padStart(2, '0')}-${String(dateObject.getDate()).padStart(2, '0')} ${String(dateObject.getHours()).padStart(2, '0')}:${String(dateObject.getMinutes()).padStart(2, '0')}:${String(dateObject.getSeconds()).padStart(2, '0')}</p>
+            <p><strong>Customer Name: </strong>${followUp.Customer_Name}</p>
+            <p><strong>Purpose: </strong>${followUp.Purpose}</p>
+            <p><strong>Connection Type: </strong>${followUp.Connection_Type}</p>
+            <div class="FollowUpCommentSection">
+                <p><strong>Comment: </strong>${followUp.Comment}</p>
+            </div>
+            <p><strong>Contact Person: </strong>${followUp.Contact_Person}</p>
+            <p><strong>Employee Name: </strong>${followUp.EmployeeName}</p>
+        </div>
+    `;
+
+            FollowUpsCollections.innerHTML += virtualItem; // Append the new content
         });
     }
+
+
+    // search  bar functionality for Binders report data
+    document.getElementById('FollowUpSearch').addEventListener('input', function () {
+        var searchValue = this.value.toLowerCase();
+
+        var rows = document.getElementById('FollowUpsCollections').querySelectorAll('.EachFollowUp');
+
+        var matchingRows = [];
+
+        rows.forEach(function (row) {
+            // Hide all rows initially
+            row.style.display = 'none';
+
+            // Show matching rows
+            if (row.textContent.toLowerCase().includes(searchValue)) {
+                row.style.display = '';
+                matchingRows.push(row);
+            }
+        });
+
+        // console.log("Matching Rows:", matchingRows);
+    });
+
+
+
+
+
+
 
 
 
@@ -1505,7 +2861,8 @@
         gap: 1rem;
     }
 
-    .UploadLedgerDataPopUp {
+    .UploadLedgerDataPopUp,
+    .EachCustomerDetailsPopUp {
         background: rgba(0, 0, 0, 0.7);
         display: none;
         justify-content: center;
@@ -1534,6 +2891,7 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        padding: 1rem 0;
     }
 
     .UpLedInputname {
@@ -1562,5 +2920,409 @@
         margin-top: 90px;
         margin-left: 25px;
         font-size: 18px;
+    }
+
+    .LedgerConditions {
+        text-align: center;
+        font-size: 15px;
+    }
+
+    .EachCustPopup {
+        padding: 2rem;
+        background-color: #323940;
+        color: #B3B7BA;
+        font-family: sans-serif;
+        width: 90%;
+        border-radius: 10px;
+        position: relative;
+        max-height: 90vh;
+        overflow-y: auto;
+        margin: 2rem 0;
+    }
+
+    .PopCustomerName {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popCustNameText {
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .popupEachCustMainSec {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2rem;
+        gap: 2rem;
+    }
+
+    .PopAddressText {
+        font-size: 20px;
+        font-size: 600;
+    }
+
+    .PopontentText {
+        font-size: 25px;
+        font-weight: 600;
+        margin-left: 1rem;
+    }
+
+    .popUpEachCustLeftSec {
+        width: 35rem;
+    }
+
+    .popUpEachCustRightSec {
+        width: 23rem;
+    }
+
+    .PopCustomerMainActionBTnSec {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .PurchasePaymentAnalysisBTN,
+    .PurchaseDetailsBTN,
+    .FollowUpSummeryBTN {
+        padding: 1rem 2rem;
+        border-radius: 27px;
+        font-size: 20px;
+        font-weight: 700;
+        border: 1px solid gray;
+        background-color: #B3B7BA;
+    }
+
+    .PopCustomerMainActionBTnSec button:hover {
+        background-color: #3b4046;
+        color: #B3B7BA;
+    }
+
+    .ActiveActionBTN {
+        background-color: #2e3135;
+        color: #B3B7BA;
+    }
+
+    .PurchasePaymentAnalysisDiv,
+    .purchaseDetailsDiv,
+    .CustomerPurchaseDetails {
+        display: flex;
+        flex-direction: column;
+        margin: 1rem;
+        border: 1px solid gray;
+        border-radius: 10px;
+        padding: 1.5rem;
+        gap: 4rem;
+    }
+
+    .PurchaseSubButtonsDiv {
+        display: flex;
+        gap: 3rem;
+        justify-content: center;
+    }
+
+    .PusrchaseSubButton {
+        width: fit-content;
+        padding: 0.5rem 2rem;
+        background: transparent;
+        border: 1px solid gray;
+        outline: none;
+        color: #B3B7BA;
+        font-size: 20px;
+        font-weight: 600;
+        border-radius: 15px;
+    }
+
+    .PusrchaseSubButton:hover {
+        background-color: #3b4046;
+        color: #B3B7BA;
+    }
+
+    .PusrchaseSubButtonActive {
+        background-color: #24272b;
+        color: #B3B7BA;
+    }
+
+
+    .BarGraph {
+        padding-bottom: 5rem;
+    }
+
+    .purchaseDetailsDiv,
+    .CustomerPurchaseDetails {
+        display: none;
+        gap: 1rem;
+    }
+
+    .PurchaseDetailsSearchSection {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .PurchaseDetailsSearchSectionForProductGroups {
+        justify-content: space-between;
+        margin-top: 4rem;
+        align-items: center;
+    }
+
+    .PurchaseDetailsSearchSectionForProductGroups p {
+        margin: 0;
+    }
+
+    .PurchaseSearchInput {
+        padding: 1rem 1rem;
+        border-radius: 10px;
+        background-color: transparent;
+        font-size: 15px;
+        font-weight: 600;
+        color: #B3B7BA;
+        border: 1px solid gray;
+    }
+
+    .PurchaseTableFormat {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 3fr 0.5fr 0.5fr 1fr 1fr 1fr 1fr 1fr;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 24px;
+        align-content: center;
+    }
+
+    .PurchaseTableFormat p {
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    .PurchaseTableHeader {
+        background: #1d1d1d;
+        font-size: 17px;
+        font-weight: 600;
+        border: 1px solid gray;
+    }
+
+    .PurchaseTableBodyDiv {
+        display: flex;
+        flex-direction: column;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+
+    .EachTableRow {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 5fr 1fr 1fr 1fr 1fr;
+        align-items: start;
+        gap: 10px;
+        padding: 15px 24px;
+        align-content: center;
+        border: 1px solid gray;
+    }
+
+    .EachTableRow p {
+        text-align: center;
+        margin-bottom: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .EachItemDiv {
+        display: grid;
+        grid-template-columns: 3fr 0.5fr 0.5fr 1fr;
+        padding-bottom: 10px;
+        align-items: start;
+    }
+
+    .PurchaseTableHR {
+        margin: 0;
+        margin-bottom: 1rem;
+    }
+
+    .ledgerCollections {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .EachLedgerItem {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .EachLedgerItem p {
+        margin: 0;
+        margin-bottom: 5px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .ExcelIcon {
+        width: 5rem;
+    }
+
+    .LedgerDownloadBtn {
+        border: none;
+        text-decoration: none;
+        padding: 1rem 2rem;
+        background: #b3b7ba;
+    }
+
+    .customer-suggestions-option {
+        cursor: pointer;
+        padding: 8px;
+    }
+
+    .customer-suggestions-option:hover {
+        background-color: #f0f0f0;
+    }
+
+    #customerNames {
+        display: none;
+        max-height: 10rem;
+        overflow-y: auto;
+    }
+
+    #customerNames option {
+        padding: 0.5rem;
+        font-weight: 600;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    #ProductPurchaseDetails,
+    #BinderPurchaseDetails,
+    #AdditivesPurchaseDetails {
+        display: none;
+    }
+
+    .ProductPurchaseTableFormat {
+        margin-top: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 24px;
+        align-content: center;
+    }
+
+    .ProductPurchaseTableFormat p {
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    .ProductGroupPurchaseTableFormat {
+        margin-top: 1rem;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .ProductGroupsText {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .PurchaseReportTableProducts,
+    .PurchaseReportTableProductGroups,
+    .PurchaseReportTableBinders,
+    .PurchaseReportTableAdditives {
+        display: flex;
+        flex-direction: column;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+
+    .EachProductGroupRow,
+    .EachAdditiveDataRow,
+    .EachBinderDataRow {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        align-items: start;
+        gap: 10px;
+        padding: 15px 24px;
+        align-content: center;
+        border: 1px solid gray;
+    }
+
+    .EachProductGroupRow,
+    .EachAdditiveDataRow,
+    .EachBinderDataRow {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .EachProductRow p,
+    .EachProductGroupRow p,
+    .EachAdditiveDataRow p,
+    .EachBinderDataRow p {
+        text-align: center;
+        margin-bottom: 0;
+        font-size: 15px;
+        font-weight: 600;
+        margin: 1rem 0;
+    }
+
+    .EachAdditiveDataRow,
+    .EachBinderDataRow {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .FollowUpSummeryDiv {
+        margin-top: 2rem;
+    }
+
+    .FollowUpsCollections {
+        margin-top: 2rem;
+        border: 1px solid gray;
+        border-radius: 15px;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        row-gap: 1rem;
+        column-gap: 1rem;
+    }
+
+    .EachFollowUp {
+        border: 1px solid gray;
+        border-radius: 15px;
+        padding: 1rem;
+    }
+
+    .EachFollowUp {
+        font-size: 16px;
+    }
+
+    .EachProductRow {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid gray;
+    }
+
+    .EachInventoryRow {
+        display: grid;
+        grid-template-columns: 3fr 12fr 1fr 1fr;
+        align-items: start;
+        /* gap: 10px;*/
+        align-content: center;
+        /*  border: 1px solid gray;*/
+    }
+
+    .EachproductMonthRow {
+        display: grid;
+        align-items: start;
+        /*  gap: 10px;*/
+        align-content: center;
+        /*border: 1px solid gray;*/
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .product-group-div {
+        display: grid;
+        grid-template-columns: 1.8fr 2.7fr 14fr;
+    }
+
+    .product-group-div-sum {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 </style>

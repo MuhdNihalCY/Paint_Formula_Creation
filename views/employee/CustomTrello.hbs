@@ -606,7 +606,8 @@
                     <input type="button" class="CreateCustomerBTN followupBTN btn" onclick="OpenCustomerFollowup()"
                         value="Add Customer follow-up"> --}}
                     <div class="input-button userBTN">
-                        <input style="width: 200px;" type="button" value="{{EmployeeData.UserName}}" class="input-field  InputBTNField btn">
+                        <input style="width: 200px;" type="button" value="{{EmployeeData.UserName}}"
+                            class="input-field  InputBTNField btn">
                         <i class="fas fa-user user-icon"></i>
                     </div>
                 </div>
@@ -4254,6 +4255,9 @@
                 // URL of your backend API endpoint
                 var apiUrl = `/UpdareCardOrder/${cardID}`;
 
+                console.log("Form data: ", formData);
+                console.log("CompleteOrderData: ", CompleteOrderData);
+
                 // Convert the data object to a JSON string
                 var jsonData = JSON.stringify(CompleteOrderData);
 
@@ -5430,7 +5434,7 @@
         transition: color 0.3s, background-color 0.3s;
     }
 
-    
+
 
     .followupBTN {
         width: 210px;

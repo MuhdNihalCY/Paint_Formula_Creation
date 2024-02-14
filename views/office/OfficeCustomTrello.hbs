@@ -2957,7 +2957,7 @@
 
     function handleResultItemClick(formula) {
         // Handle what happens when a result item is clicked
-        //  // // console.log('Result item clicked:', formula);
+        console.log('Result item clicked:', formula);
         var popProductsItemsCollectiosn = document.getElementById('popProductsItemsCollectiosns');
 
         var popEachProductsItemsCollection = document.getElementsByClassName('popEachProductsItemss ');
@@ -4111,40 +4111,16 @@
 
                 proItems = popProductsItemsCollectiosns.getElementsByClassName('EachProductionItem');
 
-                // console.log('proItems: ', proItems);
+                //  console.log('proItems: ', proItems);
 
 
                 // Alternatively, you can use the spread operator
                 var ProItemsDivArray = [...proItems];
-
-                /*
-                                ProItemsDivArray.forEach((OneItem) => {
-                                    // make changes 
-                                    var item = {
-                                        Name: OneItem.getElementsByClassName('FormulaColorName')[0].textContent,
-                                        Qty: OneItem.getElementsByClassName('FormulaQty')[0].value,
-                                        FileNo: OneItem.getElementsByClassName('FormulaFileNo')[0].textContent,
-                                        Unit: OneItem.getElementsByClassName('FormulaUnit')[0].textContent,
-                                        ColorCode: OneItem.getElementsByClassName('FormulaColorCode')[0].textContent,
-                                        SubCategoryName: OneItem.getElementsByClassName('FormulaSubCategoryName')[0].textContent,
-                                    }
-                                    if (OneItem.getElementsByClassName('HiddenMatt')[0]) {
-                                        item.Matt = OneItem.getElementsByClassName('HiddenMatt')[0].value
-                                    }
-                
-                                    if (OneItem.getElementsByClassName('HiddenGloss')[0]) {
-                                        item.Gloss = OneItem.getElementsByClassName('HiddenGloss')[0].value
-                                    }
-                
-                                    // console.log("Proitem: ", item);
-                
-                                    ProductionsItems.push(item);
-                                });
-                                */
+                //  console.log('ProItemsDivArray:', ProItemsDivArray)
 
                 ProItemsDivArray.forEach((OneItem) => {
                     // make changes 
-                    console.log("OneItem: ", OneItem);
+                    //   console.log(OneItem);
                     if (OneItem.getElementsByClassName('FormulaColorName')[0]) {
 
 
@@ -4155,9 +4131,7 @@
 
                         }
 
-                        if (OneItem.getElementsByClassName('SelectedFormulaColorName')) {
-                            alert("adding Formula data");
-                            console.log("OneItem.getElementsByClassName('SelectedFormulaColorName')[0]: ", OneItem.getElementsByClassName('SelectedFormulaColorName')[0]);
+                        if (OneItem.getElementsByClassName('SelectedFormulaColorName')[0]) {
                             item.FormulaColorName = OneItem.getElementsByClassName('SelectedFormulaColorName')[0].textContent;
                             item.FormulaColorCode = OneItem.getElementsByClassName('SelectedFormulaColorCode')[0].textContent;
                             item.SubCategoryName = OneItem.getElementsByClassName('SelectedFormulaSubCategoryName')[0].textContent;
@@ -4191,8 +4165,6 @@
                         ProductionsItems.push(item);
                     }
                 });
-                console.log('Production Items:', ProductionsItems)
-                alert("ProductionDone");
 
                 // get all Comment
                 var comments = [];
@@ -4228,15 +4200,17 @@
                     //AttachmentImage: imageFile
                 }
 
-                var input = document.getElementById('file');
-                var imageFile = input.files[0];
-                //  CompleteOrderData.file = imageFile;
-
+                // console.log("CompleteOrderData:", CompleteOrderData);
                 // Create a FormData object
                 var formData = new FormData();
 
-                // Append the file to FormData with a specific field name ('file' in this case)
-                formData.append('file', imageFile);
+                var input = document.getElementById('file');
+                if (input) {
+                    var imageFile = input.files[0];
+                    //  CompleteOrderData.file = imageFile;
+                    // Append the file to FormData with a specific field name ('file' in this case)
+                    formData.append('file', imageFile);
+                }
 
                 // Append other data to FormData
                 /* Object.entries(CompleteOrderData).forEach(([key, value]) => {
@@ -4266,7 +4240,10 @@
 
                 // api call
                 // URL of your backend API endpoint
-                var apiUrl = `/office/UpdareCardOrder/${cardID}`;
+                var apiUrl = `/UpdareCardOrder/${cardID}`;
+
+                console.log("Form data: ", formData);
+                console.log("CompleteOrderData: ", CompleteOrderData);
 
                 // Convert the data object to a JSON string
                 var jsonData = JSON.stringify(CompleteOrderData);
@@ -4287,6 +4264,7 @@
 
 
                 // Make the fetch request
+
                 fetch(apiUrl, fetchOptions)
                     .then(response => response.json()) // Parse the JSON response
                     .then(data => {

@@ -764,6 +764,52 @@ router.get('/ChangeEmployeeDutyState/:EmployeeName/:OnDutyStatus', OfficeVerifyL
 
 
 
+router.get('/GetAllCustomerPurchaseData/api/:CustomerName', OfficeVerifyLogin, (req, res) => {
+    employeeHelpers.getAllCustomerPurchaseDataByName(req.params.CustomerName).then((AllData) => {
+        for (i = 0; i <= 20; i++) {
+            console.log(AllData[i]);
+        }
+        AllData.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+        // only sent past 12 months data. 
+        res.json(AllData);
+    })
+})
+
+router.get('/GetAllCustomerledgerFile/api/:CustomerName', OfficeVerifyLogin, (req, res) => {
+    employeeHelpers.getAllCustomerLedgerFileByName(req.params.CustomerName).then((AllFiles) => {
+        res.json(AllFiles)
+    })
+})
+
+router.get('/GetProductBinderAdditive/PurchasedDetails/api/:CustomerName', OfficeVerifyLogin, (req, res) => {
+    let Branch = req.session.OfficeData.Branch
+    let CustomerName = req.params.CustomerName;
+    // for past 12 months
+    employeeHelpers.getAllProductStockoutReportData(Branch, CustomerName).then((ProductReportData) => {
+        employeeHelpers.getAllProductGroupReportData(ProductReportData).then((ProductGroupReportData) => {
+
+            employeeHelpers.getAllBindersReportData(Branch, CustomerName).then((BinderReportData) => {
+                employeeHelpers.getAllAdditiveReportData(Branch, CustomerName).then((AdditiveReportData) => {
+                    res.json({
+                        ProductReportData: ProductReportData,
+                        ProductGroupReportData: ProductGroupReportData,
+                        BinderReportData: BinderReportData,
+                        AdditiveReportData: AdditiveReportData
+                    })
+                })
+            })
+        })
+    })
+})
+
+
+router.get('/Logout', OfficeVerifyLogin, (req, res) => {
+    req.session.OfficeData.destroy();
+    res.redirect('/login');
+})
+
+
+
 
 
 

@@ -794,7 +794,7 @@ router.get('/GetAllCustomerledgerFile/api/:CustomerName', SalesVerifyLogin, (req
 })
 
 router.get('/GetProductBinderAdditive/PurchasedDetails/api/:CustomerName', SalesVerifyLogin, (req, res) => {
-    let Branch = req.session.SalesData.Branch
+    let Branch = req.session.SalesData.Branch 
     let CustomerName = req.params.CustomerName;
     // for past 12 months
     employeeHelpers.getAllProductStockoutReportData(Branch,CustomerName).then((ProductReportData) => {
