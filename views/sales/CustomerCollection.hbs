@@ -182,7 +182,7 @@
                     <div class="PurchaseTableDiv">
                         <div class="PurchaseTableHeader ProductPurchaseTableFormat ProductGroupPurchaseTableFormat">
                             <p>Binder</p>
-                             <script>
+                            <script>
 
 
                                 for (var i = 0; i <= 11; i++) {  // Start from the last month and iterate in reverse
@@ -1638,6 +1638,8 @@
         function groupByMonths(data) {
             const result = [];
 
+            console.log('Group by months data: ', data);
+
             // Iterate through each item in the data array
             data.forEach(item => {
                 const productGroup = item.ProductGroup;
@@ -1683,14 +1685,9 @@
                     .filter(d => {
                         const dDateParts = d.OrderDate.split('-');
                         const dDate = new Date(`${dDateParts[2]}-${dDateParts[1]}-${dDateParts[0]}`);
-                        return dDate >= twelveMonthsAgo && dDate <= currentDate && d.Abbreviation === item.Abbreviation;
+                        return dDate.getMonth() === currentDate.getMonth() && d.Abbreviation === item.Abbreviation;
                     })
-                    .reduce((sum, d) => {
-                        if (d.OrderDate !== item.OrderDate) {
-                            return sum + d.TinterQuantityGrams;
-                        }
-                        return sum;
-                    }, 0);
+                    .reduce((sum, d) => sum + d.TinterQuantityGrams, 0);
 
                 // Assign the calculated quantity to the corresponding month in the product entry
                 productEntry.Past_12_Months_Quantity[monthKey] = monthQuantity;
@@ -1700,7 +1697,7 @@
                     .filter(d => {
                         const dDateParts = d.OrderDate.split('-');
                         const dDate = new Date(`${dDateParts[2]}-${dDateParts[1]}-${dDateParts[0]}`);
-                        return dDate >= lastYear && dDate <= elevenMonthsAgo && d.Abbreviation === item.Abbreviation;
+                        return dDate.getFullYear() === currentDate.getFullYear() - 1 && d.Abbreviation === item.Abbreviation;
                     })
                     .reduce((sum, d) => sum + d.TinterQuantityGrams, 0);
 

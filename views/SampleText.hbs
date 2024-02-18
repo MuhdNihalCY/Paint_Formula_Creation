@@ -59,121 +59,240 @@
     // Event listener for the 'connect' button
     document.getElementById("connectButton").addEventListener("click", async () => {
 
-        try {
-            // Replace 0x24BC with the actual vendor ID of your device
-            const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x24BC }] });
+        if ('usb' in navigator) {
+            await requestUsbPermission();
+            navigator.usb.getDevices()
+                .then(async (devices) => {
+                    console.log("devices: ", devices);
+                    const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x24BC }] });
+                    return device;
+                    /*
+                      if (devices.length > 0) {
+                          // USB permission already granted, proceed with operations
+                          return devices;
+                      } else {
+                          // Request USB permission
+  
+                          return navigator.usb.requestDevice({ filters: [{ vendorId: 0x24BC }] }); //
+                      }
+                      */
+                })
+                .then(async (device) => {
+                    console.log("Connected Device: ", device);
+                    console.log(device.productName);
+                    console.log(device.manufacturerName);
 
-            console.log("Device selected:", device);
-            outputDiv.textContent = "Device selected.";
+                    // device.opened = true;
+                    if (!device.opened) {
+                        await device.open();
+                        console.log('Device Opened.');
+                    }
 
-            await device.open();
-            console.log("Device opened");
-            outputDiv.textContent += "\nDevice opened.";
+                    // Replace configuration and interface numbers if needed
+                    await device.selectConfiguration(1);
+                    await device.claimInterface(0);
+                    console.log("Interface claimed");
+                    outputDiv.textContent += "\nInterface claimed.";
 
-            // Replace configuration and interface numbers if needed
-            await device.selectConfiguration(1);
-            await device.claimInterface(0);
-            console.log("Interface claimed");
-            outputDiv.textContent += "\nInterface claimed.";
-
-            // Access endpoints (replace endpoint numbers if needed)
-            const readEndpoint = device.endpoints[0];
-            const writeEndpoint = device.endpoints[1];
-
-            // Example read operation (replace transfer parameters and data processing)
-            const bufferSize = 64;
-            let result = await readEndpoint.transferIn(1, bufferSize);
-
-            // Access the data from the transfer result
-            let receivedData = new Uint8Array(result.data.buffer);
-            let decodedData = new TextDecoder().decode(receivedData);
-
-            console.log("Received data:", decodedData);
-
-            // Assuming the read operation was successful, create a success response
-            var ResultData = {
-                type: "PMAEvolutions",
-                'Result': 'Success',
-                'Message': 'Data Received Successfully!',
-                Resultdata: result,
-                data: decodedData
-            };
-
-            // Send the data to the server or perform any further processing
-            sentDataToServer(ResultData);
-            outputDiv.textContent += "\nReceived data: " + decodedData;
-
-            // Example write operation (replace data to send)
-            // await writeEndpoint.transferOut(/* data to send */);
-            // console.log("Data sent successfully");
-            // outputDiv.textContent += "\nData sent successfully.";
-
-        } catch (error) {
-            // Handle errors
-            console.error("Error:", error);
-            var ErrorData = {
-                type: "PMAEvolutions",
-                Result: false,
-                ErrorData: error,
-                ErrorMsg: error.message
-            };
-            sentDataToServer(ErrorData);
-            outputDiv.textContent = "Error: " + error.message;
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Error accessing USB device: ' + error.message);
+                });
+        } else {
+            // USB not supported
+            alert('WebUSB is not supported by this browser!');
         }
-    });
 
-    /*connectButton.addEventListener("click", async () => {
-        try {
-            // Replace 0x1234 with the device's vendor ID
-            const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x24BC }] });
+    })
 
-            console.log("Device selected:", device);
-            outputDiv.textContent = "Device selected.";
 
-            await device.open();
-            console.log("Device opened");
-            outputDiv.textContent += "\nDevice opened.";
-
-            // Replace configuration and interface numbers if needed
-            await device.selectConfiguration(1);
-            await device.claimInterface(0);
-            console.log("Interface claimed");
-            outputDiv.textContent += "\nInterface claimed.";
-
-            // Access endpoints (replace endpoint numbers if needed)
-            const readEndpoint = device.endpoints[0];
-            const writeEndpoint = device.endpoints[1];
-
-            // Example read operation (replace transfer parameters and data processing)
-            let result = await readEndpoint.transferIn(1, 64);
-            //   console.log("Received data:", result.data);
-            var ResultData = {
-                type: "PMAEvolutions",
-                'Result': 'Success',
-                'Message': 'Data Received Successfully!',
-                Resultdata: result,
-                data: result.data
+    async function requestUsbPermission() {
+        const { state } = await navigator.permissions.query({ name: 'usb' });
+        if (state === 'granted') {
+            // Permission already granted, proceed
+            console.log("Premission Already  Granted!");
+        } else if (state === 'prompt') {
+            const permission = await navigator.permissions.request({ name: 'usb' });
+            if (permission.state === 'granted') {
+                // Permission granted now, proceed
+                console.log(" Permission granted now, proceed");
+            } else {
+                // Permission denied, inform user and handle accordingly
+                outputDiv.textContent = "User denied access to the USB device.\n";
+                console.log("User denied access to the USB device.");
             }
-            sentDataToServer(ResultData);
-            outputDiv.textContent += "\nReceived data: " + result.data;
-
-            // Example write operation (replace data to send)
-           // await writeEndpoint.transferOut( data to send );
-           // console.log("Data sent successfully");
-           // outputDiv.textContent += "\nData sent successfully.";
-
-        } catch (error) {
-            //  console.error("Error:", error);
-            var ErrorData = {
-                type: "PMAEvolutions",
-                Result: false,
-                ErrorData: error,
-                ErrorMsg: error.message
-            }
-            sentDataToServer(ErrorData);
-            // outputDiv.textContent = "Error: " + error.message;
+        } else {
+            // Permission denied, inform user and handle accordingly
+            outputDiv.textContent = "Browser does not support WebUSB!\n";
+            console.log("User denied access to the USB device. Permission denied, inform user and handle accordingly");
         }
-    });*/
+    }
+    /* try {
+         // Open the device.
+         await device.open();
+         console.log('Device Opened.');
+ 
+         // Release existing claims, if any
+         await device.releaseInterface(0);
+         console.log("Interface released.");
+ 
+         // Continue with the rest of your code...
+     } catch (error) {
+         console.error("Error:", error);
+         // Handle error...
+     }*/
+
+    /* // Open the device.
+     await device.open();
+     console.log('Device Opened.')
+ */
+
+
+    /*// Request a USB device.
+    const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x24BC }] });
+
+    console.log("Connected Device: ", device)
+
+    // Open the device.
+    await device.open();
+    console.log('Device Opened.')
+
+    // Claim the interface.
+    await device.claimInterface(0);
+    console.log("Interface claimed")
+
+    // Transfer data from the device.
+    const data = await device.transferIn(0, 64);
+    console.log("Data: ", data)
+
+    // Close the device.
+    await device.close();
+    console.log("Device closed");
+
+    // Decode the data.
+    const weight = data.getUint16(0);
+
+
+    // Display the weight.
+    console.log("Weight:", weight, "grams");*/
+
+
+    /*try {
+        // Replace 0x24BC with the actual vendor ID of your device
+        const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 9404 }] });        // 0x24BC  9404
+ 
+        console.log("Device selected:", device);
+        outputDiv.textContent = "Device selected.";
+
+        await device.open();    
+        console.log("Device opened");
+        outputDiv.textContent += "\nDevice opened.";
+
+        // Replace configuration and interface numbers if needed
+        await device.selectConfiguration(1);
+        await device.claimInterface(0);
+        console.log("Interface claimed");
+        outputDiv.textContent += "\nInterface claimed.";
+
+        // Access endpoints (replace endpoint numbers if needed)
+        const readEndpoint = device.endpoints[0];
+        const writeEndpoint = device.endpoints[1];
+
+        // Example read operation (replace transfer parameters and data processing)
+        const bufferSize = 64;
+        let result = await readEndpoint.transferIn(1, bufferSize);
+
+        // Access the data from the transfer result
+        let receivedData = new Uint8Array(result.data.buffer);
+        let decodedData = new TextDecoder().decode(receivedData);
+
+        console.log("Received data:", decodedData);
+
+        // Assuming the read operation was successful, create a success response
+        var ResultData = {
+            type: "PMAEvolutions",
+            'Result': 'Success',
+            'Message': 'Data Received Successfully!',
+            Resultdata: result,
+            data: decodedData
+        };
+
+        // Send the data to the server or perform any further processing
+        sentDataToServer(ResultData);
+        outputDiv.textContent += "\nReceived data: " + decodedData;
+
+        // Example write operation (replace data to send)
+        // await writeEndpoint.transferOut(data to send);
+        // console.log("Data sent successfully");
+        // outputDiv.textContent += "\nData sent successfully.";
+
+    } catch (error) {
+    // Handle errors
+    console.error("Error:", error);
+    var ErrorData = {
+        type: "PMAEvolutions",
+        Result: false,
+        ErrorData: error,
+        ErrorMsg: error.message
+    };
+    sentDataToServer(ErrorData);
+    outputDiv.textContent = "Error: " + error.message;
+}* /
+ 
+
+/*connectButton.addEventListener("click", async () => {
+    try {
+        // Replace 0x1234 with the device's vendor ID
+        const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x24BC }] });
+
+        console.log("Device selected:", device);
+        outputDiv.textContent = "Device selected.";
+
+        await device.open();
+        console.log("Device opened");
+        outputDiv.textContent += "\nDevice opened.";
+
+        // Replace configuration and interface numbers if needed
+        await device.selectConfiguration(1);
+        await device.claimInterface(0);
+        console.log("Interface claimed");
+        outputDiv.textContent += "\nInterface claimed.";
+
+        // Access endpoints (replace endpoint numbers if needed)
+        const readEndpoint = device.endpoints[0];
+        const writeEndpoint = device.endpoints[1];
+
+        // Example read operation (replace transfer parameters and data processing)
+        let result = await readEndpoint.transferIn(1, 64);
+        //   console.log("Received data:", result.data);
+        var ResultData = {
+            type: "PMAEvolutions",
+            'Result': 'Success',
+            'Message': 'Data Received Successfully!',
+            Resultdata: result,
+            data: result.data
+        }
+        sentDataToServer(ResultData);
+        outputDiv.textContent += "\nReceived data: " + result.data;
+
+        // Example write operation (replace data to send)
+       // await writeEndpoint.transferOut( data to send );
+       // console.log("Data sent successfully");
+       // outputDiv.textContent += "\nData sent successfully.";
+
+    } catch (error) {
+        //  console.error("Error:", error);
+        var ErrorData = {
+            type: "PMAEvolutions",
+            Result: false,
+            ErrorData: error,
+            ErrorMsg: error.message
+        }
+        sentDataToServer(ErrorData);
+        // outputDiv.textContent = "Error: " + error.message;
+    }
+});*/
 
 
     function sentDataToServer(data) {
