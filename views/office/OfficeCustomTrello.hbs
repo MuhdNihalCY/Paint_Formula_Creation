@@ -1281,7 +1281,7 @@
                 sectionHeaderText.textContent = ProductionSectionCards.Name;
 
                 // Create the input element with type "checkbox" and class "ProductionCheckBox" and set its attributes
-                /*const checkboxInput = document.createElement('input');
+                const checkboxInput = document.createElement('input');
                 checkboxInput.type = 'checkbox';
                 checkboxInput.className = 'ProductionCheckBox';
                 checkboxInput.id = '';
@@ -1289,24 +1289,24 @@
                     checkboxInput.checked = false;
                 } else {
                     checkboxInput.checked = true;
-                }*/
+                }
                 // Add an event listener for the 'click' event
-                /* checkboxInput.addEventListener('change', (e) => {
-                     // Toggle the checked state of the checkbox
-                     //   checkboxInput.checked = !checkboxInput.checked;
-                     // Log a message to the console based on the current checked state
-                     if (checkboxInput.checked) {
-                         OneList.OnDuty = true;
-                         StaffOnDutyOffDuty(ProductionSectionCards.Name, true);
-                         console.log('Checkbox is checked.');
-                     } else {
-                         OneList.OnDuty = false;
-                         StaffOnDutyOffDuty(ProductionSectionCards.Name, false);
-                         console.log('Checkbox is unchecked.');
-                     }
- 
-                     // Additional actions based on the checkbox state can be added here
-                 });*/
+                checkboxInput.addEventListener('change', (e) => {
+                    // Toggle the checked state of the checkbox
+                    //   checkboxInput.checked = !checkboxInput.checked;
+                    // Log a message to the console based on the current checked state
+                    if (checkboxInput.checked) {
+                        OneList.OnDuty = true;
+                        StaffOnDutyOffDuty(ProductionSectionCards.Name, true);
+                        console.log('Checkbox is checked.');
+                    } else {
+                        OneList.OnDuty = false;
+                        StaffOnDutyOffDuty(ProductionSectionCards.Name, false);
+                        console.log('Checkbox is unchecked.');
+                    }
+
+                    // Additional actions based on the checkbox state can be added here
+                });
 
 
 
@@ -1409,7 +1409,7 @@
                 })
                 // Append the child elements to their respective parent elements
                 productionColumnHeaderDiv.appendChild(sectionHeaderText);
-                // productionColumnHeaderDiv.appendChild(checkboxInput);
+                productionColumnHeaderDiv.appendChild(checkboxInput);
 
                 productionColumnDiv.appendChild(productionColumnHeaderDiv);
                 productionColumnDiv.appendChild(productionCardsCollectionsDiv);
