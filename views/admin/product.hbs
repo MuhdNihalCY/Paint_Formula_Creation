@@ -158,10 +158,10 @@
                     <thead class="ADTableHead">
                         <tr class="ADTableHeadTR">
                             <th>ID</th>
-                            <td>Abbreviation</td>  
+                            <td>Abbreviation</td>
                             <th>Product Name</th>
                             <th>Density</th>
-                            {{!-- <th>Stock (Ltr or Kg)</th>  --}}
+                            {{!-- <th>Stock (Ltr or Kg)</th> --}}
                             <th>Price</th>
                             <th>Action</th>
                         </tr>
@@ -295,28 +295,31 @@
 
         // console.log("Calling Addproducts to Table");
         /*console.table(categoryData);
-        console.table(subCategoryData);
-        console.table(productData);*/
+        console.table(subCategoryData);*/
+        console.table(productData);
 
         function populateTable(categoryData, subCategoryData, productData) {
             const tableBody = document.querySelector('.ADMainTable tbody');
 
             // Clear existing table rows
             tableBody.innerHTML = '';
-
+            console.log('Subcategory called: ', subCategoryData)
             // Function to match category and subcategory IDs and update product data
             function updateProductData() {
                 productData.forEach((product) => {
-                    const category = categoryData.find((category) => category.Category_Id === parseInt(product.Category));
-                    // console.log("Product: ", product.Product_Name, " category: ", category);
-                    const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === parseInt(product.SubCategory));
-                    // console.log("Product: ", product.Product_Name, " category: ", subCategory);
+                    if (product) {
+                        console.log("Product: ", product);
+                        const category = categoryData.find((category) => category.Category_Id === parseInt(product.Category));
+                        // console.log("Product: ", product.Product_Name, " category: ", category);
+                        const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === parseInt(product.SubCategory));
+                        // console.log("Product: ", product.Product_Name, " category: ", subCategory);
 
-                    if (category) {
-                        product.CategoryName = category.Category;
-                    }
-                    if (subCategory) {
-                        product.SubCategoryName = subCategory.SubCategory;
+                        if (category) {
+                            product.CategoryName = category.Category;
+                        }
+                        if (subCategory) {
+                            product.SubCategoryName = subCategory.SubCategory;
+                        }
                     }
                 });
                 // console.log("Updates Product Data with category and sub category");
@@ -331,18 +334,19 @@
             if (productData.length > 0) {
                 // Iterate over productData array and create table rows
                 productData.forEach((product) => {
-                    // Find the category and subcategory names based on IDs
-                    const category = categoryData.find((category) => category.Category_Id === product.Category);
-                    const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === product.SubCategory);
+                    if (product) {
+                        // Find the category and subcategory names based on IDs
+                        const category = categoryData.find((category) => category.Category_Id === product.Category);
+                        const subCategory = subCategoryData.find((subCategory) => subCategory.SubCategory_Id === product.SubCategory);
 
-                    // Create a new table row
-                    const row = document.createElement('tr');
+                        // Create a new table row
+                        const row = document.createElement('tr');
 
-                    var ProductStock = parseFloat(product.Stock) * parseFloat(product.StandardQuatity)
-                    // Populate table cells with data
-                    row.innerHTML = `
+                        var ProductStock = parseFloat(product.Stock) * parseFloat(product.StandardQuatity)
+                        // Populate table cells with data
+                        row.innerHTML = `
       <td>${product.Product_Id}</td>
-      <td>${product.Abbreviation? product.Abbreviation : "" }</td>
+      <td>${product.Abbreviation ? product.Abbreviation : ""}</td>
       <td>${product.Product_Name}</td>
       <td>${product.Product_Density}</td>
       {{!-- <td>${ProductStock}</td> --}}
@@ -350,8 +354,9 @@
       <td><a class="btn btn-primary ADProductEditBTN" href="/admin/editProduct/${product.Product_Id}">Edit</a></td>
     `;
 
-                    // Append the row to the table body
-                    tableBody.appendChild(row);
+                        // Append the row to the table body
+                        tableBody.appendChild(row);
+                    }       
                 });
             } else {
                 // Iterate over productData array and create table rows

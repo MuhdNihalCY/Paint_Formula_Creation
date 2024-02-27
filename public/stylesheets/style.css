@@ -918,6 +918,11 @@ a {
   width: 40%;
 }
 
+.BarCodeScan {
+  min-width: 15rem;
+  max-width: 48%;
+}
+
 .ADPRoductSubmitBTN {
   width: 50%;
   padding: 1rem 0;

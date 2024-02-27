@@ -227,19 +227,29 @@ module.exports = {
     },
     getThisFormulaFileNo: () => {
         return new Promise(async (resolve, reject) => {
-            var FileNo = 0;
-            let LatestFormula = await db.get().collection(collection.FORMULA_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray();
-            if (LatestFormula.length > 0) {
-                //console.log(LatestFormula);
-                var LatestFileNo = parseInt(LatestFormula[0].FileNo);
-                FileNo = LatestFileNo + 1;
-            } else {
-                // console.log("No Latest Formula");
-                FileNo = 10000
+            try {
+                console.log('try to get new file no.');
+                var FileNo = 0;
+                let LatestFormula = await db.get().collection(collection.FORMULA_COLLECTION)
+                .find({}, { FileNo: 1, InsertedTime: 1 })  // Projection
+                .sort({ "InsertedTime": -1 })
+                .limit(1)
+                .toArray();
+                console.log('try to get new file no. 2 ');
+                if (LatestFormula.length > 0) {
+                    var LatestFileNo = parseInt(LatestFormula[0].FileNo);
+                    FileNo = LatestFileNo + 1;
+                } else {
+                    FileNo = 10000;
+                }
+                FileNo = FileNo + "";
+                console.log("got new file number: " + FileNo);
+                resolve(FileNo);
+            } catch (error) {
+                console.error('Error in getThisFormulaFileNo:', error);
+                reject({ error: 'An error occurred while fetching the Formula FileNo.' });
             }
-            FileNo = FileNo + "";
-            resolve(FileNo);
-        })
+        });
     },
     GetAllProducts: () => {
         return new Promise(async (resolve, reject) => {
@@ -2124,38 +2134,38 @@ module.exports = {
                 }
             }).toArray();
 
-              // Your input data
-              const inputArray = AdditiveData;
+            // Your input data
+            const inputArray = AdditiveData;
 
-              // Array to store the result
-              const resultArray = inputArray.reduce((accumulator, currentItem) => {
-                  // Check if there is an existing item with the same AdditiveName and OrderDate
-                  const existingItem = accumulator.find(
-                      (groupedItem) =>
-                          groupedItem.AdditiveName === currentItem.AdditiveName &&
-                          groupedItem.OrderDate === currentItem.OrderDate
-                  );
-  
-                  // If the item already exists, update the quantities
-                  if (existingItem) {
-                      existingItem.AdditiveQuantityGrams += +currentItem.AdditiveQuantityGrams;
-                      existingItem.AdditiveVolume += +currentItem.AdditiveVolume;
-                  } else {
-                      // If the item doesn't exist, add it to the result array
-                      accumulator.push({
-                          ...currentItem,
-                          // Convert quantities to numbers for proper summation
-                          AdditiveQuantityGrams: +currentItem.AdditiveQuantityGrams,
-                          AdditiveVolume: +currentItem.AdditiveVolume,
-                      });
-                  }
-  
-                  // Return the updated accumulator for the next iteration
-                  return accumulator;
-              }, []);
-  
-              // Output the result
-              console.log(resultArray);
+            // Array to store the result
+            const resultArray = inputArray.reduce((accumulator, currentItem) => {
+                // Check if there is an existing item with the same AdditiveName and OrderDate
+                const existingItem = accumulator.find(
+                    (groupedItem) =>
+                        groupedItem.AdditiveName === currentItem.AdditiveName &&
+                        groupedItem.OrderDate === currentItem.OrderDate
+                );
+
+                // If the item already exists, update the quantities
+                if (existingItem) {
+                    existingItem.AdditiveQuantityGrams += +currentItem.AdditiveQuantityGrams;
+                    existingItem.AdditiveVolume += +currentItem.AdditiveVolume;
+                } else {
+                    // If the item doesn't exist, add it to the result array
+                    accumulator.push({
+                        ...currentItem,
+                        // Convert quantities to numbers for proper summation
+                        AdditiveQuantityGrams: +currentItem.AdditiveQuantityGrams,
+                        AdditiveVolume: +currentItem.AdditiveVolume,
+                    });
+                }
+
+                // Return the updated accumulator for the next iteration
+                return accumulator;
+            }, []);
+
+            // Output the result
+            console.log(resultArray);
 
             console.log(AdditiveData);
             resolve(resultArray);

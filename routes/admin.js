@@ -521,7 +521,7 @@ router.get('/View-Product-from-subcategory/:id', verifyLogin, (req, res) => {
   var SubCategoryId = req.params.id;
   adminHelpers.getSubCategoryById(SubCategoryId).then((SubCategory) => {
     // console.log(SubCategoryId)
-    // console.log(SubCategory)
+     console.log("SubCategory: ",SubCategory)
     var ProductsIdArray = SubCategory.Products;
     // Check if SubCategory.Products is an array and initialize it if not
     if (!Array.isArray(ProductsIdArray)) {
@@ -529,7 +529,7 @@ router.get('/View-Product-from-subcategory/:id', verifyLogin, (req, res) => {
     }
 
     adminHelpers.getAllProductsByArrayOfId(ProductsIdArray).then((Products) => {
-      // console.log(Products);
+       console.log(Products);
 
       Products.forEach(obj => {
         obj.RemoveProductPath = SubCategoryId + '/' + obj.Product_Id;

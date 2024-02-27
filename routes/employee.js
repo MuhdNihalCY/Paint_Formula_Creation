@@ -241,11 +241,16 @@ router.get('/CreateFormula', EmployeeVerifyLogin, (req, res) => {
 })
 
 router.get('/CreateFormulas', EmployeeVerifyLogin, (req, res) => {
+  console.log("Create Formula Called");
   employeeHelpers.getAllCollections().then((AllCategory) => {
+    console.log("Create Formula Called 2");
     employeeHelpers.GetAllAdditives().then((Additives) => {
+      console.log("Create Formula Called 3");
       // console.log(AllCategory);
       employeeHelpers.getThisFormulaFileNo().then((FileNo) => {
+        console.log('fileno: ', FileNo);
         var MixerName = req.session.EmployeeName;
+        console.log("Create Formula Called 4");
         res.render('employee/CreateFormulaPage', { AllCategory, Additives, FileNo, MixerName });
       })
     })
@@ -378,7 +383,7 @@ router.post('/CreateFormula', EmployeeVerifyLogin, (req, res) => {
   }
 
 
-  // console.log(req.body);
+  console.log(req.body);
 
   function calculateRatios(data) {
     // console.log("Calculating Data: ", data);
@@ -570,9 +575,13 @@ router.post('/CreateFormula', EmployeeVerifyLogin, (req, res) => {
 
         // Iterate over each TinterR1, TinterR2, TinterR3 property in Datas
         for (let i = 1; i <= Datas.TintersCount; i++) {
-          const tinterId = Datas[`TintersR${i}`];
+          const tinterId = Datas[`TintersR${i}`].trim();
           if (tinterId && tinterMap.hasOwnProperty(tinterId)) {
-            Datas[`TinterNameR${i}`] = tinterMap[tinterId];
+            if (tinterMap[tinterId]) {
+              Datas[`TinterNameR${i}`] = tinterMap[tinterId];
+            } else {
+
+            }
           }
         }
 
@@ -725,30 +734,35 @@ router.get('/BulkOrders/:FileNo/:Qty', EmployeeVerifyLogin, (req, res) => {
     var MattOrGloss = false;
     var MattOrGlossValue = false;
 
-
-    if (Formulation.Binder1) {
-      Binder1 = true;
-    }
-    if (Formulation.Binder2) {
-      Binder2 = true;
-    }
-
-    if (Formulation.gloss) {
-      MattOrGloss = "Gloss"
-      MattOrGlossValue = Formulation.gloss
-    } else if (Formulation.matt) {
-      MattOrGloss = "Matt"
-      MattOrGlossValue = Formulation.matt
-    }
+    if (Formulation) {
 
 
-    var Liter = false;
-    employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
-      if (Sub_Category.Liter) {
-        Liter = true
+      if (Formulation.Binder1) {
+        Binder1 = true;
       }
-      res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, QTY });
-    })
+      if (Formulation.Binder2) {
+        Binder2 = true;
+      }
+
+      if (Formulation.gloss) {
+        MattOrGloss = "Gloss"
+        MattOrGlossValue = Formulation.gloss
+      } else if (Formulation.matt) {
+        MattOrGloss = "Matt"
+        MattOrGlossValue = Formulation.matt
+      }
+
+
+      var Liter = false;
+      employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+        if (Sub_Category.Liter) {
+          Liter = true
+        }
+        res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, QTY });
+      })
+    } else {
+      res.render('error', { FullErrorPage: true });
+    }
   })
 
 })
@@ -772,53 +786,7 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
       var Binder2 = false;
       var MattOrGloss = false;
       var MattOrGlossValue = false;
-
-      if (Formulation.Binder1) {
-        Binder1 = true;
-      }
-      if (Formulation.Binder2) {
-        Binder2 = true;
-      }
-
-      if (Formulation.gloss) {
-        MattOrGloss = "Gloss"
-        MattOrGlossValue = Formulation.gloss
-      } else if (Formulation.matt) {
-        MattOrGloss = "Matt"
-        MattOrGlossValue = Formulation.matt
-      }
-
-      // console.log("MattOrGloss: ", MattOrGloss);
-
-
-      var Liter = false;
-      employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
-        if (Sub_Category.Liter) {
-          Liter = true
-        }
-        NoQty = "minimum Quantity is 1";
-        // console.log("Formulation: ", Formulation);
-        var ManagerLogged = false;
-        if (req.session.ManagerData) {
-          ManagerLogged = true;
-        }
-        res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, Item, MattOrGlossValue, MattOrGloss, NoQty, ManagerLogged });
-      })
-    })
-  } else {
-
-    // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
-
-    if (Stock) {
-      // low stocks
-      employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
-        // console.log(Formulation);
-
-        var Binder1 = false;
-        var Binder2 = false;
-        var MattOrGloss = false;
-        var MattOrGlossValue = false;
-
+      if (Formulation) {
         if (Formulation.Binder1) {
           Binder1 = true;
         }
@@ -842,14 +810,68 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
           if (Sub_Category.Liter) {
             Liter = true
           }
-          // console.log("Formulation: ", Formulation.ImageBase64);
+          NoQty = "minimum Quantity is 1";
+          // console.log("Formulation: ", Formulation);
           var ManagerLogged = false;
           if (req.session.ManagerData) {
             ManagerLogged = true;
           }
-
-          res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss, ManagerLogged });
+          res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, Item, MattOrGlossValue, MattOrGloss, NoQty, ManagerLogged });
         })
+      } else {
+        res.render('error', { FullErrorPage: true });
+      }
+    })
+  } else {
+
+    // console.log("Stock: ", Stock, " Item : ", Item, " TotalQTY: ", TotalQTY);
+
+    if (Stock) {
+      // low stocks
+      employeeHelpers.FindFormulaByFileNo(FileNo).then((Formulation) => {
+        // console.log(Formulation);
+
+        var Binder1 = false;
+        var Binder2 = false;
+        var MattOrGloss = false;
+        var MattOrGlossValue = false;
+
+        if (Formulation) {
+
+          if (Formulation.Binder1) {
+            Binder1 = true;
+          }
+          if (Formulation.Binder2) {
+            Binder2 = true;
+          }
+
+          if (Formulation.gloss) {
+            MattOrGloss = "Gloss"
+            MattOrGlossValue = Formulation.gloss
+          } else if (Formulation.matt) {
+            MattOrGloss = "Matt"
+            MattOrGlossValue = Formulation.matt
+          }
+
+          // console.log("MattOrGloss: ", MattOrGloss);
+
+
+          var Liter = false;
+          employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+            if (Sub_Category.Liter) {
+              Liter = true
+            }
+            // console.log("Formulation: ", Formulation.ImageBase64);
+            var ManagerLogged = false;
+            if (req.session.ManagerData) {
+              ManagerLogged = true;
+            }
+
+            res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, TotalQTY, Item, MattOrGlossValue, MattOrGloss, ManagerLogged });
+          })
+        } else {
+          res.render('error', { FullErrorPage: true });
+        }
       })
 
     } else {
@@ -862,35 +884,40 @@ router.get('/BulkOrders/:FileNo', EmployeeVerifyLogin, (req, res) => {
         var MattOrGloss = false;
         var MattOrGlossValue = false;
 
-        if (Formulation.Binder1) {
-          Binder1 = true;
-        }
-        if (Formulation.Binder2) {
-          Binder2 = true;
-        }
+        if (Formulation) {
 
-        if (Formulation.gloss) {
-          MattOrGloss = "Gloss"
-          MattOrGlossValue = Formulation.gloss
-        } else if (Formulation.matt) {
-          MattOrGloss = "Matt"
-          MattOrGlossValue = Formulation.matt
-        }
-
-        var Liter = false;
-        employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
-          if (Sub_Category.Liter) {
-            Liter = true
+          if (Formulation.Binder1) {
+            Binder1 = true;
           }
-          console.log("Formulation: ", Formulation);
-          console.log("MattorGlossValue: ", MattOrGlossValue);
-          var ManagerLogged = false;
-          if (req.session.ManagerData) {
-            ManagerLogged = true;
+          if (Formulation.Binder2) {
+            Binder2 = true;
           }
 
-          res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, ManagerLogged });
-        })
+          if (Formulation.gloss) {
+            MattOrGloss = "Gloss"
+            MattOrGlossValue = Formulation.gloss
+          } else if (Formulation.matt) {
+            MattOrGloss = "Matt"
+            MattOrGlossValue = Formulation.matt
+          }
+
+          var Liter = false;
+          employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+            if (Sub_Category.Liter) {
+              Liter = true
+            }
+            console.log("Formulation: ", Formulation);
+            console.log("MattorGlossValue: ", MattOrGlossValue);
+            var ManagerLogged = false;
+            if (req.session.ManagerData) {
+              ManagerLogged = true;
+            }
+
+            res.render("employee/BulkOrders", { Formulation, Binder1, Binder2, Liter, MattOrGlossValue, MattOrGloss, ManagerLogged });
+          })
+        } else {
+          res.render('error', { FullErrorPage: true });
+        }
       })
     }
   }
@@ -902,32 +929,35 @@ router.get('/api/BulkOrder/:FileNo', (req, res) => {
     //console.log(Formulation);
     var Binder1 = false;
     var Binder2 = false;
-    if (Formulation.Binder1) {
-      Binder1 = true;
-    }
-    if (Formulation.Binder2) {
-      Binder2 = true;
-    }
-
-
-    employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
-      var Data = {
-        Formulation: Formulation,
-        Binder1: Binder1,
-        Binder2: Binder2,
-        Sub_Category: Sub_Category
+    if (Formulation) {
+      if (Formulation.Binder1) {
+        Binder1 = true;
+      }
+      if (Formulation.Binder2) {
+        Binder2 = true;
       }
 
-      if (req.session.CustomerLogged) {
-        Data.Customer = req.session.CustomerData;
-      }
-      // console.log("Stating to execute!");
-      // console.log(Data);
 
-      res.json(Data);
+      employeeHelpers.GetSubCategoriesById(Formulation.SubCategory).then((Sub_Category) => {
+        var Data = {
+          Formulation: Formulation,
+          Binder1: Binder1,
+          Binder2: Binder2,
+          Sub_Category: Sub_Category
+        }
 
-    })
+        if (req.session.CustomerLogged) {
+          Data.Customer = req.session.CustomerData;
+        }
+        // console.log("Stating to execute!");
+        // console.log(Data);
 
+        res.json(Data);
+
+      })
+    } else {
+      res.render('error', { FullErrorPage: true });
+    }
   })
 })
 
@@ -1022,7 +1052,7 @@ router.post('/BulkOrder/:id', EmployeeVerifyLogin, async (req, res) => {
     function BulkOrderNow(orderFile) {
       var Branch = req.session.EmployeeData.Branch;
       employeeHelpers.BulkOrderUpdate(orderFile, Branch).then((OrderID) => {
-        employeeHelpers.StoreBulkOrderReportData(OrderID).then(()=>{
+        employeeHelpers.StoreBulkOrderReportData(OrderID).then(() => {
           res.redirect('/Orders');
         })
       });
@@ -2348,7 +2378,7 @@ router.get('/getAllCardAndListsAndUsersToManagement', EmployeeVerifyLogin, (req,
       console.error("Error:", error);
       res.status(500).json({ error: "Internal Server Error" });
     });
-    
+
   // employeeHelpers.GetAllCards(BranchName).then((AllCards) => {
   //   //  console.log(AllCards);
   //   employeeHelpers.getAllLists(BranchName).then((AllLists) => {
@@ -2380,7 +2410,7 @@ router.get('/getAllCardAndListsAndUsersToManagement', EmployeeVerifyLogin, (req,
 })
 
 router.post('/UpdareCardOrder/:cardID', EmployeeVerifyLogin, async (req, res) => {
-  console.log("Order Creating Updating: ", req.body); 
+  console.log("Order Creating Updating: ", req.body);
   var data = req.body;
   const imageData = req.files;
   var cardID = req.params.cardID;
@@ -3024,13 +3054,13 @@ router.get('/GetAllDataFromFormula/api/:FileNo', EmployeeVerifyLogin, (req, res)
 })
 
 
-router.get('/getSampleData',(req,res)=>{
+router.get('/getSampleData', (req, res) => {
   res.render('SampleText');
 })
 
-router.post('/saveCustomDataFromScale',(req,res)=>{
+router.post('/saveCustomDataFromScale', (req, res) => {
   var data = req.body;
-  employeeHelpers.SaveCustomMechineData(data).then(()=>{
+  employeeHelpers.SaveCustomMechineData(data).then(() => {
     res.json(data);
   })
 })

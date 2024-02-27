@@ -175,53 +175,60 @@ module.exports = {
                 Status: false,
                 error: false
             }
+
             if (!SameProduct) {
 
-                data.InsertedTime = Date.now();
+                var SameProductID = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ "Product_Id": data.Product_Id });
+                if (!SameProductID) {
+                    data.InsertedTime = Date.now();
 
-                var latestProductAdded = await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray()
-                // console.log(latestProductAdded);
+                    var latestProductAdded = await db.get().collection(collection.PRODUCT_COLLECTION).find().sort({ "InsertedTime": -1 }).toArray()
+                    // console.log(latestProductAdded);
 
-                if (latestProductAdded.length > 0) {
-                    latestProductAdded = latestProductAdded[0];
-                    data.Product_Id = parseInt(latestProductAdded.Product_Id) + 1;
-                } else {
-                    data.Product_Id = 10000;
-                } //Product_Collection
+                    // if (latestProductAdded.length > 0) {
+                    //     latestProductAdded = latestProductAdded[0];
+                    //     data.Product_Id = parseInt(latestProductAdded.Product_Id) + 1;
+                    // } else {
+                    //     data.Product_Id = 10000;
+                    // } 
+                    //Product_Collection
 
-                var SubCategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ SubCategory_Id: parseInt(data.SubCategory) });
-                console.log(data);
-                console.log(SubCategory);
-                var ProductsArrayInSubcategory = SubCategory.Products;
-                var ProductId = data.Product_Id;
-                // Check if the product ID is present in the array
-                var isPresent = ProductsArrayInSubcategory.includes(ProductId);
-
-                // Output the result
-                if (isPresent) {
-                    // Already Product added to subcategory
-                    State.Status = false;
-                    State.error = "Product is Already added to subcategory";
-                    // console.log("Product ID", pId, "is present in the array.");
-                } else {
-                    // console.log("Product ID", pId, "is not present in the array.");
-                    ProductsArrayInSubcategory.push(ProductId);
+                    var SubCategory = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).findOne({ SubCategory_Id: parseInt(data.SubCategory) });
+                    console.log(data);
                     console.log(SubCategory);
-                    // remove Category and subcategory from data
-                    delete data.Category;
-                    delete data.SubCategory;
+                    var ProductsArrayInSubcategory = SubCategory.Products;
+                    var ProductId = data.Product_Id;
+                    // Check if the product ID is present in the array
+                    var isPresent = ProductsArrayInSubcategory.includes(ProductId);
 
-                    console.log("Product to Insert: ", data);
-                    await db.get().collection(collection.PRODUCT_COLLECTION).insertOne(data).then((response) => {
-                        if (response.insertedId) {
-                            UpdateProductsArray(SubCategory)
-                            State.Status = true;
-                            console.log("Product Added");
-                        } else {
-                            State.Status = false;
-                            State.error = "Product is not Added, Try Again."
-                        }
-                    })
+                    // Output the result
+                    if (isPresent) {
+                        // Already Product added to subcategory
+                        State.Status = false;
+                        State.error = "Product is Already added to subcategory";
+                        // console.log("Product ID", pId, "is present in the array.");
+                    } else {
+                        // console.log("Product ID", pId, "is not present in the array.");
+                        ProductsArrayInSubcategory.push(ProductId);
+                        console.log(SubCategory);
+                        // remove Category and subcategory from data
+                        delete data.Category;
+                        delete data.SubCategory;
+
+                        console.log("Product to Insert: ", data);
+                        await db.get().collection(collection.PRODUCT_COLLECTION).insertOne(data).then((response) => {
+                            if (response.insertedId) {
+                                UpdateProductsArray(SubCategory)
+                                State.Status = true;
+                                console.log("Product Added");
+                            } else {
+                                State.Status = false;
+                                State.error = "Product is not Added, Try Again."
+                            }
+                        })
+                    }
+                } else {
+                    State.error = "Product ID Already Exists."
                 }
 
             } else {
@@ -287,7 +294,7 @@ module.exports = {
                 error: ""
             }
             // console.log(data.Product_Name)
-            var SameProduct = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: parseInt(data.Product_Id) });
+            var SameProduct = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ Product_Id: parseInt(data.OldProduct_Id) });
             // console.log(SameProduct);
             if (SameProduct) {
 
@@ -305,9 +312,37 @@ module.exports = {
                     if (response.acknowledged) {
                         State.Status = true;
                     }
-                    resolve(State)
+
                 });
 
+
+                // update in subcategory  collection
+                var Subcategories = await db.get().collection(collection.SUB_CATEGORY_COLLECTION).find({
+                    Products: {
+                        $in: [parseInt(data.OldProduct_Id)]
+                    }
+                }).toArray();
+
+
+                console.log("Old Product ID: ", data.OldProduct_Id);
+                console.log("Old Product ID Subcategories: ", Subcategories);
+
+                // Find the index of the subcategory containing data.OldProduct_Id
+                const oldProductIndex = Subcategories.findIndex(subcategory => subcategory.Products.includes(parseInt(data.OldProduct_Id)));
+
+                if (oldProductIndex !== -1) {
+                    // Remove data.OldProduct_Id from the Products array
+                    Subcategories[oldProductIndex].Products = Subcategories[oldProductIndex].Products.filter(id => id !== parseInt(data.OldProduct_Id));
+
+                    // Add data.NewProductID to the Products array
+                    Subcategories[oldProductIndex].Products.push(data.Product_Id);
+                }
+
+                console.log("Old Product ID Modified Subcategories: ", Subcategories);
+
+
+
+                resolve(State);
             }
 
         })
@@ -881,12 +916,12 @@ module.exports = {
     },
 
     //Management Tool
-    CreateNewList: (UserName,Branch) => {
+    CreateNewList: (UserName, Branch) => {
         return new Promise(async (resolve, reject) => {
             var ListData = {
                 Name: UserName,
                 OldCards: [],
-                Branch:Branch
+                Branch: Branch
 
             }
             await db.get().collection(collection.LIST_COLLECTION).insertOne(ListData).then((respose) => {
@@ -1218,15 +1253,15 @@ module.exports = {
             }
         })
     },
-    getAllProductGroups:()=>{
-        return new Promise(async(resolve,reject)=>{
+    getAllProductGroups: () => {
+        return new Promise(async (resolve, reject) => {
             var AllGroup = await db.get().collection(collection.PRODUCT_GROUP_COLLECTION).find().toArray();
             resolve(AllGroup);
         })
     },
-    deleteProductGroup:(GroupName)=>{
-        return new Promise(async(resolve,reject) => {
-            await db.get().collection(collection.PRODUCT_GROUP_COLLECTION).deleteOne({GroupName: GroupName}).then(()=>{
+    deleteProductGroup: (GroupName) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.PRODUCT_GROUP_COLLECTION).deleteOne({ GroupName: GroupName }).then(() => {
                 resolve();
             })
         })

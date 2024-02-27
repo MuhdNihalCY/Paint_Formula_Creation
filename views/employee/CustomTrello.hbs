@@ -2976,7 +2976,7 @@
     function handleSelectedFormula(element, formula) {
         var ThisElement = element.parentNode.parentNode.parentNode.parentNode.parentNode;
         // console.log("element:", ThisElement);
-        //  console.log("formula:", formula);
+        console.log("1 formula:", formula);
 
         var popEachProductsItemsCollection = ThisElement.getElementsByClassName('popEachProductsItemss');
         //  console.log('popEachProductsItems: ' + popEachProductsItemsCollection.length);
@@ -2994,13 +2994,14 @@
         //  console.log("OldSelectedItems", OldSelectedItems);
 
         var VirtualSelectItem = `
+            <a href="/BulkOrders/${formula.FileNo}" target="_blank" class="btn btn-transparent">Place order</a>
             <p id="FormulaColorName" class='SelectedFormulaColorName' >${formula.ColorName}</p>
             <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.ColorCode ? formula.ColorCode : ""} </p>
             <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
             <p id="SelectedFormulaMattOrGloss" class='FormulaColorName SelectedFormulaMattOrGloss' >${formula.matt ? `Matt: ${formula.matt}` : ''} ${formula.gloss ? `Gloss: ${formula.gloss}` : ''}</p>
             ${formula.matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.matt ? `Matt: ${formula.matt}` : ''}" hidden>` : ""}
             ${formula.gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.gloss ? `Gloss: ${formula.gloss}` : ''}" hidden>` : ""} 
-            {{!-- <p id="SelectedFormulaFileNo" class='FormulaColorName SelectedFormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p> --}}
+            <p id="SelectedFormulaFileNo" class='formualFileNo FormulaColorName SelectedFormulaFileNo' hidden >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
                             
             <button onclick="RemoveSelectedFormula(this,'${formula.ColorName}','SelectedProductItem_${OldColorName}')"
                             class="btn SelectedItemRemoveBTN">x</button>
@@ -3021,6 +3022,7 @@
     }
 
     function handleResultItemClick(formula) {
+        console.log("formula: ", formula);
         // Handle what happens when a result item is clicked
         //  // // console.log('Result item clicked:', formula);
         var popProductsItemsCollectiosn = document.getElementById('popProductsItemsCollectiosns');
@@ -3061,6 +3063,7 @@
                     </div>
                     <div class="SelectedProductItems SelectedProductItem_${formula.Name}" id="SelectedProductItem_${formula.Name}">
                         ${formula.FormulaColorName ? ` 
+                            <a href="/BulkOrders/${formula.SelectedFileNo}" target="_blank" class="btn btn-transparent">Place order</a>
                             <p id="SelectedFormulaColorName" class='SelectedFormulaColorName' >${formula.FormulaColorName}</p>
                             <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.FormulaColorCode ? formula.FormulaColorCode : ""} </p>
                             <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
@@ -3070,7 +3073,7 @@
                              ${formula.Gloss ? `<p id="SelectedFormulaGloss" class='FormulaColorName SelectedFormulaFileNo' >${formula.Gloss}</p>` : ""}
                             ${formula.Matt ? `<input type="text" class="HiddenMatt" id="HiddenMatt" value="${formula.Matt}" hidden >` : ""}
                             ${formula.Gloss ? `<input type="text" class="HiddenGloss" id="HiddenGloss" value="${formula.Gloss}" hidden >` : ""} 
-                            <p id="SelectedFormulaFileNo" class=' SelectedFormulaFileNo FormulaColorName FormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
+                            <p id="SelectedFormulaFileNo" class='formualFileNo SelectedFormulaFileNo FormulaColorName FormulaFileNo' >${formula.FileNo ? `${formula.FileNo}` : ""}</p>
                             <button id="SelectedItemRemoveBtn_${formula.Name}" onclick="RemoveSelectedFormula(this,'${formula.FormulaColorName}','SelectedProductItem_${formula.Name}')"
                             class="btn SelectedItemRemoveBTN">x</button>
                         `: ``}
@@ -3731,6 +3734,9 @@
         var ProsItems = CardData.CheckListItems.checkItems;
         if (ProsItems.length > 0) {
             ProsItems.forEach((ProItems) => {
+
+
+                console.log('ProItems:', ProItems);
                 var formula = {
                     State: ProItems.State,
                     Name: ProItems.Name,
