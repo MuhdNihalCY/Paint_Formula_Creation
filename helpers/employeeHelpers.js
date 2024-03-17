@@ -21,6 +21,7 @@ module.exports = {
                     // password Match
                     delete MatchedUser.Password;
                     // console.log(MatchedUser);
+
                     State.User = MatchedUser;
                     State.loggedStatus = true
                     resolve(State)
@@ -231,10 +232,10 @@ module.exports = {
                 console.log('try to get new file no.');
                 var FileNo = 0;
                 let LatestFormula = await db.get().collection(collection.FORMULA_COLLECTION)
-                .find({}, { FileNo: 1, InsertedTime: 1 })  // Projection
-                .sort({ "InsertedTime": -1 })
-                .limit(1)
-                .toArray();
+                    .find({}, { FileNo: 1, InsertedTime: 1 })  // Projection
+                    .sort({ "InsertedTime": -1 })
+                    .limit(1)
+                    .toArray();
                 console.log('try to get new file no. 2 ');
                 if (LatestFormula.length > 0) {
                     var LatestFileNo = parseInt(LatestFormula[0].FileNo);
@@ -1672,7 +1673,8 @@ module.exports = {
             ]
 
             // handle Attachments
-            var OldID = OldCard._id;
+            //  var OldID = OldCard._id;
+
 
             delete OldCard._id
 
@@ -1681,23 +1683,23 @@ module.exports = {
             await db.get().collection(collection.CARD_COLLECTION).insertOne(OldCard).then((response) => {
 
                 if (OldCard.IsAttachments) {
-                    const ImageOldImageName = OldID;
-                    const SaveImgName = response.insertedId;
-                    const publicFolderPath = path.join(__dirname, '..', 'public');
-                    app.use(express.static(publicFolderPath));
-                    // Get the path to the public folder.
-                    const sourceImagePath = path.join(publicFolderPath, 'images', 'Attachments', `${ImageOldImageName}.jpg`);
-                    // console.log(sourceImagePath);
-                    const destinationImagePath = path.join(publicFolderPath, 'images', 'Attachments', `${SaveImgName}.jpg`);
-                    // console.log(destinationImagePath);
+                    // const ImageOldImageName = OldID;
+                    // const SaveImgName = response.insertedId;
+                    // const publicFolderPath = path.join(__dirname, '..', 'public');
+                    // app.use(express.static(publicFolderPath));
+                    // // Get the path to the public folder.
+                    // const sourceImagePath = path.join(publicFolderPath, 'images', 'Attachments', `${ImageOldImageName}.jpg`);
+                    // // console.log(sourceImagePath);
+                    // const destinationImagePath = path.join(publicFolderPath, 'images', 'Attachments', `${SaveImgName}.jpg`);
+                    // // console.log(destinationImagePath);
 
-                    if (fs.existsSync(sourceImagePath)) {
-                        // Copy the image.  
-                        fs.copyFileSync(sourceImagePath, destinationImagePath);
-                    } else {
-                        console.error('Source Image does not exist.');
-                        // Handle the error or provide appropriate feedback to the user.
-                    }
+                    // if (fs.existsSync(sourceImagePath)) {
+                    //     // Copy the image.  
+                    //     fs.copyFileSync(sourceImagePath, destinationImagePath);
+                    // } else {
+                    //     console.error('Source Image does not exist.');
+                    //     // Handle the error or provide appropriate feedback to the user.
+                    // }
                 }
                 resolve();
             })
@@ -2169,6 +2171,48 @@ module.exports = {
 
             console.log(AdditiveData);
             resolve(resultArray);
+        })
+    },
+    findFormulaByNameAndColorCode: (formulaName, FormulsColorCode) => {
+        return new Promise(async (resolve, reject) => {
+            var Formula = await db.get().collection(collection.FORMULA_COLLECTION).findOne({ "ColorName": formulaName });
+            // console.log("Formula Found: ", Formula);
+            resolve(Formula);
+        })
+    },
+    ModifyCardProductionItem: (cardName, productionItemName, FormulaData) => {
+        return new Promise(async (resolve, reject) => {
+            var CardData = await db.get().collection(collection.CARD_COLLECTION).findOne({ "Name": cardName });
+            var checkItems = CardData.CheckListItems.checkItems
+
+            checkItems.forEach((eachItem) => {
+                if (eachItem.Name == productionItemName) {
+                    // update the card
+                    eachItem.FileNo = FormulaData.FileNo
+                    eachItem.FormulaColorName = FormulaData.ColorName
+                    eachItem.FormulaColorCode = FormulaData.ColorCode
+                    eachItem.SubCategoryName = FormulaData.SubCategoryName
+
+                    if (FormulaData.matt) {
+                        eachItem.Matt = `Matt: ${FormulaData.matt}`
+                    }
+
+                    if (FormulaData.gloss) {
+                        eachItem.Gloss = `Matt: ${FormulaData.matt}`
+                    }
+                }
+            })
+
+            await db.get().collection(collection.CARD_COLLECTION).updateOne({ "Name": cardName }, { $set: CardData })
+
+            resolve();
+        })
+    },
+    getCardDataByName: (cardName) => {
+        return new Promise(async (resolve, reject) => {
+            var CardData = await db.get().collection(collection.CARD_COLLECTION).findOne({ "Name": cardName });
+
+            resolve(CardData);
         })
     }
 }

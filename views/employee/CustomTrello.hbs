@@ -7,7 +7,7 @@
             <span class="bar"></span>
             <span class="bar"></span>
         </div>
-    </div>
+    </div> 
 
     <div id="mainPopup" class="popupWrapper">
         <div id="" class="popup mainPopup">
@@ -625,10 +625,10 @@
 
 
                     </div>
-                    <div onclick="OpenPopUpforNewOrder()" class="AddSmCardDiv">
+                    {{!-- <div onclick="OpenPopUpforNewOrder()" class="AddSmCardDiv">
                         <p class="AddCardIconText">+</p>
                         <p class="AddCardText">Add new card</p>
-                    </div>
+                    </div> --}}
                 </div>
 
                 {{!-- Office section --}}
@@ -1207,7 +1207,7 @@
 
                 // Check if the image file exists, and only create the image element if it does
 
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1310,7 +1310,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1455,7 +1455,7 @@
                         cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                         // Check if the image file exists, and only create the image element if it does
-                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                         const cardImg = new Image();
                         cardImg.className = 'CardImg';
                         cardImg.alt = 'No Attachments';
@@ -1583,7 +1583,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1687,7 +1687,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1840,7 +1840,7 @@
                         cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                         // Check if the image file exists, and only create the image element if it does
-                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                         const cardImg = new Image();
                         cardImg.className = 'CardImg';
                         cardImg.alt = 'No Attachments';
@@ -1957,7 +1957,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -2062,7 +2062,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -2172,7 +2172,7 @@
             cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
             // Check if the image file exists, and only create the image element if it does
-            const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+            const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
             const cardImg = new Image();
             cardImg.className = 'CardImg';
             cardImg.alt = 'No Attachments';
@@ -2994,7 +2994,7 @@
         //  console.log("OldSelectedItems", OldSelectedItems);
 
         var VirtualSelectItem = `
-            <a href="/BulkOrders/${formula.FileNo}" target="_blank" class="btn btn-transparent">Place order</a>
+            <a href="/BulkOrders/${formula.FileNo}" target="_blank" class="btn btn-transparent PlaceOrderBtn">Place order</a>
             <p id="FormulaColorName" class='SelectedFormulaColorName' >${formula.ColorName}</p>
             <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.ColorCode ? formula.ColorCode : ""} </p>
             <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
@@ -3063,7 +3063,7 @@
                     </div>
                     <div class="SelectedProductItems SelectedProductItem_${formula.Name}" id="SelectedProductItem_${formula.Name}">
                         ${formula.FormulaColorName ? ` 
-                            <a href="/BulkOrders/${formula.SelectedFileNo}" target="_blank" class="btn btn-transparent">Place order</a>
+                            <a href="/redirect/BulkOrders/${formula.SelectedFileNo ? formula.SelectedFileNo : 'no'}/${formula.FormulaColorName}/${formula.FormulaColorCode}/" target="_blank" class="btn btn-transparent PlaceOrderBtn">Place order</a>
                             <p id="SelectedFormulaColorName" class='SelectedFormulaColorName' >${formula.FormulaColorName}</p>
                             <p id="SelectedFormulaColorCode" class='FormulaColorName SelectedFormulaColorCode' >${formula.FormulaColorCode ? formula.FormulaColorCode : ""} </p>
                             <p id="SelectedFormulaSubCategoryName" class='FormulaColorName SelectedFormulaSubCategoryName' >${formula.SubCategoryName ? formula.SubCategoryName : ""}</p>
@@ -3782,7 +3782,7 @@
         if (CardData.IsAttachments) {
             // alert("Has Image")
             var attachementImg = document.getElementById("AttachmentImage");
-            attachementImg.src = `/images/Attachments/${CardData._id}.jpg`
+            attachementImg.src = `data:image/jpeg;base64,${CardData.ImageBase64}`
         }
 
 
@@ -3997,7 +3997,7 @@
         }
     }
 
-    function UpdateOrder(cardID) {
+    function UpdateOrder(cardID, nextLocation) {
         //   alert("Ordre updated", cardID);
 
         function validateNewOrderInput() {
@@ -4302,6 +4302,9 @@
 
 
                 CloseCreateOrderPopup()
+                if (nextLocation) {
+                    window.location.href = nextLocation;
+                }
             }
 
 
@@ -5167,8 +5170,14 @@
             PreviousSelectedRow[i].innerHTML = "";
         }
 
-        //console.log(element);
-        // console.log(element.parentNode)
+        var OrderIDNumber = document.getElementById('OrderIDNumber').value;
+        var OrderName = document.getElementById('OrderName').value;
+        var ProductionItemName = element.getElementsByClassName('FormulaColorName')[0].textContent
+        //  console.log(element);
+
+        var CardData = State.AllCards.find(eachCard => eachCard.OrderIDNumber === OrderIDNumber);
+
+        //console.log("Clicked product : ", );
         //  element.getElementsByClassName('FormulaColorCode')[0].textContent = "dsfa";
         //  console.log(element.getElementsByClassName('FormulaColorCode')[0].textContent);
         var VertualInputSection = ` 
@@ -5183,7 +5192,8 @@
                     <ul class="search-results" id="searchResults"></ul>
                 </div>
              </div>
-            <a href="/createFormulas" class="btn popNewFormulaBtn ">Create New Formula</a>
+            {{!-- <a href="/createFormulas/${OrderIDNumber + OrderName}/${ProductionItemName}" onclick="UpdateOrder(${CardData._id})" class="btn popNewFormulaBtn createNewFormula">Create New Formula</a> --}}
+            <a href="/createFormulas/${OrderIDNumber + OrderName}/${ProductionItemName}" onclick="handleCreateNewFormulaClick(event, '${CardData._id}')" class="btn popNewFormulaBtn createNewFormula">Create New Formula</a>
         </div>
                     `
 
@@ -5287,6 +5297,15 @@
         }
     }
 
+
+    // Function to handle the click event and initiate the update and redirection
+    function handleCreateNewFormulaClick(event, orderId) {
+        // Prevent the default behavior of the link (e.g., navigating to a new page)
+        event.preventDefault();
+
+        // Call UpdateOrder function with a callback to navigate after completion
+        UpdateOrder(orderId, event.target.href);
+    }
 
 
 
@@ -7113,10 +7132,26 @@
         margin-bottom: 1rem;
     }
 
+    .SelectedProductItems p {
+        margin: 0;
+    }
+
     .SelectedItemRemoveBTN {
         background-color: gray;
         font-size: 20px;
         font-weight: 600;
+    }
+
+    .PlaceOrderBtn {
+        border: 3px solid gray;
+        border-radius: 10px;
+        color: gray;
+        font-weight: 600;
+    }
+
+    .PlaceOrderBtn:hover {
+        border: rgb(187, 187, 187);
+        color: rgb(187, 187, 187);
     }
 
 

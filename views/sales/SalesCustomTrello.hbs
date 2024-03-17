@@ -1218,7 +1218,7 @@
 
                 // Check if the image file exists, and only create the image element if it does
 
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1321,7 +1321,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1466,7 +1466,7 @@
                         cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                         // Check if the image file exists, and only create the image element if it does
-                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                         const cardImg = new Image();
                         cardImg.className = 'CardImg';
                         cardImg.alt = 'No Attachments';
@@ -1499,7 +1499,7 @@
                     })
                     // Append the child elements to their respective parent elements
                     productionColumnHeaderDiv.appendChild(sectionHeaderText);
-                    //  productionColumnHeaderDiv.appendChild(checkboxInput);
+                  //  productionColumnHeaderDiv.appendChild(checkboxInput);
 
                     productionColumnDiv.appendChild(productionColumnHeaderDiv);
                     productionColumnDiv.appendChild(productionCardsCollectionsDiv);
@@ -1594,7 +1594,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1698,7 +1698,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1851,7 +1851,7 @@
                         cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                         // Check if the image file exists, and only create the image element if it does
-                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                         const cardImg = new Image();
                         cardImg.className = 'CardImg';
                         cardImg.alt = 'No Attachments';
@@ -1968,7 +1968,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -2073,7 +2073,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -2183,7 +2183,7 @@
             cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
             // Check if the image file exists, and only create the image element if it does
-            const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+            const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
             const cardImg = new Image();
             cardImg.className = 'CardImg';
             cardImg.alt = 'No Attachments';
@@ -3744,7 +3744,7 @@
         if (CardData.IsAttachments) {
             // alert("Has Image")
             var attachementImg = document.getElementById("AttachmentImage");
-            attachementImg.src = `/images/Attachments/${CardData._id}.jpg`
+            attachementImg.src = `data:image/jpeg;base64,${CardData.ImageBase64}`
         }
 
 
@@ -4221,7 +4221,7 @@
 
                 // api call
                 // URL of your backend API endpoint
-                var apiUrl = `/UpdareCardOrder/${cardID}`;
+                var apiUrl = `/sales/UpdareCardOrder/${cardID}`;
 
                 console.log("Form data: ", formData);
                 console.log("CompleteOrderData: ", CompleteOrderData);

@@ -458,7 +458,7 @@ router.post('/UpdareCardOrder/:cardID', OfficeVerifyLogin, async (req, res) => {
         console.log("Each Item: ", EachItem);
         var PushData = {
             Name: EachItem.Name,
-            State: "InComplete",
+            State: EachItem.State,
             Qty: EachItem.Qty,
             Unit: EachItem.Unit,
             FileNo: EachItem.FileNo ? EachItem.FileNo : "",

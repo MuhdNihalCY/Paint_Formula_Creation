@@ -419,6 +419,9 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
 
     if (req.files) {
         NewOrder.IsAttachments = true;
+        const imageData = req.files.file;
+        const base64Image = imageData.data.toString('base64');
+        NewOrder.ImageBase64 = base64Image;
     }
 
     // adding Branch
@@ -429,17 +432,17 @@ router.post('/CreateNewOrder', SalesVerifyLogin, async (req, res) => {
 
 
     employeeHelpers.InsertNewCard(NewOrder).then((CardId) => {
-        if (req.files) {
-            const imageData = req.files.file;
-            // console.log('Image data:', imageData);
+        // if (req.files) {
+        //     const imageData = req.files.file;
+        //     // console.log('Image data:', imageData);
 
-            imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
-                if (!err) {
-                } else {
-                    console.log("Error at img1 " + err)
-                }
-            })
-        }
+        //     imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
+        //         if (!err) {
+        //         } else {
+        //             console.log("Error at img1 " + err)
+        //         }
+        //     })
+        // }
         res.json({ State: true });
     })
 })
@@ -467,16 +470,17 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
     let comments = await JSON.parse(data.comments);
     let Labels = await JSON.parse(data.Labels);
     let ReadyProducts = await JSON.parse(data.ReadyProducts);
-    // console.log(productionsItemsArray);
+    console.log("productionsItemsArray: ", productionsItemsArray);
 
     await productionsItemsArray.forEach((EachItem) => {
         var PushData = {
             Name: EachItem.Name,
-            State: "InComplete",
+            State: EachItem.State,
             Qty: EachItem.Qty,
             Unit: EachItem.Unit,
             FileNo: EachItem.FileNo ? EachItem.FileNo : "",
-            ColorCode: EachItem.ColorCode,
+            FormulaColorName: EachItem.FormulaColorName,
+            FormulaColorCode: EachItem.FormulaColorCode,
             SubCategoryName: EachItem.SubCategoryName,
 
         }
@@ -490,6 +494,8 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
 
         CheckItems.push(PushData)
     })
+
+    console.log("CheckItems:", CheckItems);
 
 
 
@@ -525,6 +531,9 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
 
     if (req.files) {
         NewOrder.IsAttachments = true;
+        const imageData = req.files.file;
+        const base64Image = imageData.data.toString('base64');
+        NewOrder.ImageBase64 = base64Image;
     }
 
     console.log("New Card updated: ", NewOrder);
@@ -535,17 +544,17 @@ router.post('/UpdareCardOrder/:cardID', SalesVerifyLogin, async (req, res) => {
     }
 
     employeeHelpers.UpdateCard(NewOrder, cardID, Activity).then((CardId) => {
-        if (req.files) {
-            const imageData = req.files.file;
-            // console.log('Image data:', imageData);
+        // if (req.files) {
+        //     const imageData = req.files.file;
+        //     // console.log('Image data:', imageData);
 
-            imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
-                if (!err) {
-                } else {
-                    console.log("Error at img1 " + err)
-                }
-            })
-        }
+        //     imageData.mv('./public/images/Attachments/' + CardId + ".jpg", (err) => {
+        //         if (!err) {
+        //         } else {
+        //             console.log("Error at img1 " + err)
+        //         }
+        //     })
+        // }
         res.json({ State: true });
     })
 })
@@ -794,14 +803,14 @@ router.get('/GetAllCustomerledgerFile/api/:CustomerName', SalesVerifyLogin, (req
 })
 
 router.get('/GetProductBinderAdditive/PurchasedDetails/api/:CustomerName', SalesVerifyLogin, (req, res) => {
-    let Branch = req.session.SalesData.Branch 
+    let Branch = req.session.SalesData.Branch
     let CustomerName = req.params.CustomerName;
     // for past 12 months
-    employeeHelpers.getAllProductStockoutReportData(Branch,CustomerName).then((ProductReportData) => {
+    employeeHelpers.getAllProductStockoutReportData(Branch, CustomerName).then((ProductReportData) => {
         employeeHelpers.getAllProductGroupReportData(ProductReportData).then((ProductGroupReportData) => {
-            
-            employeeHelpers.getAllBindersReportData(Branch,CustomerName).then((BinderReportData) => {
-                employeeHelpers.getAllAdditiveReportData(Branch,CustomerName).then((AdditiveReportData) => {
+
+            employeeHelpers.getAllBindersReportData(Branch, CustomerName).then((BinderReportData) => {
+                employeeHelpers.getAllAdditiveReportData(Branch, CustomerName).then((AdditiveReportData) => {
                     res.json({
                         ProductReportData: ProductReportData,
                         ProductGroupReportData: ProductGroupReportData,

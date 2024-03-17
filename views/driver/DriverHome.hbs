@@ -529,10 +529,10 @@
 
 
                     </div>
-                    <div onclick="OpenPopUpforNewOrder()" class="AddSmCardDiv">
+                    {{!-- <div onclick="OpenPopUpforNewOrder()" class="AddSmCardDiv">
                         <p class="AddCardIconText">+</p>
                         <p class="AddCardText">Add new card</p>
-                    </div>
+                    </div> --}}
                 </div>
 
                 {{!-- Office section --}}
@@ -1108,7 +1108,7 @@
 
                 // Check if the image file exists, and only create the image element if it does
 
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1211,7 +1211,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1356,7 +1356,7 @@
                         cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                         // Check if the image file exists, and only create the image element if it does
-                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                         const cardImg = new Image();
                         cardImg.className = 'CardImg';
                         cardImg.alt = 'No Attachments';
@@ -1484,7 +1484,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1588,7 +1588,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1741,7 +1741,7 @@
                         cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                         // Check if the image file exists, and only create the image element if it does
-                        const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                        const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                         const cardImg = new Image();
                         cardImg.className = 'CardImg';
                         cardImg.alt = 'No Attachments';
@@ -1858,7 +1858,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -1963,7 +1963,7 @@
                 cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
                 // Check if the image file exists, and only create the image element if it does
-                const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+                const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
                 const cardImg = new Image();
                 cardImg.className = 'CardImg';
                 cardImg.alt = 'No Attachments';
@@ -2073,7 +2073,7 @@
             cardSMCheckNum.textContent = `${ChecklistCompleted}/${TotalChecklist}`;
 
             // Check if the image file exists, and only create the image element if it does
-            const imageSrc = `/images/Attachments/${OneCard._id}.jpg`;
+            const imageSrc = `data:image/jpeg;base64,${OneCard.ImageBase64}`;
             const cardImg = new Image();
             cardImg.className = 'CardImg';
             cardImg.alt = 'No Attachments';
@@ -2606,7 +2606,7 @@
     }
 
 
-    function OpenPopUpforNewOrder() {
+    /*function OpenPopUpforNewOrder() {
 
         resetAllDataFromNewOrder();
 
@@ -2716,7 +2716,7 @@
         CreateOrderButton.textContent = "Create new Order";
 
 
-    }
+    }*/
 
     function CloseCreateOrderPopup() {
         var mainPopup = document.getElementById('CreateOrderPopup');
@@ -3685,7 +3685,7 @@
         if (CardData.IsAttachments) {
             // alert("Has Image")
             var attachementImg = document.getElementById("AttachmentImage");
-            attachementImg.src = `/images/Attachments/${CardData._id}.jpg`
+            attachementImg.src = `data:image/jpeg;base64,${CardData.ImageBase64}`
         }
 
 
